@@ -15,5 +15,5 @@ Thumbs.db
 .emacs.d/anything-c-adaptive-history
 .emacs.d/site-lisp
 .vimperator/info
-.vimperator/plugin_loader.js
+.vimperator/plugin/plugin_loader.js
 .vimperator/plugin-available
