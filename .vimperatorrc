@@ -1,0 +1,83 @@
+""set guioptions+=m
+set hintmatching=custom
+set titlestring=Firefox
+set wildoptions=auto,sort
+set complete=bl
+set preload
+set ic
+set visualbell
+set hlsearch
+set editor="notepad.exe"
+set verbose=9
+""set focuscontent
+
+hi Hint z-index:5000; font-weight:bold; font-family:monospace; font-size:12px; color:#404040; background-color:#e0e0ff; outline-style:solid; outline-width:1px; outline-color:blue; padding:0 2px 0 2px; position:absolute;
+
+" plugin_loader.js
+let g:plugin_loader_roots='~/.vimperator/plugin-available/';
+js <<EOM
+liberator.globalVariables.plugin_loader_plugins = <>
+    appendAnchor
+    caret-hint
+    cpan-search
+    google-search
+    hatena-bookmark-search
+    hints-yank-paste
+    ime_controller
+    migemo_completion
+    migemo-find
+    migemo_hint
+    pluginManager
+    splitBrowser
+    tinymenu
+</>.toString().split(/\s+/).filter(function(n) n);
+EOM
+
+let g:ex_ime_mode='inactive';
+let g:textarea_ime_mode='inactive';
+
+let g:caret_hint_key='i';
+let g:caret_hint_tail_key='I';
+
+let g:hatena_bookmark_suffix_array='true';
+js <<EOM
+liberator.globalVariables.hBookmark_shortcuts = {
+    hintsAdd :     '',    // default: 'c'
+    hintsComment : '',    // default: 'C'
+    add :          ['C'], // default: ['c']
+    comment :      ['c'], // default: ['C']
+};
+if (typeof hBookmark != 'undefined') {
+    liberator.loadScript(
+        'chrome://hatenabookmark/content/vimperator/plugin/hatenabookmark.js',
+         {__proto__: this}
+    );
+}
+EOM
+
+noremap d D
+noremap D d
+
+noremap <C-j> <Nop>
+inoremap <C-j> <Nop>
+cnoremap <C-j> <Nop>
+
+noremap j 3<C-e>
+noremap k 3<C-y>
+noremap J <C-d>
+noremap K <C-u>
+noremap <C-k> <C-u>
+
+inoremap <C-v> <S-Insert>
+cnoremap <C-v> <S-Insert>
+
+cnoremap <C-c> <C-v><C-c>
+
+inoremap <C-z> <C-v><C-z>
+cnoremap <C-z> <C-v><C-z>
+
+inoremap <C-e> <End>
+cnoremap <C-e> <End>
+
+noremap ; :
+noremap : ;

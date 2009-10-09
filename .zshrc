@@ -1,0 +1,24 @@
+# set display
+if [ -n "$SSH_CLIENT" ]; then
+    if [[ "$SSH_CLIENT" == 192.168.* ]]; then
+        export DISPLAY=`echo $SSH_CLIENT | cut -d ' ' -f 1`:0.0
+    fi
+fi
+. ~/bin/export-display
+
+source ~/.luxaky.zshrc
+source ~/.vimode.zshrc
+
+dbl=$HOME/bin:$HOME/bin
+bin=$HOME/bin
+export PATH=${PATH/$dbl/$bin}
+
+alias ii='win cygstart'
+alias ck='win ck -e ssh luxaky'
+alias wgui='win --interactive'
+alias wresolve='win --resolve'
+alias reboot='poweroff -r -w 3'
+alias xpdf='/usr/bin/xpdf -g +200+300'
+alias nautilus='/usr/bin/nautilus --no-desktop -g +200+300'
+alias browser='/usr/bin/nautilus --browser --no-desktop -g +200+300'
+alias restartck='win startup-ck; exit'

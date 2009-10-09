@@ -1,0 +1,43 @@
+# ~/.screenrc
+
+msgwait         0
+maptimeout      0
+escape          ^z^z
+bind            ^X
+bind            x
+startup_message off
+nethack         on
+autodetach      on
+defencoding     utf-8
+encoding        utf-8 utf-8
+cjkwidth        on
+altscreen       on
+hardstatus alwayslastline "%H %`%-w%{=b bw}%n %t%{-}%+w"
+
+multiuser on
+acladd    $USER
+
+defbce "on"
+term xterm
+shell zsh
+
+# J/K for half page donw/up
+bindkey -m J stuff ^D
+bindkey -m K stuff ^U
+
+# set copy buffer
+setenv MYBUFFERFILE $HOME/.screen-exchange
+bufferfile $MYBUFFERFILE
+
+# pass copy buffer to wclip
+bindkey -m ' ' eval 'stuff \040' writebuf 'exec !!! xclip $MYBUFFERFILE'
+bindkey -m Y eval 'stuff Y' writebuf 'exec !!! xclip $MYBUFFERFILE'
+bindkey -m y eval 'stuff y' writebuf 'exec !!! xclip $MYBUFFERFILE'
+bindkey -m W eval 'stuff W' writebuf 'exec !!! xclip $MYBUFFERFILE'
+
+# paste from xclip
+setenv PASTE "screen -X eval 'readbuf' 'paste .'"
+bind P eval 'exec !!! zsh -c "xclip -o > $MYBUFFERFILE; $PASTE"'
+
+# initial screen
+screen -t main  0
