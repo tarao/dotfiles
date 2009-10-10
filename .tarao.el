@@ -103,7 +103,3 @@
              (not buffer-read-only)
              (file-writable-p buffer-file-name))
         (save-buffer))))
-
-;; edit textarea
-(require 'textarea)
-(setq textarea-dir "~/win/var")
