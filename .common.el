@@ -7,33 +7,6 @@
  '(indicate-buffer-boundaries (quote left))
  '(tool-bar-mode nil)
  '(menu-bar-mode nil))
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(minibuffer-prompt ((t (:foreground "blue"))))
- '(font-lock-builtin-face
-   ((((class color) (min-colors 8)) (:foreground "brightblue"))))
- '(font-lock-comment-delimiter-face ((t (:inherit nil :foreground "green"))))
- '(font-lock-comment-face ((t (:foreground "green"))))
- '(font-lock-function-name-face ((t (:foreground "RoyalBlue"))))
- '(font-lock-keyword-face ((t (:foreground "blue" :weight bold))))
- '(font-lock-preprocessor-face ((t (:foreground "medium blue"))))
- '(font-lock-string-face ((t (:foreground "firebrick"))))
- '(font-lock-type-face ((t (:foreground "slate blue"))))
- '(font-lock-variable-name-face ((t (:foreground "BlueViolet"))))
- '(font-lock-warning-face ((t (:foreground "red"))))
- '(nxml-comment-content-face ((t (:foreground "DarkGreen"))))
- '(nxml-comment-delimiter-face ((t (:foreground "DarkGreen"))))
- '(nxml-delimited-data-face ((t (:foreground "firebrick"))))
- '(nxml-delimiter-face ((t (:foreground "medium blue"))))
- '(nxml-element-local-name-face
-   ((t (:inherit nxml-name-face :foreground "dark blue"))))
- '(nxml-name-face ((t (:foreground "BlueViolet"))))
- '(nxml-tag-slash-face
-   ((t (:inherit nxml-name-face :foreground "medium blue"))))
- '(trailing-whitespace ((t (:background "peach puff")))))
 
 ; load-path
 (setq load-path (cons "~/.emacs.d/site-lisp" load-path))
