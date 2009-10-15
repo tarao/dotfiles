@@ -6,8 +6,8 @@ if [ -n "$SSH_CLIENT" ]; then
 fi
 . ~/bin/export-display
 
-source ~/.luxaky.zshrc
-source ~/.vimode.zshrc
+source ~/.zsh/luxaky.zshrc
+source ~/.zsh/vimode.zshrc
 
 dbl=$HOME/bin:$HOME/bin
 bin=$HOME/bin

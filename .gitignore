@@ -14,6 +14,7 @@ Thumbs.db
 .svn
 .emacs.d/anything-c-adaptive-history
 .emacs.d/site-lisp
+.emacs.d/dot/.*
 .vimperator/info
 .vimperator/plugin/plugin_loader.js
 .vimperator/plugin-available

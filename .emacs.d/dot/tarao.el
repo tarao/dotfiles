@@ -1,3 +1,8 @@
+(load "dot/util")
+(load "dot/flymake")
+(load "dot/cpp")
+(load "dot/perl")
+
 ;; no startup message
 (setq inhibit-startup-message t)
 
@@ -62,9 +67,6 @@
    ((t (:inherit nxml-name-face :foreground "medium blue"))))
  '(trailing-whitespace ((t (:background "peach puff")))))
 
-(load "~/.util")
-(load "~/.common")
-
 ;; VC
 (setq vc-follow-symlinks nil)
 (setq vc-stay-local t)
@@ -77,9 +79,6 @@
   (local-set-key (kbd "C-c s") 'hs-show-block)
   (local-set-key (kbd "C-c l") 'hs-hide-level))
 
-(load "~/.flymake")
-(load "~/.cpp")
-(load "~/.perl")
 
 ;; Zenkaku -> Hankaku
 (autoload 'zen2han-region "zen2han" "zen <=> han" t)
@@ -92,6 +91,7 @@
 (setq skk-use-viper t)
 
 ;; viper minor mode
+(setq viper-custom-file-name (locate-library "dot/.viper"))
 (setq viper-mode t)
 (setq viper-toggle-key (kbd "C-x C-z"))
 (setq viper-ex-style-motion nil)

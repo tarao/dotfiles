@@ -10,6 +10,7 @@
 
 ; load-path
 (setq load-path (cons "~/.emacs.d/site-lisp" load-path))
+(setq load-path (cons "~/.emacs.d" load-path))
 
 ; hostname
 (string-match "^\\([^\\.]+\\)\\(\\.\\(.*\\)\\)?$" (system-name))
@@ -92,6 +93,7 @@
 (require 'default-file-coding-systems)
 
 ; skk
+(setq skk-init-file "dot/.skk")
 (require 'skk-autoloads)
 (global-set-key (kbd "C-x C-j") 'skk-mode)
 
@@ -316,7 +318,8 @@
       (setq mew-mbox-command-arg
             (concat "-u -d /home/users/" (user-login-name) "/Maildir"))
       ; emacs-w3m - a text browser
-      (require 'w3m-load)
+      (setq w3m-init-file "dot/.emacs-w3m")
+      (load "w3m")
       (add-hook 'w3m-mode-hook
                 '(lambda () (setq show-trailing-whitespace nil)))
       ; lookup - search dictionary

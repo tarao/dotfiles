@@ -1,4 +1,5 @@
-(load "~/.tarao")
+(load "~/.emacs.d/dot/common")
+(load "dot/tarao")
 
 ;; edit textarea
 (require 'textarea)
