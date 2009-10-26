@@ -68,8 +68,6 @@ if test "$EMACS" = "t" ; then
 fi
 export LS_OPTIONS
 
-export PAGER='lv -c'
-
 # Aliases
 alias ls='/bin/ls -F $=LS_OPTIONS'
 alias dir='ls -l'
