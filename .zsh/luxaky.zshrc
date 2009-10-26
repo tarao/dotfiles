@@ -13,17 +13,18 @@ bindkey "^N" history-beginning-search-forward-end
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 # VCS
-autoload -Uz vcs_info
-zstyle ':vcs_info:*' formats '[%b]'
-zstyle ':vcs_info:*' actionformats '[%b|%a]'
-precmd_vcs_info () {
-    psvar=()
-    LANG=en_US.UTF-8 vcs_info
-    [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
-}
-
-typeset -ga precmd_functions
-precmd_functions+=precmd_vcs_info
+if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
+    autoload -Uz vcs_info
+    zstyle ':vcs_info:*' formats '[%b]'
+    zstyle ':vcs_info:*' actionformats '[%b|%a]'
+    precmd_vcs_info () {
+        psvar=()
+        LANG=en_US.UTF-8 vcs_info
+        [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
+    }
+    typeset -ga precmd_functions
+    precmd_functions+=precmd_vcs_info
+fi
 
 # alias
 alias sc='screen -h 4096'
@@ -44,5 +45,32 @@ alias g++now="/usr/bin/g++ -std=gnu++98 -pedantic"
 alias emacs-compile='emacs -batch -f batch-byte-compile'
 
 # prompt
-PROMPT="%(!.%F{red}.%F{green})%U%n@%m%u%f:%1(j.%j.)%(!.#.>) "
-RPROMPT="[%F{yellow}%~%f]%1(v|%F{blue}%1v%f|)"
+if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
+    PROMPT="%(!.%F{red}.%F{green})%U%n@%m%u%f:%1(j.%j.)%(!.#.>) "
+    RPROMPT="[%F{yellow}%~%f]%1(v|%F{blue}%1v%f|)"
+else
+    # 0   to restore default color
+    # 1   for brighter colors
+    # 4   for underlined text
+    # 5   for flashing text
+    # 30  for black foreground
+    # 31  for red foreground
+    # 32  for green foreground
+    # 33  for yellow (or brown) foreground
+    # 34  for blue foreground
+    # 35  for purple foreground
+    # 36  for cyan foreground
+    # 37  for white (or gray) foreground
+    # 40  for black background
+    # 41  for red background
+    # 42  for green background
+    # 43  for yellow (or brown) background
+    # 44  for blue background
+    # 45  for purple background
+    # 46  for cyan background
+    # 47  for white (or gray) background
+    col1='0;4;32'
+    col2='0;33'
+    PROMPT="%{[${col1}m%}%n@%m%{[m%}:%1(j.%j.)%(!.#.>) "
+    RPROMPT="[%{[${col2}m%}%~%{[m%}]"
+fi
