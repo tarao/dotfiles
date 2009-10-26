@@ -1,3 +1,4 @@
+syntax on
 set ic
 noremap ; :
 noremap J <C-d>
