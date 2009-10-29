@@ -223,6 +223,10 @@
 (add-hook 'ruby-mode-hook
           '(lambda ()
              (inf-ruby-keys)))
+(autoload 'rdoc-mode "rdoc-mode"
+  "Mode for editing rdoc files" t)
+(setq auto-mode-alist
+      (append '(("\\.rdoc$" . rdoc-mode))))
 
 ; tuareg-mode - Objective Caml support
 (setq auto-mode-alist (cons '("\\.ml\\w?" . tuareg-mode) auto-mode-alist))
