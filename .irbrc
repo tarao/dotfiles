@@ -13,7 +13,7 @@ end
 
 module Kernel
   def r(arg)
-    puts `refe #{arg}`
+    puts(NKF.nkf('-w', `refe #{arg}`))
   end
   private :r
 end
