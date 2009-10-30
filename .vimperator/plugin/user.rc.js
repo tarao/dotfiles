@@ -4,16 +4,17 @@
         modes.forEach(function(mode) {
             var map = liberator.modules.mappings.get(mode, rhs);
             if (map) {
-                if (!(lhs instanceof Array)) {
-                    lhs = [lhs];
-                    liberator.modules.mappings.addUserMap(
-                        [mode],
-                        lhs, map.description, map.action,
-                        { flags: map.flags,
-                          rhs: map.rhs,
-                          noremap: map.noremap,
-                          silent: map.silent });
-                }
+                if (!(lhs instanceof Array)) lhs = [lhs];
+                liberator.modules.mappings.addUserMap(
+                    [mode],
+                    lhs, map.description, map.action,
+                    { arg:     map.arg,
+                      count:   map.count,
+                      motion:  map.motion,
+                      route:   map.route,
+                      noremap: map.noremap,
+                      silent:  map.silent,
+                      rhs:     map.rhs });
             }
         });
     };
