@@ -18,6 +18,7 @@ let g:plugin_loader_roots='~/.vimperator/plugin-available/';
 js <<EOM
 liberator.globalVariables.plugin_loader_plugins = <>
     appendAnchor
+    auto_reload
     caret-hint
     cpan-search
     google-search
