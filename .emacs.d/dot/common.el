@@ -226,7 +226,7 @@
 (autoload 'rdoc-mode "rdoc-mode"
   "Mode for editing rdoc files" t)
 (setq auto-mode-alist
-      (append '(("\\.rdoc$" . rdoc-mode))))
+      (append '(("\\.rdoc$" . rdoc-mode)) auto-mode-alist))
 
 ; tuareg-mode - Objective Caml support
 (setq auto-mode-alist (cons '("\\.ml\\w?" . tuareg-mode) auto-mode-alist))
