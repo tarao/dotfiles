@@ -1,0 +1,6 @@
+bindkey -m d stuff \202
+bindkey -m h stuff \216
+bindkey -m t stuff \220
+bindkey -m n stuff \206
+bindkey -m H stuff ^D
+bindkey -m T stuff ^U
