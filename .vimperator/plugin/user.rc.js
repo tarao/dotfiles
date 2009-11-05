@@ -51,11 +51,11 @@
         openfunc('open', true, true));
     liberator.modules.mappings.addUserMap(
         [liberator.modules.modes.NORMAL],
-        ['l'], 'Open one or more URLs in a new tab',
+        ['t'], 'Open one or more URLs in a new tab',
         openfunc('tabopen', true));
     liberator.modules.mappings.addUserMap(
         [liberator.modules.modes.NORMAL],
-        ['L'], 'Open one or more URLs in a new tab, based on current location',
+        ['T'], 'Open one or more URLs in a new tab, based on current location',
         openfunc('tabopen', true, true));
     liberator.modules.mappings.addUserMap(
         [liberator.modules.modes.NORMAL],
