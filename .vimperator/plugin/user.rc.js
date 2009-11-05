@@ -51,11 +51,11 @@
         openfunc('open', true, true));
     liberator.modules.mappings.addUserMap(
         [liberator.modules.modes.NORMAL],
-        ['t'], 'Open one or more URLs in a new tab',
+        ['l'], 'Open one or more URLs in a new tab',
         openfunc('tabopen', true));
     liberator.modules.mappings.addUserMap(
         [liberator.modules.modes.NORMAL],
-        ['T'], 'Open one or more URLs in a new tab, based on current location',
+        ['L'], 'Open one or more URLs in a new tab, based on current location',
         openfunc('tabopen', true, true));
     liberator.modules.mappings.addUserMap(
         [liberator.modules.modes.NORMAL],
@@ -71,7 +71,7 @@
         openfunc('open'));
     liberator.modules.mappings.addUserMap(
         [liberator.modules.modes.NORMAL],
-        [',t'], ':tabopen in the wild mode',
+        [',l'], ':tabopen in the wild mode',
         openfunc('tabopen'));
     liberator.modules.mappings.addUserMap(
         [liberator.modules.modes.NORMAL],
@@ -81,14 +81,14 @@
         [liberator.modules.modes.NORMAL],
         [',B'], ':tabopen from bookmarks in the wild mode',
         openfunc('tabopen *'));
-    liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.NORMAL],
-        ['s'], ':gsearch',
-        openfunc('gsearch', true));
-    liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.NORMAL],
-        ['S'], ':gsearch!',
-        openfunc('gsearch!', true));
+//     liberator.modules.mappings.addUserMap(
+//         [liberator.modules.modes.NORMAL],
+//         ['s'], ':gsearch',
+//         openfunc('gsearch', true));
+//     liberator.modules.mappings.addUserMap(
+//         [liberator.modules.modes.NORMAL],
+//         ['S'], ':gsearch!',
+//         openfunc('gsearch!', true));
 
     deepRemap('++', '<C-a>');
     deepRemap('--', '<C-x>');

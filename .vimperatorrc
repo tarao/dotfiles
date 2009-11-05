@@ -56,17 +56,23 @@ if (typeof hBookmark != 'undefined') {
 }
 EOM
 
-noremap d D
-noremap D d
+noremap k D
+noremap K d
+noremap s n
+noremap S N
+noremap D H
+noremap N L
+noremap j f
+noremap J F
 
 noremap <C-j> <Nop>
 inoremap <C-j> <Nop>
 cnoremap <C-j> <Nop>
 
-noremap j 3<C-e>
-noremap k 3<C-y>
-noremap J <C-d>
-noremap K <C-u>
+noremap h 3<C-e>
+noremap t 3<C-y>
+noremap H <C-d>
+noremap T <C-u>
 noremap <C-k> <C-u>
 
 inoremap <C-v> <S-Insert>
