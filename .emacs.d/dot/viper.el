@@ -1,3 +1,4 @@
+(setq viper-fast-keyseq-timeout 0)
 (setq viper-expert-level 3)
 (setq viper-case-fold-search t)
 (setq viper-inhibit-startup-message t)
