@@ -198,7 +198,7 @@
 (require 'jaspace)
 ;(setq jaspace-alternate-eol-string "\xab\n")
 (setq jaspace-highlight-tabs t)
-(setq jaspace-highlight-tabs ?^)
+(setq jaspace-highlight-tabs ?>)
 
 ; align
 (require 'align)
