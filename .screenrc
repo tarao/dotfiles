@@ -29,7 +29,7 @@ bindkey -m K stuff ^U
 setenv MYBUFFERFILE $HOME/.screen-exchange
 bufferfile $MYBUFFERFILE
 
-# pass copy buffer to wclip
+# pass copy buffer to xclip
 bindkey -m ' ' eval 'stuff \040' writebuf 'exec !!! xclip $MYBUFFERFILE'
 bindkey -m Y eval 'stuff Y' writebuf 'exec !!! xclip $MYBUFFERFILE'
 bindkey -m y eval 'stuff y' writebuf 'exec !!! xclip $MYBUFFERFILE'
