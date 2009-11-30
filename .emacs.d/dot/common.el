@@ -276,6 +276,12 @@
 (autoload 'xquery-mode "xquery-mode" "Major mode for editing xquery" t)
 (setq auto-mode-alist (cons '("\\.xquery$" . xquery-mode) auto-mode-alist))
 
+(autoload 'yaml-mode "yaml-mode"
+  "Mode for editing YAML files" t)
+(setq auto-mode-alist
+      (append '(("\\.yml$" . yaml-mode)
+                ("\\.yaml$" . yaml-mode)) auto-mode-alist))
+
 ; LaTeX mode
 (setq TeX-default-mode 'japanese-latex-mode)
 (setq auto-mode-alist
