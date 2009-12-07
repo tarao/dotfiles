@@ -1,5 +1,7 @@
 require 'irb/completion'
 require 'nkf'
+require 'pp'
+IRB.conf[:SAVE_HISTORY] = 100000
 
 begin
   require 'rubygems'
