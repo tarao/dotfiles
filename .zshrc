@@ -13,6 +13,11 @@ dbl=$HOME/bin:$HOME/bin
 bin=$HOME/bin
 export PATH=${PATH/$dbl/$bin}
 
+alias c++="~/bin/g++ -lstdc++ -std=c++98 -pedantic-errors $cppwarning"
+alias c++now="~/bin/g++ -lstdc++ -std=c++98 -pedantic-errors"
+alias g++="~/bin/g++ -lstdc++ -std=gnu++98 -pedantic $cppwarning"
+alias g++now="~/bin/g++ -lstdc++ -std=gnu++98 -pedantic"
+
 alias ii='win cygstart'
 alias ck='win ck -e ssh luxaky'
 alias wgui='win --interactive'

@@ -27,7 +27,7 @@
          (local-file (file-relative-name
                       temp-file
                       (file-name-directory buffer-file-name))))
-    (list "g++" (append flymake-cc-command-opt (list local-file)))))
+    (list "/usr/bin/g++" (append flymake-cc-command-opt (list local-file)))))
 
 (push '("\\.cpp$" flymake-cc-init) flymake-allowed-file-name-masks)
 
