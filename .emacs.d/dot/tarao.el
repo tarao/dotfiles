@@ -17,7 +17,7 @@
         ;   (normal) |--かな:uuu:...
         ;   (insert) |--INSERT--かな:uuu:...
         (viper-mode-string
-         (:eval (unless (string= viper-mode-string "") "--")))
+         (:eval (unless (eq viper-current-state 'vi-state) "--")))
         viper-mode-string
         skk-modeline-input-mode
         (skk-mode
@@ -109,6 +109,8 @@
 ;; viper-mode patches
 (require 'hexl-viper-patch)
 (defadvice viper-maybe-checkout (around viper-dont-ask-checkout activate) nil)
+(defadvice ac-start (around viper-replace-no-ac-start (&optional msg) activate)
+  (unless (eq viper-current-state 'replace-state) ad-do-it))
 
 ;; line number mode
 ;; (setq linum-format
