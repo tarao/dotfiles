@@ -12,6 +12,7 @@ tags
 Thumbs.db
 *.bak
 .svn
+CVS
 .emacs.d/anything-c-adaptive-history
 .emacs.d/site-lisp
 .emacs.d/dot/.*
