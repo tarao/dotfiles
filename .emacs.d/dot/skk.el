@@ -3,14 +3,23 @@
 
 ; use skk server
 (setq skk-server-host "localhost")
-(setq skk-server-portnum 1178)
+(setq skk-server-portnum 1179)
 
-; use skk-look
-;; (setq skk-use-look t)
+(setq skk-dcomp-activate t)
+(setq skk-dcomp-multiple-activate t)
+
+(set-face-foreground 'skk-dcomp-multiple-face "black")
+(set-face-background 'skk-dcomp-multiple-face "lightgray")
+(set-face-foreground 'skk-dcomp-multiple-trailing-face "yellow")
+(set-face-background 'skk-dcomp-multiple-selected-face "blue")
+
+; skk-lookup (use dictionary server)
+;; (autoload 'skk-lookup-search "skk-lookup")
 ;; (setq skk-search-prog-list
-;;        (append skk-search-prog-list
-;;                (list
-;;                 '(skk-lookup-search))))
+;;       (append skk-search-prog-list
+;;               '(
+;;                 (skk-lookup-search)
+;;                 )))
 
 ; standalone
 ;; (setq skk-large-jisyo "/usr/share/skk/SKK-JISYO.L")
