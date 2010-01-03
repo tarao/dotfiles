@@ -2,6 +2,7 @@
 
 msgwait         0
 maptimeout      0
+defscrollback   8192
 escape          ^z^z
 bind            ^X
 bind            x
@@ -17,13 +18,12 @@ hardstatus alwayslastline "%H %`%-w%{=b bw}%n %t%{-}%+w"
 multiuser on
 acladd    $USER
 
-defbce "on"
+defbce on
 term xterm
 shell zsh
 
 # J/K for half page donw/up
-bindkey -m J stuff ^D
-bindkey -m K stuff ^U
+markkeys ^D=J:^U=K
 
 # set copy buffer
 setenv MYBUFFERFILE $HOME/.screen-exchange
