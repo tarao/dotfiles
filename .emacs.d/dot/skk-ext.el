@@ -1,3 +1,11 @@
+(setq skk-dcomp-activate t)
+(setq skk-dcomp-multiple-activate t)
+
+(set-face-foreground 'skk-dcomp-multiple-face "black")
+(set-face-background 'skk-dcomp-multiple-face "lightgray")
+(set-face-foreground 'skk-dcomp-multiple-trailing-face "yellow")
+(set-face-background 'skk-dcomp-multiple-selected-face "blue")
+
 (setq-default skk-kutouten-type 'en)
 (setq skk-egg-like-newline t)
 (setq my-skk-rom-kana-rule-list-base
