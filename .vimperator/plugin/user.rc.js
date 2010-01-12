@@ -1,24 +1,4 @@
 (function(){
-    var deepRemap = function(lhs, rhs/*, modes*/) {
-        var modes = arguments[2] || [liberator.modules.modes.NORMAL];
-        modes.forEach(function(mode) {
-            var map = liberator.modules.mappings.get(mode, rhs);
-            if (map) {
-                if (!(lhs instanceof Array)) lhs = [lhs];
-                liberator.modules.mappings.addUserMap(
-                    [mode],
-                    lhs, map.description, map.action,
-                    { arg:     map.arg,
-                      count:   map.count,
-                      motion:  map.motion,
-                      route:   map.route,
-                      noremap: map.noremap,
-                      silent:  map.silent,
-                      rhs:     map.rhs });
-            }
-        });
-    };
-
     liberator.plugins.advice.add(
         'liberator.modules.commandline.open',
         function(prompt, cmd, extendedMode) {
@@ -90,8 +70,8 @@
 //         ['S'], ':gsearch!',
 //         openfunc('gsearch!', true));
 
-    deepRemap('++', '<C-a>');
-    deepRemap('--', '<C-x>');
+    liberator.plugins.map.deepRemap('++', '<C-a>');
+    liberator.plugins.map.deepRemap('--', '<C-x>');
 
     liberator.execute('noremap <C-a> <C-v><C-a>', null, true);
     liberator.execute('inoremap <C-a> <C-v><C-a>', null, true);
@@ -148,4 +128,10 @@
                                                liberator.modules.modes.EX);
         });
 
+    commands.addUserCommand(
+        ['imagelo[ader]'], 'Activate imageloader.user.js',
+        function(args){
+            liberator.plugins.imageloader.start();
+        }, {
+        });
 })();
