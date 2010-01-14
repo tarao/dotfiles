@@ -65,7 +65,7 @@ alias emacs-compile='emacs -batch -f batch-byte-compile'
 if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
     PROMPT="%(!.%F{red}.%F{green})%U%n@%6>>%m%>>%u%f:%1(j.%j.)%(!.#.>) "
     local dirs='[%F{yellow}%3(v|%32<..<%3v%<<|%60<..<%~%<<)%f]'
-    local vcs='%3(v|[%26<><%F{yellow}%2v%f@%F{blue}%1v%f%<<]|)'
+    local vcs='%3(v|[%25<\<<%F{yellow}%2v%f@%F{blue}%1v%f%<<]|)'
     RPROMPT="$dirs$vcs"
 else
     # 0   to restore default color
