@@ -70,6 +70,9 @@ noremap J <C-d>
 noremap K <C-u>
 noremap <C-k> <C-u>
 
+noremap <C-u> <C-a>
+noremap <C-d> <C-x>
+
 inoremap <C-v> <S-Insert>
 cnoremap <C-v> <S-Insert>
 

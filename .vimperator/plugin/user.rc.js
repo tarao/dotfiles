@@ -70,8 +70,8 @@
 //         ['S'], ':gsearch!',
 //         openfunc('gsearch!', true));
 
-    liberator.plugins.map.deepRemap('++', '<C-a>');
-    liberator.plugins.map.deepRemap('--', '<C-x>');
+//     liberator.plugins.map.deepRemap('++', '<C-a>');
+//     liberator.plugins.map.deepRemap('--', '<C-x>');
 
     liberator.execute('noremap <C-a> <C-v><C-a>', null, true);
     liberator.execute('inoremap <C-a> <C-v><C-a>', null, true);
