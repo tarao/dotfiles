@@ -24,6 +24,16 @@ function snatch() {
                 p (int)dup2(\$1, 2)")
 }
 
+# git-hg compatibility
+function git() {
+    if [[ "$vcs" = 'hg' ]]; then
+        local args=`git2hg $@`
+        hg ${=args}
+    else
+        /usr/bin/env git $@
+    fi
+}
+
 # alias
 alias sc='screen -h 4096'
 alias wcat='wget -q -O -'
@@ -46,14 +56,19 @@ alias emacs-compile='emacs -batch -f batch-byte-compile'
 if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
     # VCS
     autoload -Uz vcs_info
-    zstyle ':vcs_info:(git|svn):*' formats '%R' '%S' '%b'
-    zstyle ':vcs_info:(git|svn):*' actionformats '%R' '%S' '%b|%a'
-    zstyle ':vcs_info:*' formats '%R' '%S' '%s:%b'
-    zstyle ':vcs_info:*' actionformats '%R' '%S' '%s:%b|%a'
+    zstyle ':vcs_info:(git|svn):*' formats '%R' '%S' '%b' '%s'
+    zstyle ':vcs_info:(git|svn):*' actionformats '%R' '%S' '%b|%a' '%s'
+    zstyle ':vcs_info:*' formats '%R' '%S' '%s:%b' '%s'
+    zstyle ':vcs_info:*' actionformats '%R' '%S' '%s:%b|%a' '%s'
     precmd_vcs_info () {
         psvar=()
         LANG=en_US.UTF-8 vcs_info
         repos=`print -nD "$vcs_info_msg_0_"`
+        if [[ -n "$vcs_info_msg_1_" ]]; then
+            vcs="$vcs_info_msg_3_"
+        else
+            vcs=''
+        fi
         [[ -n "$repos" ]] && psvar[2]="$repos"
         [[ -n "$vcs_info_msg_1_" ]] && psvar[3]="$vcs_info_msg_1_"
         [[ -n "$vcs_info_msg_2_" ]] && psvar[1]="$vcs_info_msg_2_"
@@ -62,9 +77,9 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
     precmd_functions+=precmd_vcs_info
 
     PROMPT="%(!.%F{red}.%F{green})%U%n@%6>>%m%>>%u%f:%1(j.%j.)%(!.#.>) "
-    local dirs='[%F{yellow}%3(v|%32<..<%3v%<<|%60<..<%~%<<)%f]'
-    local vcs='%3(v|[%25<\<<%F{yellow}%2v%f@%F{blue}%1v%f%<<]|)'
-    RPROMPT="$dirs$vcs"
+    local psdirs='[%F{yellow}%3(v|%32<..<%3v%<<|%60<..<%~%<<)%f]'
+    local psvcs='%3(v|[%25<\<<%F{yellow}%2v%f@%F{blue}%1v%f%<<]|)'
+    RPROMPT="$psdirs$psvcs"
 else
     # 0   to restore default color
     # 1   for brighter colors
