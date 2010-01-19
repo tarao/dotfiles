@@ -1,0 +1,2 @@
+[extensions]
+hgext.forest=/home/users/tarao/.hg/ext/forest.py
