@@ -1,7 +1,7 @@
 (function(){
     liberator.plugins.libly.$U.around(
         liberator.modules.commandline, 'open',
-        function(original, prompt, cmd, extendedMode) {
+        function(original, args) {
             if (liberator.modules.commandline.nowildoptflag) {
                 liberator.modules.commandline.nowildoptflag = false;
                 liberator.modules.options.get('wildoptions').set('');
@@ -102,9 +102,10 @@
 
     liberator.plugins.libly.$U.around(
         liberator.modules.bookmarks, 'add',
-        function(original, starOnly, title, url, keyword, tags, bang) {
+        function(original, args/*starOnly, title, url, keyword, tags, bang*/) {
             // force using the unfiledBookmarksFolder
-            return original([true, title, url, keyword, tags, bang]);
+            args[0] = true; // starOnly
+            return original(args);
         });
 
     liberator.modules.mappings.addUserMap(
