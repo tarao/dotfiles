@@ -1,14 +1,15 @@
 (function(){
-    liberator.plugins.advice.add(
-        'liberator.modules.commandline.open',
-        function(prompt, cmd, extendedMode) {
+    liberator.plugins.libly.$U.around(
+        liberator.modules.commandline, 'open',
+        function(original, prompt, cmd, extendedMode) {
             if (liberator.modules.commandline.nowildoptflag) {
                 liberator.modules.commandline.nowildoptflag = false;
                 liberator.modules.options.get('wildoptions').set('');
             } else {
                 liberator.modules.options.get('wildoptions').set('auto,sort');
             }
-        }, 'before');
+            original();
+        });
     var openfunc = function(name/*, nowild, url*/) {
         var nowild = arguments[1];
         var url = arguments[2];
@@ -99,11 +100,11 @@
             }
         });
 
-    liberator.plugins.advice.add(
-        'liberator.modules.bookmarks.add',
-        function(starOnly, title, url, keyword, tags, bang) {
+    liberator.plugins.libly.$U.around(
+        liberator.modules.bookmarks, 'add',
+        function(original, starOnly, title, url, keyword, tags, bang) {
             // force using the unfiledBookmarksFolder
-            return this.original(true, title, url, keyword, tags, bang);
+            return original([true, title, url, keyword, tags, bang]);
         });
 
     liberator.modules.mappings.addUserMap(
