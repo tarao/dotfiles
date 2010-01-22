@@ -129,11 +129,4 @@
                                                'buffer! ',
                                                liberator.modules.modes.EX);
         });
-
-    commands.addUserCommand(
-        ['imagelo[ader]'], 'Activate imageloader.user.js',
-        function(args){
-            liberator.plugins.imageloader.start();
-        }, {
-        });
 })();

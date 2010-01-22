@@ -124,6 +124,7 @@ liberator.plugins.imageloader = (function() {
         resetMap();
 
         var il = sandbox().ImageLoader;
+        il.vimperator = true;
         var d = sandbox().document;
         var $ = function(id){ return d.getElementById(id); };
         var $node = function(node) {
@@ -142,6 +143,16 @@ liberator.plugins.imageloader = (function() {
                 parent.appendChild(elem);
             }
         };
+
+        liberator.plugins.libly.$U.around(
+            il, '_startSlideShowFromFirst',
+            function(original, args) {
+                original();
+
+                if (GM.getValue('disableVimperatorKeymap', true)) {
+                    liberator.plugins.map.emulate('<C-z>');
+                }
+            });
 
         // new keymap
         liberator.plugins.libly.$U.around(
@@ -170,31 +181,82 @@ liberator.plugins.imageloader = (function() {
             function(original, args) {
                 original(); // show first
 
-                var makeDiv = function() {
+                try {
+
+                var makeInputDiv = function() {
                     return $node(
                             <div class="textinputContainer"
                                  style="text-align: left"/>);
                 };
-                var makeKeyInput = function(id, val) {
-                    var input = $node(<input style="width:1.5em"/>);
+                var makeCheckDiv = function() {
+                    return $node(
+                            <div class="checkboxContainer"
+                                 style="text-align: left"/>);
+                };
+                var makeCheck = function(id, l, checked) {
+                    var input = $node(<input type="checkbox"/>);
+                    input.id = id;
+                    if (checked) input.checked = true;
+                    var label = $node(<label/>);
+                    label.for = id;
+                    label.appendChild(d.createTextNode(' '+l));
+                    return [ input, label ];
+                };
+                var makeInput = function(id, val, style) {
+                    var input = $node(<input style=""/>);
                     input.id = id;
                     if (val) input.value = val;
+                    if (style) {
+                        for (var p in style) input.style[p] = style[p];
+                    }
                     return input;
                 };
+                var makeKeyInput = function(id, val) {
+                    return makeInput(id, val, { width: '1.5em' });
+                };
                 var makeDirInput = function(id, val) {
-                    var input = $node(<input/>);
-                    input.id = id;
-                    if (val) input.value = val;
-                    return input;
+                    return makeInput(id, val, { width: '70%' });
                 };
 
                 var ext = $('__config_extended');
                 var conf = $('__config_panel_id__');
                 if (!ext && conf) {
-                    var after = $('__imageloader_config_button').parentNode;
+                    var before = $('__enable_autoloading').parentNode;
+                    var after = before.nextSibling;
+                    var appendCheck = function(id, label, checked) {
+                        var div = makeCheckDiv();
+                        var check = makeCheck(id, label, checked);
+                        check.forEach(function(x){ div.appendChild(x); });
+                        $add(conf, div, after);
+                        return check[0];
+                    };
+                    var slideshow = appendCheck(
+                        '__enable_autoslideshow',
+                        'enable auto slideshow.',
+                        GM.getValue('autoStartSlideShow', true));
+                    var disVimpKey = appendCheck(
+                        '__disable_vimperator_keymap',
+                        'disable vimperator keymap',
+                        GM.getValue('disableVimperatorKeymap', true));
+                    var disKey = $('__config_disable_keybordShortcut');
+                    var disKeyParent = disKey.parentNode;
+                    for (var i=0; i < disKeyParent.childNodes.length; i++) {
+                        var child = disKeyParent.childNodes[i];
+                        if (child && child.tagName &&
+                            child.tagName.toLowerCase() == 'label') {
+                            disKeyParent.removeChild(child);
+                        }
+                    }
+                    disKey.parentNode.appendChild($node(
+                            <label for="__config_disable_keybordShortcut">
+                              disable keyboard shortcut.
+                            </label>));
+
+                    var btn = $('__imageloader_config_button');
+                    after = btn.parentNode;
                     $add(conf, <hr id="__config_extended"/>, after);
                     $add(conf, <p>Key for places</p>, after);
-                    var div = makeDiv();
+                    var div = makeInputDiv();
                     var keySaveAsDefault = GM.getValue('keySaveAs', 'a');
                     var keySaveAs = makeKeyInput('__key_saveas',
                                                  keySaveAsDefault);
@@ -206,7 +268,7 @@ liberator.plugins.imageloader = (function() {
                     var keys = [];
                     var dirs = [];
                     var appendInput = function(k, d) {
-                        var div = makeDiv();
+                        var div = makeInputDiv();
                         keys[i] = makeKeyInput('__key_places'+i, k);
                         dirs[i] = makeDirInput('__dir_places'+i, d)
                         $add(div, keys[i]);
@@ -231,10 +293,13 @@ liberator.plugins.imageloader = (function() {
                     };
                     growInput();
 
-                    var btn = $('__imageloader_config_button');
                     btn.addEventListener('click', function() {
-                        var p = new Places();
+                        GM.setValue('autoStartSlideShow',
+                                    slideshow.checked);
+                        GM.setValue('disableVimperatorKeymap',
+                                    disVimpKey.checked);
                         GM.setValue('keySaveAs', keySaveAs.value);
+                        var p = new Places();
                         for (var j=0; j < i; j++) {
                             var key = keys[j];
                             var dir = dirs[j];
@@ -248,21 +313,31 @@ liberator.plugins.imageloader = (function() {
                         resetMap();
                     }, false);
                 }
+
+                } catch (e) { alert(e); }
             });
     };
 
     var afterLoad = function() { // automatically enter slide show mode
-        /* TODO: make these optional */
-        sandbox().ImageLoader.startSlideShowFromFirst();
-        liberator.plugins.map.emulate('<C-z>'); // disable keymap of vimperator
+        if (GM.getValue('autoStartSlideShow', true)) {
+            sandbox().ImageLoader.startSlideShowFromFirst();
+        }
     };
 
-    var start = function() {
-        liberator.execute(':gmload imageLoader');
+    var start = function(forceReload) {
+        var firstTime = false;
+        var gmp = liberator.plugins.gmperator;
+        if (!gmp.currentContainer.hasScript('imageloader.user.js')) {
+            liberator.execute(':gmload imageLoader');
+            firstTime = true;
+        }
         try {
-            setup();
+            if (!sandbox().ImageLoader.vimperator) {
+                setup();
+            }
         } catch (e) {
             liberator.echoerr(e);
+            return;
         }
 
         var il = sandbox().ImageLoader;
@@ -282,7 +357,23 @@ liberator.plugins.imageloader = (function() {
             }
             afterLoad();
         };
-        wait();
+
+        if (firstTime) {
+            liberator.plugins.libly.$U.around(
+                il, '_loadImages',
+                function(original, args) {
+                    original();
+                    wait();
+                });
+            var auto = GM.getValue('__enable_autoloading', true);
+            if (auto) {
+                wait();
+            } else if (forceReload) {
+                il.loadImages();
+            }
+        } else {
+            il.loadImages();
+        }
     };
 
     return {
@@ -290,3 +381,12 @@ liberator.plugins.imageloader = (function() {
         map: internalMap,
     };
 })();
+
+commands.addUserCommand(
+    ['imagelo[ader]', 'imgldr'], 'Activate imageloader.user.js',
+    function(args){
+        liberator.plugins.imageloader.start(args.bang);
+    }, {
+        bang: true
+    });
+
