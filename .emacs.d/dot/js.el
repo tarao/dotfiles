@@ -1,5 +1,8 @@
 ;;; javascript
-(add-to-list 'auto-mode-alist '("\\.js\\'" . javascript-mode))
+(setq auto-mode-alist
+      (append '(("\\.json$" . javascript-mode)
+                ("\\.js$" . javascript-mode))))
+
 (autoload 'javascript-mode "javascript" nil t)
 (setq javascript-indent-level 4)
 
