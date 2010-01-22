@@ -18,6 +18,5 @@ CVS
 .emacs.d/site-lisp
 .emacs.d/dot/.*
 .vimperator/info
-.vimperator/plugin/_libly.js
 .vimperator/plugin/plugin_loader.js
 .vimperator/plugin-available

@@ -17,6 +17,7 @@ hi Hint z-index:5000; font-weight:bold; font-family:monospace; font-size:12px; c
 let g:plugin_loader_roots='~/.vimperator/plugin-available/';
 js <<EOM
 liberator.globalVariables.plugin_loader_plugins = <>
+    _libly
     appendAnchor
     auto_reload
     caret-hint
@@ -30,8 +31,6 @@ liberator.globalVariables.plugin_loader_plugins = <>
     migemo-find
     migemo_hint
     pluginManager
-    splitBrowser
-    tinymenu
 </>.toString().split(/\s+/).filter(function(n) n);
 EOM
 
