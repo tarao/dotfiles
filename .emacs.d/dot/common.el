@@ -203,11 +203,6 @@
 ; align
 (require 'align)
 
-; javascript-mode
-(add-to-list 'auto-mode-alist '("\\.js\\'" . javascript-mode))
-(autoload 'javascript-mode "javascript" nil t)
-(setq javascript-indent-level 4)
-
 ; ruby-mode
 (autoload 'ruby-mode "ruby-mode"
   "Mode for editing ruby source files" t)

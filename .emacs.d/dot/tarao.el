@@ -1,6 +1,7 @@
 (load "dot/util")
 (load "dot/flymake")
 (load "dot/cpp")
+(load "dot/js")
 (load "dot/perl")
 
 ;; no startup message
