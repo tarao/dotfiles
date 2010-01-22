@@ -1,3 +1,6 @@
+/*
+    - Google image search
+*/
 liberator.plugins.imageloader = (function() {
     var saveAs = function(il, img) {
         window.saveURL(img.src);
@@ -29,18 +32,24 @@ liberator.plugins.imageloader = (function() {
                     '@mozilla.org/embedding/browser/nsWebBrowserPersist;1'
                 ].createInstance(Ci.nsIWebBrowserPersist);
                 var download = dm.addDownload(
-                    // FIXME: are these arguments right?
-                    0,
-                    uri,
-                    fileuri,
-                    basename,
-                    null,
-                    null,
-                    null,
-                    null,
-                    persist);
+                    0,        // download type
+                    uri,      // source URI (must not be null)
+                    fileuri,  // target URI (must not be null)
+                    basename, // display name (may be an empty string)
+                    null,     // MIME info (optional)
+                    null,     // start time
+                    null,     // temporary file (may be null)
+                    persist   // cancelable (must not be null)
+                );
                 persist.progressListener = download;
-                persist.saveURI(uri, null, null, null, null, file);
+                persist.saveURI(
+                    uri,  // source URI
+                    null, // cache key (or null)
+                    null, // referrer (or null)
+                    null, // post data with an HTTP request (or null)
+                    null, // additional headers for an HTTP request (or null)
+                    file  // target file
+                );
             } catch (e) {
                 liberator.echoerr(e);
             }
@@ -66,9 +75,17 @@ liberator.plugins.imageloader = (function() {
         };
         return {
             bind: function(key, func){ map[key] = func; },
+            forEach: function(f){ for (var k in map) f(k, map[k]); },
+            emulate: function(k, args) {
+                try {
+                    f = map[k];
+                    return f && f.apply((function(){return this;})(), args);
+                } catch (e) {
+                    liberator.echoerr(e);
+                }
+            },
             invoke: function(e, args) {
-                f = map[event2key(e)];
-                return f && f.apply(this, args);
+                return this.emulate(event2key(e), args);
             },
             clone: function() {
                 var c = {};
@@ -104,6 +121,7 @@ liberator.plugins.imageloader = (function() {
     var internalMap = new KeyMap();
     var map;
     var places;
+    var toolbar;
 
     var sandbox = function() {
         return liberator.plugins.gmperator.currentSandbox;
@@ -113,16 +131,7 @@ liberator.plugins.imageloader = (function() {
         setValue: function(name, v){ return sandbox().GM_setValue(name, v); },
     };
 
-    var resetMap = function() {
-        map = internalMap.clone();
-        map.bind(GM.getValue('keySaveAs', 'a'), saveAs);
-        places = new Places(GM.getValue('places', '{"t":"/tmp"}'));
-        places.forEach(function(key, dir){ map.bind(key, saveLocal(dir)) });
-    };
-
     var setup = function() { // setup extended features
-        resetMap();
-
         var il = sandbox().ImageLoader;
         il.vimperator = true;
         var d = sandbox().document;
@@ -143,9 +152,60 @@ liberator.plugins.imageloader = (function() {
                 parent.appendChild(elem);
             }
         };
+        var getImage = function() {
+            return (il._mode == il._mode_thumbnail) ?
+                il._thumbnail_getSelected_image() :
+                il._getPopedImage();
+        };
 
+        var Toolbar = function(map) {
+            var tl = [];
+
+            map.forEach(function(key, func) {
+                if (!GM.getValue('showPlacesToolbar', true)) return;
+                var btn = <input type="button"
+                                 style="border: 1px solid gray;
+                                        font-weight: bold;
+                                        font-size: 12px;
+                                        cursor: pointer;
+                                        min-width: 16px; height: 16px;
+                                        margin: 0 3px; padding: 0;
+                                        vertical-align: middle;
+                                       "/>;
+                btn = $node(btn);
+                btn.value = key;
+                btn.addEventListener('click', function(e) {
+                    var img = getImage();
+                    if (img && map.emulate(key, [ il, img ])) {
+                        // disable default action
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return;
+                    }
+                }, false);
+                tl.push(btn);
+            });
+
+            return {
+                install: function(id) {
+                    var bar = $(id);
+                    bar && tl.forEach(function(btn){bar.appendChild(btn);});
+                }
+            };
+        };
+
+        var resetMap = function() {
+            map = internalMap.clone();
+            map.bind(GM.getValue('keySaveAs', 'a'), saveAs);
+            places = new Places(GM.getValue('places', '{"t":"/tmp"}'));
+            places.forEach(function(key, dir){map.bind(key,saveLocal(dir))});
+            toolbar = new Toolbar(map);
+        };
+        resetMap();
+
+        // disable vimperator keymap
         liberator.plugins.libly.$U.around(
-            il, '_startSlideShowFromFirst',
+            il, '_popImage',
             function(original, args) {
                 original();
 
@@ -154,7 +214,7 @@ liberator.plugins.imageloader = (function() {
                 }
             });
 
-        // new keymap
+        // additional keymap
         liberator.plugins.libly.$U.around(
             il, '_keybordNavigation',
             function(original, args) {
@@ -162,10 +222,8 @@ liberator.plugins.imageloader = (function() {
                 if (il._mode == il._mode_slideShow ||
                     il._mode == il._mode_slideShow_expandImage ||
                     il._mode == il._mode_thumbnail) {
-                    var img = (il._mode == il._mode_thumbnail) ?
-                        il._thumbnail_getSelected_image() :
-                        il._getPopedImage();
-                    if (map.invoke(e, [ il, img ])) {
+                    var img = getImage();
+                    if (img && map.invoke(e, [ il, img ])) {
                         // disable default action
                         e.preventDefault();
                         e.stopPropagation();
@@ -175,21 +233,37 @@ liberator.plugins.imageloader = (function() {
                 original(); // call default action
             });
 
+        // install additional toobar
+        liberator.plugins.libly.$U.around(
+            il, '_popImage',
+            function(original, args) {
+                var back = $(il._background_id_);
+                original();
+                back || toolbar.install('__toolbar_id__');
+            });
+        liberator.plugins.libly.$U.around(
+            il, '_showThumbnailUi',
+            function(original, args) {
+                original();
+                toolbar.install('__thumbnail_toolbar_');
+            });
+
         // additonal configuration
         liberator.plugins.libly.$U.around(
             il, '_showConfigPanel',
             function(original, args) {
                 original(); // show first
 
+                var makeDiv = function(klass) {
+                    var div = $node(<div style="text-align: left"/>);
+                    if (klass) div.className = klass;
+                    return div;
+                };
                 var makeInputDiv = function() {
-                    return $node(
-                            <div class="textinputContainer"
-                                 style="text-align: left"/>);
+                    return makeDiv('textinputContainer');
                 };
                 var makeCheckDiv = function() {
-                    return $node(
-                            <div class="checkboxContainer"
-                                 style="text-align: left"/>);
+                    return makeDiv('checkboxContainer');
                 };
                 var makeCheck = function(id, l, checked) {
                     var input = $node(<input type="checkbox"/>);
@@ -254,6 +328,10 @@ liberator.plugins.imageloader = (function() {
                     after = btn.parentNode;
                     $add(conf, <hr id="__config_extended"/>, after);
                     $add(conf, <p>Key for places</p>, after);
+                    var placesToolbar = appendCheck(
+                        '__show_places_toolbar',
+                        'show toolbar buttons for places',
+                        GM.getValue('showPlacesToolbar', true));
                     var div = makeInputDiv();
                     var keySaveAsDefault = GM.getValue('keySaveAs', 'a');
                     var keySaveAs = makeKeyInput('__key_saveas',
@@ -296,6 +374,8 @@ liberator.plugins.imageloader = (function() {
                                     slideshow.checked);
                         GM.setValue('disableVimperatorKeymap',
                                     disVimpKey.checked);
+                        GM.setValue('showPlacesToolbar',
+                                    placesToolbar.checked);
                         GM.setValue('keySaveAs', keySaveAs.value);
                         var p = new Places();
                         for (var j=0; j < i; j++) {
@@ -385,4 +465,3 @@ commands.addUserCommand(
     }, {
         bang: true
     });
-
