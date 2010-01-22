@@ -181,8 +181,6 @@ liberator.plugins.imageloader = (function() {
             function(original, args) {
                 original(); // show first
 
-                try {
-
                 var makeInputDiv = function() {
                     return $node(
                             <div class="textinputContainer"
@@ -313,8 +311,6 @@ liberator.plugins.imageloader = (function() {
                         resetMap();
                     }, false);
                 }
-
-                } catch (e) { alert(e); }
             });
     };
 
