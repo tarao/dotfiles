@@ -526,7 +526,7 @@ liberator.plugins.imageloader = (function() {
                         GM.getValue('autoStartSlideShow', true));
                     var disVimpKey = appendCheck(
                         '__disable_vimperator_keymap',
-                        'disable vimperator keymap',
+                        'disable vimperator keymap.',
                         GM.getValue('disableVimperatorKeymap', true));
                     var disKey = $('__config_disable_keybordShortcut');
                     var disKeyParent = disKey.parentNode;
@@ -559,7 +559,7 @@ liberator.plugins.imageloader = (function() {
                     $add(conf, <p>Key for places</p>, after);
                     var placesToolbar = appendCheck(
                         '__show_places_toolbar',
-                        'show toolbar buttons for places',
+                        'show toolbar buttons for places.',
                         GM.getValue('showPlacesToolbar', true));
                     var div = makeInputDiv();
                     var keySaveAsDefault = GM.getValue('keySaveAs', 'a');
