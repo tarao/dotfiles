@@ -230,9 +230,10 @@ liberator.plugins.imageloader = (function() {
         var absolutePath = function(elem, relative) {
             return elem.baseURIObject.resolve(relative);
         };
-        var getLargestImageURI = function(srcs, callback) {
+        var getLargestImageURI = function(srcs, container, callback) {
             var count = srcs.length; var i=0; var largest; var max=0;
             var done = function(img, result) {
+                if (!container || !container.parentNode) return; // abort
                 i++;
                 if (result) {
                     var minWidth = GM.getValue('__filter_image_size', 100);
@@ -249,27 +250,40 @@ liberator.plugins.imageloader = (function() {
             srcs.forEach(function(src) {
                 var img = $node(<img/>);
                 img.src = src;
-                $add(il._tempContainer, img);
-                img.addEventListener('load', function() {
-                    done(img,true);
-                }, false);
-                img.addEventListener('error', function() {
-                    done(img,false);
-                }, false);
+                try {
+                    $add(container, img);
+                    img.addEventListener('load', function() {
+                        done(img,true);
+                    }, false);
+                    img.addEventListener('error', function() {
+                        done(img,false);
+                    }, false);
+                } catch (ignore) {}
             });
         };
         var getIndirectImageURI = function(uri, callback) {
             var req = new liberator.plugins.libly.Request(uri);
+            var container = il._tempContainer;
             var loaded = function(res) {
+                if (!container || !container.parentNode) return; // abort
                 res.getHTMLDocument();
                 var doc = res.doc;
                 var images = doc.getElementsByTagName('img');
                 var srcs = [];
+                var seen = {};
                 for (var i=0; i < images.length; i++) {
-                    srcs.push(absolutePath(images[i], images[i].src));
+                    var src = absolutePath(images[i], images[i].src);
+                    if (!seen[src]) srcs.push(src);
+                    seen[src] = true;
+                }
+                var anchors = doc.getElementsByTagName('a');
+                for (var i=0; i < anchors.length; i++) {
+                    var src = absolutePath(anchors[i], anchors[i].href);
+                    if (il._isImageUrl(src) && !seen[src]) srcs.push(src);
+                    seen[src] = true;
                 }
                 if (srcs.length > 0) {
-                    getLargestImageURI(srcs, callback);
+                    getLargestImageURI(srcs, container, callback);
                 } else {
                     callback(null);
                 }
@@ -413,12 +427,20 @@ liberator.plugins.imageloader = (function() {
                         var img = $node(<img/>);
                         img.setAttribute('index', entity.index);
                         img.src = uri;
+                        il._setImage(entity.index, uri, img, null);
                         il._loadErrorEvent({
                             getAttribute: function(){ return entity.index; },
                             src: uri,
                         });
                     }
                 });
+            });
+        liberator.plugins.libly.$U.around(
+            il, '_cancel',
+            function(original, args) {
+                var c = il._tempContainer;
+                original();
+                if (c && c.parentNode)  c.parentNode.removeChild(c);
             });
 
         // URIFilter
