@@ -132,3 +132,12 @@
              (not buffer-read-only)
              (file-writable-p buffer-file-name))
         (save-buffer))))
+
+;; hatena
+(add-hook 'find-file-hook
+          '(lambda ()
+             (if (string-match "/hatena/diary/" (buffer-file-name))
+                 (progn
+                   (make-variable-buffer-local 'make-backup-files)
+                   (setq make-backup-files nil)
+                   (auto-save-mode 0)))))
