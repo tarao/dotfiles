@@ -10,7 +10,8 @@
                 ("\\.hpp$" . c++-mode)
                 ("\\.cpp$" . c++-mode)
                 ("\\.hxx$" . c++-mode)
-                ("\\.cxx$" . c++-mode)) auto-mode-alist))
+                ("\\.cxx$" . c++-mode))
+              auto-mode-alist))
 
 (setq flymake-cc-command-opt
       '("-fsyntax-only"
