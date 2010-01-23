@@ -1,6 +1,3 @@
-/*
-    - Google image search
-*/
 liberator.plugins.imageloader = (function() {
     var saveAs = function(il, img) {
         window.saveURL(img.src);
@@ -118,10 +115,62 @@ liberator.plugins.imageloader = (function() {
         }.fromJSON(arguments[0] || '{}');
     };
 
+    var URIFilter = function() {
+        var f = [];
+        var escape = function(str) {
+            return '"'+str.replace('\\', '\\\\', 'g')+'"';
+        };
+        return {
+            toString: function() {
+                return '[' + f.map(function(v) {
+                    var ls = v.map(function(s){return escape(s);}).join(',');
+                    return '[' + ls + ']';
+                }).join(',') + ']';
+            },
+            toJSON: function(){ return this.toString(); },
+            fromJSON: function(str) {
+                try {
+                    f = liberator.plugins.libly.$U.evalJson(str);
+                } catch (e) {
+                    liberator.echoerr(e);
+                    f = [];
+                }
+                return this;
+            },
+            fromObject: function(obj) {
+                if (typeof obj == 'string') {
+                    return this.fromJSON(obj);
+                } else if (obj instanceof Array) {
+                    f = obj;
+                    return this;
+                }
+                return this;
+            },
+            add: function(dom, pat, sep){ f.push([dom, pat, sep||'']); },
+            forDomain: function(dom) {
+                var ff = f.filter(function(v) {
+                    return new RegExp('^'+v[0]).test(dom);
+                });
+                return new URIFilter(ff);
+            },
+            filter: function(uri) {
+                for (var i=0; i < f.length; i++) {
+                    var m = new RegExp(f[i][1]).exec(uri);
+                    if (m) {
+                        m.shift();
+                        return m.join(f[i][2]);
+                    }
+                }
+                return uri;
+            },
+        }.fromObject(arguments[0] || '[]');
+    };
+
     var internalMap = new KeyMap();
     var map;
     var places;
     var toolbar;
+    var uriFilter;
 
     var sandbox = function() {
         return liberator.plugins.gmperator.currentSandbox;
@@ -156,6 +205,80 @@ liberator.plugins.imageloader = (function() {
             return (il._mode == il._mode_thumbnail) ?
                 il._thumbnail_getSelected_image() :
                 il._getPopedImage();
+        };
+        var hasImg = function(anchor) {
+            var children = anchor.childNodes;
+            var minWidth = GM.getValue('__filter_image_size', 100);
+            minWidth = parseInt(minWidth);
+            for (var i=0; i < children.length; i++) {
+                var child = children[i];
+                if (child.tagName && child.tagName.toLowerCase() == 'img') {
+                    var size = il._culcurateElementSize(child);
+                    if (isNaN(minWidth) || minWidth <= size.width ||
+                        minWidth <= size.height) return true;
+                }
+            }
+        };
+        var getDomain = function() {
+            var loc = sandbox().location;
+            return loc.protocol+'//'+loc.host;
+        };
+        var isDomestic = function(uri) {
+            return !/^s?https?:/.test(uri) ||
+                new RegExp('^'+getDomain()).test(uri);
+        };
+        var absolutePath = function(elem, relative) {
+            return elem.baseURIObject.resolve(relative);
+        };
+        var getLargestImageURI = function(srcs, callback) {
+            var count = srcs.length; var i=0; var largest; var max=0;
+            var done = function(img, result) {
+                i++;
+                if (result) {
+                    var minWidth = GM.getValue('__filter_image_size', 100);
+                    minWidth = parseInt(minWidth);
+                    var size = il._culcurateElementSize(img);
+                    if ((!isNaN(minWidth) || minWidth <= size.width) &&
+                        max < size.width * size.height) {
+                        largest = img;
+                        max = size.width * size.height;
+                    }
+                }
+                if (i >= count) callback(largest ? largest.src : null);
+            };
+            srcs.forEach(function(src) {
+                var img = $node(<img/>);
+                img.src = src;
+                $add(il._tempContainer, img);
+                img.addEventListener('load', function() {
+                    done(img,true);
+                }, false);
+                img.addEventListener('error', function() {
+                    done(img,false);
+                }, false);
+            });
+        };
+        var getIndirectImageURI = function(uri, callback) {
+            var req = new liberator.plugins.libly.Request(uri);
+            var loaded = function(res) {
+                res.getHTMLDocument();
+                var doc = res.doc;
+                var images = doc.getElementsByTagName('img');
+                var srcs = [];
+                for (var i=0; i < images.length; i++) {
+                    srcs.push(absolutePath(images[i], images[i].src));
+                }
+                if (srcs.length > 0) {
+                    getLargestImageURI(srcs, callback);
+                } else {
+                    callback(null);
+                }
+            };
+            var failed = function(res){ callback(null); };
+            req.addEventListener('onSuccess', loaded);
+            req.addEventListener('onFailure', failed);
+            req.addEventListener('onException', failed);
+            req.get();
         };
 
         var Toolbar = function(map) {
@@ -200,6 +323,11 @@ liberator.plugins.imageloader = (function() {
             places = new Places(GM.getValue('places', '{"t":"/tmp"}'));
             places.forEach(function(key, dir){map.bind(key,saveLocal(dir))});
             toolbar = new Toolbar(map);
+            var def = new URIFilter();
+            def.add('http://images\\.google(?:\\.[a-z]+)+',
+                    'http://images\\.google(?:\\.[a-z]+)+/.*imgurl=([^&]+)');
+            uriFilter = new URIFilter(GM.getValue('uriFilter', def.toJSON()));
+            uriFilter = uriFilter.forDomain(getDomain());
         };
         resetMap();
 
@@ -246,6 +374,72 @@ liberator.plugins.imageloader = (function() {
             function(original, args) {
                 original();
                 toolbar.install('__thumbnail_toolbar_');
+            });
+
+        // look into indirect image links
+        liberator.plugins.libly.$U.around(
+            il, '_extractImageAnchors',
+            function(original, args) {
+                original(); // extract direct image anchors
+                if (!GM.getValue('indirectImageLinks', true)) return;
+
+                var anchors = d.getElementsByTagName('a');
+                var seen = {};
+                var counter = il._load_images.length;
+                for (var i=0; i < anchors.length; i++) {
+                    var uri = anchors[i].href;
+                    if (!uri || seen[uri] || il._isImageUrl(uri)) continue;
+                    seen[uri] = true;
+                    if (hasImg(anchors[i]) && isDomestic(uri)) {
+                        il._setImage(counter, anchors[i], null, null);
+                        il._load_images[counter].indirect = true;
+                        counter++;
+                    }
+                }
+            });
+        liberator.plugins.libly.$U.around(
+            il, '_preloadImage',
+            function(original, args) {
+                var entity = args[0];
+                if (!entity.indirect) return original();
+
+                var uri = absolutePath(entity.anchor, entity.anchor.href);
+                getIndirectImageURI(uri, function(src) {
+                    if (src) {
+                        entity.anchor.href = src;
+                        original([entity]);
+                    } else {
+                        // failed
+                        var img = $node(<img/>);
+                        img.setAttribute('index', entity.index);
+                        img.src = uri;
+                        il._loadErrorEvent({
+                            getAttribute: function(){ return entity.index; },
+                            src: uri,
+                        });
+                    }
+                });
+            });
+
+        // URIFilter
+        liberator.plugins.libly.$U.around(
+            il, '_isImageUrl',
+            function(original, args) {
+                var uri = args[0];
+                if (GM.getValue('useURIFilter', true)) {
+                    uri = uriFilter.filter(uri);
+                }
+                return original([uri]);
+            });
+        liberator.plugins.libly.$U.around(
+            il, '_preloadImage',
+            function(original, args) {
+                var entity = args[0];
+                if (GM.getValue('useURIFilter', true)) {
+                    var uri = uriFilter.filter(entity.anchor.href);
+                    entity.anchor.href = uri;
+                }
+                original([entity]);
             });
 
         // additonal configuration
@@ -326,7 +520,18 @@ liberator.plugins.imageloader = (function() {
 
                     var btn = $('__imageloader_config_button');
                     after = btn.parentNode;
+
                     $add(conf, <hr id="__config_extended"/>, after);
+                    var indirect = appendCheck(
+                        '__indirect_image_links',
+                        'look into indirect image links.',
+                        GM.getValue('indirectImageLinks', true));
+                    var filter = appendCheck(
+                        '__use_uri_filter',
+                        'use URI filters.',
+                        GM.getValue('useURIFilter', true));
+
+                    $add(conf, <hr/>, after);
                     $add(conf, <p>Key for places</p>, after);
                     var placesToolbar = appendCheck(
                         '__show_places_toolbar',
@@ -374,6 +579,10 @@ liberator.plugins.imageloader = (function() {
                                     slideshow.checked);
                         GM.setValue('disableVimperatorKeymap',
                                     disVimpKey.checked);
+                        GM.setValue('indirectImageLinks',
+                                    indirect.checked);
+                        GM.setValue('useURIFilter',
+                                    filter.checked);
                         GM.setValue('showPlacesToolbar',
                                     placesToolbar.checked);
                         GM.setValue('keySaveAs', keySaveAs.value);
@@ -417,21 +626,31 @@ liberator.plugins.imageloader = (function() {
         }
 
         var il = sandbox().ImageLoader;
-        var interval = 200;
-        var timeout = 60000;
-        var t = 0;
-        var wait = function() {
-            if (!(il._isModePreloaded() &&
-                  il._getNextLoadedImage(-1) &&
-                  il._getNextLoadedImage(-1).preloaded)) {
-                if ((t += interval) < timeout) {
-                    window.setTimeout(wait, interval);
-                } else {
-                    liberator.echoerr('ImageLoader timed out.');
-                }
-                return;
+
+        var interval = 200; var timeout = 60000; var t = 0;
+        var wait = function(func) {
+            var cond;
+            var entered;
+            try {
+                cond = il._isModePreloaded() &&
+                    il._getNextLoadedImage(-1) &&
+                    il._getNextLoadedImage(-1).preloaded;
+                entered = il._isModeSlideShow() ||
+                    il._isModeSlideShowExpandImage() ||
+                    il._isModeThumbnail();
+            } catch (e) {
+                cond = false;
             }
-            afterLoad();
+            if (!entered) {
+                if (cond) {
+                    func();
+                } else if ((t += interval) < timeout) {
+                    // retry
+                    window.setTimeout(function(){wait(func);}, interval);
+                } else {
+                    liberator.echo('ImageLoader timed out.');
+                }
+            }
         };
 
         if (firstTime) {
@@ -439,15 +658,14 @@ liberator.plugins.imageloader = (function() {
                 il, '_loadImages',
                 function(original, args) {
                     original();
-                    wait();
+                    wait(afterLoad);
                 });
             var auto = GM.getValue('__enable_autoloading', true);
             if (auto) {
-                wait();
-            } else if (forceReload) {
-                il.loadImages();
+                wait(afterLoad);
             }
-        } else {
+        }
+        if (forceReload || !firstTime) {
             il.loadImages();
         }
     };
