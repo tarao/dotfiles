@@ -352,7 +352,9 @@ liberator.plugins.imageloader = (function() {
                 original();
 
                 if (GM.getValue('disableVimperatorKeymap', true)) {
-                    liberator.plugins.map.emulate('<C-z>');
+                    var mode = liberator.modules.modes.NORMAL;
+                    var map = liberator.modules.mappings.get(mode, '<C-z>');
+                    map && map.action();
                 }
             });
 
@@ -440,7 +442,7 @@ liberator.plugins.imageloader = (function() {
             function(original, args) {
                 var c = il._tempContainer;
                 original();
-                if (c && c.parentNode)  c.parentNode.removeChild(c);
+                if (c && c.parentNode) c.parentNode.removeChild(c);
             });
 
         // URIFilter
