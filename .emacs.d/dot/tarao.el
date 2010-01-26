@@ -6,6 +6,8 @@
 
 ;; no startup message
 (setq inhibit-startup-message t)
+(setq inhibit-startup-screen t)
+(setq initial-scratch-message nil)
 
 ;; mode-line
 (setq mode-line-frame-identification " ")
