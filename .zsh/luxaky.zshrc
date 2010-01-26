@@ -50,6 +50,8 @@ alias c++now="env g++ -lstdc++ -std=c++98 -pedantic-errors"
 alias g++="env g++ -lstdc++ -std=gnu++98 -pedantic $cppwarning"
 alias g++now="env g++ -lstdc++ -std=gnu++98 -pedantic"
 
+alias emacs='emacs-snapshot'
+alias emacs22='env emacs'
 alias emacs-compile='emacs -batch -f batch-byte-compile'
 
 # prompt
