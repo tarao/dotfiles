@@ -10,6 +10,9 @@
 (setq initial-scratch-message nil)
 
 ;; mode-line
+(defun viper-mode-string-p ()
+  (or vimpulse-visual-mode
+      (and viper-mode-string (not (eq viper-current-state 'vi-state)))))
 (setq mode-line-frame-identification " ")
 (setq default-mode-line-format
       '(""
@@ -19,14 +22,17 @@
         ; case with skk:
         ;   (normal) |--かな:uuu:...
         ;   (insert) |--INSERT--かな:uuu:...
-        (viper-mode-string
-         (:eval (unless (eq viper-current-state 'vi-state) "--")))
-        viper-mode-string
+        (:eval (and (viper-mode-string-p) "--"))
+        (:eval (cond
+                ((and vimpulse-visual-mode-linewise vimpulse-visual-mode)
+                 viper-visual-linewise-state-id)
+                (vimpulse-visual-mode
+                 viper-visual-characterwise-state-id)
+                (t viper-mode-string)))
         skk-modeline-input-mode
         (skk-mode
          ""
-         ("-" (viper-mode-string
-               (:eval (unless (string= viper-mode-string "") "-")))))
+         ("-" (:eval (and (viper-mode-string-p) "-"))))
         mode-line-mule-info
         mode-line-modified
         mode-line-frame-identification
@@ -82,7 +88,6 @@
   (local-set-key (kbd "C-c s") 'hs-show-block)
   (local-set-key (kbd "C-c l") 'hs-hide-level))
 
-
 ;; Zenkaku -> Hankaku
 (autoload 'zen2han-region "zen2han" "zen <=> han" t)
 (autoload 'zen2han-buffer "zen2han" "zen <=> han" t)
@@ -103,7 +108,6 @@
 (require 'viper)
 (setq viper-vi-state-id "")
 (setq viper-insert-state-id "INSERT")
-(setq viper-replace-state-id "REPLACE")
 (setq viper-visual-characterwise-state-id "VISUAL")
 (setq viper-visual-linewise-state-id "VLINE")
 (setq viper-visual-blockwise-state-id "VBLOCK")
@@ -112,8 +116,40 @@
 ;; viper-mode patches
 (require 'hexl-viper-patch)
 (defadvice viper-maybe-checkout (around viper-dont-ask-checkout activate) nil)
-(defadvice ac-start (around viper-replace-no-ac-start (&optional msg) activate)
-  (unless (eq viper-current-state 'replace-state) ad-do-it))
+
+;; vimpulse
+;(setq vimpulse-experimental nil) ; don't load bleeding edge code
+(require 'vimpulse)
+(setq woman-use-own-frame nil) ; don't create new frame for manpages
+
+;; vimpulse patches
+(defadvice vimpulse-visual-mode
+  (around vimpulse-visual-mode-pass-explicit-args (arg) activate)
+  (when (null arg) (setq arg 0))
+  ad-do-it)
+(defadvice vimpulse-visual-mode-linewise
+  (around vimpulse-visual-mode-linewise-pass-explicit-args (arg) activate)
+  (when (null arg) (setq arg 0))
+  ad-do-it)
+(defadvice viper-intercept-ESC-key
+  (around vimpulse-esc-exit-visual-mode activate)
+  (if vimpulse-visual-mode (vimpulse-visual-mode 0) ad-do-it))
+
+;; viper-mode keymaps
+(define-key vimpulse-visual-mode-map
+  (kbd ";") (lambda () (interactive) (viper-ex t)))
+(define-key viper-vi-basic-map
+  (kbd ";") 'viper-ex)
+(define-key viper-vi-global-user-map
+  (kbd ":") 'anything)
+(define-key viper-vi-global-user-map
+  (kbd "C-w") 'kill-region)
+(define-key viper-insert-global-user-map
+  (kbd "C-w") 'kill-region)
+(define-key viper-vi-global-user-map
+  (kbd "J") 'viper-scroll-up)
+(define-key viper-vi-global-user-map
+  (kbd "K") 'viper-scroll-down)
 
 ;; line number mode
 ;; (setq linum-format

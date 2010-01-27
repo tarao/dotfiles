@@ -3,38 +3,6 @@
 (setq viper-case-fold-search t)
 (setq viper-inhibit-startup-message t)
 (setq viper-u-always-undo t)
-(define-key viper-insert-global-user-map
-  (kbd "C-w") 'kill-region)
-(define-key viper-visual-map
-  (kbd ";") (lambda () (interactive) (viper-ex t)))
-(define-key viper-vi-basic-map
-  (kbd ";") 'viper-ex)
-(define-key viper-vi-global-user-map
-  (kbd ":") 'anything)
-(define-key viper-vi-global-user-map
-  (kbd "J") 'viper-scroll-up)
-(define-key viper-vi-global-user-map
-  (kbd "K") 'viper-scroll-down)
-(defvar viper-prefix-command-map
-  '((?k . ?d)))
-
-(defadvice viper-prefix-arg-com
-  (around viper-prefix-command-replace first (char value com) activate)
-  (setq char (or (cdr (assq char viper-prefix-command-map)) char))
-  ad-do-it)
-
-(defun my-viper-beginning-of-buffer ()
-  (interactive)
-  (beginning-of-buffer))
-(define-key viper-vi-global-user-map [?g?g] 'my-viper-beginning-of-buffer)
-
-(defun my-viper-star ()
-  (interactive)
-  (let ((wd (concat "\\<" (thing-at-point 'symbol) "\\>")))
-    (setq viper-s-string wd)
-    (setq viper-s-forward t)
-    (viper-search wd t 1)))
-(define-key viper-vi-global-user-map (kbd "*") 'my-viper-star)
 
 (defun my-viper-jump-tag ()
   (interactive)
