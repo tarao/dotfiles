@@ -24,10 +24,12 @@
         ;   (insert) |--INSERT--かな:uuu:...
         (:eval (and (viper-mode-string-p) "--"))
         (:eval (cond
-                ((and vimpulse-visual-mode-linewise vimpulse-visual-mode)
-                 viper-visual-linewise-state-id)
-                (vimpulse-visual-mode
+                ((and vimpulse-visual-mode (eq vimpulse-visual-mode 'normal))
                  viper-visual-characterwise-state-id)
+                ((and vimpulse-visual-mode (eq vimpulse-visual-mode 'line))
+                 viper-visual-linewise-state-id)
+                ((and vimpulse-visual-mode (eq vimpulse-visual-mode 'block))
+                 viper-visual-blockwise-state-id)
                 (t viper-mode-string)))
         skk-modeline-input-mode
         (skk-mode
@@ -122,18 +124,25 @@
 (require 'vimpulse)
 (setq woman-use-own-frame nil) ; don't create new frame for manpages
 
-;; vimpulse patches
-(defadvice vimpulse-visual-mode
-  (around vimpulse-visual-mode-pass-explicit-args (arg) activate)
-  (when (null arg) (setq arg 0))
-  ad-do-it)
-(defadvice vimpulse-visual-mode-linewise
-  (around vimpulse-visual-mode-linewise-pass-explicit-args (arg) activate)
-  (when (null arg) (setq arg 0))
-  ad-do-it)
-(defadvice viper-intercept-ESC-key
-  (around vimpulse-esc-exit-visual-mode activate)
-  (if vimpulse-visual-mode (vimpulse-visual-mode 0) ad-do-it))
+;; ;; vimpulse patches
+(defvar in-viper-ex-visual nil)
+(defadvice viper-ex (around ad-viper-ex activate)
+  (setq in-viper-ex-visual vimpulse-visual-mode)
+  ad-do-it
+  (setq in-viper-ex-visual nil))
+(defadvice viper-read-string-with-history
+  (around viper-ex-visual (p &optional initial-str h d k m) activate)
+  (let ((orig-str initial-str)
+        (visual-addr "'<,'>")
+        ret)
+    (when (and in-viper-ex-visual initial-str)
+      (setq initial-str visual-addr))
+    (setq ret ad-do-it)
+    (setq ad-return-value
+          (if (and in-viper-ex-visual
+                   (string-match (concat "\\`" visual-addr) ret))
+              (replace-match orig-str nil t ret)
+            ret))))
 
 ;; viper-mode keymaps
 (define-key vimpulse-visual-mode-map
@@ -150,6 +159,10 @@
   (kbd "J") 'viper-scroll-up)
 (define-key viper-vi-global-user-map
   (kbd "K") 'viper-scroll-down)
+(define-key viper-insert-global-user-map
+  (kbd "C-p") nil)
+(define-key viper-insert-global-user-map
+  (kbd "C-n") nil)
 
 ;; line number mode
 ;; (setq linum-format
