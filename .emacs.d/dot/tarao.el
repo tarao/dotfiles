@@ -12,7 +12,9 @@
 ;; mode-line
 (defun viper-mode-string-p ()
   (or vimpulse-visual-mode
-      (and viper-mode-string (not (eq viper-current-state 'vi-state)))))
+      (and (boundp 'viper-mode-string)
+           viper-mode-string
+           (not (eq viper-current-state 'vi-state)))))
 (setq mode-line-frame-identification " ")
 (setq default-mode-line-format
       '(""
