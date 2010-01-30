@@ -11,6 +11,7 @@
 
 (setq skk-egg-like-newline t)
 (setq skk-henkan-strict-okuri-precedence t)
+(setq skk-show-annotation t)
 (require 'skk-hint)
 (require 'skk-study)
 
