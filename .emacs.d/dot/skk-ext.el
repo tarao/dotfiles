@@ -10,7 +10,9 @@
     (set-face-background 'skk-dcomp-multiple-selected-face "blue")))
 
 (setq skk-egg-like-newline t)
+(setq skk-henkan-strict-okuri-precedence t)
 (require 'skk-hint)
+(require 'skk-study)
 
 (setq-default skk-kutouten-type 'en)
 (setq my-skk-rom-kana-rule-list-base

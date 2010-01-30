@@ -100,6 +100,7 @@
 (autoload 'zen2han-chop-line-end-space "zen2han" "zen <=> han" t)
 
 ;; SKK
+(setq skk-user-directory "~/.ddskk")
 (setq skk-use-viper t)
 
 ;; viper minor mode
