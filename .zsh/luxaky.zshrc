@@ -27,7 +27,8 @@ function snatch() {
 # git-hg compatibility
 function git() {
     if [[ "$vcs" = 'hg' ]]; then
-        local args=`git2hg $@`
+        local args
+        args=`git2hg $@`
         hg ${=args}
     else
         /usr/bin/env git $@
