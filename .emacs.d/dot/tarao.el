@@ -129,24 +129,7 @@
 (setq woman-use-own-frame nil) ; don't create new frame for manpages
 
 ;; ;; vimpulse patches
-(defvar in-viper-ex-visual nil)
-(defadvice viper-ex (around ad-viper-ex activate)
-  (setq in-viper-ex-visual vimpulse-visual-mode)
-  ad-do-it
-  (setq in-viper-ex-visual nil))
-(defadvice viper-read-string-with-history
-  (around viper-ex-visual (p &optional initial-str h d k m) activate)
-  (let ((orig-str initial-str)
-        (visual-addr "'<,'>")
-        ret)
-    (when (and in-viper-ex-visual initial-str)
-      (setq initial-str visual-addr))
-    (setq ret ad-do-it)
-    (setq ad-return-value
-          (if (and in-viper-ex-visual
-                   (string-match (concat "\\`" visual-addr) ret))
-              (replace-match orig-str nil t ret)
-            ret))))
+(setq ex-token-alist (cons '("substitute" (ex-substitute)) ex-token-alist))
 
 ;; viper-mode keymaps
 (define-key vimpulse-visual-mode-map
