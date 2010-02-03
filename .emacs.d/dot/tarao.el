@@ -32,7 +32,8 @@
                  viper-visual-linewise-state-id)
                 ((and vimpulse-visual-mode (eq vimpulse-visual-mode 'block))
                  viper-visual-blockwise-state-id)
-                (t viper-mode-string)))
+                ((boundp 'viper-mode-string) viper-mode-string)
+                (t "")))
         skk-modeline-input-mode
         (skk-mode
          ""
