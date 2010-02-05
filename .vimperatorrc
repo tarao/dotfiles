@@ -30,12 +30,15 @@ liberator.globalVariables.plugin_loader_plugins = <>
     migemo_completion
     migemo-find
     migemo_hint
+    no-reading
     pluginManager
 </>.toString().split(/\s+/).filter(function(n) n);
 EOM
 
 let g:ex_ime_mode='inactive';
 let g:textarea_ime_mode='inactive';
+
+let g:no_reading_on_statusline=1
 
 let g:caret_hint_key='i';
 let g:caret_hint_tail_key='I';
