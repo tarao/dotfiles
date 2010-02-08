@@ -143,6 +143,10 @@
 (define-key viper-insert-global-user-map
   (kbd "C-w") 'kill-region)
 (define-key viper-vi-global-user-map
+  (kbd "j") 'next-line)
+(define-key viper-vi-global-user-map
+  (kbd "k") 'previous-line)
+(define-key viper-vi-global-user-map
   (kbd "J") 'viper-scroll-up)
 (define-key viper-vi-global-user-map
   (kbd "K") 'viper-scroll-down)
