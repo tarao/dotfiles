@@ -31,7 +31,7 @@ function git() {
         args=`git2hg $@`
         hg ${=args}
     else
-        /usr/bin/env git $@
+        env git $@
     fi
 }
 
