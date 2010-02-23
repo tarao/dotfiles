@@ -38,7 +38,7 @@ EOM
 let g:ex_ime_mode='inactive';
 let g:textarea_ime_mode='inactive';
 
-let g:no_reading_on_statusline=1
+let g:no_reading_do_echo=1
 
 let g:caret_hint_key='i';
 let g:caret_hint_tail_key='I';
