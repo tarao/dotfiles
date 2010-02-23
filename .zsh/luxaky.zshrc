@@ -79,7 +79,7 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
 
     # set window title of screen
     precmd_screen_window_title () {
-        if [[ -n "$SCREENAUTOTITLE" ]]; then
+        if [[ "$SCREENTITLE" = 'auto' ]]; then
             local dir=`pwd`
             dir=`print -nD $dir`
             if [[ ( -n "$vcs" ) && ( "$repos" != "$dir" ) ]]; then
@@ -98,7 +98,7 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
     preexec_screen_window_title () {
         typeset -a ZSH_LAST_CMD
         ZSH_LAST_CMD=(${=1})
-        if [[ -n "$SCREENAUTOTITLE" ]]; then
+        if [[ "$SCREENTITLE" = 'auto' ]]; then
             # name of command
             local j=$ZSH_LAST_CMD[1]
             if [[ -n "$SCREEN_TITLE_CMD_IGNORE[$j]" ]]; then
@@ -114,13 +114,15 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
         fi
     }
     function title() {
-        if [[ -n "$1" ]]; then
-            # set title explicitly
-            export SCREENAUTOTITLE=''
-            screen -X eval "title '$1'"
-        else
-            # automatically set title
-            export SCREENAUTOTITLE=1
+        if [[ -n "$SCREENTITLE" ]]; then
+            if [[ -n "$1" ]]; then
+                # set title explicitly
+                export SCREENTITLE=explicit
+                screen -X eval "title '$1'"
+            else
+                # automatically set title
+                export SCREENTITLE=auto
+            fi
         fi
     }
 
