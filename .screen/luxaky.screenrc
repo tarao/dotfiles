@@ -39,5 +39,8 @@ bindkey -m W eval 'stuff W' writebuf 'exec !!! xclip $MYBUFFERFILE'
 setenv PASTE "screen -X eval 'readbuf' 'paste .'"
 bind P eval 'exec !!! zsh -c "xclip -o > $MYBUFFERFILE; $PASTE"'
 
+# automatically set title
+setenv SCREENAUTOTITLE 1
+
 # initial screen
 screen -t main  0

@@ -52,10 +52,10 @@ alias g++="env g++ -lstdc++ -std=gnu++98 -pedantic $cppwarning"
 alias g++now="env g++ -lstdc++ -std=gnu++98 -pedantic"
 
 alias emacs='emacs-snapshot'
-alias emacs22='env emacs'
+alias emacs22='env emacs22'
+alias emacs23='env emacs-snapshot'
 alias emacs-compile='emacs -batch -f batch-byte-compile'
 
-# prompt
 if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
     # VCS
     autoload -Uz vcs_info
@@ -76,9 +76,62 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
         [[ -n "$vcs_info_msg_1_" ]] && psvar[3]="$vcs_info_msg_1_"
         [[ -n "$vcs_info_msg_2_" ]] && psvar[1]="$vcs_info_msg_2_"
     }
+
+    # set window title of screen
+    precmd_screen_window_title () {
+        if [[ -n "$SCREENAUTOTITLE" ]]; then
+            local dir=`pwd`
+            dir=`print -nD $dir`
+            if [[ ( -n "$vcs" ) && ( "$repos" != "$dir" ) ]]; then
+                # name of repository and directory
+                dir="${repos:t}:${dir:t}"
+            else
+                # name of directory
+                dir=${dir:t}
+            fi
+            screen -X eval "title '$dir'"
+        fi
+    }
+    typeset -A SCREEN_TITLE_CMD_ARG
+    typeset -A SCREEN_TITLE_CMD_IGNORE
+    SCREEN_TITLE_CMD_IGNORE=(fg 1 job 1)
+    preexec_screen_window_title () {
+        typeset -a ZSH_LAST_CMD
+        ZSH_LAST_CMD=(${=1})
+        if [[ -n "$SCREENAUTOTITLE" ]]; then
+            # name of command
+            local j=$ZSH_LAST_CMD[1]
+            if [[ -n "$SCREEN_TITLE_CMD_IGNORE[$j]" ]]; then
+                j=$SCREEN_TITLE_CMD_LAST
+            else
+                if [[ -n "$SCREEN_TITLE_CMD_ARG[$j]" ]]; then
+                    # argument of command
+                    j=$ZSH_LAST_CMD[$SCREEN_TITLE_CMD_ARG[$j]]
+                fi
+            fi
+            SCREEN_TITLE_CMD_LAST=$j
+            screen -X eval "title '$j'"
+        fi
+    }
+    function title() {
+        if [[ -n "$1" ]]; then
+            # set title explicitly
+            export SCREENAUTOTITLE=''
+            screen -X eval "title '$1'"
+        else
+            # automatically set title
+            export SCREENAUTOTITLE=1
+        fi
+    }
+
     typeset -ga precmd_functions
     precmd_functions+=precmd_vcs_info
+    precmd_functions+=precmd_screen_window_title
 
+    typeset -ga preexec_functions
+    preexec_functions+=preexec_screen_window_title
+
+    # prompt
     PROMPT="%(!.%F{red}.%F{green})%U%n@%6>>%m%>>%u%f:%1(j.%j.)%(!.#.>) "
     local psdirs='[%F{yellow}%3(v|%32<..<%3v%<<|%60<..<%~%<<)%f]'
     local psvcs='%3(v|[%25<\<<%F{yellow}%2v%f@%F{blue}%1v%f%<<]|)'
