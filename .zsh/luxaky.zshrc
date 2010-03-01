@@ -94,6 +94,7 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
     }
     typeset -A SCREEN_TITLE_CMD_ARG
     typeset -A SCREEN_TITLE_CMD_IGNORE
+    SCREEN_TITLE_CMD_ARGS=()
     SCREEN_TITLE_CMD_IGNORE=(fg 1 job 1)
     preexec_screen_window_title () {
         typeset -a ZSH_LAST_CMD
@@ -110,7 +111,7 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
                 fi
             fi
             SCREEN_TITLE_CMD_LAST=$j
-            screen -X eval "title '$j'"
+            screen -X eval "title '${j:t}'"
         fi
     }
     function title() {
