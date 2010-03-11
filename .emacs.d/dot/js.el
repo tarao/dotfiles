@@ -1,4 +1,5 @@
 ;;; javascript
+(load "javascript")
 (setq auto-mode-alist
       (append '(("\\.json$" . javascript-mode)
                 ("\\.js$" . javascript-mode))
