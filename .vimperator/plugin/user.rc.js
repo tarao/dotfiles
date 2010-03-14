@@ -110,7 +110,7 @@
 
     liberator.modules.mappings.addUserMap(
         [liberator.modules.modes.NORMAL],
-        ['b'], 'Show tabbar',
+        ['B'], 'Show tabbar',
         function() {
             if (TreeStyleTabService != null) {
                 var b;
@@ -123,7 +123,7 @@
 
     liberator.modules.mappings.addUserMap(
         [liberator.modules.modes.NORMAL],
-        ['B'], 'Open a prompt to switch buffers',
+        ['b'], 'Open a prompt to switch buffers',
         function() {
             liberator.modules.commandline.open(':',
                                                'buffer! ',
