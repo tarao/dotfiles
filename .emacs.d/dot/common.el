@@ -92,6 +92,10 @@
   (set-terminal-coding-system 'utf-8-unix))
 (require 'default-file-coding-systems)
 
+; move window
+(windmove-default-keybindings)
+(setq windmove-wrap-around t)
+
 ; skk
 (setq skk-init-file "dot/.skk")
 (require 'skk-autoloads)
@@ -186,7 +190,7 @@
 
 ; wc (CC/WW/LL)
 (autoload 'word-count-mode "word-count" "Minor mode to count words." t nil)
-(global-set-key "\M-+" 'word-count-mode)
+(global-set-key (kbd "M-+") 'word-count-mode)
 
 ; tabbing
 (setq-default tab-width 4 indent-tabs-mode nil)
