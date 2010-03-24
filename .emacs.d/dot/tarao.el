@@ -183,3 +183,5 @@
                    (make-variable-buffer-local 'make-backup-files)
                    (setq make-backup-files nil)
                    (auto-save-mode 0)))))
+(setq auto-mode-alist
+      (append '(("/hatena/diary/" . text-mode)) auto-mode-alist))
