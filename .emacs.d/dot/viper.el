@@ -4,6 +4,15 @@
 (setq viper-inhibit-startup-message t)
 (setq viper-u-always-undo t)
 
+(define-key viper-vi-global-user-map
+  (kbd "j") 'next-line)
+(define-key viper-vi-global-user-map
+  (kbd "k") 'previous-line)
+(define-key viper-vi-global-user-map
+  (kbd "J") 'viper-scroll-up)
+(define-key viper-vi-global-user-map
+  (kbd "K") 'viper-scroll-down)
+
 (defun my-viper-jump-tag ()
   (interactive)
   (setq wd (thing-at-point 'symbol))

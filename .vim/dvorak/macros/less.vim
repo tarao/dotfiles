@@ -65,11 +65,11 @@ set noma
 
 " Give help
 noremap h :call <SID>Help()<CR>
-map H h
+map J j
 fun! s:Help()
   echo "<Space>   One page forward          b         One page backward"
-  echo "d         Half a page forward       u         Half a page backward"
-  echo "<Enter>   One line forward          k         One line backward"
+  echo "H         Half a page forward       T         Half a page backward"
+  echo "<Enter>   One line forward          t         One line backward"
   echo "G         End of file               g         Start of file"
   echo "N%        percentage in file"
   echo "\n"
