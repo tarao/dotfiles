@@ -132,7 +132,7 @@
 (setq ex-token-alist (cons '("substitute" (ex-substitute)) ex-token-alist))
 
 ;; viper-mode keymaps
-(define-key vimpulse-visual-mode-map
+(define-key vimpulse-visual-basic-map
   (kbd ";") (lambda () (interactive) (viper-ex t)))
 (define-key viper-vi-basic-map
   (kbd ";") 'viper-ex)
