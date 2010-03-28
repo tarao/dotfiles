@@ -7,6 +7,7 @@
 
 (autoload 'javascript-mode "javascript" nil t)
 (setq javascript-indent-level 4)
+(setq javascript-expr-indent-offset 4)
 
 (defconst flymake-allowed-js-file-name-masks
   '(("\\.json$" flymake-js-init)
