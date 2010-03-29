@@ -138,6 +138,8 @@
   (kbd ";") 'viper-ex)
 (define-key viper-vi-global-user-map
   (kbd ":") 'anything)
+(define-key viper-vi-basic-map
+  (kbd "TAB") nil)
 (define-key viper-vi-global-user-map
   (kbd "C-w") 'kill-region)
 (define-key viper-insert-global-user-map
@@ -146,7 +148,6 @@
   (kbd "C-p") nil)
 (define-key viper-insert-basic-map
   (kbd "C-n") nil)
-
 ;; line number mode
 ;; (setq linum-format
 ;;       (lambda (line)
