@@ -124,30 +124,8 @@
 (defadvice viper-maybe-checkout (around viper-dont-ask-checkout activate) nil)
 
 ;; vimpulse
-;(setq vimpulse-experimental nil) ; don't load bleeding edge code
-(require 'vimpulse)
-(setq woman-use-own-frame nil) ; don't create new frame for manpages
+(load "dot/vimpulse")
 
-;; ;; vimpulse patches
-(setq ex-token-alist (cons '("substitute" (ex-substitute)) ex-token-alist))
-
-;; viper-mode keymaps
-(define-key vimpulse-visual-basic-map
-  (kbd ";") (lambda () (interactive) (viper-ex t)))
-(define-key viper-vi-basic-map
-  (kbd ";") 'viper-ex)
-(define-key viper-vi-global-user-map
-  (kbd ":") 'anything)
-(define-key viper-vi-basic-map
-  (kbd "TAB") nil)
-(define-key viper-vi-global-user-map
-  (kbd "C-w") 'kill-region)
-(define-key viper-insert-global-user-map
-  (kbd "C-w") 'kill-region)
-(define-key viper-insert-basic-map
-  (kbd "C-p") nil)
-(define-key viper-insert-basic-map
-  (kbd "C-n") nil)
 ;; line number mode
 ;; (setq linum-format
 ;;       (lambda (line)
