@@ -51,10 +51,34 @@ alias c++now="env g++ -lstdc++ -std=c++98 -pedantic-errors"
 alias g++="env g++ -lstdc++ -std=gnu++98 -pedantic $cppwarning"
 alias g++now="env g++ -lstdc++ -std=gnu++98 -pedantic"
 
-alias emacs='emacs-snapshot'
+alias emacsclient='emacsclient.emacs-snapshot'
+alias emacsc='emacsclient -nw'
+alias emacsd='emacs-snapshot --daemon'
 alias emacs22='env emacs22'
 alias emacs23='env emacs-snapshot'
-alias emacs-compile='emacs -batch -f batch-byte-compile'
+alias emacs-standalone='emacs23'
+alias emacs-compile='emacs-standalone -batch -f batch-byte-compile'
+
+# Emacs server and client
+function emacs() {
+    if [[ `id -ur` = 0 ]]; then # root
+        emacs-standalone $@
+    else
+        if [[ -z `pgrep emacs -u $USER` ]]; then
+            emacsd
+        fi
+        emacsc $@
+    fi
+}
+function stop-emacsd() {
+    if [[ -n `pgrep emacs -u $USER` ]]; then
+        emacsclient -e '(progn (defun yes-or-no-p (p) t) (kill-emacs))'
+    fi
+}
+function restart-emacsd() {
+    stop-emacsd
+    emacsd
+}
 
 if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
     # VCS
