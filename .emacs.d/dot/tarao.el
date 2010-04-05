@@ -115,6 +115,12 @@
 ;;           (let ((fmt (concat "%" (number-to-string w) "d ")))
 ;;             (propertize (format fmt line) 'face 'linum)))))
 
+;; auto-insert
+(setq auto-insert-alist
+      (append '(("\\.xhtml$" . ["insert.xhtml" my-template]))
+              auto-insert-alist))
+
+
 ;; auto-save
 (defun auto-save-buffer (&optional buffer)
   (interactive)
