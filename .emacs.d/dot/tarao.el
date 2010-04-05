@@ -120,7 +120,9 @@
       (append '(("\\.xhtml$" . ["insert.xhtml" my-template]))
               auto-insert-alist))
 
-
+;; zen coding
+(setq zencoding-preview-default nil) ; no preview
+(setq zencoding-insert-flash-time 0.2)
 ;; auto-save
 (defun auto-save-buffer (&optional buffer)
   (interactive)
