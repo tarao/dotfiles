@@ -104,8 +104,9 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
     # set window title of screen
     precmd_screen_window_title () {
         if [[ "$SCREENTITLE" = 'auto' ]]; then
-            local dir=`pwd`
-            dir=`print -nD $dir`
+            local dir
+            dir=`pwd`
+            dir=`print -nD "$dir"`
             if [[ ( -n "$vcs" ) && ( "$repos" != "$dir" ) ]]; then
                 # name of repository and directory
                 dir="${repos:t}:${dir:t}"
@@ -125,7 +126,8 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
         ZSH_LAST_CMD=(${=1})
         if [[ "$SCREENTITLE" = 'auto' ]]; then
             # name of command
-            local j=$ZSH_LAST_CMD[1]
+            local j
+            j=$ZSH_LAST_CMD[1]
             if [[ -n "$SCREEN_TITLE_CMD_IGNORE[$j]" ]]; then
                 j=$SCREEN_TITLE_CMD_LAST
             else
