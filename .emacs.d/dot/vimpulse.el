@@ -17,6 +17,9 @@
 (require 'hexl-viper-patch)
 (defadvice viper-maybe-checkout (around viper-dont-ask-checkout activate) nil)
 
+;; auto-complete patches
+(define-key ac-completing-map (kbd "ESC") nil)
+
 (setq vimpulse-want-vi-keys-in-dired nil)
 (setq woman-use-own-frame nil) ; don't create new frame for manpages
 (require 'vimpulse)
