@@ -1,5 +1,5 @@
 source ~/.zsh/display.zshrc
-source ~/.zsh/luxaky.zshrc
+source ~/.zsh/common.zshrc
 source ~/.zsh/vimode.zshrc
 
 SCREEN_TITLE_CMD_ARG=(ssh -1 man -1 v -1)
