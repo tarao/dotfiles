@@ -28,7 +28,9 @@
         (setq install-elisp-repository-directory
               (format dir (mapconcat 'identity vl ".")))))
   ;;; user (install to the user directory)
-  (setq install-elisp-repository-directory "~/.emacs.d/site-lisp/"))
+  (progn
+    (setq load-path (cons "~/.emacs.d/site-lisp" load-path))
+    (setq install-elisp-repository-directory "~/.emacs.d/site-lisp/")))
 
 (defun update-remote-emacs-lisp ()
   (interactive)
