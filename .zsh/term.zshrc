@@ -45,9 +45,7 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
             local -a cmd; cmd=(${(z)1})
             while [[ "$cmd[1]" =~ "[^\\]=" ]]; do shift cmd; done
             if [[ "$cmd[1]" == "env" ]]; then shift cmd; fi
-            echo $cmd[1]
             if [[ -n "$SCREEN_TITLE_CMD_IGNORE[$cmd[1]]" ]]; then
-                echo hoge
                 return
             elif [[ -n "$SCREEN_TITLE_CMD_ARG[$cmd[1]]" ]]; then
                 # argument of command
