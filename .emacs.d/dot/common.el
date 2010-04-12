@@ -47,12 +47,6 @@
 (global-set-key (kbd "ESC M-O d") 'backward-sexp)
 (global-set-key (kbd "ESC M-O c") 'forward-sexp)
 
-; redo
-(when (require 'redo nil t)
-  (global-set-key (kbd "C-x U") 'redo)
-  (global-set-key (kbd "C-.") 'redo)
-  (global-set-key (kbd "C-M-_") 'redo))
-
 ; Mule-UCS settings
 ;-; --> disabled: not needed in Emacs 22
 ;-;(require 'un-define) ; Unicode
@@ -113,18 +107,6 @@
 
 ; parenthesis
 (show-paren-mode t)
-
-; screen lines
-;; (when (< emacs-major-version 23)
-;;   (autoload 'screen-lines-mode "screen-lines"
-;;     "Toggle Screen Lines minor mode for the current buffer." t)
-;;   (autoload 'turn-on-screen-lines-mode "screen-lines"
-;;     "Turn on Screen Lines minor mode for the current buffer." t)
-;;   (autoload 'turn-off-screen-lines-mode "screen-lines"
-;;     "Turn off Screen Lines minor mode for the current buffer." t)
-;;   (add-hook 'find-file-hooks 'turn-on-screen-lines-mode))
-(require 'physical-line)
-;(setq-default physical-line-mode t)
 
 ; browse-kill-ring
 (autoload 'browse-kill-ring "browse-kill-ring" nil t)
@@ -309,12 +291,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; luxaky
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (when (and (>= emacs-major-version 23) window-system)
-;;   (set-default-font "osaka_unicode")
-;;   (set-fontset-font (frame-parameter nil 'font)
-;;                     'japanese-jisx0208
-;;                     '("osaka_unicode" . "unicode-bmp")))
 
 (if (equal short-hostname "luxaky")
     (progn

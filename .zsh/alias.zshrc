@@ -14,10 +14,17 @@ function { # local scope
     alias g++now="env g++ -lstdc++ -std=gnu++98 -pedantic"
 }
 
-alias emacsclient='emacsclient.emacs-snapshot'
-alias emacsc='emacsclient -nw'
-alias emacsd='emacs-snapshot --daemon'
-alias emacs22='env emacs22'
-alias emacs23='env emacs-snapshot'
-alias emacs-standalone='emacs23'
-alias emacs-compile='emacs-standalone -batch -f batch-byte-compile'
+function { # local scope
+    local install
+    local update
+    install="~/.emacs.d/dot/install.el"
+    update="update-remove-emacs-lisp"
+    alias emacsclient='emacsclient.emacs-snapshot'
+    alias emacsc='emacsclient -nw'
+    alias emacsd='emacs-snapshot --daemon'
+    alias emacs22='env emacs22'
+    alias emacs23='env emacs-snapshot'
+    alias emacs-standalone='emacs23'
+    alias emacs-compile='emacs-standalone --batch -f batch-byte-compile'
+    alias update-elisp="emacs-standalone --batch -l '$install' -f $update"
+}
