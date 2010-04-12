@@ -38,20 +38,20 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
             fi
         }
     }
+    typeset -A SCREEN_TITLE_CMD_ARG; SCREEN_TITLE_CMD_ARG=()
+    typeset -A SCREEN_TITLE_CMD_IGNORE; SCREEN_TITLE_CMD_IGNORE=()
     function { # use command name as a title
-        typeset -A SCREEN_TITLE_CMD_ARG; SCREEN_TITLE_CMD_ARG=()
-        typeset -A SCREEN_TITLE_CMD_IGNORE; SCREEN_TITLE_CMD_IGNORE=()
         function set_cmd_screen_title () {
             local -a cmd; cmd=(${(z)1})
             while [[ "$cmd[1]" =~ "[^\\]=" ]]; do shift cmd; done
             if [[ "$cmd[1]" == "env" ]]; then shift cmd; fi
+            echo $cmd[1]
             if [[ -n "$SCREEN_TITLE_CMD_IGNORE[$cmd[1]]" ]]; then
+                echo hoge
                 return
-            else
-                if [[ -n "$SCREEN_TITLE_CMD_ARG[$cmd[1]]" ]]; then
-                    # argument of command
-                    cmd[1]=$cmd[$SCREEN_TITLE_CMD_ARG[$cmd[1]]]
-                fi
+            elif [[ -n "$SCREEN_TITLE_CMD_ARG[$cmd[1]]" ]]; then
+                # argument of command
+                cmd[1]=$cmd[$SCREEN_TITLE_CMD_ARG[$cmd[1]]]
             fi
             set_screen_title "$cmd[1]:t"
         }
