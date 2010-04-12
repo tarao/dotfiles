@@ -21,43 +21,67 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
 
     # set window title of screen
     function set_screen_title () { echo -n "k$1\\" }
-    precmd_screen_window_title () {
-        if [[ "$SCREENTITLE" = 'auto' ]]; then
-            local dir
-            dir=`pwd`
-            dir=`print -nD "$dir"`
-            if [[ ( -n "$vcs" ) && ( "$repos" != "$dir" ) ]]; then
-                # name of repository and directory
-                dir="${repos:t}:${dir:t}"
-            else
-                # name of directory
-                dir=${dir:t}
+    function { # use current directory as a title
+        precmd_screen_window_title () {
+            if [[ "$SCREENTITLE" = 'auto' ]]; then
+                local dir
+                dir=`pwd`
+                dir=`print -nD "$dir"`
+                if [[ ( -n "$vcs" ) && ( "$repos" != "$dir" ) ]]; then
+                    # name of repository and directory
+                    dir="${repos:t}:${dir:t}"
+                else
+                    # name of directory
+                    dir=${dir:t}
+                fi
+                set_screen_title "$dir"
             fi
-            set_screen_title "$dir"
-        fi
+        }
     }
-    typeset -A SCREEN_TITLE_CMD_ARG
-    typeset -A SCREEN_TITLE_CMD_IGNORE
-    SCREEN_TITLE_CMD_ARG=()
-    SCREEN_TITLE_CMD_IGNORE=(fg 1 job 1)
-    preexec_screen_window_title () {
-        typeset -a ZSH_LAST_CMD
-        ZSH_LAST_CMD=(${=1})
-        if [[ "$SCREENTITLE" = 'auto' ]]; then
-            # name of command
-            local j
-            j=$ZSH_LAST_CMD[1]
-            if [[ -n "$SCREEN_TITLE_CMD_IGNORE[$j]" ]]; then
-                j=$SCREEN_TITLE_CMD_LAST
+    function { # use command name as a title
+        typeset -A SCREEN_TITLE_CMD_ARG; SCREEN_TITLE_CMD_ARG=()
+        typeset -A SCREEN_TITLE_CMD_IGNORE; SCREEN_TITLE_CMD_IGNORE=()
+        function set_cmd_screen_title () {
+            local -a cmd; cmd=(${(z)1})
+            while [[ "$cmd[1]" =~ "[^\\]=" ]]; do shift cmd; done
+            if [[ "$cmd[1]" == "env" ]]; then shift cmd; fi
+            if [[ -n "$SCREEN_TITLE_CMD_IGNORE[$cmd[1]]" ]]; then
+                return
             else
-                if [[ -n "$SCREEN_TITLE_CMD_ARG[$j]" ]]; then
+                if [[ -n "$SCREEN_TITLE_CMD_ARG[$cmd[1]]" ]]; then
                     # argument of command
-                    j=$ZSH_LAST_CMD[$SCREEN_TITLE_CMD_ARG[$j]]
+                    cmd[1]=$cmd[$SCREEN_TITLE_CMD_ARG[$cmd[1]]]
                 fi
             fi
-            SCREEN_TITLE_CMD_LAST=$j
-            set_screen_title "${j:t}"
-        fi
+            set_screen_title "$cmd[1]:t"
+        }
+        preexec_screen_window_title () {
+            local -a cmd; cmd=(${(z)2}) # command in a single line
+            if [[ "$SCREENTITLE" = 'auto' ]]; then
+                case $cmd[1] in
+                    fg)
+                        if (( $#cmd == 1 )); then
+                            cmd=(builtin jobs -l %+)
+                        else
+                            cmd=(builtin jobs -l $cmd[2])
+                        fi
+                        ;;
+                    %*)
+                        cmd=(builtin jobs -l $cmd[1])
+                        ;;
+                    *)
+                        set_cmd_screen_title "$cmd"
+                        return
+                        ;;
+                esac
+                # resolve command in jobs
+                local -A jt; jt=(${(kv)jobtexts})
+                $cmd >>(read num rest
+                    cmd=(${(z)${(e):-\$jt$num}})
+                    set_cmd_screen_title "$cmd"
+                ) 2>/dev/null
+            fi
+        }
     }
     function title() {
         if [[ -n "$SCREENTITLE" ]]; then
