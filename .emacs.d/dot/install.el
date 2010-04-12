@@ -1,5 +1,3 @@
-(require 'install-elisp)
-
 (setq elisp-emacswiki-src
       '(
         "install-elisp.el"
@@ -31,6 +29,8 @@
   (progn
     (setq load-path (cons "~/.emacs.d/site-lisp" load-path))
     (setq install-elisp-repository-directory "~/.emacs.d/site-lisp/")))
+
+(require 'install-elisp)
 
 (defun update-remote-emacs-lisp ()
   (interactive)
