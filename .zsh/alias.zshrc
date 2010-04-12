@@ -18,7 +18,7 @@ function { # local scope
     local install
     local update
     install="~/.emacs.d/dot/install.el"
-    update="update-remove-emacs-lisp"
+    update="update-remote-emacs-lisp"
     alias emacsclient='emacsclient.emacs-snapshot'
     alias emacsc='emacsclient -nw'
     alias emacsd='emacs-snapshot --daemon'
