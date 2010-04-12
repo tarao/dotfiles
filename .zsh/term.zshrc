@@ -20,6 +20,7 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
     }
 
     # set window title of screen
+    function set_screen_title () { echo -n "k$1\\" }
     precmd_screen_window_title () {
         if [[ "$SCREENTITLE" = 'auto' ]]; then
             local dir
@@ -32,7 +33,7 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
                 # name of directory
                 dir=${dir:t}
             fi
-            screen -X eval "title '$dir'"
+            set_screen_title "$dir"
         fi
     }
     typeset -A SCREEN_TITLE_CMD_ARG
@@ -55,7 +56,7 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
                 fi
             fi
             SCREEN_TITLE_CMD_LAST=$j
-            screen -X eval "title '${j:t}'"
+            set_screen_title "${j:t}"
         fi
     }
     function title() {
@@ -63,7 +64,7 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
             if [[ -n "$1" ]]; then
                 # set title explicitly
                 export SCREENTITLE=explicit
-                screen -X eval "title '$1'"
+                set_screen_title "$1"
             else
                 # automatically set title
                 export SCREENTITLE=auto
