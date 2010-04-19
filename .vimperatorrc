@@ -21,7 +21,6 @@ liberator.globalVariables.plugin_loader_plugins = <>
     appendAnchor
     auto_reload
     caret-hint
-    cpan-search
     gmperator
     google-search
     hatena-bookmark-search
@@ -65,6 +64,9 @@ noremap D d
 noremap <C-j> <Nop>
 inoremap <C-j> <Nop>
 cnoremap <C-j> <Nop>
+
+inoremap <C-n> <Nop>
+cnoremap <C-n> <Nop>
 
 noremap j 3<C-e>
 noremap k 3<C-y>
