@@ -7,7 +7,7 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
     zstyle ':vcs_info:*' actionformats '%R' '%S' '%s:%b|%a' '%s'
     precmd_vcs_info () {
         psvar=()
-        LANG=en_US.UTF-8 vcs_info
+        STY= LANG=en_US.UTF-8 vcs_info
         repos=`print -nD "$vcs_info_msg_0_"`
         if [[ -n "$vcs_info_msg_1_" ]]; then
             vcs="$vcs_info_msg_3_"
@@ -94,11 +94,8 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
         fi
     }
 
-    typeset -ga precmd_functions
     precmd_functions+=precmd_vcs_info
     precmd_functions+=precmd_screen_window_title
-
-    typeset -ga preexec_functions
     preexec_functions+=preexec_screen_window_title
 
     # prompt

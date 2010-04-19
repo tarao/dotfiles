@@ -21,3 +21,4 @@ CVS
 .vimperator/info
 .vimperator/plugin/plugin_loader.js
 .vimperator/plugin-available
+.zsh/cdd_pwd_list*
