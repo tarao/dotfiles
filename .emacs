@@ -1,6 +1,6 @@
 (load "~/.emacs.d/dot/common")
-(load "dot/tarao")
 (load "dot/howm")
+(load "dot/tarao")
 
 ;; edit textarea
 (require 'textarea)
