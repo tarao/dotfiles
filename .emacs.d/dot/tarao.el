@@ -136,12 +136,24 @@
         (save-buffer))))
 
 ;; hatena
+(load "multi-mode-util" t)
+(setq hatena-diary-super-pre-languages '(java javascript lisp ruby))
+(defun hatena-diary-super-pre-notation ()
+  (interactive)
+  (multi-mode-init 'text-mode)
+  (dolist (l hatena-diary-super-pre-languages)
+    (let ((str (symbol-name l)))
+      (multi-install-chunk-finder (concat "^>|" str "|$") "^||<$"
+                                  (intern (concat str "-mode"))))))
 (add-hook 'find-file-hook
           '(lambda ()
-             (if (string-match "/hatena/diary/" (buffer-file-name))
-                 (progn
-                   (make-variable-buffer-local 'make-backup-files)
-                   (setq make-backup-files nil)
-                   (auto-save-mode 0)))))
-(setq auto-mode-alist
-      (append '(("/hatena/diary/" . text-mode)) auto-mode-alist))
+             (when (string-match "/hatena/diary/" (buffer-file-name))
+               (set (make-variable-buffer-local 'make-backup-files) nil)
+               (auto-save-mode 0)
+               (when (featurep 'multi-mode-util)
+                 (add-hook
+                  'multi-indirect-buffer-hook
+                  '(lambda ()
+                     (set (make-variable-buffer-local 'make-backup-files) nil)
+                     (auto-save-mode 0)))
+                 (hatena-diary-super-pre-notation)))))
