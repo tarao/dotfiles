@@ -36,3 +36,8 @@
 (defadvice flymake-post-syntax-check
   (after flymake-display-err-minibuf-auto last activate)
   (flymake-display-err-minibuf))
+
+;; ignore when visiting non-file buffer
+(defadvice flymake-get-init-function
+  (around flymake-ignore-non-file (file-name) activate)
+  (if file-name ad-do-it '(lambda () nil)))
