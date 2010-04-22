@@ -23,7 +23,7 @@
       (defun head3 (l n)
         (if (null l) l (if (< n 3) (cons (car l) (head3 (cdr l) (1+ n))) nil)))
       (let ((vl (head3 (split-string emacs-version "\\.") 0))
-            (dir "/usr/local/share/emacs/%s/site-lisp-test/"))
+            (dir "/usr/local/share/emacs/%s/site-lisp/"))
         (setq install-elisp-repository-directory
               (format dir (mapconcat 'identity vl ".")))))
   ;;; user (install to the user directory)
