@@ -41,5 +41,26 @@
   (kbd "C-p") nil)
 (define-key viper-insert-basic-map
   (kbd "C-n") nil)
+(define-key viper-vi-basic-map
+  (kbd "C-r") 'undo-tree-redo)
+
+(defadvice undo-tree-visualize
+  (after ad-undo-tree-visualize-remove-viper-keys activate)
+  (make-variable-buffer-local 'viper-vi-basic-map)
+  (define-key viper-vi-basic-map (kbd "b") nil)
+  (define-key viper-vi-basic-map (kbd "f") nil)
+  (define-key viper-vi-basic-map (kbd "n") nil)
+  (define-key viper-vi-basic-map (kbd "p") nil)
+  (define-key viper-vi-basic-map (kbd "q") nil)
+  (define-key viper-vi-basic-map (kbd "t") nil)
+  (define-key viper-vi-basic-map (kbd ",") nil)
+  (define-key viper-vi-basic-map (kbd ".") nil)
+  (define-key viper-vi-basic-map (kbd "<") nil)
+  (define-key viper-vi-basic-map (kbd ">") nil)
+  (define-key viper-vi-basic-map (kbd "C-b") nil)
+  (define-key viper-vi-basic-map (kbd "C-f") nil)
+  (define-key viper-vi-basic-map (kbd "C-n") nil)
+  (define-key viper-vi-basic-map (kbd "C-p") nil)
+  (define-key viper-vi-basic-map (kbd "C-q") nil))
 
 ;; vimpulse patches

@@ -166,6 +166,10 @@
 (setq read-file-name-completion-ignore-case t)
 (setq completer-words "---. <_")
 
+; undo/redo
+(require 'undo-tree)
+(global-undo-tree-mode)
+
 ; anything
 (require 'anything-config)
 (setq anything-sources
