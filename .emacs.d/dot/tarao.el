@@ -11,10 +11,40 @@
 
 ;; mode-line
 (defun viper-mode-string-p ()
-  (or vimpulse-visual-mode
-      (and (boundp 'viper-mode-string)
-           viper-mode-string
-           (not (eq viper-current-state 'vi-state)))))
+  (condition-case ()
+      (or vimpulse-visual-mode (not (eq viper-current-state 'vi-state)))
+    (error nil)))
+(setq viper-my-mode-string "--x--")
+(setq viper-after-mode-string "")
+(defun viper-update-my-mode-string ()
+  (make-variable-buffer-local 'viper-my-mode-string)
+  (make-variable-buffer-local 'viper-after-mode-string)
+  (condition-case ()
+      (cond
+       ((viper-mode-string-p)
+        (setq viper-my-mode-string
+              (cond
+               ((eq vimpulse-visual-mode 'normal)
+                viper-visual-characterwise-state-id)
+               ((eq vimpulse-visual-mode 'line)
+                viper-visual-linewise-state-id)
+               ((eq vimpulse-visual-mode 'block)
+                viper-visual-blockwise-state-id)
+               ((eq viper-current-state 'insert-state)
+                viper-insert-state-id)
+               ((eq viper-current-state 'replace-state)
+                viper-replace-state-id)
+               ((eq viper-current-state 'emacs-state)
+                viper-emacs-state-id)
+               (t "")))
+        (setq viper-my-mode-string (concat "--" viper-my-mode-string))
+        (setq viper-after-mode-string "--"))
+       (t
+        (setq viper-my-mode-string "")
+        (setq viper-after-mode-string "-")))
+    (error nil)))
+(defadvice viper-change-state (after ad-viper-update-my-mode-string activate)
+  (viper-update-my-mode-string))
 (setq mode-line-frame-identification " ")
 (setq default-mode-line-format
       '(""
@@ -24,20 +54,11 @@
         ; case with skk:
         ;   (normal) |--かな:uuu:...
         ;   (insert) |--INSERT--かな:uuu:...
-        (:eval (and (viper-mode-string-p) "--"))
-        (:eval (cond
-                ((and vimpulse-visual-mode (eq vimpulse-visual-mode 'normal))
-                 viper-visual-characterwise-state-id)
-                ((and vimpulse-visual-mode (eq vimpulse-visual-mode 'line))
-                 viper-visual-linewise-state-id)
-                ((and vimpulse-visual-mode (eq vimpulse-visual-mode 'block))
-                 viper-visual-blockwise-state-id)
-                ((boundp 'viper-mode-string) viper-mode-string)
-                (t "")))
+        viper-my-mode-string
         skk-modeline-input-mode
         (skk-mode
          ""
-         ("-" (:eval (and (viper-mode-string-p) "-"))))
+         viper-after-mode-string)
         mode-line-mule-info
         mode-line-modified
         mode-line-frame-identification
@@ -56,6 +77,8 @@
         (which-func-mode ("" which-func-format "-"))
 ;;         global-mode-string
         "-%-"))
+(setq jaspace-mode-string " WS")
+(setq undo-tree-mode-lighter nil)
 
 (custom-set-faces
  '(minibuffer-prompt ((t (:foreground "blue"))))
