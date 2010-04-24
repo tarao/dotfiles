@@ -26,18 +26,20 @@ shell zsh
 markkeys ^D=J:^U=K
 
 # set copy buffer
-setenv MYBUFFERFILE $HOME/.screen-exchange
-bufferfile $MYBUFFERFILE
+setenv COPYBUFFER $HOME/.screen-exchange
+setenv COPYCMD "cat $COPYBUFFER | xsel -i"
+bufferfile $COPYBUFFER
 
 # pass copy buffer to xclip
-bindkey -m ' ' eval 'stuff \040' writebuf 'exec !!! xclip $MYBUFFERFILE'
-bindkey -m Y eval 'stuff Y' writebuf 'exec !!! xclip $MYBUFFERFILE'
-bindkey -m y eval 'stuff y' writebuf 'exec !!! xclip $MYBUFFERFILE'
-bindkey -m W eval 'stuff W' writebuf 'exec !!! xclip $MYBUFFERFILE'
+bindkey -m ' ' eval 'stuff \040' writebuf "exec !!! zsh -c '$COPYCMD'"
+bindkey -m Y eval 'stuff Y' writebuf "exec !!! zsh -c '$COPYCMD'"
+bindkey -m y eval 'stuff y' writebuf "exec !!! zsh -c '$COPYCMD'"
+bindkey -m W eval 'stuff W' writebuf "exec !!! zsh -c '$COPYCMD'"
 
 # paste from xclip
-setenv PASTE "screen -X eval 'readbuf' 'paste .'"
-bind P eval 'exec !!! zsh -c "xclip -o > $MYBUFFERFILE; $PASTE"'
+setenv YANKCMD "xsel -o > $COPYBUFFER"
+setenv SCREENPASTE "screen -X eval 'readbuf' 'paste .'"
+bind P eval "exec !!! zsh -c '$YANKCMD; $SCREENPASTE'"
 
 # automatically set title
 setenv SCREENTITLE auto
