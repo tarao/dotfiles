@@ -3,6 +3,7 @@
 (load "dot/cpp")
 (load "dot/js")
 (load "dot/perl")
+(load "dot/install")
 
 ;; no startup message
 (setq inhibit-startup-message t)
@@ -137,6 +138,16 @@
 ;;                           (count-lines (point-min) (point-max))))))
 ;;           (let ((fmt (concat "%" (number-to-string w) "d ")))
 ;;             (propertize (format fmt line) 'face 'linum)))))
+
+;; key-chord
+(require 'key-chord)
+(setq key-chord-two-keys-delay 0.1)
+(key-chord-mode 1)
+(require 'space-chord)
+
+;; SandS (works only for the first character)
+(loop for k from ?a to ?z do
+      (space-chord-define-global k (upcase (char-to-string k))))
 
 ;; auto-insert
 (setq auto-insert-alist

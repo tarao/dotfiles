@@ -6,6 +6,8 @@
         "browse-kill-ring.el"
         "browse-kill-ring+.el"
         "descbinds-anything.el"
+        "key-chord.el"
+        "space-chord.el"
         "xquery-mode.el"
         ))
 (setq elisp-url-src
