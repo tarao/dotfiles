@@ -145,10 +145,6 @@
 (key-chord-mode 1)
 (require 'space-chord)
 
-;; SandS (works only for the first character)
-(loop for k from ?a to ?z do
-      (space-chord-define-global k (upcase (char-to-string k))))
-
 ;; auto-insert
 (setq auto-insert-alist
       (append '(("\\.xhtml$" . ["insert.xhtml" my-template]))
