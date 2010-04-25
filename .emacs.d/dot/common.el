@@ -172,19 +172,28 @@
 
 ; anything
 (require 'anything-config)
+(require 'anything-match-plugin)
+(require 'anything-complete)
+(setq anything-complete-sort-candidates t)
+;(anything-read-string-mode 1)
+(substitute-key-definition 'execute-extended-command
+                           'anything-execute-extended-command global-map)
+(require 'anything-grep)
+(defalias 'ag 'anything-grep)
 (setq anything-sources
       '(
+        anything-c-source-buffers+
         anything-c-source-ffap-line
         anything-c-source-ffap-guesser
-        anything-c-source-buffers+
-        anything-c-source-file-name-history
+        anything-c-source-recentf
+        anything-c-source-bookmarks
         anything-c-source-files-in-current-dir+
         anything-c-source-locate
         anything-c-source-kill-ring
         ))
 (global-set-key (kbd "C-x b") 'anything)
-(define-key anything-map (kbd "C-M-n") 'anything-next-source)
-(define-key anything-map (kbd "C-M-p") 'anything-previous-source)
+(define-key anything-map (kbd "M-n") 'anything-next-source)
+(define-key anything-map (kbd "M-p") 'anything-previous-source)
 
 ;; describe-bindings alternatative
 (require 'descbinds-anything)

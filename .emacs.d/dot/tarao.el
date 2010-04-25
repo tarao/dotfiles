@@ -105,6 +105,9 @@
    ((t (:inherit nxml-name-face :foreground "medium blue"))))
  '(trailing-whitespace ((t (:background "peach puff")))))
 
+(defalias 'comm 'comment-region)
+(defalias 'unc 'uncomment-region)
+
 ;; VC
 (setq vc-follow-symlinks nil)
 (setq vc-stay-local t)

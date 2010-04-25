@@ -2,7 +2,10 @@
       '(
         "install-elisp.el"
         "anything.el"
+        "anything-complete.el"
         "anything-config.el"
+        "anything-grep.el"
+        "anything-match-plugin.el"
         "browse-kill-ring.el"
         "browse-kill-ring+.el"
         "descbinds-anything.el"
@@ -35,8 +38,12 @@
 
 (require 'install-elisp)
 
+(defadvice install-elisp (before batch-install-elisp activate)
+  (when noninteractive (setq install-elisp-confirm-flag nil)))
 (defun update-remote-emacs-lisp ()
   (interactive)
   (when noninteractive (setq install-elisp-confirm-flag nil))
-  (mapcar 'install-elisp-from-emacswiki elisp-emacswiki-src)
-  (mapcar 'install-elisp elisp-url-src))
+  (dolist (src elisp-emacswiki-src)
+    (when noninteractive (sleep-for 2))
+    (install-elisp-from-emacswiki src))
+  (dolist (src elisp-url-src) (install-elisp src)))

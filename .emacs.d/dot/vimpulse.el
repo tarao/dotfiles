@@ -63,4 +63,13 @@
   (define-key viper-vi-basic-map (kbd "C-p") nil)
   (define-key viper-vi-basic-map (kbd "C-q") nil))
 
+(setq my-viper-extra-ex-commands
+      '(("o" "open")
+        ("open" (anything-find-file))))
+
+(dolist (entry my-viper-extra-ex-commands)
+  (setq ex-token-alist
+        (delete (assoc (car entry) ex-token-alist) ex-token-alist))
+  (add-to-list 'ex-token-alist entry t))
+
 ;; vimpulse patches
