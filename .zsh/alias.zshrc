@@ -31,5 +31,5 @@ function install-elisp {
     emacsbinstall --eval "(install-elisp \"$1\")"
 }
 function update-elisp {
-    emacsinstall -f update-remote-emacs-lisp
+    emacsbinstall -f update-remote-emacs-lisp
 }
