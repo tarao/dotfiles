@@ -38,7 +38,7 @@ bindkey -m W eval 'stuff W' writebuf "exec !!! zsh -c '$COPYCMD'"
 
 # paste from xclip
 setenv YANKCMD "xsel -o > $COPYBUFFER"
-setenv SCREENPASTE "screen -X eval 'readbuf' 'paste .'"
+setenv SCREENPASTE 'screen -X eval "readbuf" "paste ."'
 bind P eval "exec !!! zsh -c '$YANKCMD; $SCREENPASTE'"
 
 # automatically set title
