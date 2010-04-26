@@ -11,55 +11,9 @@
 (setq initial-scratch-message nil)
 
 ;; mode-line
-(defun viper-mode-string-p ()
-  (condition-case ()
-      (or vimpulse-visual-mode (not (eq viper-current-state 'vi-state)))
-    (error nil)))
-(setq viper-my-mode-string "--x--")
-(setq viper-after-mode-string "")
-(defun viper-update-my-mode-string ()
-  (make-variable-buffer-local 'viper-my-mode-string)
-  (make-variable-buffer-local 'viper-after-mode-string)
-  (condition-case ()
-      (cond
-       ((viper-mode-string-p)
-        (setq viper-my-mode-string
-              (cond
-               ((eq vimpulse-visual-mode 'normal)
-                viper-visual-characterwise-state-id)
-               ((eq vimpulse-visual-mode 'line)
-                viper-visual-linewise-state-id)
-               ((eq vimpulse-visual-mode 'block)
-                viper-visual-blockwise-state-id)
-               ((eq viper-current-state 'insert-state)
-                viper-insert-state-id)
-               ((eq viper-current-state 'replace-state)
-                viper-replace-state-id)
-               ((eq viper-current-state 'emacs-state)
-                viper-emacs-state-id)
-               (t "")))
-        (setq viper-my-mode-string (concat "--" viper-my-mode-string))
-        (setq viper-after-mode-string "--"))
-       (t
-        (setq viper-my-mode-string "")
-        (setq viper-after-mode-string "-")))
-    (error nil)))
-(defadvice viper-change-state (after ad-viper-update-my-mode-string activate)
-  (viper-update-my-mode-string))
 (setq mode-line-frame-identification " ")
 (setq default-mode-line-format
       '(""
-        ; case without skk:
-        ;   (normal) |-uuu:...
-        ;   (insert) |--INSERT--uuu:...
-        ; case with skk:
-        ;   (normal) |--かな:uuu:...
-        ;   (insert) |--INSERT--かな:uuu:...
-        viper-my-mode-string
-        skk-modeline-input-mode
-        (skk-mode
-         ""
-         viper-after-mode-string)
         mode-line-mule-info
         mode-line-modified
         mode-line-frame-identification
@@ -103,7 +57,8 @@
  '(nxml-name-face ((t (:foreground "BlueViolet"))))
  '(nxml-tag-slash-face
    ((t (:inherit nxml-name-face :foreground "medium blue"))))
- '(trailing-whitespace ((t (:background "peach puff")))))
+ '(trailing-whitespace ((t (:background "peach puff"))))
+ '(blink-matching-paren t))
 
 (defalias 'comm 'comment-region)
 (defalias 'unc 'uncomment-region)
@@ -130,6 +85,8 @@
 ;; SKK
 (setq skk-user-directory "~/.ddskk")
 (setq skk-use-viper t)
+(setq-default mode-line-format
+              (append '("" skk-modeline-input-mode) mode-line-format))
 
 ;; vimpulse
 (load "dot/vimpulse")
