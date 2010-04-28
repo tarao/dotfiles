@@ -23,5 +23,6 @@ typeset -ga preexec_functions
 source ~/.zsh/env.zshrc
 source ~/.zsh/alias.zshrc
 source ~/.zsh/function.zshrc
+source ~/.zsh/emacs.zshrc
 source ~/.zsh/cdd.zshrc
 source ~/.zsh/term.zshrc

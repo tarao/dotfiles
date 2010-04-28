@@ -17,24 +17,3 @@ function git() {
         env git $@
     fi
 }
-
-# Emacs server and client
-function emacs() {
-    if [[ `id -ur` = 0 ]]; then # root
-        emacs-standalone $@
-    else
-        if [[ -z `pgrep emacs -u $USER` ]]; then
-            emacsd
-        fi
-        emacsc $@
-    fi
-}
-function stop-emacsd() {
-    if [[ -n `pgrep emacs -u $USER` ]]; then
-        emacsclient -e '(progn (defun yes-or-no-p (p) t) (kill-emacs))'
-    fi
-}
-function restart-emacsd() {
-    stop-emacsd
-    emacsd
-}
