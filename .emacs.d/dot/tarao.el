@@ -3,6 +3,7 @@
 (load "dot/cpp")
 (load "dot/js")
 (load "dot/perl")
+(load "dot/anything-zsh")
 (load "dot/install")
 
 ;; no startup message

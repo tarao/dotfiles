@@ -10,6 +10,7 @@
         "browse-kill-ring+.el"
         "descbinds-anything.el"
         "key-chord.el"
+        "shell-history.el"
         "space-chord.el"
         "xquery-mode.el"
         ))

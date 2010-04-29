@@ -38,3 +38,23 @@ function restart-emacsd() {
     stop-emacsd
     emacsd
 }
+
+# See: http://d.hatena.ne.jp/rubikitch/20091208/anythingzsh
+function anything-history()  {
+    local tmpfile
+    tmpfile="$HOME/.zsh/.azh-tmp-file"
+    touch $tmpfile
+    chmod 600 $tmpfile
+    emacs --eval '(anything-zsh-history-from-zle)'
+    [[ -n "$STY" ]] && zle -I
+    zle -R -c
+    if [[ -n "$ANYTHING_HISTORY_DONT_EXEC" ]]; then
+        zle -U "`cat $tmpfile`"
+    else
+        BUFFER="`cat $tmpfile`"
+        zle accept-line
+    fi
+#    rm $tmpfile
+}
+zle -N anything-history
+bindkey "^R" anything-history
