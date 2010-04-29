@@ -7,7 +7,6 @@
 
 (defun anything-zsh-history-from-zle ()
   (interactive)
-  (azh/set-frame)
   (let ((anything-samewindow t)
         (anything-display-function 'anything-default-display-buffer))
     (azh/set-command
@@ -22,27 +21,9 @@
 (defvar azh/tmp-file "~/.zsh/.azh-tmp-file")
 (defvar azh/frame nil)
 
-(defun azh/set-frame ()
-  nil
-  ;; (unless (and azh/frame (frame-live-p azh/frame))
-  ;;   (setq azh/frame (make-frame '((name . "zsh history")
-  ;;                                 (title . "zsh history")))))
-  ;; (select-frame azh/frame)
-  ;; (sit-for 0)
-)
-
 (defun azh/set-command (line)
   (write-region (or line "") nil azh/tmp-file)
-  (delete-frame)
-;  (azh/close-frame)
-)
-
-(defun azh/close-frame ()
-  (ignore-errors (make-frame-invisible azh/frame))
-  (when (fboundp 'do-applescript)
-    (funcall 'do-applescript "tell application \"iTerm\"
-                                activate
-                             end")))
+  (delete-frame))
 
 (defun azh/edit-command (line)
   (switch-to-buffer "*zsh command edit*")
@@ -61,4 +42,3 @@
 (defun azh/edit-exit ()
   (interactive)
   (exit-recursive-edit))
-
