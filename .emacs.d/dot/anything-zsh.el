@@ -17,7 +17,6 @@
       "*anything zsh history*"))))
 
 (defvar azh/tmp-file "~/.zsh/.azh-tmp-file")
-(defvar azh/frame nil)
 
 (defun azh/set-command (line)
   (write-region (or line "") nil azh/tmp-file)
