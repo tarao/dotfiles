@@ -1,9 +1,5 @@
 ;; See: http://d.hatena.ne.jp/rubikitch/20091208/anythingzsh
 (require 'anything-complete)
-(require 'shell-history)
-(setq shell-history-file
-      (if (string= (getenv "SHELL") "zsh")
-          "~/.zsh_history" "~/.bash_history"))
 
 (defun anything-zsh-history-from-zle ()
   (interactive)

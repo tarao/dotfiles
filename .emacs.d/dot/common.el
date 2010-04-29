@@ -124,6 +124,12 @@
   (set-terminal-coding-system 'utf-8-unix))
 (require 'default-file-coding-systems)
 
+; shell history
+(require 'shell-history)
+(setq shell-history-file
+      (if (string= (getenv "SHELL") "zsh")
+          "~/.zsh_history" "~/.bash_history"))
+
 ; move window
 (windmove-default-keybindings)
 (setq windmove-wrap-around t)
@@ -172,6 +178,7 @@
 
 ; anything
 (require 'anything-config)
+(setq anything-enable-shortcuts 'alphabet)
 (require 'anything-match-plugin)
 (require 'anything-complete)
 (setq anything-complete-sort-candidates t)
