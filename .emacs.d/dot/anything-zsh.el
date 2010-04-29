@@ -1,7 +1,7 @@
 ;; See: http://d.hatena.ne.jp/rubikitch/20091208/anythingzsh
 (require 'anything-complete)
 
-(defun anything-zsh-history-from-zle (&optional input)
+(defun anything-zsh-history-from-zle (file &optional input)
   (interactive)
   (let ((anything-samewindow t)
         (anything-display-function 'anything-default-display-buffer))
@@ -14,12 +14,11 @@
          ,@anything-c-source-complete-shell-history))
       input
       nil nil nil
-      "*anything zsh history*"))))
+      "*anything zsh history*")
+     file)))
 
-(defvar azh/tmp-file "~/.zsh/.azh-tmp-file")
-
-(defun azh/set-command (line)
-  (write-region (or line "") nil azh/tmp-file)
+(defun azh/set-command (line file)
+  (write-region (or line "") nil file)
   (delete-frame))
 
 (defun azh/edit-command (line)
