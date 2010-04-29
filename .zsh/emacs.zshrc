@@ -51,9 +51,9 @@ function anything-history() {
     fi
     zle -R -c
     if [[ -n "$ANYTHING_HISTORY_DONT_EXEC" ]]; then
-        zle -U `cat "$tmpfile"`
+        zle -U "`cat $tmpfile`"
     else
-        BUFFER=`cat "$tmpfile"`
+        BUFFER="`cat $tmpfile`"
         zle accept-line
     fi
     rm $tmpfile
