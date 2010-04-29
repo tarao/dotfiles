@@ -1,17 +1,19 @@
 ;; See: http://d.hatena.ne.jp/rubikitch/20091208/anythingzsh
 (require 'anything-complete)
 
-(defun anything-zsh-history-from-zle ()
+(defun anything-zsh-history-from-zle (&optional input)
   (interactive)
   (let ((anything-samewindow t)
         (anything-display-function 'anything-default-display-buffer))
     (azh/set-command
-     (anything-other-buffer
+     (anything
       `(((name . "History")
          (action
           ("Paste" . identity)
           ("Edit" . azh/edit-command))
          ,@anything-c-source-complete-shell-history))
+      input
+      nil nil nil
       "*anything zsh history*"))))
 
 (defvar azh/tmp-file "~/.zsh/.azh-tmp-file")

@@ -45,7 +45,7 @@ function anything-history()  {
     tmpfile="$HOME/.zsh/.azh-tmp-file"
     touch $tmpfile
     chmod 600 $tmpfile
-    emacsclient -nw --eval '(anything-zsh-history-from-zle)'
+    emacsclient -nw --eval "(anything-zsh-history-from-zle \"$BUFFER\")"
     if [[ -n "$STY" ]]; then
         # screen 4.0.3 has a bug that altscreen doesn't work for emacs
         (( `screen -v | cut -f 3 -d ' ' | cut -f 2 -d.` < 1 )) && zle -I
