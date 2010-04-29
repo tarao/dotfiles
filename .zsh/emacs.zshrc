@@ -46,7 +46,10 @@ function anything-history()  {
     touch $tmpfile
     chmod 600 $tmpfile
     emacs --eval '(anything-zsh-history-from-zle)'
-    [[ -n "$STY" ]] && zle -I
+    if [[ -n "$STY" ]]; then
+        # screen 4.0.3 has a bug that altscreen doesn't work for emacs
+        (( `screen -v | cut -f 3 -d ' ' | cut -f 2 -d.` < 1 )) && zle -I
+    fi
     zle -R -c
     if [[ -n "$ANYTHING_HISTORY_DONT_EXEC" ]]; then
         zle -U "`cat $tmpfile`"
@@ -54,7 +57,7 @@ function anything-history()  {
         BUFFER="`cat $tmpfile`"
         zle accept-line
     fi
-#    rm $tmpfile
+    rm $tmpfile
 }
 zle -N anything-history
 bindkey "^R" anything-history
