@@ -8,6 +8,7 @@
         "anything-match-plugin.el"
         "browse-kill-ring.el"
         "browse-kill-ring+.el"
+        "c-eldoc.el"
         "descbinds-anything.el"
         "eldoc-extension.el"
         "key-chord.el"
