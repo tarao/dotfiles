@@ -127,7 +127,7 @@
 ; shell history
 (require 'shell-history)
 (setq shell-history-file
-      (if (string= (getenv "SHELL") "zsh")
+      (if (string= shell-file-name "zsh")
           "~/.zsh_history" "~/.bash_history"))
 
 ; move window
