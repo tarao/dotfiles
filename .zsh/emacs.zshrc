@@ -54,7 +54,7 @@ function anything-history() {
         zle -U "`cat $tmpfile`"
     else
         BUFFER="`cat $tmpfile`"
-        zle accept-line
+        [[ -n "$BUFFER" ]] && zle accept-line
     fi
     rm $tmpfile
 }
