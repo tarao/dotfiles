@@ -16,7 +16,7 @@ function _reg_cdd_pwd() {
   if [ ! -f "$CDD_PWD_FILE" ]; then
     echo "\n" >> "$CDD_PWD_FILE"
     if [ $? = 1 ]; then
-      echo "Error: Don't wrote $CDD_PWD_FILE."
+      echo "Error: Couldn't write $CDD_PWD_FILE."
       return 1
     fi
   fi
