@@ -40,7 +40,7 @@ function restart-emacsd() {
 }
 
 # See: http://d.hatena.ne.jp/rubikitch/20091208/anythingzsh
-function anything-history()  {
+function anything-history() {
     local tmpfile
     tmpfile="$HOME/.zsh/.azh-tmp-file"
     touch $tmpfile
