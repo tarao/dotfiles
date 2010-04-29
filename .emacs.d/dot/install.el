@@ -9,6 +9,7 @@
         "browse-kill-ring.el"
         "browse-kill-ring+.el"
         "descbinds-anything.el"
+        "eldoc-extension.el"
         "key-chord.el"
         "shell-history.el"
         "space-chord.el"
