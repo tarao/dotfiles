@@ -126,9 +126,7 @@
 
 ; shell history
 (require 'shell-history)
-(setq shell-history-file
-      (if (string= shell-file-name "zsh")
-          "~/.zsh_history" "~/.bash_history"))
+(setq shell-history-file "~/.zsh_history")
 
 ; move window
 (windmove-default-keybindings)
