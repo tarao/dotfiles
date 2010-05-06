@@ -125,9 +125,15 @@
   (set-terminal-coding-system 'utf-8-unix))
 (require 'default-file-coding-systems)
 
+; bookmark
+(setq bookmark-default-file "~/.emacs.d/bmk")
+
+; recentf
+(setq recentf-save-file (convert-standard-filename "~/.emacs.d/recentf"))
+
 ; shell history
 (require 'shell-history)
-(setq shell-history-file "~/.zsh_history")
+(setq shell-history-file "~/.zsh/history")
 
 ; move window
 (windmove-default-keybindings)

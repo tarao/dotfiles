@@ -26,7 +26,7 @@ shell zsh
 markkeys ^D=J:^U=K
 
 # set copy buffer
-setenv COPYBUFFER $HOME/.screen-exchange
+setenv COPYBUFFER $HOME/.screen/exchange
 setenv COPYCMD "cat $COPYBUFFER | xsel -i"
 bufferfile $COPYBUFFER
 

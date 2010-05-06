@@ -14,6 +14,7 @@ set laststatus=2
 set showcmd
 set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%l,%c%V%8P
 set foldlevelstart=99
+set viminfo='50,<50,s10,h,n~/.vim/info
 noremap ; :
 noremap j gj
 noremap k gk

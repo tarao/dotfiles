@@ -1,4 +1,3 @@
-source ~/.zsh/display.zshrc
 source ~/.zsh/common.zshrc
 source ~/.zsh/vimode.zshrc
 

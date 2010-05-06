@@ -5,6 +5,7 @@ stty stop undef
 typeset -gxU PATH=$PATH
 
 # history
+HISTFILE=~/.zsh/history
 HISTSIZE=100000
 SAVEHIST=100000
 setopt share_history
