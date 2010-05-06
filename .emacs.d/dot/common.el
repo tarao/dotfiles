@@ -6,7 +6,8 @@
  '(column-number-mode t)
  '(indicate-buffer-boundaries (quote left))
  '(tool-bar-mode nil)
- '(menu-bar-mode nil))
+ '(menu-bar-mode nil)
+ '(blink-matching-paren t))
 
 ; load-path
 (setq load-path (cons "~/.emacs.d/site-lisp" load-path))
@@ -173,6 +174,7 @@
 ; undo/redo
 (require 'undo-tree)
 (global-undo-tree-mode)
+(setq undo-tree-mode-lighter nil)
 
 ; anything
 (require 'anything-config)
@@ -207,6 +209,7 @@
 ; auto completion like IntelliSense
 (require 'auto-complete)
 (global-auto-complete-mode t)
+(setq ac-auto-show-menu 0.5)
 (define-key ac-complete-mode-map (kbd "C-n") 'ac-next)
 (define-key ac-complete-mode-map (kbd "C-p") 'ac-previous)
 (define-key ac-complete-mode-map (kbd "TAB") nil)
@@ -241,6 +244,7 @@
 ;(setq jaspace-alternate-eol-string "\xab\n")
 (setq jaspace-highlight-tabs t)
 (setq jaspace-highlight-tabs ?>)
+(setq jaspace-mode-string " WS")
 
 ; align
 (require 'align)

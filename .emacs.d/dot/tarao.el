@@ -33,8 +33,6 @@
         (which-func-mode ("" which-func-format "-"))
 ;;         global-mode-string
         "-%-"))
-(setq jaspace-mode-string " WS")
-(setq undo-tree-mode-lighter nil)
 
 (custom-set-faces
  '(minibuffer-prompt ((t (:foreground "blue"))))
@@ -58,8 +56,7 @@
  '(nxml-name-face ((t (:foreground "BlueViolet"))))
  '(nxml-tag-slash-face
    ((t (:inherit nxml-name-face :foreground "medium blue"))))
- '(trailing-whitespace ((t (:background "peach puff"))))
- '(blink-matching-paren t))
+ '(trailing-whitespace ((t (:background "peach puff")))))
 
 (defalias 'comm 'comment-region)
 (defalias 'unc 'uncomment-region)
