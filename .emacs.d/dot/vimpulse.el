@@ -33,11 +33,11 @@
     (error nil)))
 (defadvice viper-change-state (after ad-my-viper-update-mode-line activate)
   (my-viper-update-mode-line))
-(setq my-viper-mode-line (my-viper-mode-line-format 'emacs-state))
 (setq viper-vi-state-id "")
 (setq viper-insert-state-id "INSERT")
 (setq viper-replace-state-id "REPLACE")
 (setq viper-emacs-state-id "x")
+(setq my-viper-mode-line (my-viper-mode-line-format 'emacs-state))
 (setq-default mode-line-format
               (append '("" my-viper-mode-line) mode-line-format))
 (setq vimpulse-state-id-alist
