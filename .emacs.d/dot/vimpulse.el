@@ -50,7 +50,6 @@
 ;; auto-complete patches
 (define-key ac-completing-map (kbd "ESC") nil)
 
-(setq vimpulse-want-vi-keys-in-dired nil)
 (setq woman-use-own-frame nil) ; don't create new frame for manpages
 (require 'vimpulse)
 
@@ -91,14 +90,5 @@
   (kbd "J") 'viper-scroll-up)
 (define-key viper-vi-global-user-map
   (kbd "K") 'viper-scroll-down)
-
-;; dired
-(define-key viper-dired-modifier-map "j" 'dired-next-line)
-(define-key viper-dired-modifier-map "k" 'dired-previous-line)
-(define-key viper-dired-modifier-map "/" 'dired-goto-file)
-(define-key viper-dired-modifier-map "l"
-  '(lambda () (interactive) (dired-next-line 10)))
-(define-key viper-dired-modifier-map "h"
-  '(lambda () (interactive) (dired-previous-line 10)))
 
 ;; vimpulse patches
