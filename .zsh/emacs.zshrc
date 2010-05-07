@@ -59,4 +59,3 @@ function anything-history() {
     rm $tmpfile
 }
 zle -N anything-history
-bindkey "^R" anything-history
