@@ -1,5 +1,5 @@
 require 'irb/completion'
-require 'nkf'
+require 'kconv'
 require 'pp'
 IRB.conf[:SAVE_HISTORY] = 100000
 
@@ -15,7 +15,7 @@ end
 
 module Kernel
   def r(arg)
-    puts(NKF.nkf('-w', `refe #{arg}`))
+    puts(`refe #{arg}`.toutf8)
   end
   private :r
 end
@@ -24,12 +24,12 @@ class Module
   def r(method = nil)
     if method
       if instance_methods(false).include?(method.to_s)
-        puts(NKF.nkf('-w', `refe #{self}##{method}`))
+        puts(`refe #{self}##{method}`.toutf8)
       else
         super
       end
     else
-      puts(NKF.nkf('-w', `refe #{self}`))
+      puts(`refe #{self}`.toutf8)
     end
   end
 end
