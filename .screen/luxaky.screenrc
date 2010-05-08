@@ -13,7 +13,8 @@ defencoding     utf-8
 encoding        utf-8 utf-8
 cjkwidth        on
 altscreen       on
-hardstatus alwayslastline "%H %`%-w%{=b bw}%n %t%{-}%+w"
+caption splitonly "%?%F%{= Wk}%:%{= wk}%?%3n %t"
+hardstatus alwayslastline "%{+b b}%H%{-} %-w%{=b bw}%n %t%{-}%+w"
 
 multiuser on
 acladd    $USER
