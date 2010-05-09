@@ -4,6 +4,7 @@ set ignorecase
 set smartcase
 set hlsearch
 set tabstop=4
+set expandtab
 set autoindent
 set backspace=2
 set ruler
