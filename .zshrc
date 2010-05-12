@@ -1,9 +1,6 @@
 source ~/.zsh/common.zshrc
 source ~/.zsh/vimode.zshrc
-
-SCREEN_TITLE_CMD_ARG=(ssh -1 su -1 man -1 v -1)
-
-bindkey "^R" anything-history
+source ~/.zsh/tarao.zshrc
 
 alias ii='win cygstart'
 alias ck='win ck -e ssh luxaky'
