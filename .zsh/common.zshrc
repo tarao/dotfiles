@@ -26,4 +26,8 @@ source ~/.zsh/alias.zshrc
 source ~/.zsh/function.zshrc
 source ~/.zsh/emacs.zshrc
 source ~/.zsh/cdd.zshrc
-source ~/.zsh/term.zshrc
+if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
+    source ~/.zsh/term.zshrc
+else
+    source ~/.zsh/term.compat.zshrc
+fi
