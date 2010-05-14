@@ -1,0 +1,56 @@
+source ~/.screen/local.screenrc
+
+msgwait         0
+maptimeout      0
+defscrollback   8192
+escape          ^z^z
+bind            ^X
+bind            x
+startup_message off
+nethack         on
+autodetach      on
+defencoding     utf-8
+encoding        utf-8 utf-8
+cjkwidth        on
+altscreen       on
+caption splitonly "%?%F%{= Wk}%:%{= wk}%?%3n %t"
+hardstatus alwayslastline "$SCRHSTCLR%H%{-} %-w%{=b bw}%n %t%{-}%+w"
+
+multiuser on
+acladd    $USER
+
+defbce on
+term xterm
+shell zsh
+
+# J/K for half page donw/up
+markkeys ^D=J:^U=K
+
+# set copy buffer
+setenv SCRCOPYBUFFER $HOME/.screen/exchange
+setenv SCRCOPYCMD "cat $SCRCOPYBUFFER | xsel -i"
+bufferfile $SCRCOPYBUFFER
+
+# pass copy buffer to xclip
+bindkey -m ' ' eval 'stuff \040' writebuf "exec !!! zsh -c '$SCRCOPYCMD'"
+bindkey -m Y eval 'stuff Y' writebuf "exec !!! zsh -c '$SCRCOPYCMD'"
+bindkey -m y eval 'stuff y' writebuf "exec !!! zsh -c '$SCRCOPYCMD'"
+bindkey -m W eval 'stuff W' writebuf "exec !!! zsh -c '$SCRCOPYCMD'"
+
+# paste from xclip
+setenv SCRYANKCMD "xsel -o > $SCRCOPYBUFFER"
+setenv SCRPASTE 'screen -X eval "readbuf" "paste ."'
+bind P eval "exec !!! zsh -c '$SCRYANKCMD; $SCRPASTE'"
+
+# automatically set title
+setenv SCREENTITLE auto
+
+# reset env
+unsetenv SCRHSTCLR
+unsetenv SCRCOPYBUFFER
+unsetenv SCRCOPYCMD
+unsetenv SCRYANKCMD
+unsetenv SCRPASTE
+
+# initial screen
+screen -t main  0
