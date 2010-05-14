@@ -21,6 +21,7 @@ CVS
 .emacs.d/site-lisp
 .emacs.d/dot/.*
 .screen/exchange
+.screen/local.screenrc
 .vim/info
 .vimperator/info
 .vimperator/plugin/plugin_loader.js
