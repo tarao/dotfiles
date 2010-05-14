@@ -17,6 +17,7 @@ CVS
 .emacs.d/anything-c-adaptive-history
 .emacs.d/ac-comphist.dat
 .emacs.d/bmk
+.emacs.d/init.el
 .emacs.d/recentf
 .emacs.d/site-lisp
 .emacs.d/dot/.*
