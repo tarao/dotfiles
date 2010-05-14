@@ -104,7 +104,7 @@
 (require 'space-chord)
 
 ;; synchronize kill buffer
-(when (executable-find "xsel")
+(when (and (executable-find "xsel") (getenv "DISPLAY"))
   (defun xsel-copy (start end)
     (let* ((process-connection-type nil)
            (proc (start-process "xsel" "*Messages*" "xsel" "-b" "-i")))
