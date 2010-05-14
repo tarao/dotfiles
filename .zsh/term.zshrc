@@ -37,7 +37,7 @@ function { # use current directory as a title
         fi
     }
 }
-typeset -A SCREEN_TITLE_CMD_ARG; SCREEN_TITLE_CMD_ARG=()
+typeset -A SCREEN_TITLE_CMD_ARG; SCREEN_TITLE_CMD_ARG=(ssh -1 su -1 man -1)
 typeset -A SCREEN_TITLE_CMD_IGNORE; SCREEN_TITLE_CMD_IGNORE=()
 function { # use command name as a title
     function set_cmd_screen_title () {
