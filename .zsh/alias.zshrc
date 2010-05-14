@@ -1,3 +1,12 @@
+alias ls='/bin/ls -F $=LS_OPTIONS'
+alias dir='ls -l'
+alias la='ls -la'
+alias ll='ls -alF'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias -- +='pushd .'
+alias -- -='popd'
+
 alias sc='screen -h 4096'
 alias wcat='wget -q -O -'
 
