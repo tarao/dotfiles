@@ -7,14 +7,23 @@ alias ...='cd ../..'
 alias -- +='pushd .'
 alias -- -='popd'
 
-alias sc='screen -h 4096'
-alias wcat='wget -q -O -'
+alias sc='screen'
+function sca () {
+    [[ -z "$STY" ]] && screen -xR
+}
+function scd () {
+    [[ -n "$STY" ]] && screen -d $STY >/dev/null
+}
+
+alias fwd='ssh -N -F ~/.ssh/fwd_config'
+alias proxy='ssh -F ~/.ssh/proxy_config'
 
 alias man='LANG=${LANG/en_US.UTF-8/en_US} env man'
 alias diff='colordiff -u'
 alias od='od -A x -t xCz'
 alias apt='LANG=C aptitude'
 alias sapt='LANG=C sudo aptitude'
+alias wcat='wget -q -O -'
 
 function { # local scope
     local w
