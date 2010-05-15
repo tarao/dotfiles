@@ -159,8 +159,10 @@
 
 ; browse-kill-ring
 (autoload 'browse-kill-ring "browse-kill-ring" nil t)
-(define-key global-map (kbd "M-y") 'browse-kill-ring)
 (load "browse-kill-ring+")
+(define-key global-map (kbd "M-y") 'browse-kill-ring)
+(defadvice kill-new (before no-kill-new-duplicates activate)
+  (setq kill-ring (delete (ad-get-arg 0) kill-ring)))
 
 ; make *scratch* immortal
 (require 'immortal-buffer)
