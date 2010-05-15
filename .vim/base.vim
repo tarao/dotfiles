@@ -17,7 +17,7 @@ set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%l,%c%V
 set foldlevelstart=99
 set viminfo='50,<50,s10,h,n~/.vim/info
 set encoding=utf-8
-set fileencodings=ucs-bom,iso-2022-jp,iso-2022-jp-3,iso-2022-jp,euc-jp,sjis,cp932,utf-8
+set fileencodings=ucs-bom,euc-jp,sjis,cp932,utf-8
 noremap ; :
 noremap j gj
 noremap k gk
