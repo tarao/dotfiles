@@ -1,0 +1,16 @@
+*.o
+*.lo
+*.pyc
+#*#
+.*.rej
+*.rej
+.*~
+*~
+.#*
+.DS_Store
+*.sw[po]
+tags
+Thumbs.db
+*.bak
+.svn
+CVS
