@@ -1,4 +1,3 @@
-(load "~/.emacs.d/dot/common")
 (load "dot/howm")
 (load "dot/tarao")
 

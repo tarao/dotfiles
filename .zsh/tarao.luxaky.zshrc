@@ -1,4 +1,3 @@
-source ~/.zsh/common.zshrc
 source ~/.zsh/vimode.zshrc
 source ~/.zsh/tarao.zshrc
 source ~/.zsh/win.zshrc

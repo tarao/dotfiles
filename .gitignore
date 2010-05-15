@@ -17,10 +17,10 @@ CVS
 .emacs.d/anything-c-adaptive-history
 .emacs.d/ac-comphist.dat
 .emacs.d/bmk
-.emacs.d/init.el
 .emacs.d/recentf
 .emacs.d/site-lisp
 .emacs.d/dot/.*
+.emacs.d/dot/local.el
 .screen/exchange
 .screen/local.screenrc
 .vim/info
@@ -28,6 +28,6 @@ CVS
 .vimperator/plugin/plugin_loader.js
 .vimperator/plugin-available
 .zsh/.zcompdump
-.zsh/.zshrc
+.zsh/local.zshrc
 .zsh/cdd_pwd_list*
 .zsh/history
