@@ -24,6 +24,7 @@ CVS
 .screen/exchange
 .screen/local.screenrc
 .vim/info
+.vim/local.vim
 .vimperator/info
 .vimperator/plugin/plugin_loader.js
 .vimperator/plugin-available
