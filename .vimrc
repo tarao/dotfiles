@@ -1,2 +1,2 @@
-"set runtimepath+=~/.vim/dvorak
+runtime! local.vim
 runtime! base.vim

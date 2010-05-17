@@ -10,8 +10,13 @@
  '(blink-matching-paren t))
 
 ; load-path
-(setq load-path (cons "~/.emacs.d/site-lisp" load-path))
 (setq load-path (cons "~/.emacs.d" load-path))
+(when (fboundp 'normal-top-level-add-subdirs-to-load-path)
+  (let* ((dir "~/.emacs.d/site-lisp")
+         (default-directory dir))
+    (when (file-directory-p dir)
+      (setq load-path (cons dir load-path))
+      (normal-top-level-add-subdirs-to-load-path))))
 
 ; hostname
 (string-match "^\\([^\\.]+\\)\\(\\.\\(.*\\)\\)?$" (system-name))
