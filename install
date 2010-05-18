@@ -99,8 +99,6 @@ class Linker
         FileUtils.rm_r(@link) unless t
       end
     end
-
-    def depend?(other); return @dir =~ /^#{other.dir}/ end
   end
 
   def initialize(dst, hash)
