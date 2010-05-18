@@ -16,7 +16,7 @@
   .skk.el: skk.el
   local.el: local.dummy.el
 .screen:
-  local.screenrc: local.dummy.screenrc
+  local.screenrc: luxaky.screenrc
 .vim:
   local.vim: local.dummy.vim
 .zsh:

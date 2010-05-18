@@ -1,8 +1,6 @@
 .emacs.d/dot:
   local.el: tarao.luxaky.el
   .viper.el: viper.el
-.screen:
-  local.screenrc: luxaky.screenrc
 .vim:
   local.vim: tarao.vim
 .zsh:

@@ -129,11 +129,13 @@ class Linker
           sep = File::SEPARATOR
           l = l.gsub(/(?:^|#{sep})<src>(?:$|#{sep})/, @dst)
           f.each do |ll,ff|
-            link = Link.new(dir, ll, File.expand_path(ff, l))
+            ff = File.expand_path(ff, l) if ff
+            link = Link.new(dir, ll, ff)
             r.push([ File.expand_path(ll, dir), link ])
           end
         else
-          link = Link.new(dir, l, File.expand_path(f, dir))
+          f = File.expand_path(f, dir) if f
+          link = Link.new(dir, l, f)
           r.push([ File.expand_path(l, dir), link ])
         end
       end
