@@ -1,0 +1,176 @@
+#! /usr/bin/env ruby
+require 'yaml'
+require 'fileutils'
+
+$argv = {}
+
+$argv[:help] = %w'-h --help'.any?{|x| $*.delete(x)}
+$argv[:pull] = !%w'--no-pull'.any?{|x| $*.delete(x)}
+$argv[:uninstall] = %w'-u --uninstall'.any?{|x| $*.delete(x)}
+$argv[:verbose] = %w'-v --verbose'.any?{|x| $*.delete(x)}
+$argv[:silent] = %w'-s --silent'.any?{|x| $*.delete(x)}
+$argv[:silent] = false if $argv[:verbose]
+
+$argv[:src] = $*.reject!{|x|x=~/^--src=(.*)$/&&arg=$1} && arg || $argv[:src]
+$argv[:src] = File.expand_path($argv[:src]||File.dirname($0))
+$argv[:dir] = $*.reject!{|x|x=~/^--dir=(.*)$/&&arg=$1} && arg || $argv[:dir]
+$argv[:dir] = File.expand_path($argv[:dir]||'~')
+$argv[:conf] = []
+$*.each{|x| $argv[:conf].push($1) if x =~ /^--conf=(.*)$/}
+$argv[:conf] = %w'install.yml local.install.yml' if $argv[:conf].empty?
+
+if $argv[:help]
+  print <<"EOM"
+Usage: #{$0} [OPTIONS]
+Options:
+  --no-pull        Suppress pull action. (#{!$argv[:pull]})
+  -u, --uninstall  Remove generated links. (#{$argv[:uninstall]})
+  -v, --verbose    Verbose messages. (#{$argv[:verbose]})
+  -s, --silent     Supress messages. (#{$argv[:silent]})
+  --src=<dir>      Source directory. (#{$argv[:src]})
+  --dir=<dir>      Target directory. (#{$argv[:dir]})
+  --conf=<file>    YAML configuration file. (#{File.expand_path('{'+$argv[:conf].join(',')+'}', $argv[:src])})
+EOM
+  exit
+end
+
+class Info
+  def initialize(silent, verbose) @s = silent; @v = verbose end
+  def err(msg) Kernel.warn(msg) end
+  def warn(msg, c=nil) !c || @s || (Kernel.warn(msg)||true); c end
+  def debug(msg) Kernel.puts(msg) unless @v end
+  def puts(msg) Kernel.puts(msg) unless @s end
+  def ask(msg) return @s || print(msg) || $stdin.gets =~ /^y/ end
+end
+$info = Info.new($argv[:silent], $argv[:verbose])
+
+class Hash
+  def deep_merge(rhs)
+    self.merge(rhs){|k,v1,v2| v1.is_a?(Hash) ? v1.deep_merge(v2) : v2}
+  end
+end
+
+class File
+  def self.to_rel(basedir, target)
+    sep = /#{File::SEPARATOR}+/o
+    base = File.expand_path(basedir).split(sep)
+    target = File.expand_path(target).split(sep)
+    while (base.first == target.first)
+      base.shift
+      target.shift
+    end
+    return File.join(['..']*base.size + target)
+  end
+end
+
+class Linker
+  class Link
+    attr_reader :dir, :link, :target
+
+    def initialize(dir, link, target)
+      @dir = dir
+      @link = link
+      @target = target
+    end
+
+    def make
+      return unless File.directory?(@dir)
+      Dir.chdir(@dir) do
+        return if File.exist?(@link) || File.symlink?(@link)
+        target = File.to_rel(@dir, @target)
+        Linker.info.puts("  #{@link} -> #{target}")
+        FileUtils.ln_s(target, link)
+      end
+    end
+
+    def remove
+      return unless File.directory?(@dir)
+      Dir.chdir(@dir) do
+        msg = "'#{@link}' is not symlink. Remove it? "
+        return unless File.exist?(@link) || File.symlink?(@link)
+        return unless File.symlink?(@link) || Linker.info.ask(msg)
+        Linker.info.puts("  rm #{@link}")
+        FileUtils.rm_r(@link)
+      end
+    end
+
+    def depend?(other); return @dir =~ /^#{other.dir}/ end
+  end
+
+  def initialize(dst, hash)
+    @dst = dst
+    @conf = hash
+  end
+
+  def link(src) each(src, proc{|a,b|a[0]<=>b[0]}, proc{|l|l.make}) end
+  def unlink(src) each(src, proc{|a,b|b[0]<=>a[0]}, proc{|l|l.remove}) end
+
+  def each(src, comp, action)
+    dir = ''
+    links(src).sort(&comp).each do |d,l|
+      @@info.puts("In #{l.dir}") if l.dir != dir
+      dir = l.dir
+      action.call(l)
+    end
+  end
+
+  def links(src)
+    r = []
+    @conf.each do |k, v|
+      next unless v.is_a?(Hash)
+      dir = File.expand_path(k, src)
+      v.each do |l, f|
+        if f.is_a?(Hash)
+          sep = File::SEPARATOR
+          l = l.gsub(/(?:^|#{sep})<src>(?:$|#{sep})/, @dst)
+          f.each do |ll,ff|
+            link = Link.new(dir, ll, File.expand_path(ff, l))
+            r.push([ File.expand_path(ll, dir), link ])
+          end
+        else
+          link = Link.new(dir, l, File.expand_path(f, dir))
+          r.push([ File.expand_path(l, dir), link ])
+        end
+      end
+    end
+    return r
+  end
+
+  def self.from_files(dir, files)
+    Dir.chdir(dir) do
+      conf = files.map do |f|
+        File.expand_path(f)
+      end.reject do |f|
+        @@info.warn("'#{f}': no such file", !File.exist?(f))
+      end.map{|f|YAML.load_file(f)}.inject({}){|r,h|r.deep_merge(h)}
+
+      return self.new(dir, conf)
+    end
+  end
+
+  def self.set_info(info) @@info = info end
+  def self.info; return @@info end
+end
+Linker.set_info($info)
+
+# check directory
+[ :src, :dir ].map{|s|$argv[s]}.each do |d|
+  $argv[s] = $info.err("'#{d}': no such directory") unless File.directory?(d)
+end.any?{|x| exit(1) if x===nil}
+
+# remove links
+Linker.from_files($argv[:src], $argv[:conf]).unlink($argv[:dir])
+
+exit if $argv[:uninstall]
+
+# pull
+if $argv[:pull]
+  $info.puts('')
+  Dir.chdir($argv[:src]) do
+    $info.puts('pull'); $info.puts(`git pull`)
+  end
+  $info.puts('')
+end
+
+# new links
+Linker.from_files($argv[:src], $argv[:conf]).link($argv[:dir])

@@ -1,0 +1,23 @@
+.:
+  <src>:
+    .emacs.d: .emacs.d
+    .gitignore: dot.gitignore
+    .hg: .hg
+    .irbrc: .irbrc
+    .lesskey: .lesskey
+    .screen: .screen
+    .screenrc: .screenrc
+    .vim: .vim
+    .vimrc: .vimrc
+    .zsh: .zsh
+    .zshenv: .zshenv
+.emacs.d/dot:
+  .emacs-w3m.el: emacs-w3m.el
+  .skk.el: skk.el
+  local.el: local.dummy.el
+.screen:
+  local.screenrc: local.dummy.screenrc
+.vim:
+  local.vim: local.dummy.vim
+.zsh:
+  local.zshrc: local.dummy.zshrc
