@@ -36,6 +36,14 @@ EOM
   exit
 end
 
+def try(&block)
+  begin
+    block.call
+  rescue => e
+    $info.warn(e.message)
+  end
+end
+
 class Info
   def initialize(silent, verbose, test) @s=silent; @v=verbose; @t=test end
   def err(msg) Kernel.warn(msg) end
@@ -84,7 +92,7 @@ class Linker
         return if !t && (File.exist?(@link) || File.symlink?(@link))
         target = File.to_rel(@dir, @target)
         Linker.info.puts("  #{@link} -> #{target}")
-        FileUtils.ln_s(target, link) unless t
+        try { FileUtils.ln_s(target, link) } unless t
       end
     end
 
@@ -96,7 +104,7 @@ class Linker
         return unless File.exist?(@link) || File.symlink?(@link)
         return unless File.symlink?(@link) || Linker.info.ask(msg)
         Linker.info.puts("  rm #{@link}")
-        FileUtils.rm_r(@link) unless t
+        try { FileUtils.rm_r(@link) } unless t
       end
     end
   end
@@ -174,7 +182,7 @@ if $argv[:pull]
   $info.puts('')
   Dir.chdir($argv[:src]) do
     $info.puts('pull')
-    $info.puts(`git pull`) unless $info.test?
+    try { $info.puts(`git pull`) } unless $info.test?
   end
   $info.puts('')
 end
