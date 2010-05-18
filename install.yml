@@ -2,7 +2,6 @@
   <src>:
     .emacs.d: .emacs.d
     .gitignore: dot.gitignore
-    .hg: .hg
     .irbrc: .irbrc
     .lesskey: .lesskey
     .screen: .screen

@@ -22,7 +22,6 @@ local.install.yml
 .emacs.d/site-lisp
 .emacs.d/dot/.*
 .emacs.d/dot/local.el
-.hg/ext
 .screen/exchange
 .screen/local.screenrc
 .vim/info
