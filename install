@@ -9,6 +9,7 @@ $argv[:pull] = !%w'--no-pull'.any?{|x| $*.delete(x)}
 $argv[:uninstall] = %w'-u --uninstall'.any?{|x| $*.delete(x)}
 $argv[:verbose] = %w'-v --verbose'.any?{|x| $*.delete(x)}
 $argv[:silent] = %w'-s --silent'.any?{|x| $*.delete(x)}
+$argv[:test] = %w'-t --test'.any?{|x| $*.delete(x)}
 $argv[:silent] = false if $argv[:verbose]
 
 $argv[:src] = $*.reject!{|x|x=~/^--src=(.*)$/&&arg=$1} && arg || $argv[:src]
@@ -27,6 +28,7 @@ Options:
   -u, --uninstall  Remove generated links. (#{$argv[:uninstall]})
   -v, --verbose    Verbose messages. (#{$argv[:verbose]})
   -s, --silent     Supress messages. (#{$argv[:silent]})
+  -t, --test       Show what is going to be done. (#{$argv[:test]})
   --src=<dir>      Source directory. (#{$argv[:src]})
   --dir=<dir>      Target directory. (#{$argv[:dir]})
   --conf=<file>    YAML configuration file. (#{File.expand_path('{'+$argv[:conf].join(',')+'}', $argv[:src])})
@@ -35,14 +37,15 @@ EOM
 end
 
 class Info
-  def initialize(silent, verbose) @s = silent; @v = verbose end
+  def initialize(silent, verbose, test) @s=silent; @v=verbose; @t=test end
   def err(msg) Kernel.warn(msg) end
   def warn(msg, c=nil) !c || @s || (Kernel.warn(msg)||true); c end
   def debug(msg) Kernel.puts(msg) unless @v end
   def puts(msg) Kernel.puts(msg) unless @s end
   def ask(msg) return @s || print(msg) || $stdin.gets =~ /^y/ end
+  def test?; return @t end
 end
-$info = Info.new($argv[:silent], $argv[:verbose])
+$info = Info.new($argv[:silent], $argv[:verbose], $argv[:test])
 
 class Hash
   def deep_merge(rhs)
@@ -74,23 +77,25 @@ class Linker
     end
 
     def make
+      t = Linker.info.test?
       return unless File.directory?(@dir)
       Dir.chdir(@dir) do
-        return if File.exist?(@link) || File.symlink?(@link)
+        return if !t && (File.exist?(@link) || File.symlink?(@link))
         target = File.to_rel(@dir, @target)
         Linker.info.puts("  #{@link} -> #{target}")
-        FileUtils.ln_s(target, link)
+        FileUtils.ln_s(target, link) unless t
       end
     end
 
     def remove
+      t = Linker.info.test?
       return unless File.directory?(@dir)
       Dir.chdir(@dir) do
         msg = "'#{@link}' is not symlink. Remove it? "
         return unless File.exist?(@link) || File.symlink?(@link)
         return unless File.symlink?(@link) || Linker.info.ask(msg)
         Linker.info.puts("  rm #{@link}")
-        FileUtils.rm_r(@link)
+        FileUtils.rm_r(@link) unless t
       end
     end
 
@@ -167,7 +172,8 @@ exit if $argv[:uninstall]
 if $argv[:pull]
   $info.puts('')
   Dir.chdir($argv[:src]) do
-    $info.puts('pull'); $info.puts(`git pull`)
+    $info.puts('pull')
+    $info.puts(`git pull`) unless $info.test?
   end
   $info.puts('')
 end
