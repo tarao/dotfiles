@@ -3,23 +3,28 @@
 
 export CDD_PWD_FILE=$HOME/.zsh/cdd_pwd_list
 
-function _reg_pwd_screennum() {
-  if [ "$STY" != "" ]; then
+function _cdd_pwd_file() {
     if [ ! -f "$CDD_PWD_FILE" ]; then
       echo "\n" >> "$CDD_PWD_FILE"
+      touch "$CDD_PWD_FILE.t"
+      if [ $? = 1 ]; then
+          echo "Error: Couldn't write $CDD_PWD_FILE."
+          return 1
+      fi
+      chmod 600 "$CDD_PWD_FILE"
+      chmod 600 "$CDD_PWD_FILE.t"
     fi
+}
+
+function _reg_pwd_screennum() {
+  if [ "$STY" != "" ]; then
     _reg_cdd_pwd "$WINDOW" "$PWD"
   fi
 }
 
 function _reg_cdd_pwd() {
-  if [ ! -f "$CDD_PWD_FILE" ]; then
-    echo "\n" >> "$CDD_PWD_FILE"
-    if [ $? = 1 ]; then
-      echo "Error: Couldn't write $CDD_PWD_FILE."
-      return 1
-    fi
-  fi
+  _cdd_pwd_file
+  [ $? = 1 ] && return 1
   sed -i".t" -e "/^$1:/d" "$CDD_PWD_FILE"
   sed -i".t" -e "1i \\
 $1:$2" "$CDD_PWD_FILE"
