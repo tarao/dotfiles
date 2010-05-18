@@ -79,6 +79,7 @@ class Linker
     def make
       t = Linker.info.test?
       return unless File.directory?(@dir)
+      return unless target
       Dir.chdir(@dir) do
         return if !t && (File.exist?(@link) || File.symlink?(@link))
         target = File.to_rel(@dir, @target)
