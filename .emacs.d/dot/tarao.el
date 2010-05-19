@@ -81,7 +81,6 @@
 (autoload 'zen2han-chop-line-end-space "zen2han" "zen <=> han" t)
 
 ;; SKK
-(setq skk-user-directory "~/.ddskk")
 (setq skk-use-viper t)
 (setq-default mode-line-format
               (append '("" skk-modeline-input-mode) mode-line-format))
