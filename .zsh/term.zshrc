@@ -4,7 +4,7 @@ zstyle ':vcs_info:(git|svn):*' formats '%R' '%S' '%b' '%s'
 zstyle ':vcs_info:(git|svn):*' actionformats '%R' '%S' '%b|%a' '%s'
 zstyle ':vcs_info:*' formats '%R' '%S' '%s:%b' '%s'
 zstyle ':vcs_info:*' actionformats '%R' '%S' '%s:%b|%a' '%s'
-precmd_vcs_info () {
+function precmd_vcs_info () {
     psvar=()
     STY= LANG=en_US.UTF-8 vcs_info
     repos=`print -nD "$vcs_info_msg_0_"`
@@ -19,9 +19,9 @@ precmd_vcs_info () {
 }
 
 # set window title of screen
-function set_screen_title () { echo -n "k$1\\" }
+function set_screen_title () { echo -ne "\ek$1\e\\" }
 function { # use current directory as a title
-    precmd_screen_window_title () {
+    function precmd_screen_window_title () {
         if [[ "$SCREENTITLE" = 'auto' ]]; then
             local dir
             dir=`pwd`
@@ -52,7 +52,7 @@ function { # use command name as a title
         fi
         set_screen_title "$cmd[1]:t"
     }
-    preexec_screen_window_title () {
+    function preexec_screen_window_title () {
         local -a cmd; cmd=(${(z)2}) # command in a single line
         if [[ "$SCREENTITLE" = 'auto' ]]; then
             case $cmd[1] in
