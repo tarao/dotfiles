@@ -50,6 +50,11 @@
 ;; auto-complete patches
 (define-key ac-completing-map (kbd "ESC") nil)
 
+;; dired
+(setq vimpulse-want-vi-keys-in-dired nil) ; Don't set t:
+                                          ;   ex-token for example 's' will
+                                          ;   be taken over by dired
+                                          ;   See vimpulse-compatibility.el
 (setq woman-use-own-frame nil) ; don't create new frame for manpages
 (require 'vimpulse)
 
@@ -90,5 +95,14 @@
   (kbd "J") 'viper-scroll-up)
 (define-key viper-vi-global-user-map
   (kbd "K") 'viper-scroll-down)
+
+; dired
+(setq viper-emacs-state-mode-list
+      (delq 'dired-mode viper-emacs-state-mode-list))
+(add-to-list 'viper-vi-state-mode-list 'dired-mode)
+(let ((map dired-mode-map))
+  (vimpulse-add-core-movement-cmds map)
+  (vimpulse-inhibit-destructive-cmds map)
+  (viper-modify-major-mode 'dired-mode 'vi-state map))
 
 ;; vimpulse patches
