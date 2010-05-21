@@ -19,11 +19,15 @@ alias fwd='ssh -N -F ~/.ssh/fwd_config'
 alias proxy='ssh -F ~/.ssh/proxy_config'
 
 alias man='LANG=${LANG/en_US.UTF-8/en_US} env man'
-alias diff='colordiff -u'
 alias od='od -A x -t xCz'
 alias apt='LANG=C aptitude'
 alias sapt='LANG=C sudo aptitude'
 alias wcat='wget -q -O -'
+
+function diff () {
+    colordiff -u $@ | v
+}
+alias last='env last | v'
 
 function { # local scope
     local w

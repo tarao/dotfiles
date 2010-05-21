@@ -1,5 +1,5 @@
 export MANPAGER='less -s'
-export PAGER='v -e'
+export PAGER='v'
 
 if test -x /usr/bin/dircolors ; then
     if test -f $HOME/.dir_colors ; then
