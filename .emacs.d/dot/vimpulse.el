@@ -50,7 +50,6 @@
 ;; auto-complete patches
 (define-key ac-completing-map (kbd "ESC") nil)
 
-;; dired
 (setq vimpulse-want-vi-keys-in-dired nil) ; Don't set t:
                                           ;   ex-token for example 's' will
                                           ;   be taken over by dired
@@ -100,9 +99,12 @@
 (setq viper-emacs-state-mode-list
       (delq 'dired-mode viper-emacs-state-mode-list))
 (add-to-list 'viper-vi-state-mode-list 'dired-mode)
-(let ((map dired-mode-map))
-  (vimpulse-add-core-movement-cmds map)
-  (vimpulse-inhibit-destructive-cmds map)
-  (viper-modify-major-mode 'dired-mode 'vi-state map))
+(defun vimpulse-install-dired-mode-map ()
+  (let ((map dired-mode-map))
+    (vimpulse-add-core-movement-cmds map)
+    (vimpulse-inhibit-destructive-cmds map)
+    (viper-modify-major-mode 'dired-mode 'vi-state map)))
+(if (boundp 'dired-mode-map) (vimpulse-install-dired-mode-map)
+  (eval-after-load "dired" '(vimpulse-install-dired-mode-map)))
 
 ;; vimpulse patches
