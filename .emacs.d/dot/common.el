@@ -9,6 +9,9 @@
  '(menu-bar-mode nil)
  '(blink-matching-paren t))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; basic
+
 ; load-path
 (setq load-path (cons "~/.emacs.d" load-path))
 (when (fboundp 'normal-top-level-add-subdirs-to-load-path)
@@ -23,8 +26,12 @@
 (defconst short-hostname (replace-match "\\1" t nil (system-name))
   "Host part of function `system-name'.")
 
-; no cursor blinking
-(blink-cursor-mode nil)
+; make *scratch* immortal
+(require 'immortal-buffer)
+(make-buffer-immortal "*scratch*")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; keys
 
 ; key bindings
 (global-set-key (kbd "C-h") 'backward-delete-char)
@@ -53,10 +60,17 @@
 (global-set-key (kbd "ESC M-O d") 'backward-sexp)
 (global-set-key (kbd "ESC M-O c") 'forward-sexp)
 
+; move window
+(windmove-default-keybindings)
+(setq windmove-wrap-around t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; language
+
 ; Mule-UCS settings
-;-; --> disabled: not needed in Emacs 22
-;-;(require 'un-define) ; Unicode
-;-;(require 'jisx0213)  ; JIS X 0213
+(when (< emacs-major-version 22)
+  (require 'un-define)
+  (require 'jisx0213))
 
 (when (>= emacs-major-version 23)
   (defun set-east-asian-ambiguous-width (width)
@@ -119,6 +133,7 @@
      ;-;(load "utf-16") ;; for safe-charsets
      ;-;(utf-translate-cjk-set-unicode-range `((#x80 . ,(lsh -1 -1))))
 )
+
 ; language and coding-system
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8-unix)
@@ -130,6 +145,15 @@
   (set-terminal-coding-system 'utf-8-unix))
 (require 'default-file-coding-systems)
 
+; skk
+(setq skk-init-file "dot/.skk")
+(setq skk-user-directory "~/.ddskk")
+(require 'skk-autoloads)
+(global-set-key (kbd "C-x C-j") 'skk-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; history
+
 ; bookmark
 (setq bookmark-default-file "~/.emacs.d/bmk")
 
@@ -140,15 +164,31 @@
 (require 'shell-history)
 (setq shell-history-file "~/.zsh/history")
 
-; move window
-(windmove-default-keybindings)
-(setq windmove-wrap-around t)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; appearance
 
-; skk
-(setq skk-init-file "dot/.skk")
-(setq skk-user-directory "~/.ddskk")
-(require 'skk-autoloads)
-(global-set-key (kbd "C-x C-j") 'skk-mode)
+; no cursor blinking
+(blink-cursor-mode nil)
+
+; eof mark
+(require 'end-mark)
+(unless window-system (global-end-mark-mode))
+
+; show fullwidth-spaces and tabs
+(require 'jaspace)
+;(setq jaspace-alternate-eol-string "\xab\n")
+(setq jaspace-highlight-tabs t)
+(setq jaspace-highlight-tabs ?>)
+(setq jaspace-mode-string " WS")
+
+; show trailing whitespace
+(setq-default show-trailing-whitespace t)
+
+; parenthesis
+(show-paren-mode t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; information
 
 ; show line numbers
 (require 'linum)
@@ -156,12 +196,39 @@
 (global-set-key (kbd "M-N") 'linum-mode)
 (global-set-key (kbd "M-n") 'relative-linum-mode)
 
-; eof mark
-(require 'end-mark)
-(unless window-system (global-end-mark-mode))
+; wc (CC/WW/LL)
+(autoload 'word-count-mode "word-count" "Minor mode to count words." t nil)
+(global-set-key (kbd "M-+") 'word-count-mode)
 
-; parenthesis
-(show-paren-mode t)
+; eldoc
+(require 'c-eldoc)
+(require 'eldoc-extension)
+(setq eldoc-idle-delay 0)
+(setq eldoc-echo-area-use-multiline-p t)
+(dolist (hook '(emacs-lisp-mode-hook
+                lisp-interaction-mode-hook
+                ielm-mode-hook))
+  (add-hook hook 'turn-on-eldoc-mode))
+(dolist (hook '(c-mode-hook c++-mode-hook))
+  (add-hook hook '(lambda ()
+                    (set (make-local-variable 'eldoc-idle-delay) 0.3)
+                    (c-turn-on-eldoc-mode))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; editing
+
+; tabbing
+(setq-default tab-width 4 indent-tabs-mode nil)
+
+; align
+(require 'align)
+
+; auto-insert
+(require 'autoinsert)
+(add-hook 'find-file-not-found-hooks 'auto-insert)
+(setq auto-insert-directory "~/.emacs.d/insert/")
+(setq auto-insert-query nil)
+(setq auto-insert-alist nil)
 
 ; browse-kill-ring
 (autoload 'browse-kill-ring "browse-kill-ring" nil t)
@@ -170,9 +237,13 @@
 (defadvice kill-new (before no-kill-new-duplicates activate)
   (setq kill-ring (delete (ad-get-arg 0) kill-ring)))
 
-; make *scratch* immortal
-(require 'immortal-buffer)
-(make-buffer-immortal "*scratch*")
+; undo/redo
+(require 'undo-tree)
+(global-undo-tree-mode)
+(setq undo-tree-mode-lighter nil)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; completion
 
 ; shell command (with saving the last command for default value)
 (require 'shell-command+)
@@ -184,11 +255,6 @@
 (setq completion-ignore-case t)
 (setq read-file-name-completion-ignore-case t)
 (setq completer-words "---. <_")
-
-; undo/redo
-(require 'undo-tree)
-(global-undo-tree-mode)
-(setq undo-tree-mode-lighter nil)
 
 ; anything
 (require 'anything-config)
@@ -228,54 +294,19 @@
 (define-key ac-complete-mode-map (kbd "C-p") 'ac-previous)
 (define-key ac-complete-mode-map (kbd "TAB") nil)
 
-; auto-insert
-(require 'autoinsert)
-(add-hook 'find-file-not-found-hooks 'auto-insert)
-(setq auto-insert-directory "~/.emacs.d/insert/")
-(setq auto-insert-query nil)
-(setq auto-insert-alist nil)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; command
 
 ; M-x compile
 (setq compile-command "make -k")
 (setq compile-history (list "make" "make clean"))
 
 ; M-x grep
-(setq grep-program "lgrep")
-(setq grep-command "lgrep -inH -Au8 ")
+(setq grep-program "grep")
+(setq grep-command "grep -inH")
 
-; wc (CC/WW/LL)
-(autoload 'word-count-mode "word-count" "Minor mode to count words." t nil)
-(global-set-key (kbd "M-+") 'word-count-mode)
-
-; tabbing
-(setq-default tab-width 4 indent-tabs-mode nil)
-
-; show trailing whitespace
-(setq-default show-trailing-whitespace t)
-
-; show fullwidth-spaces and tabs
-(require 'jaspace)
-;(setq jaspace-alternate-eol-string "\xab\n")
-(setq jaspace-highlight-tabs t)
-(setq jaspace-highlight-tabs ?>)
-(setq jaspace-mode-string " WS")
-
-; align
-(require 'align)
-
-; eldoc
-(require 'c-eldoc)
-(require 'eldoc-extension)
-(setq eldoc-idle-delay 0)
-(setq eldoc-echo-area-use-multiline-p t)
-(dolist (hook '(emacs-lisp-mode-hook
-                lisp-interaction-mode-hook
-                ielm-mode-hook))
-  (add-hook hook 'turn-on-eldoc-mode))
-(dolist (hook '(c-mode-hook c++-mode-hook))
-  (add-hook hook '(lambda ()
-                    (set (make-local-variable 'eldoc-idle-delay) 0.3)
-                    (c-turn-on-eldoc-mode))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; major-mode
 
 ; ruby-mode
 (autoload 'ruby-mode "ruby-mode"
@@ -376,9 +407,8 @@
 (add-hook 'TeX-mode-hook 'turn-on-reftex)
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; luxaky
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (if (equal short-hostname "luxaky")
     (progn
