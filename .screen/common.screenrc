@@ -1,4 +1,4 @@
-source ~/.screen/local.screenrc
+source $HOME/.screen/local.screenrc
 
 msgwait         0
 maptimeout      0
