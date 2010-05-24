@@ -15,8 +15,8 @@ function scd () {
     [[ -n "$STY" ]] && screen -d $STY >/dev/null
 }
 
-alias fwd='ssh -N -F ~/.ssh/fwd_config'
-alias proxy='ssh -F ~/.ssh/proxy_config'
+alias fwd='ssh -N -F ~/.ssh/fwd_config -N'
+alias proxy='ssh -F ~/.ssh/proxy_config -N'
 
 alias man='LANG=${LANG/en_US.UTF-8/en_US} env man'
 alias od='od -A x -t xCz'
