@@ -8,8 +8,8 @@ typeset -gxU PATH=$PATH
 HISTFILE=~/.zsh/history
 HISTSIZE=100000
 SAVEHIST=100000
-setopt share_history
-setopt hist_ignore_space
+setopt   share_history append_history
+setopt   hist_ignore_space hist_ignore_dups hist_expire_dups_first
 autoload -U history-search-end
 zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
@@ -17,13 +17,22 @@ bindkey "^P" history-beginning-search-backward-end
 bindkey "^N" history-beginning-search-forward-end
 
 # options
-setopt   globdots correct pushdtohome autolist nopromptcr
-setopt   nocorrectall autocd recexact longlistjobs autoresume
-setopt   histignoredups pushdsilent appendhistory histexpiredupsfirst
-setopt   autopushd pushdminus extendedglob rcquotes
-unsetopt bgnice autoparamslash hup
+## Changing Directories
+setopt   auto_pushd pushd_to_home pushd_minus pushd_silent auto_cd
+## Expansion and Globbing
+setopt   extended_glob glob_dots
+## Input/Output
+setopt   correct rc_quotes
+unsetopt correct_all
+## Job Control
+setopt   long_list_jobs auto_resume
+unsetopt bg_nice hup
+## Prompting
+unsetopt prompt_cr
 
 # completion
+setopt   auto_list auto_param_slash list_packed rec_exact
+unsetopt list_beep
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 autoload -U compinit
 compinit
