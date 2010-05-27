@@ -17,7 +17,7 @@ bindkey "^P" history-beginning-search-backward-end
 bindkey "^N" history-beginning-search-forward-end
 
 # options
-setopt   globdots nocorrect pushdtohome autolist nopromptcr
+setopt   globdots correct pushdtohome autolist nopromptcr
 setopt   nocorrectall autocd recexact longlistjobs autoresume
 setopt   histignoredups pushdsilent appendhistory histexpiredupsfirst
 setopt   autopushd pushdminus extendedglob rcquotes
