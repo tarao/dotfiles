@@ -30,6 +30,6 @@ local.install.yml
 .vimperator/plugin/plugin_loader.js
 .vimperator/plugin-available
 .zsh/.zcompdump
-.zsh/local.zshrc
+.zsh/local.zsh
 .zsh/cdd_pwd_list*
 .zsh/history

@@ -1,2 +1,2 @@
-source ~/.zsh/common.zshrc
-source ~/.zsh/local.zshrc
+source ~/.zsh/common.zsh
+source ~/.zsh/local.zsh

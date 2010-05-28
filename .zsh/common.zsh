@@ -46,13 +46,13 @@ typeset -ga chpwd_functions
 typeset -ga precmd_functions
 typeset -ga preexec_functions
 
-source ~/.zsh/env.zshrc
-source ~/.zsh/alias.zshrc
-source ~/.zsh/function.zshrc
-source ~/.zsh/emacs.zshrc
-source ~/.zsh/cdd.zshrc
+source ~/.zsh/env.zsh
+source ~/.zsh/alias.zsh
+source ~/.zsh/function.zsh
+source ~/.zsh/emacs.zsh
+source ~/.zsh/cdd.zsh
 if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
-    source ~/.zsh/term.zshrc
+    source ~/.zsh/term.zsh
 else
-    source ~/.zsh/term.compat.zshrc
+    source ~/.zsh/term.compat.zsh
 fi
