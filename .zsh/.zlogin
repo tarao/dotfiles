@@ -1,1 +1,1 @@
-source ~/.zsh/display.zshrc
+source ~/.zsh/display.zsh
