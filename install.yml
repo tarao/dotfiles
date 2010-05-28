@@ -19,4 +19,4 @@
 .vim:
   local.vim: local.dummy.vim
 .zsh:
-  local.zshrc: local.dummy.zshrc
+  local.zsh: local.dummy.zsh
