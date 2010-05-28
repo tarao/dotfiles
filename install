@@ -182,7 +182,9 @@ if $argv[:pull]
   $info.puts('')
   Dir.chdir($argv[:src]) do
     $info.puts('pull')
-    try { $info.puts(`git pull`) } unless $info.test?
+    try do
+      $info.puts(`git pull && git submodule init && git submodule update`)
+    end unless $info.test?
   end
   $info.puts('')
 end
