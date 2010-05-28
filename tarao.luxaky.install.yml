@@ -4,4 +4,4 @@
 .vim:
   local.vim: tarao.vim
 .zsh:
-  local.zshrc: tarao.luxaky.zshrc
+  local.zsh: tarao.luxaky.zsh
