@@ -1,4 +1,3 @@
-source ~/.zsh/vimode.zsh
 source ~/.zsh/tarao.zsh
 source ~/.zsh/win.zsh
 
