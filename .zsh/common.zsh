@@ -44,18 +44,20 @@ autoload -U compinit
 compinit
 
 # incremental completion
-source ~/.zsh/auto-fu.zsh
-function () {
-    local code
-    code=${functions[auto-fu-init]/'\n-azfu-'/''}
-    eval "function auto-fu-init () { $code }"
-    code=${functions[auto-fu]/fg=black,bold/fg=white}
-    eval "function auto-fu () { $code }"
-}
-function zle-line-init () {
-    auto-fu-init
-}
-zle -N zle-line-init
+if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
+    source ~/.zsh/auto-fu.zsh
+    function () {
+        local code
+        code=${functions[auto-fu-init]/'\n-azfu-'/''}
+        eval "function auto-fu-init () { $code }"
+        code=${functions[auto-fu]/fg=black,bold/fg=white}
+        eval "function auto-fu () { $code }"
+    }
+    function zle-line-init () {
+        auto-fu-init
+    }
+    zle -N zle-line-init
+fi
 
 # run-help
 unalias  run-help 2>/dev/null || true
