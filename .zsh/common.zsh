@@ -38,25 +38,22 @@ zstyle ':completion:*' format '%F{white}%d%f'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' keep-prefix
-zstyle ':completion:*' completer _oldlist _expand _complete _match _ignored \
+zstyle ':completion:*' completer _oldlist _complete _match _ignored \
     _approximate _list _history
 autoload -U compinit
 compinit
 
 # incremental completion
 source ~/.zsh/auto-fu.zsh
-function my-auto-fu-init () {
-    {
-        local -a region_highlight
-        local afu_in_p=0
-        afu-recursive-edit-and-accept
-        zle -I
-    } always {
-        POSTDISPLAY=''
-    }
+function () {
+    local code
+    code=${functions[auto-fu-init]/'\n-azfu-'/''}
+    eval "function auto-fu-init () { $code }"
+    code=${functions[auto-fu]/fg=black,bold/fg=white}
+    eval "function auto-fu () { $code }"
 }
 function zle-line-init () {
-    my-auto-fu-init
+    auto-fu-init
 }
 zle -N zle-line-init
 
