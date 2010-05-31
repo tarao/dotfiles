@@ -50,7 +50,7 @@ class Info
   def warn(msg, c=nil) c==false || @s || (Kernel.warn(msg)||true); c end
   def debug(msg) Kernel.puts(msg) unless @v end
   def puts(msg) Kernel.puts(msg) unless @s end
-  def ask(msg) return @s || print(msg) || $stdin.gets =~ /^y/ end
+  def ask(msg) return @s ? false : (print(msg) || $stdin.gets =~ /^y/) end
   def test?; return @t end
 end
 $info = Info.new($argv[:silent], $argv[:verbose], $argv[:test])
