@@ -29,6 +29,8 @@ setopt   long_list_jobs auto_resume
 unsetopt bg_nice hup
 ## Prompting
 unsetopt prompt_cr
+## Zle
+unsetopt beep
 
 # completion
 setopt   auto_list auto_param_slash list_packed rec_exact
@@ -56,6 +58,33 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
     function zle-line-init () {
         auto-fu-init
     }
+    function afu+cancel () {
+        afu-clearing-maybe
+        ((afu_in_p == 1)) && { afu_in_p=0; BUFFER="$buffer_cur" }
+    }
+    function afu-bindkey-advice-before () {
+        local key="$1"
+        local advice="$2"
+        local -a bind
+        bind=(`bindkey -M main "$key"`)
+        local widget=$bind[2]
+        local fun="$advice"
+        if [[ "$widget" != "undefined-key" ]]; then
+            local code=${"$(<=(cat <<"EOT"
+                (( $+functions[afu+$widget] )) || function afu+$widget () {
+                    zle $advice
+                    zle $widget
+                }
+                fun="afu+$widget"
+EOT
+            ))"}
+            eval "${${${code//\$widget/$widget}//\$key/$key}/\$advice/$advice}"
+        fi
+        zle -N "$fun"
+        bindkey -M afu "$key" "$fun"
+    }
+    afu-bindkey-advice-before "^G" afu+cancel
+    afu-bindkey-advice-before "^[" afu+cancel
     zle -N zle-line-init
 fi
 
