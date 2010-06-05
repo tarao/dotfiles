@@ -47,15 +47,16 @@
           yaml z8a zsh))
 (defvar hatena-diary-filetype-alist
       '((cpp . c++) (ocaml . tuareg) (perl . cperl) (tex . latex) (zsh . sh)))
-(defvar hatena-diary-major-mode-alist
-      (mapcar
-       '(lambda (x)
-          (let ((ft (or (cdr (assq x hatena-diary-filetype-alist)) x)))
-            (cons x (intern (concat (symbol-name ft) "-mode")))))
-       hatena-diary-filetypes))
 (defun hatena-diary-install-multi-mode ()
   (interactive)
-  (let ((m 'text-mode) cache)
+  (let ((m 'text-mode)
+        (major-mode-alist
+         (mapcar
+          '(lambda (x)
+             (let ((ft (or (cdr (assq x hatena-diary-filetype-alist)) x)))
+               (cons x (intern (concat (symbol-name ft) "-mode")))))
+          hatena-diary-filetypes))
+        cache)
     (multi-mode-init m)
     (save-excursion
       (goto-char 0)
@@ -63,7 +64,7 @@
         (let ((ft (intern (match-string 1))) (begin (match-string 0)))
           (unless (memq ft cache)
             (add-to-list 'cache ft)
-            (let ((mode (cdr (assq ft hatena-diary-major-mode-alist))))
+            (let ((mode (cdr (assq ft major-mode-alist))))
               (multi-install-chunk-finder
                (concat "^" begin "$") "^||<$"
                (if (functionp mode) mode m)))))))))
