@@ -124,6 +124,7 @@
 ;; zen coding
 (setq zencoding-preview-default nil) ; no preview
 (setq zencoding-insert-flash-time 0.2)
+
 ;; auto-save
 (defun auto-save-buffer (&optional buffer)
   (interactive)
@@ -136,25 +137,24 @@
              (file-writable-p buffer-file-name))
         (save-buffer))))
 
+;; no backup
+(defun no-backup ()
+  (interactive)
+  (set (make-variable-buffer-local 'make-backup-files) nil)
+  (auto-save-mode 0))
+
 ;; hatena
 (load "multi-mode-util" t)
-(setq hatena-diary-super-pre-languages '(java javascript lisp ruby))
-(defun hatena-diary-super-pre-notation ()
+(load "dot/hatena")
+(defun hatena-diary-init ()
   (interactive)
-  (multi-mode-init 'text-mode)
-  (dolist (l hatena-diary-super-pre-languages)
-    (let ((str (symbol-name l)))
-      (multi-install-chunk-finder (concat "^>|" str "|$") "^||<$"
-                                  (intern (concat str "-mode"))))))
+  (no-backup)
+  (when (featurep 'multi-mode-util)
+    (add-hook
+     'multi-indirect-buffer-hook
+     '(lambda () (no-backup)))
+    (hatena-diary-install-multi-mode)))
 (add-hook 'find-file-hook
           '(lambda ()
              (when (string-match "/hatena/diary/" (buffer-file-name))
-               (set (make-variable-buffer-local 'make-backup-files) nil)
-               (auto-save-mode 0)
-               (when (featurep 'multi-mode-util)
-                 (add-hook
-                  'multi-indirect-buffer-hook
-                  '(lambda ()
-                     (set (make-variable-buffer-local 'make-backup-files) nil)
-                     (auto-save-mode 0)))
-                 (hatena-diary-super-pre-notation)))))
+               (hatena-diary-init))))
