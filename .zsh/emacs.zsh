@@ -12,10 +12,12 @@ function emacsbinstall {
     emacsb -l ~/.emacs.d/dot/install.el $@
 }
 function install-elisp {
-    emacsbinstall --eval "(install-elisp \"$1\")"
+    local install=$1
+    shift
+    emacsbinstall --eval "(install-elisp \"$install\")" $@
 }
 function update-elisp {
-    emacsbinstall -f update-remote-emacs-lisp
+    emacsbinstall -f update-remote-emacs-lisp $@
 }
 
 # Emacs server and client
@@ -24,19 +26,19 @@ function emacs() {
         emacs-standalone $@
     else
         if [[ -z `pgrep emacs -u $USER` ]]; then
-            emacsd
+            emacsd $@
         fi
         emacsc $@
     fi
 }
 function stop-emacsd() {
     if [[ -n `pgrep emacs -u $USER` ]]; then
-        emacsclient -e '(progn (defun yes-or-no-p (p) t) (kill-emacs))'
+        emacsclient -e '(progn (defun yes-or-no-p (p) t) (kill-emacs))' $@
     fi
 }
 function restart-emacsd() {
-    stop-emacsd
-    emacsd
+    stop-emacsd $@
+    emacsd $@
 }
 
 # See: http://d.hatena.ne.jp/rubikitch/20091208/anythingzsh
