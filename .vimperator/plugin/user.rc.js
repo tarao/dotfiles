@@ -115,9 +115,7 @@
             if (TreeStyleTabService != null) {
                 var b;
                 var sv = (b = TreeStyleTabService.browser) && b.treeStyleTab;
-                if (sv && !sv.autoHideShown) {
-                    sv.showTabbar();
-                }
+                sv && sv.toggleAutoHide();
             }
         });
 
