@@ -21,6 +21,7 @@ liberator.globalVariables.plugin_loader_plugins = <>
     appendAnchor
     auto_reload
     caret-hint
+    char-hints-mod2
     gmperator
     google-search
     hatena-bookmark-search
