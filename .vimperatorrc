@@ -12,6 +12,7 @@ set verbose=9
 ""set focuscontent
 
 hi Hint z-index:5000; font-family:monospace; font-size:12px; letter-spacing:0.1em; color:#404040; background-color:#e0e0ff; outline-style:solid; outline-width:1px; outline-color:blue; padding:2px 4px; position:absolute;
+set hintchars=hjklgfdsayuioptrewq
 
 " plugin_loader.js
 let g:plugin_loader_roots='~/.vimperator/plugin-available/';
@@ -21,7 +22,6 @@ liberator.globalVariables.plugin_loader_plugins = <>
     appendAnchor
     auto_reload
     caret-hint
-    char-hints-mod2
     gmperator
     google-search
     hatena-bookmark-search
