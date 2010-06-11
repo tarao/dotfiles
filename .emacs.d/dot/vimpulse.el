@@ -50,10 +50,7 @@
 ;; auto-complete patches
 (define-key ac-completing-map (kbd "ESC") nil)
 
-(setq vimpulse-want-vi-keys-in-dired nil) ; Don't set t:
-                                          ;   ex-token for example 's' will
-                                          ;   be taken over by dired
-                                          ;   See vimpulse-compatibility.el
+(setq vimpulse-want-vi-keys-in-dired t)
 (setq woman-use-own-frame nil) ; don't create new frame for manpages
 (require 'vimpulse)
 
@@ -96,15 +93,14 @@
   (kbd "K") 'viper-scroll-down)
 
 ; dired
-(setq viper-emacs-state-mode-list
-      (delq 'dired-mode viper-emacs-state-mode-list))
-(add-to-list 'viper-vi-state-mode-list 'dired-mode)
-(defun vimpulse-install-dired-mode-map ()
-  (let ((map dired-mode-map))
-    (vimpulse-add-core-movement-cmds map)
-    (vimpulse-inhibit-destructive-cmds map)
-    (viper-modify-major-mode 'dired-mode 'vi-state map)))
-(if (boundp 'dired-mode-map) (vimpulse-install-dired-mode-map)
-  (eval-after-load "dired" '(vimpulse-install-dired-mode-map)))
+(defun uninstall-dired-ex-token ()
+  (dolist (x '("e" "s" "v" "d"))
+    (let ((bind (assoc x ex-token-alist)))
+      (when (and bind (caadr bind)
+                 (string-match "^epa-dired-.*" (symbol-name (caadr bind))))
+        (setq ex-token-alist (rassq-delete-all (cdr bind) ex-token-alist))))))
+(if (boundp 'dired-mode-map)
+    (uninstall-dired-ex-token)
+  (eval-after-load "dired" '(uninstall-dired-ex-token)))
 
 ;; vimpulse patches
