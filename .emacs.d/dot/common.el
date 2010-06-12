@@ -167,6 +167,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; appearance
 
+; coloring
+(setq frame-background-mode 'dark)
+(require 'color-theme)
+(color-theme-initialize)
+(color-theme-dark-laptop)
+
 ; no cursor blinking
 (blink-cursor-mode nil)
 

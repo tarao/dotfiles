@@ -107,8 +107,5 @@ source ~/.zsh/alias.zsh
 source ~/.zsh/function.zsh
 source ~/.zsh/emacs.zsh
 source ~/.zsh/cdd.zsh
-if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
-    source ~/.zsh/term.zsh
-else
-    source ~/.zsh/term.compat.zsh
-fi
+source ~/.zsh/term.compat.zsh
+[[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]] && source ~/.zsh/term.zsh

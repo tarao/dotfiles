@@ -18,7 +18,12 @@
 # 45  for purple background
 # 46  for cyan background
 # 47  for white (or gray) background
-col1='0;4;32'
-col2='0;33'
-PROMPT="%{[${col1}m%}%n@%m%{[m%}:%1(j.%j.)%(!.#.>) "
-RPROMPT="[%{[${col2}m%}%~%{[m%}]"
+[[ -n "$COLORTERM" ]] && export TERM=xterm-256color
+function () {
+    local col1
+    local col2
+    col1='0;4;32'
+    col2='0;33'
+    PROMPT="%{[${col1}m%}%n@%m%{[m%}:%1(j.%j.)%(!.#.>) "
+    RPROMPT="[%{[${col2}m%}%~%{[m%}]"
+}

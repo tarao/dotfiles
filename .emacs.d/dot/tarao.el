@@ -34,30 +34,6 @@
 ;;         global-mode-string
         "-%-"))
 
-(custom-set-faces
- '(minibuffer-prompt ((t (:foreground "blue"))))
- '(font-lock-builtin-face
-   ((((class color) (min-colors 8)) (:foreground "brightblue"))))
- '(font-lock-comment-delimiter-face ((t (:inherit nil :foreground "green"))))
- '(font-lock-comment-face ((t (:foreground "green"))))
- '(font-lock-function-name-face ((t (:foreground "RoyalBlue"))))
- '(font-lock-keyword-face ((t (:foreground "blue" :weight bold))))
- '(font-lock-preprocessor-face ((t (:foreground "medium blue"))))
- '(font-lock-string-face ((t (:foreground "firebrick"))))
- '(font-lock-type-face ((t (:foreground "slate blue"))))
- '(font-lock-variable-name-face ((t (:foreground "BlueViolet"))))
- '(font-lock-warning-face ((t (:foreground "red"))))
- '(nxml-comment-content-face ((t (:foreground "DarkGreen"))))
- '(nxml-comment-delimiter-face ((t (:foreground "DarkGreen"))))
- '(nxml-delimited-data-face ((t (:foreground "firebrick"))))
- '(nxml-delimiter-face ((t (:foreground "medium blue"))))
- '(nxml-element-local-name-face
-   ((t (:inherit nxml-name-face :foreground "dark blue"))))
- '(nxml-name-face ((t (:foreground "BlueViolet"))))
- '(nxml-tag-slash-face
-   ((t (:inherit nxml-name-face :foreground "medium blue"))))
- '(trailing-whitespace ((t (:background "peach puff")))))
-
 (defalias 'comm 'comment-region)
 (defalias 'unc 'uncomment-region)
 
