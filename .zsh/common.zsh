@@ -42,23 +42,17 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' keep-prefix
 zstyle ':completion:*' remote-access false
 zstyle ':completion:*' completer _oldlist _complete _match _ignored \
-    _approximate _list _history
+    _list _history
 autoload -U compinit
 compinit
 
 # incremental completion
 if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
     source ~/.zsh/auto-fu.zsh
-    function () {
-        local code
-        code=${functions[auto-fu-init]/'\n-azfu-'/''}
-        eval "function auto-fu-init () { $code }"
-        code=${functions[auto-fu]/fg=black,bold/fg=white}
-        eval "function auto-fu () { $code }"
-    }
-    function zle-line-init () {
-        auto-fu-init
-    }
+    function zle-line-init () { auto-fu-init }
+    zle -N zle-line-init
+    zstyle ':auto-fu:highlight' completion fg=white
+    zstyle ':auto-fu:var' postdisplay ''
     function afu+cancel () {
         afu-clearing-maybe
         ((afu_in_p == 1)) && { afu_in_p=0; BUFFER="$buffer_cur"; }
@@ -90,7 +84,6 @@ EOT
     bindkey-advice-before "^G" afu+cancel
     bindkey-advice-before "^[" afu+cancel
     bindkey-advice-before "^J" afu+cancel afu+accept-line
-    zle -N zle-line-init
 fi
 
 # run-help

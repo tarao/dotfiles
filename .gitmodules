@@ -1,0 +1,3 @@
+[submodule ".zsh/modules/auto-fu"]
+	path = .zsh/modules/auto-fu
+	url = http://github.com/hchbaw/auto-fu.zsh.git
