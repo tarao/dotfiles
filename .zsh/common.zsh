@@ -48,7 +48,13 @@ compinit
 
 # incremental completion
 if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
-    source ~/.zsh/auto-fu.zsh
+    function () { # precompile
+        local A
+        A=~/.zsh/modules/auto-fu/auto-fu.zsh
+        [[ -e "${A:r}.zwc" ]] && [[ "$A" -ot "${A:r}.zwc" ]] ||
+        zsh -c "source $A; auto-fu-zcompile $A ${A:h}" >/dev/null 2>&1
+    }
+    source ~/.zsh/modules/auto-fu/auto-fu; auto-fu-install
     function zle-line-init () { auto-fu-init }
     zle -N zle-line-init
     zstyle ':auto-fu:highlight' completion fg=white
