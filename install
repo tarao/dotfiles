@@ -183,7 +183,8 @@ if $argv[:pull]
   Dir.chdir($argv[:src]) do
     $info.puts('pull')
     try do
-      $info.puts(`git pull && git submodule init && git submodule update`)
+      submod = %w'sync init update'.map{|x|'git submodule '+x}.join(' && ')
+      $info.puts(`git pull && #{submod}`)
     end unless $info.test?
   end
   $info.puts('')
