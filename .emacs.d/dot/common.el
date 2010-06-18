@@ -436,6 +436,12 @@
   (mew-message-goto-summary)
   (mew-summary-toggle-disp-msg))
 
+(defun mew-summary-refile-spam ()
+  (interactive)
+  (mew-summary-msg-or-part
+   (mew-summary-not-in-draft
+    (mew-summary-local-or-imap
+     (mew-summary-refile-body '("+spam"))))))
 ;; patch
 (defadvice mew-draft-mode (before major-mode-convention activate)
   (kill-all-local-variables))
@@ -448,6 +454,7 @@
   (define-key mew-summary-mode-map (kbd "SPC") 'mew-summary-scroll-up)
   (define-key mew-summary-mode-map (kbd "C-@") 'mew-summary-scroll-down)
   (define-key mew-summary-mode-map (kbd "C-SPC") 'mew-summary-scroll-down)
+  (define-key mew-summary-mode-map "s" 'mew-summary-refile-spam)
   (when (featurep 'viper)
     (define-key mew-summary-mode-map (kbd "j") 'mew-summary-next-line)
     (define-key mew-summary-mode-map (kbd "k") 'mew-summary-previous-line)
