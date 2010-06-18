@@ -414,6 +414,54 @@
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; mew
+
+(defun mew-summary-display-and-select-window ()
+  (interactive)
+  (mew-summary-msg-or-part
+   (let* ((win (selected-window))
+          (msg (mew-summary-message-number))
+          (part (mew-syntax-nums))
+          (fid (mew-frame-id))
+          (omsg (mew-current-get-msg fid))
+          (opart (mew-current-get-part fid)))
+     (unless (or (and msg (string= msg omsg) (null part) (null opart))
+             (and part (equal part opart)))
+       (call-interactively 'mew-summary-display)) ;; ensure displaying message
+     (mew-summary-toggle-disp-msg 'on)
+     (mew-window-configure 'message))))
+
+(defun mew-message-close ()
+  (interactive)
+  (mew-message-goto-summary)
+  (mew-summary-toggle-disp-msg))
+
+;; patch
+(defadvice mew-draft-mode (before major-mode-convention activate)
+  (kill-all-local-variables))
+
+(defun mew-install-user-map ()
+  ;; mew-summary-mode key maps
+  (define-key mew-summary-mode-map (kbd ":") 'anything)
+  (define-key mew-summary-mode-map (kbd "RET")
+    'mew-summary-display-and-select-window)
+  (define-key mew-summary-mode-map (kbd "SPC") 'mew-summary-scroll-up)
+  (define-key mew-summary-mode-map (kbd "C-@") 'mew-summary-scroll-down)
+  (define-key mew-summary-mode-map (kbd "C-SPC") 'mew-summary-scroll-down)
+  (when (featurep 'viper)
+    (define-key mew-summary-mode-map (kbd "j") 'mew-summary-next-line)
+    (define-key mew-summary-mode-map (kbd "k") 'mew-summary-previous-line)
+    (define-key mew-summary-mode-map (kbd "J") 'scroll-up)
+    (define-key mew-summary-mode-map (kbd "K") 'scroll-down)
+    (define-key mew-summary-mode-map (kbd "G") 'viper-goto-line))
+  ;; mew-message-mode key maps
+  (when (featurep 'vimpulse)
+    (vimpulse-add-movement-cmds mew-message-mode-map t))
+  (define-key mew-message-mode-map (kbd ":") 'anything)
+  (define-key mew-message-mode-map (kbd "q") 'mew-message-close))
+(eval-after-load 'mew-key '(mew-install-user-map))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; luxaky
 
 (if (equal short-hostname "luxaky")
