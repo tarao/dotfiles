@@ -57,6 +57,7 @@ if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
     source ~/.zsh/modules/auto-fu/auto-fu; auto-fu-install
     function zle-line-init () { auto-fu-init }
     zle -N zle-line-init
+    zstyle ':auto-fu:highlight' input bold
     zstyle ':auto-fu:highlight' completion fg=white
     zstyle ':auto-fu:var' postdisplay ''
     function afu+cancel () {
