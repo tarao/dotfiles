@@ -19,7 +19,7 @@
 # 46  for cyan background
 # 47  for white (or gray) background
 [[ -n "$COLORTERM" ]] && export TERM=xterm-256color
-function () {
+function term-compat() {
     local col1
     local col2
     col1='0;4;32'
@@ -27,3 +27,4 @@ function () {
     PROMPT="%{[${col1}m%}%n@%m%{[m%}:%1(j.%j.)%(!.#.>) "
     RPROMPT="[%{[${col2}m%}%~%{[m%}]"
 }
+term-compat
