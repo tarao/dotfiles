@@ -119,21 +119,20 @@
          ("]" nil "」")
          )
        my-skk-rom-kana-rule-list-base))
-(setq my-skk-rom-kana-rule-list-jssst
+(setq my-skk-rom-kana-rule-list-JA
       (append
        '(
          ("." nil "．")
          ("," nil "，")
-         ("!" nil "!")
-         ("?" nil "?")
+         ("!" nil "！")
+         ("?" nil "？")
          ("-" nil "ー")
-         ("@" nil "@")
-         ("[" nil "[")
-         ("]" nil "]")
+         ("@" nil "＠")
+         ("[" nil "「")
+         ("]" nil "」")
          )
        my-skk-rom-kana-rule-list-base))
 (defun skk-reconstruct-rule-tree ()
-  (kill-local-variable 'skk-rule-tree)
   (setq skk-rule-tree (skk-compile-rule-list
                        skk-rom-kana-base-rule-list
                        skk-rom-kana-rule-list)))
@@ -145,8 +144,13 @@
   (interactive)
   (setq skk-rom-kana-rule-list my-skk-rom-kana-rule-list-ja)
   (skk-reconstruct-rule-tree))
-(defun skk-use-jssst-signs ()
+(defun skk-use-JA-signs ()
   (interactive)
-  (setq skk-rom-kana-rule-list my-skk-rom-kana-rule-list-jssst)
+  (setq skk-rom-kana-rule-list my-skk-rom-kana-rule-list-JA)
   (skk-reconstruct-rule-tree))
+
 (skk-use-en-signs)
+(make-variable-buffer-local 'skk-rule-tree)
+(make-variable-buffer-local 'skk-rom-kana-rule-list)
+
+(when (featurep 'anything-complete) (alcs-make-candidates))
