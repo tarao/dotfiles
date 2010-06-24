@@ -6,6 +6,11 @@
 (load "dot/anything-zsh")
 (load "dot/install")
 
+;; font
+(when window-system
+  (custom-set-faces
+   '(default ((t (:family "osaka_unicode"))))))
+
 ;; no startup message
 (setq inhibit-startup-message t)
 (setq inhibit-startup-screen t)
