@@ -113,7 +113,8 @@
                       (#x2660 . #x2661) (#x2663 . #x2665) (#x2667 . #x266A)
                       (#x266C . #x266D) #x266F #x273D (#x2776 . #x277F)
                       (#xE000 . #xF8FF) (#xFE00 . #xFE0F) #xFFFD ))
-        (set-char-table-range char-width-table range width)))
+        (set-char-table-range char-width-table range width))
+    (set-char-table-range char-width-table #x00AC 1))
   (set-east-asian-ambiguous-width 2))
 (when (and (< emacs-major-version 23) (>= emacs-major-version 22))
   ; language and charset
