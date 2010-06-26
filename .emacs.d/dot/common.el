@@ -241,8 +241,7 @@
 (autoload 'browse-kill-ring "browse-kill-ring" nil t)
 (load "browse-kill-ring+")
 (define-key global-map (kbd "M-y") 'browse-kill-ring)
-(defadvice kill-new (before no-kill-new-duplicates activate)
-  (setq kill-ring (delete (ad-get-arg 0) kill-ring)))
+(setq kill-do-not-save-duplicates t)
 
 ; undo/redo
 (require 'undo-tree)
