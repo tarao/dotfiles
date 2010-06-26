@@ -12,7 +12,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; basic
 
-; load-path
+;; load-path
 (setq load-path (cons "~/.emacs.d" load-path))
 (when (fboundp 'normal-top-level-add-subdirs-to-load-path)
   (let* ((dir "~/.emacs.d/site-lisp")
@@ -21,19 +21,24 @@
       (setq load-path (cons dir load-path))
       (normal-top-level-add-subdirs-to-load-path))))
 
-; hostname
+;; hostname
 (string-match "^\\([^\\.]+\\)\\(\\.\\(.*\\)\\)?$" (system-name))
 (defconst short-hostname (replace-match "\\1" t nil (system-name))
   "Host part of function `system-name'.")
 
-; make *scratch* immortal
+;; shell
+(setq explicit-shell-file-name "zsh")
+(setq shell-file-name "zsh")
+(setq shell-command-switch "-c")
+
+;; make *scratch* immortal
 (require 'immortal-buffer)
 (make-buffer-immortal "*scratch*")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; keys
 
-; key bindings
+;; key bindings
 (global-set-key (kbd "C-h") 'backward-delete-char)
 (global-set-key (kbd "M-g") 'goto-line)
 (global-set-key (kbd "C-x C-b") 'buffer-menu)
@@ -42,7 +47,7 @@
 (global-set-key (kbd "M-j") 'enlarge-window)
 (global-set-key (kbd "M-k") 'shrink-window)
 
-; terminal fix
+;; terminal fix
 (global-set-key (kbd "M-O a") 'backward-paragraph)
 (global-set-key (kbd "M-O b") 'forward-paragraph)
 (global-set-key (kbd "M-O d") 'backward-word)
@@ -60,14 +65,14 @@
 (global-set-key (kbd "ESC M-O d") 'backward-sexp)
 (global-set-key (kbd "ESC M-O c") 'forward-sexp)
 
-; move window
+;; move window
 (windmove-default-keybindings)
 (setq windmove-wrap-around t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; language
 
-; Mule-UCS settings
+;; Mule-UCS settings
 (when (< emacs-major-version 22)
   (require 'un-define)
   (require 'jisx0213))
@@ -117,25 +122,25 @@
     (set-char-table-range char-width-table #x00AC 1))
   (set-east-asian-ambiguous-width 2))
 (when (and (< emacs-major-version 23) (>= emacs-major-version 22))
-  ; language and charset
-  ; jisx0213 support in utf-8
+  ;; language and charset
+  ;; jisx0213 support in utf-8
   (utf-translate-cjk-set-unicode-range
    '((#x00a2 . #x00a3) (#x00a7 . #x00a8) (#x00ac . #x00ac) (#x00b0 . #x00b1)
      (#x00b4 . #x00b4) (#x00b6 . #x00b6) (#x00d7 . #x00d7) (#X00f7 . #x00f7)
      (#x0370 . #x03ff) (#x0400 . #x04FF) (#x2000 . #x206F) (#x2100 . #x214F)
      (#x2190 . #x21FF) (#x2200 . #x22FF) (#x2300 . #x23FF) (#x2500 . #x257F)
      (#x25A0 . #x25FF) (#x2600 . #x26FF) (#x2e80 . #xd7a3) (#xff00 . #xffef)))
-     ; for patched utf-8.el (utf-8.el.diff applied; subst-jisx0213.el required)
-     ;-; --> disabled: there are problems in showing latin characters
-     ;-;(modify-category-entry (make-char 'japanese-jisx0213-1) ?j)
-     ;-;(modify-category-entry (make-char 'japanese-jisx0213-2) ?j)
-     ;-;(eval-after-load "subst-jis" '(load "subst-jisx0213"))
-     ;-;(load "utf-8") ;; patched file
-     ;-;(load "utf-16") ;; for safe-charsets
-     ;-;(utf-translate-cjk-set-unicode-range `((#x80 . ,(lsh -1 -1))))
-)
+  ;; for patched utf-8.el (utf-8.el.diff applied; subst-jisx0213.el required)
+  ;;-; --> disabled: there are problems in showing latin characters
+  ;;-;(modify-category-entry (make-char 'japanese-jisx0213-1) ?j)
+  ;;-;(modify-category-entry (make-char 'japanese-jisx0213-2) ?j)
+  ;;-;(eval-after-load "subst-jis" '(load "subst-jisx0213"))
+  ;;-;(load "utf-8") ;; patched file
+  ;;-;(load "utf-16") ;; for safe-charsets
+  ;;-;(utf-translate-cjk-set-unicode-range `((#x80 . ,(lsh -1 -1))))
+  )
 
-; language and coding-system
+;; language and coding-system
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8-unix)
 (set-default-coding-systems 'utf-8-unix)
@@ -146,7 +151,7 @@
   (set-terminal-coding-system 'utf-8-unix))
 (require 'default-file-coding-systems)
 
-; skk
+;; skk
 (setq skk-init-file "dot/.skk")
 (setq skk-user-directory "~/.ddskk")
 (require 'skk-autoloads)
@@ -155,59 +160,58 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; history
 
-; bookmark
+;; bookmark
 (setq bookmark-default-file "~/.emacs.d/bmk")
 
-; recentf
+;; recentf
 (setq recentf-save-file (convert-standard-filename "~/.emacs.d/recentf"))
 
-; shell history
+;; shell history
 (require 'shell-history)
 (setq shell-history-file "~/.zsh/history")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; appearance
 
-; coloring
+;; coloring
 (setq frame-background-mode 'dark)
 (require 'color-theme)
 (color-theme-initialize)
 (color-theme-dark-laptop)
 
-; no cursor blinking
+;; no cursor blinking
 (blink-cursor-mode nil)
 
-; eof mark
+;; eof mark
 (require 'end-mark)
 (unless window-system (global-end-mark-mode))
 
-; show fullwidth-spaces and tabs
+;; show fullwidth-spaces and tabs
 (require 'jaspace)
-;(setq jaspace-alternate-eol-string "\xab\n")
 (setq jaspace-highlight-tabs t)
 (setq jaspace-highlight-tabs ?>)
 (setq jaspace-mode-string " WS")
 
-; show trailing whitespace
+;; show trailing whitespace
 (setq-default show-trailing-whitespace t)
 
-; parenthesis
+;; parenthesis
 (show-paren-mode t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; information
 
-; show line numbers
+;; show line numbers
 (require 'linum)
 (require 'linum+)
 (global-set-key (kbd "M-N") 'linum-mode)
 (global-set-key (kbd "M-n") 'relative-linum-mode)
 
-; wc (CC/WW/LL)
+;; wc (CC/WW/LL)
 (autoload 'word-count-mode "word-count" "Minor mode to count words." t nil)
 (global-set-key (kbd "M-+") 'word-count-mode)
 
-; eldoc
+;; eldoc
 (require 'c-eldoc)
 (require 'eldoc-extension)
 (setq eldoc-idle-delay 0)
@@ -224,26 +228,26 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; editing
 
-; tabbing
+;; tabbing
 (setq-default tab-width 4 indent-tabs-mode nil)
 
-; align
+;; align
 (require 'align)
 
-; auto-insert
+;; auto-insert
 (require 'autoinsert)
 (add-hook 'find-file-not-found-hooks 'auto-insert)
 (setq auto-insert-directory "~/.emacs.d/insert/")
 (setq auto-insert-query nil)
 (setq auto-insert-alist nil)
 
-; browse-kill-ring
+;; browse-kill-ring
 (autoload 'browse-kill-ring "browse-kill-ring" nil t)
 (load "browse-kill-ring+")
 (define-key global-map (kbd "M-y") 'browse-kill-ring)
 (setq kill-do-not-save-duplicates t)
 
-; undo/redo
+;; undo/redo
 (require 'undo-tree)
 (global-undo-tree-mode)
 (setq undo-tree-mode-lighter nil)
@@ -251,24 +255,24 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; completion
 
-; shell command (with saving the last command for default value)
+;; shell command (with saving the last command for default value)
 (require 'shell-command+)
 (global-set-key (kbd "M-!") 'shell-command+)
 (global-set-key (kbd "M-|") 'shell-command-on-region+)
 
-; completer
+;; completer
 (require 'completer)
 (setq completion-ignore-case t)
 (setq read-file-name-completion-ignore-case t)
 (setq completer-words "---. <_")
 
-; anything
+;; anything
 (require 'anything-config)
 (setq anything-enable-shortcuts 'alphabet)
 (require 'anything-match-plugin)
 (require 'anything-complete)
 (setq anything-complete-sort-candidates t)
-;(anything-read-string-mode 1)
+;; (anything-read-string-mode 1)
 (substitute-key-definition 'execute-extended-command
                            'anything-execute-extended-command global-map)
 (require 'anything-grep)
@@ -292,7 +296,7 @@
 (require 'descbinds-anything)
 (descbinds-anything-install)
 
-; auto completion like IntelliSense
+;; auto completion like IntelliSense
 (require 'auto-complete)
 (global-auto-complete-mode t)
 (setq ac-auto-show-menu 0.5)
@@ -303,18 +307,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; command
 
-; M-x compile
+;; M-x compile
 (setq compile-command "make -k")
 (setq compile-history (list "make" "make clean"))
 
-; M-x grep
+;; M-x grep
 (setq grep-program "grep")
 (setq grep-command "grep -inH")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; major-mode
 
-; ruby-mode
+;; ruby-mode
 (autoload 'ruby-mode "ruby-mode"
   "Mode for editing ruby source files" t)
 (setq auto-mode-alist
@@ -334,27 +338,27 @@
 (setq auto-mode-alist
       (append '(("\\.rdoc$" . rdoc-mode)) auto-mode-alist))
 
-; tuareg-mode - Objective Caml support
+;; tuareg-mode - Objective Caml support
 (setq auto-mode-alist (cons '("\\.ml\\w?" . tuareg-mode) auto-mode-alist))
 (autoload 'tuareg-mode "tuareg" "Major mode for editing Caml code" t)
 (autoload 'camldebug "camldebug" "Run the Caml debugger" t)
 (autoload 'tuareg-run-caml "tuareg" "Run the Caml interactive compiler" t)
-; font-lock
+;; font-lock
 (if (and (boundp 'window-system) window-system)
     (when (string-match "XEmacs" emacs-version)
       (if (not (and (boundp 'mule-x-win-initted) mule-x-win-initted))
           (require 'sym-lock))
       (require 'font-lock)))
 
-; haskell-mode
+;; haskell-mode
 (load "haskell-site-file")
 
-; css mode
+;; css mode
 (autoload 'css-mode "css-mode" "Major mode for editing CSS" t)
 (setq auto-mode-alist (cons '("\\.css$" . css-mode) auto-mode-alist))
 (setq cssm-newline-before-closing-bracket t)
 
-; nxml-mode
+;; nxml-mode
 (load "rng-auto")
 (add-to-list 'auto-mode-alist
              (cons (concat "\\."
@@ -384,7 +388,7 @@
 (define-key zencoding-mode-keymap (kbd "C-j") 'zencoding-expand-line)
 (define-key zencoding-preview-keymap (kbd "RET") 'zencoding-preview-accept)
 
-; xquery mode
+;; xquery mode
 (autoload 'xquery-mode "xquery-mode" "Major mode for editing xquery" t)
 (setq auto-mode-alist (cons '("\\.xquery$" . xquery-mode) auto-mode-alist))
 
@@ -394,7 +398,7 @@
       (append '(("\\.yml$" . yaml-mode)
                 ("\\.yaml$" . yaml-mode)) auto-mode-alist))
 
-; LaTeX mode
+;; LaTeX mode
 (setq TeX-default-mode 'japanese-latex-mode)
 (setq auto-mode-alist
   (append
@@ -427,7 +431,7 @@
           (opart (mew-current-get-part fid)))
      (unless (or (and msg (string= msg omsg) (null part) (null opart))
              (and part (equal part opart)))
-       (call-interactively 'mew-summary-display)) ;; ensure displaying message
+       (call-interactively 'mew-summary-display)) ; ensure displaying message
      (mew-summary-toggle-disp-msg 'on)
      (mew-window-configure 'message))))
 
@@ -471,32 +475,25 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; luxaky
 
-(if (equal short-hostname "luxaky")
-    (progn
-      ; color theme
-      (load "color-theme-autoloads")
-      ; shell
-      (setq explicit-shell-file-name "zsh")
-      (setq shell-file-name "zsh")
-      (setq shell-command-switch "-c")
-      ; mew
-      (autoload 'mew "mew" nil t)
-      (autoload 'mew-send "mew" nil t)
-      (setq mew-smtp-user (user-login-name))
-      (setq mew-mail-domain "orezdnu.org")
-      (setq mew-mailbox-type 'mbox)
-      (setq mew-mbox-command "incm")
-      (setq mew-mbox-command-arg
-            (concat "-u -d /home/users/" (user-login-name) "/Maildir"))
-      ; emacs-w3m - a text browser
-      (setq w3m-init-file "dot/.emacs-w3m")
-      (load "w3m")
-      (add-hook 'w3m-mode-hook
-                '(lambda () (setq show-trailing-whitespace nil)))
-      ; lookup - search dictionary
-      (autoload 'lookup "lookup" nil t)
-      (autoload 'lookup-region "lookup" nil t)
-      (autoload 'lookup-pattern "lookup" nil t)
-      (global-set-key (kbd "C-x C-y") 'lookup)
-      (global-set-key (kbd "C-x y") 'lookup-region)
-      (global-set-key (kbd "C-x l") 'lookup-pattern)))
+(when (equal short-hostname "luxaky")
+  ;; mew
+  (autoload 'mew "mew" nil t)
+  (autoload 'mew-send "mew" nil t)
+  (setq mew-smtp-user (user-login-name))
+  (setq mew-mail-domain "orezdnu.org")
+  (setq mew-mailbox-type 'mbox)
+  (setq mew-mbox-command "incm")
+  (setq mew-mbox-command-arg
+        (concat "-u -d /home/users/" (user-login-name) "/Maildir"))
+  ;; emacs-w3m - a text browser
+  (setq w3m-init-file "dot/.emacs-w3m")
+  (load "w3m")
+  (add-hook 'w3m-mode-hook
+            '(lambda () (setq show-trailing-whitespace nil)))
+  ;; lookup - search dictionary
+  (autoload 'lookup "lookup" nil t)
+  (autoload 'lookup-region "lookup" nil t)
+  (autoload 'lookup-pattern "lookup" nil t)
+  (global-set-key (kbd "C-x C-y") 'lookup)
+  (global-set-key (kbd "C-x y") 'lookup-region)
+  (global-set-key (kbd "C-x l") 'lookup-pattern))
