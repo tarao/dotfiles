@@ -6,6 +6,7 @@ function emacsb {
     [[ -z "$1" ]] &&
     echo "Usage: $0 [compile FILE | install URL | update]..." && return
     cmd=(env emacs-snapshot --batch)
+    install=($cmd -l ~/.emacs.d/dot/install.el)
     action=$1; shift
     case "$action" in
         compile)
@@ -13,10 +14,10 @@ function emacsb {
             ;;
         install)
             url=$1; shift
-            $cmd --eval "(install-elisp \"$url\")" $@
+            $install --eval "(install-elisp \"$url\")" $@
             ;;
         update)
-            $cmd -f update-remote-emacs-lisp $@
+            $install -f update-remote-emacs-lisp $@
             ;;
         help)
             $0
