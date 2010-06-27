@@ -8,7 +8,7 @@ function emacs() {
         emacs-standalone $@
     else
         if [[ -z `pgrep emacs -u $USER` ]]; then
-            emacsd $@
+            emacsd
         fi
         emacsc $@
     fi

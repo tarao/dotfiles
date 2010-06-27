@@ -1,33 +1,53 @@
 alias emacsclient='emacsclient.emacs-snapshot'
 alias emacsc='emacsclient -nw'
-alias emacsd='emacs-snapshot --daemon'
 alias emacs-standalone='emacs-snapshot'
 alias emacs='emacs-standalone'
 function emacsb {
-    env emacs-snapshot --batch $@
+    [[ -z "$1" ]] &&
+    echo "Usage: $0 [compile FILE | install URL | update]..." && return
+    cmd=(env emacs-snapshot --batch)
+    action=$1; shift
+    case "$action" in
+        compile)
+            $cmd -f batch-byte-compile $@
+            ;;
+        install)
+            url=$1; shift
+            $cmd --eval "(install-elisp \"$url\")" $@
+            ;;
+        update)
+            $cmd -f update-remote-emacs-lisp $@
+            ;;
+        help)
+            $0
+            ;;
+        *)
+            $cmd $@
+            ;;
+    esac
 }
-alias emacs-compile="emacsb -f batch-byte-compile"
-function emacsbinstall {
-    emacsb -l ~/.emacs.d/dot/install.el $@
-}
-function install-elisp {
-    local install=$1
-    shift
-    emacsbinstall --eval "(install-elisp \"$install\")" $@
-}
-function update-elisp {
-    emacsbinstall -f update-remote-emacs-lisp $@
-}
+alias emacs-compile="emacsb compile"
 
-# Emacs server and client
-function stop-emacsd() {
-    if [[ -n `pgrep emacs -u $USER` ]]; then
-        emacsclient -e '(progn (defun yes-or-no-p (p) t) (kill-emacs))' $@
-    fi
-}
-function restart-emacsd() {
-    stop-emacsd $@
-    emacsd $@
+# Emacs server
+function emacsd() {
+    [[ -z "$1" ]] && emacs-snapshot --daemon && return
+    action=$1; shift
+    case "$action" in
+        start)
+            $0
+            ;;
+        stop)
+            [[ -n `pgrep emacs -u $USER` ]] &&
+            emacsclient -e '(progn (defun yes-or-no-p (p) t) (kill-emacs))'
+            ;;
+        restart)
+            $0 stop
+            $0 start
+            ;;
+        *)
+            echo "Usage: $0 [start|stop|restart]"
+            ;;
+    esac
 }
 
 # See: http://d.hatena.ne.jp/rubikitch/20091208/anythingzsh
