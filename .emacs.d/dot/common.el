@@ -472,6 +472,10 @@
   (define-key mew-message-mode-map (kbd "q") 'mew-message-close))
 (eval-after-load 'mew-key '(mew-install-user-map))
 
+(add-hook
+ 'mew-summary-mode-hook
+ '(lambda () (set (make-local-variable 'show-trailing-whitespace) nil)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; luxaky
 
