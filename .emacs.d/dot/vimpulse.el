@@ -64,6 +64,13 @@
         (delete (assoc (car entry) ex-token-alist) ex-token-alist))
   (add-to-list 'ex-token-alist entry t))
 
+;; operators
+(vimpulse-convert-to-operator 'comment-or-uncomment-region)
+(define-key viper-vi-basic-map (kbd "C")
+  'comment-or-uncomment-region-operator)
+(define-key vimpulse-visual-basic-map (kbd "C")
+  'comment-or-uncomment-region-operator)
+
 ;; viper-mode keymaps
 (define-key vimpulse-visual-basic-map
   (kbd ";") (lambda () (interactive) (viper-ex t)))
