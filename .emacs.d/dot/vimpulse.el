@@ -86,11 +86,11 @@
             ret)))
     (error nil)))
 (vimpulse-define-text-object vimpulse-inner-between (arg)
-  "Select inner range between a character by which followed by the command.'"
+  "Select inner range between a character by which the command is followed.'"
   :keys "iF"
   (vimpulse-between-range arg))
 (vimpulse-define-text-object vimpulse-a-between (arg)
-  "Select range between a character by which followed by the command.'"
+  "Select range between a character by which the command is followed.'"
   :keys "aF"
   (vimpulse-between-range arg t))
 
