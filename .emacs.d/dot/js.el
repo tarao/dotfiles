@@ -58,6 +58,5 @@
 (add-hook 'javascript-mode-hook
           '(lambda ()
              (progn
-               (jaspace-mode)
                (hs-enable)
                (flymake-js-load))))
