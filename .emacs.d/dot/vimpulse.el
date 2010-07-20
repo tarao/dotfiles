@@ -100,7 +100,7 @@
 (define-key viper-vi-basic-map
   (kbd ";") 'viper-ex)
 (define-key viper-vi-global-user-map
-  (kbd ":") 'anything)
+  (kbd ":") 'anything-for-files)
 (define-key viper-vi-basic-map
   (kbd "TAB") nil)
 (define-key viper-vi-global-user-map

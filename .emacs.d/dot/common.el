@@ -37,7 +37,7 @@
 
 ;; auto-install
 (require 'auto-install)
-(setq auto-install-directory "~/.emacs.d/auto-install")
+(setq auto-install-directory "~/.emacs.d/auto-install/")
 (setq load-path (cons "~/.emacs.d/auto-install" load-path))
 (auto-install-update-emacswiki-package-name t)
 (auto-install-compatibility-setup)
@@ -276,6 +276,14 @@
 ;; anything
 (require 'anything-config)
 (setq anything-enable-shortcuts 'alphabet)
+(setq anything-for-files-prefered-list
+      '(anything-c-source-buffers+
+        anything-c-source-ffap-line
+        anything-c-source-ffap-guesser
+        anything-c-source-recentf
+        anything-c-source-bookmarks
+        anything-c-source-files-in-current-dir+
+        anything-c-source-locate))
 (require 'anything-match-plugin)
 (require 'anything-complete)
 (setq anything-complete-sort-candidates t)
@@ -284,24 +292,11 @@
                            'anything-execute-extended-command global-map)
 (require 'anything-grep)
 (defalias 'ag 'anything-grep)
-(setq anything-sources
-      '(
-        anything-c-source-buffers+
-        anything-c-source-ffap-line
-        anything-c-source-ffap-guesser
-        anything-c-source-recentf
-        anything-c-source-bookmarks
-        anything-c-source-files-in-current-dir+
-        anything-c-source-locate
-        anything-c-source-kill-ring
-        ))
-(global-set-key (kbd "C-x b") 'anything)
-(define-key anything-map (kbd "M-n") 'anything-next-source)
-(define-key anything-map (kbd "M-p") 'anything-previous-source)
-
-;; describe-bindings alternatative
 (require 'descbinds-anything)
 (descbinds-anything-install)
+(global-set-key (kbd "C-x b") 'anything-for-files)
+(define-key anything-map (kbd "M-n") 'anything-next-source)
+(define-key anything-map (kbd "M-p") 'anything-previous-source)
 
 ;; auto completion like IntelliSense
 (require 'auto-complete)
