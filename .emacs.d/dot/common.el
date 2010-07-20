@@ -459,14 +459,16 @@
   (define-key mew-summary-mode-map (kbd "C-@") 'mew-summary-scroll-down)
   (define-key mew-summary-mode-map (kbd "C-SPC") 'mew-summary-scroll-down)
   (define-key mew-summary-mode-map "s" 'mew-summary-refile-spam)
-  (when (featurep 'viper)
-    (define-key mew-summary-mode-map (kbd "j") 'mew-summary-next-line)
-    (define-key mew-summary-mode-map (kbd "k") 'mew-summary-previous-line)
-    (define-key mew-summary-mode-map (kbd "J") 'scroll-up)
-    (define-key mew-summary-mode-map (kbd "K") 'scroll-down)
-    (define-key mew-summary-mode-map (kbd "G") 'viper-goto-line))
+  (when (featurep 'vimpulse)
+    (vimpulse-add-vi-bindings mew-summary-mode-map
+                              '(viper-next-line
+                                viper-previous-line
+                                viper-scroll-down
+                                viper-scroll-up
+                                viper-goto-line) t))
   ;; mew-message-mode key maps
   (when (featurep 'vimpulse)
+    (vimpulse-add-core-movement-cmds mew-message-mode-map t)
     (vimpulse-add-movement-cmds mew-message-mode-map t))
   (define-key mew-message-mode-map (kbd ":") 'anything)
   (define-key mew-message-mode-map (kbd "q") 'mew-message-close))
