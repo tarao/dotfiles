@@ -452,7 +452,6 @@
 
 (defun mew-install-user-map ()
   ;; mew-summary-mode key maps
-  (define-key mew-summary-mode-map (kbd ":") 'anything)
   (define-key mew-summary-mode-map (kbd "RET")
     'mew-summary-display-and-select-window)
   (define-key mew-summary-mode-map (kbd "SPC") 'mew-summary-scroll-up)
@@ -465,12 +464,13 @@
                                 viper-previous-line
                                 viper-scroll-down
                                 viper-scroll-up
-                                viper-goto-line) t))
+                                viper-goto-line
+                                anything) t))
   ;; mew-message-mode key maps
   (when (featurep 'vimpulse)
     (vimpulse-add-core-movement-cmds mew-message-mode-map t)
-    (vimpulse-add-movement-cmds mew-message-mode-map t))
-  (define-key mew-message-mode-map (kbd ":") 'anything)
+    (vimpulse-add-movement-cmds mew-message-mode-map t)
+  (vimpulse-add-vi-bindings mew-message-mode-map '(anything) t))
   (define-key mew-message-mode-map (kbd "q") 'mew-message-close))
 (eval-after-load 'mew-key '(mew-install-user-map))
 
