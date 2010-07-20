@@ -35,6 +35,13 @@
 (require 'immortal-buffer)
 (make-buffer-immortal "*scratch*")
 
+;; auto-install
+(require 'auto-install)
+(setq auto-install-directory "~/.emacs.d/auto-install")
+(setq load-path (cons "~/.emacs.d/auto-install" load-path))
+(auto-install-update-emacswiki-package-name t)
+(auto-install-compatibility-setup)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; keys
 

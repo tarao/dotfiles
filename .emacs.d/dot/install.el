@@ -1,6 +1,7 @@
 (setq elisp-emacswiki-src
       '(
         "install-elisp.el"
+        "auto-install.el"
         "anything.el"
         "anything-complete.el"
         "anything-config.el"
