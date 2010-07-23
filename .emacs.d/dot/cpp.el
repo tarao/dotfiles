@@ -42,7 +42,7 @@
 (defun flymake-extract-includes-from-makefile ()
   (let ((tmp-buf-name "*flymake-temp-buf-for-makefile*")
         (buf (current-buffer))
-        (dir (file-name-directory (buffer-file-name))))
+        (dir (file-name-directory (or (buffer-file-name) ""))))
     (if (file-readable-p (concat dir "Makefile"))
         (progn
           (set-buffer (get-buffer-create tmp-buf-name))
