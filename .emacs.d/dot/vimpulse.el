@@ -122,15 +122,4 @@
 (define-key viper-vi-global-user-map
   (kbd "K") 'viper-scroll-down)
 
-; dired
-(defun uninstall-dired-ex-token ()
-  (dolist (x '("e" "s" "v" "d"))
-    (let ((bind (assoc x ex-token-alist)))
-      (when (and bind (caadr bind)
-                 (string-match "^epa-dired-.*" (symbol-name (caadr bind))))
-        (setq ex-token-alist (rassq-delete-all (cdr bind) ex-token-alist))))))
-(if (boundp 'dired-mode-map)
-    (uninstall-dired-ex-token)
-  (eval-after-load "dired" '(uninstall-dired-ex-token)))
-
 ;; vimpulse patches
