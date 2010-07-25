@@ -43,6 +43,11 @@
 (setq vimpulse-state-id-alist
       '((normal . "VISUAL") (line . "VLINE") (block . "VBLOCK")))
 
+;; vi keys in the message buffer
+(save-excursion
+  (set-buffer "*Messages*")
+  (viper-change-state-to-vi))
+
 ;; viper-mode patches
 (require 'hexl-viper-patch)
 (defadvice viper-maybe-checkout (around viper-dont-ask-checkout activate) nil)
