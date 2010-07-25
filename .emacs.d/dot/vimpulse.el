@@ -9,6 +9,7 @@
       viper-case-fold-search t
       viper-inhibit-startup-message t
       viper-u-always-undo t)
+(setq-default viper-auto-indent t)
 
 (require 'viper)
 
@@ -42,6 +43,12 @@
               (append '("" my-viper-mode-line) mode-line-format))
 (setq vimpulse-state-id-alist
       '((normal . "VISUAL") (line . "VLINE") (block . "VBLOCK")))
+
+;; auto-indent on o and O
+(defadvice viper-open-line (after viper-open-line-with-indentation activate)
+  (indent-according-to-mode))
+(defadvice viper-Open-line (after viper-Open-line-with-indentation activate)
+  (indent-according-to-mode))
 
 ;; vi keys in the message buffer
 (save-excursion
