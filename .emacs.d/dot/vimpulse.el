@@ -66,36 +66,10 @@
   (add-to-list 'ex-token-alist entry t))
 
 ;; operator
-(vimpulse-convert-to-operator 'comment-or-uncomment-region)
-(define-key viper-vi-basic-map (kbd "C")
-  'comment-or-uncomment-region-operator)
-(define-key vimpulse-visual-basic-map (kbd "C")
-  'comment-or-uncomment-region-operator)
+(require 'vimpulse-operator-comment)
 
 ;; textobj
-(defadvice scan-sexps (around ad-fake-scan-sexps (from count) activate)
-  (setq ad-return-value (if (= from beg) end beg)))
-(ad-disable-advice 'scan-sexps 'around 'ad-fake-scan-sexps)
-(ad-activate 'scan-sexps)
-(defun vimpulse-between-range (arg &optional include)
-  (condition-case ()
-      (let ((ch (read-char)))
-        (when (string ch)
-          (ad-enable-advice 'scan-sexps 'around 'ad-fake-scan-sexps)
-          (ad-activate 'scan-sexps)
-          (let ((ret (vimpulse-quote-range arg ch include)))
-            (ad-disable-advice 'scan-sexps 'around 'ad-fake-scan-sexps)
-            (ad-activate 'scan-sexps)
-            ret)))
-    (error nil)))
-(vimpulse-define-text-object vimpulse-inner-between (arg)
-  "Select inner range between a character by which the command is followed.'"
-  :keys "ib"
-  (vimpulse-between-range arg))
-(vimpulse-define-text-object vimpulse-a-between (arg)
-  "Select range between a character by which the command is followed.'"
-  :keys "ab"
-  (vimpulse-between-range arg t))
+(require 'vimpulse-textobj-between)
 
 ;; use ; for :
 (define-key vimpulse-visual-basic-map
