@@ -1,14 +1,14 @@
 ;; viper minor mode
-(setq viper-custom-file-name (locate-library "dot/.viper"))
-(setq viper-mode t)
-(setq viper-toggle-key (kbd "C-x C-z"))
-(setq viper-ex-style-motion nil)
-(setq viper-ex-style-editing nil)
-(setq viper-fast-keyseq-timeout 0)
-(setq viper-expert-level 3)
-(setq viper-case-fold-search t)
-(setq viper-inhibit-startup-message t)
-(setq viper-u-always-undo t)
+(setq viper-custom-file-name (locate-library "dot/.viper")
+      viper-mode t
+      viper-toggle-key (kbd "C-x C-z")
+      viper-ex-style-motion nil
+      viper-ex-style-editing nil
+      viper-fast-keyseq-timeout 0
+      viper-expert-level 3
+      viper-case-fold-search t
+      viper-inhibit-startup-message t
+      viper-u-always-undo t)
 
 (require 'viper)
 
@@ -33,11 +33,11 @@
     (error nil)))
 (defadvice viper-change-state (after ad-my-viper-update-mode-line activate)
   (my-viper-update-mode-line))
-(setq viper-vi-state-id "")
-(setq viper-insert-state-id "INSERT")
-(setq viper-replace-state-id "REPLACE")
-(setq viper-emacs-state-id "x")
-(setq my-viper-mode-line (my-viper-mode-line-format 'emacs-state))
+(setq viper-vi-state-id ""
+      viper-insert-state-id "INSERT"
+      viper-replace-state-id "REPLACE"
+      viper-emacs-state-id "x"
+      my-viper-mode-line (my-viper-mode-line-format 'emacs-state))
 (setq-default mode-line-format
               (append '("" my-viper-mode-line) mode-line-format))
 (setq vimpulse-state-id-alist
@@ -50,8 +50,8 @@
 ;; auto-complete patches
 (define-key ac-completing-map (kbd "ESC") nil)
 
-(setq vimpulse-want-vi-keys-in-dired t)
-(setq woman-use-own-frame nil) ; don't create new frame for manpages
+(setq vimpulse-want-vi-keys-in-dired t
+      woman-use-own-frame nil) ; don't create new frame for manpages
 (require 'vimpulse)
 (load "vimpulse-surround")
 
@@ -94,6 +94,8 @@
   (kbd "J") 'viper-scroll-up)
 (define-key viper-vi-global-user-map
   (kbd "K") 'viper-scroll-down)
+(define-key viper-vi-global-user-map
+  (kbd "gw") 'what-cursor-position)
 
 ;; remove key bindings
 (define-key viper-vi-basic-map
