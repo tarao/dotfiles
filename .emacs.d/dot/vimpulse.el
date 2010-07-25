@@ -73,8 +73,10 @@
   'comment-or-uncomment-region-operator)
 
 ;; textobj
-(defadvice scan-sexps (around ad-fake-scan-sexps (from count) disable)
+(defadvice scan-sexps (around ad-fake-scan-sexps (from count) activate)
   (setq ad-return-value (if (= from beg) end beg)))
+(ad-disable-advice 'scan-sexps 'around 'ad-fake-scan-sexps)
+(ad-activate 'scan-sexps)
 (defun vimpulse-between-range (arg &optional include)
   (condition-case ()
       (let ((ch (read-char)))
@@ -88,31 +90,27 @@
     (error nil)))
 (vimpulse-define-text-object vimpulse-inner-between (arg)
   "Select inner range between a character by which the command is followed.'"
-  :keys "iF"
+  :keys "ib"
   (vimpulse-between-range arg))
 (vimpulse-define-text-object vimpulse-a-between (arg)
   "Select range between a character by which the command is followed.'"
-  :keys "aF"
+  :keys "ab"
   (vimpulse-between-range arg t))
 
-;; viper-mode keymaps
+;; use ; for :
 (define-key vimpulse-visual-basic-map
   (kbd ";") (lambda () (interactive) (viper-ex t)))
 (define-key viper-vi-basic-map
   (kbd ";") 'viper-ex)
+
+;; user key bindings
 (define-key viper-vi-global-user-map
   (kbd ":") 'anything-for-files)
-(define-key viper-vi-basic-map
-  (kbd "TAB") nil)
 (define-key viper-vi-global-user-map
   (kbd "C-w") 'kill-region)
 (define-key viper-insert-global-user-map
   (kbd "C-w") 'kill-region)
-(define-key viper-insert-basic-map
-  (kbd "C-p") nil)
-(define-key viper-insert-basic-map
-  (kbd "C-n") nil)
-(define-key viper-vi-basic-map
+(define-key viper-vi-global-user-map
   (kbd "C-r") 'undo-tree-redo)
 (define-key viper-vi-global-user-map
   (kbd "j") 'next-line)
@@ -122,5 +120,13 @@
   (kbd "J") 'viper-scroll-up)
 (define-key viper-vi-global-user-map
   (kbd "K") 'viper-scroll-down)
+
+;; remove key bindings
+(define-key viper-vi-basic-map
+  (kbd "TAB") nil)
+(define-key viper-insert-basic-map
+  (kbd "C-p") nil)
+(define-key viper-insert-basic-map
+  (kbd "C-n") nil)
 
 ;; vimpulse patches
