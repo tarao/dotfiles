@@ -53,6 +53,7 @@
 (setq vimpulse-want-vi-keys-in-dired t)
 (setq woman-use-own-frame nil) ; don't create new frame for manpages
 (require 'vimpulse)
+(load "vimpulse-surround")
 
 ;; ex-commands
 (setq my-viper-extra-ex-commands
