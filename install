@@ -2,7 +2,7 @@
 require 'yaml'
 require 'fileutils'
 
-$argv = {}
+$argv = {}; arg=nil
 
 $argv[:help] = %w'-h --help'.any?{|x| $*.delete(x)}
 $argv[:pull] = !%w'--no-pull'.any?{|x| $*.delete(x)}
