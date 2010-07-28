@@ -54,6 +54,8 @@
 (save-excursion
   (set-buffer "*Messages*")
   (viper-change-state-to-vi))
+(defadvice init-loader-show-log (after ad-init-loader-log-vi-keys activate)
+  (viper-change-state-to-vi))
 
 ;; viper-mode patches
 (require 'hexl-viper-patch)
@@ -116,5 +118,3 @@
   (kbd "C-p") nil)
 (define-key viper-insert-basic-map
   (kbd "C-n") nil)
-
-;; vimpulse patches

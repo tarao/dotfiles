@@ -1,6 +1,6 @@
 .emacs.d/dot:
-  local.el: tarao.luxaky.el
-  .viper.el: viper.el
+  99_local.el: tarao.luxaky.el
+  .viper.el: local/viper.el
 .vim:
   local.vim: tarao.vim
 .zsh:

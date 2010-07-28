@@ -1,5 +1,5 @@
 ; personal settings
-(load "dot/skk-ext")
+(load "dot/local/skk-ext")
 
 ; use skk server
 (setq skk-server-host "localhost")

@@ -1,5 +1,4 @@
-(load "dot/howm")
-(load "dot/tarao")
+(init-loader-load "~/.emacs.d/dot/tarao")
 
 ;; edit textarea
 (require 'textarea)

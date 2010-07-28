@@ -1,4 +1,3 @@
-;; flymake
 (require 'flymake)
 
 ;; timeout
