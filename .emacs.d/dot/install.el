@@ -20,6 +20,7 @@
 (setq elisp-url-src
       '(
         "http://www.brgeight.se/downloads/emacs/css-mode.el"
+        "http://svn.coderepos.org/share/lang/elisp/init-loader/init-loader.el"
         "http://homepage3.nifty.com/satomii/software/jaspace.el"
         "http://www.brgeight.se/downloads/emacs/javascript.el"
         "http://www.loveshack.ukfsn.org/emacs/multi-mode.el"
