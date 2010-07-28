@@ -420,6 +420,12 @@
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; migemo
+
+(require 'migemo)
+(migemo-init)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; mew
 
 (defun mew-summary-display-and-select-window ()
