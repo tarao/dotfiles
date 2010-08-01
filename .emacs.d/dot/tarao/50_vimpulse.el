@@ -46,9 +46,9 @@
 
 ;; auto-indent on o and O
 (defadvice viper-open-line (after viper-open-line-with-indentation activate)
-  (unless (eq major-mode 'text-mode) indent-according-to-mode))
+  (unless (eq major-mode 'text-mode) (indent-according-to-mode)))
 (defadvice viper-Open-line (after viper-Open-line-with-indentation activate)
-  (unless (eq major-mode 'text-mode) indent-according-to-mode))
+  (unless (eq major-mode 'text-mode) (indent-according-to-mode)))
 
 ;; vi keys in the message buffer
 (save-excursion
