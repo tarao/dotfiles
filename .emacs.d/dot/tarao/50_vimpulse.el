@@ -120,4 +120,4 @@
   (kbd "C-n") nil)
 
 ;; CJK patch
-;(require 'vimpulse-cjk)
+(require 'vimpulse-cjk)
