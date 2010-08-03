@@ -120,4 +120,5 @@
   (kbd "C-n") nil)
 
 ;; CJK patch
+(setq vimpulse-cjk-want-japanese-phrase-as-word t)
 (require 'vimpulse-cjk)
