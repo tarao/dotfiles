@@ -1,4 +1,4 @@
-alias ls='/bin/ls -F $=LS_OPTIONS'
+alias ls='env ls -F $=LS_OPTIONS'
 alias dir='ls -l'
 alias la='ls -la'
 alias ll='ls -alF'
@@ -19,6 +19,7 @@ alias fwd='ssh -N -F ~/.ssh/fwd_config -N'
 alias proxy='ssh -F ~/.ssh/proxy_config -N'
 
 alias man='LANG=${LANG/en_US.UTF-8/en_US} env man'
+alias grep='env grep -nH --color'
 alias od='od -A x -t xCz'
 alias apt='LANG=C aptitude'
 alias sapt='LANG=C sudo aptitude'
