@@ -46,7 +46,7 @@
                                 anything-for-files) t))
   ;; mew-message-mode key maps
   (when (featurep 'vimpulse)
-    (vimpulse-add-core-movement-cmds mew-message-mode-map t)
+    (vimpulse-add-core-movement-cmds mew-message-mode-map)
     (vimpulse-add-movement-cmds mew-message-mode-map t)
   (vimpulse-add-vi-bindings mew-message-mode-map '(anything-for-files) t))
   (define-key mew-message-mode-map (kbd "q") 'mew-message-close))
