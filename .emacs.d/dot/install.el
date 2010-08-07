@@ -15,6 +15,7 @@
         "key-chord.el"
         "shell-history.el"
         "space-chord.el"
+        "switch-window.el"
         "xquery-mode.el"
         ))
 (setq elisp-url-src

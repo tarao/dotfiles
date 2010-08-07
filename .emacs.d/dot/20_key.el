@@ -24,7 +24,3 @@
 (global-set-key (kbd "M-O 3 a") 'shrink-window)
 (global-set-key (kbd "ESC M-O d") 'backward-sexp)
 (global-set-key (kbd "ESC M-O c") 'forward-sexp)
-
-;; move window
-(windmove-default-keybindings)
-(setq windmove-wrap-around t)
