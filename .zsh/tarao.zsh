@@ -7,9 +7,7 @@ function emacs() {
     if [[ `id -ur` = 0 ]]; then # root
         emacs-standalone $@
     else
-        if [[ -z `pgrep emacs -u $USER` ]]; then
-            emacsd
-        fi
+        emacsd status >/dev/null || emacsd
         emacsc $@
     fi
 }

@@ -5,15 +5,15 @@ alias emacs='emacs-standalone'
 function emacsb {
     [[ -z "$1" ]] &&
     echo "Usage: $0 [compile FILE | install URL | update]..." && return
-    cmd=(env emacs-snapshot --batch)
-    install=($cmd -l ~/.emacs.d/dot/install.el)
-    action=$1; shift
+    local cmd; cmd=(env emacs-snapshot --batch)
+    local install; install=($cmd -l ~/.emacs.d/dot/install.el)
+    local action; action=$1; shift
     case "$action" in
         compile)
             $cmd -f batch-byte-compile $@
             ;;
         install)
-            url=$1; shift
+            local url; url=$1; shift
             $install --eval "(install-elisp \"$url\")" $@
             ;;
         update)
@@ -31,14 +31,25 @@ alias emacs-compile="emacsb compile"
 
 # Emacs server
 function emacsd() {
-    [[ -z "$1" ]] && emacs-snapshot --daemon && return
-    action=$1; shift
+    local cmd; cmd=`alias -m emacs-standalone | cut -f2 -d=`
+    cmd=($cmd --daemon)
+    [[ -z "$1" ]] && $cmd && return
+    local action; action=$1; shift
     case "$action" in
+        status)
+            local grep; grep=(pgrep -f -u $USER "$cmd")
+            if [[ -n `$grep` ]]; then
+                echo 'emacs daemon is running'
+                return 0
+            fi
+            echo 'emacs daemon is not running'
+            return 1
+            ;;
         start)
             $0
             ;;
         stop)
-            [[ -n `pgrep emacs -u $USER` ]] &&
+            $0 status >/dev/null &&
             emacsclient -e '(progn (defun yes-or-no-p (p) t) (kill-emacs))'
             ;;
         restart)
@@ -46,15 +57,14 @@ function emacsd() {
             $0 start
             ;;
         *)
-            echo "Usage: $0 [start|stop|restart]"
+            echo "Usage: $0 [status|start|stop|restart]"
             ;;
     esac
 }
 
 # See: http://d.hatena.ne.jp/rubikitch/20091208/anythingzsh
 function anything-history() {
-    local tmpfile
-    tmpfile=`mktemp`
+    local tmpfile; tmpfile=`mktemp`
     emacsclient -nw --eval \
         "(anything-zsh-history-from-zle \"$tmpfile\" \"$BUFFER\")"
     if [[ -n "$STY" ]]; then
