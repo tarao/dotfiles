@@ -33,7 +33,7 @@ alias emacs-compile="emacsb compile"
 function emacsd() {
     local cmd; cmd=`alias -m emacs-standalone | cut -f2 -d=`
     cmd=($cmd --daemon)
-    [[ -z "$1" ]] && $cmd && return
+    [[ -z "$1" ]] && 1='help'
     local action; action=$1; shift
     case "$action" in
         status)
@@ -46,7 +46,11 @@ function emacsd() {
             return 1
             ;;
         start)
-            $0
+            if $0 status >/dev/null; then
+                echo 'emacs daemon is already running'
+                return 1
+            fi
+            $cmd
             ;;
         stop)
             $0 status >/dev/null &&
@@ -57,7 +61,7 @@ function emacsd() {
             $0 start
             ;;
         *)
-            echo "Usage: $0 [status|start|stop|restart]"
+            echo "Usage: $0 status|start|stop|restart"
             ;;
     esac
 }

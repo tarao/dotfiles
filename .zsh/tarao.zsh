@@ -7,7 +7,7 @@ function emacs() {
     if [[ `id -ur` = 0 ]]; then # root
         emacs-standalone $@
     else
-        emacsd status >/dev/null || emacsd
+        emacsd status >/dev/null || emacsd start
         emacsc $@
     fi
 }
