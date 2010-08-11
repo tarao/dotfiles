@@ -58,6 +58,11 @@ function emacsd() {
             ;;
         restart)
             $0 stop
+            local -i c; c=0
+            while (( c < 10 )) && $0 status >/dev/null; do
+                (( c++ ))
+                sleep 0.1
+            done
             $0 start
             ;;
         *)
