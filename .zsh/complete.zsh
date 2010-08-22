@@ -60,6 +60,7 @@ EOT
 
     # delete unambiguous prefix when accepting line
     function afu+delete-unambiguous-prefix () {
+        afu-clearing-maybe
         local buf; buf="$BUFFER"
         local bufc; bufc="$buffer_cur"
         ((afu_in_p == 1)) && [[ "$buf[-1]" != ' ' && "$buf" != "$bufc" ]] && {
