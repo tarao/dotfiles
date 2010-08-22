@@ -63,7 +63,10 @@ EOT
         afu-clearing-maybe
         local buf; buf="$BUFFER"
         local bufc; bufc="$buffer_cur"
-        ((afu_in_p == 1)) && [[ "$buf[-1]" != ' ' && "$buf" != "$bufc" ]] && {
+        [[ -z "$cursor_new" ]] && cursor_new=-1
+        [[ "$buf[$cursor_new]" == ' ' ]] && return
+        [[ "$buf[$cursor_new]" == '/' ]] && return
+        ((afu_in_p == 1)) && [[ "$buf" != "$bufc" ]] && {
             # there are more than one completion candidates
             zle afu+complete-word
             [[ "$buf" == "$BUFFER" ]] && {
@@ -71,6 +74,7 @@ EOT
                 afu_in_p=0; buf="$bufc"
             }
             BUFFER="$buf"
+            buffer_cur="$bufc"
         }
     }
     zle -N afu+delete-unambiguous-prefix
