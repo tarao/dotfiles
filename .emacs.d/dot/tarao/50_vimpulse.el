@@ -68,8 +68,6 @@
       woman-use-own-frame nil) ; don't create new frame for manpages
 (require 'vimpulse)
 (load "vimpulse-surround")
-(define-key vimpulse-visual-basic-map "d" 'vimpulse-delete)
-(define-key vimpulse-visual-basic-map "c" 'vimpulse-change)
 
 ;; ex-commands
 (setq my-viper-extra-ex-commands
