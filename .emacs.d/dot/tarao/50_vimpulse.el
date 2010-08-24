@@ -70,9 +70,10 @@
 
 ;; vimpulse-surround
 (load "vimpulse-surround")
-(setq vimpulse-surround-excludes '(Buffer-menu-mode dired-mode))
+(setq vimpulse-surround-excludes '())
 (add-hook 'after-change-major-mode-hook
-          '(lambda () (when (memq major-mode vimpulse-surround-excludes)
+          '(lambda () (when (or buffer-read-only
+                                (memq major-mode vimpulse-surround-excludes))
                         (vimpulse-surround-mode -1))))
 
 ;; ex-commands
