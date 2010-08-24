@@ -9,20 +9,49 @@ function snatch() {
 
 # Go up
 # see http://subtech.g.hatena.ne.jp/secondlife/20080604/1212562182
-function gu () {
-    if [[ -z "$1" ]]; then
+# and http://d.hatena.ne.jp/hitode909/20100211/1265879271
+function _gu () {
+    [[ -z "$1" || "${1[1]}" = '/' ]] && {
+        [[ -n "$vcs" ]] || return
         # move to repository root
-        { [[ -n "$vcs" ]] && $0 "$.vcs" } ||
-        $0 Makefile || $0 Rakefile || cd ..
+        if [[ "$vcs" = 'git' ]]; then
+            local root; root=`git rev-parse --show-cdup`
+            [[ -n "$root" ]] && cd "${root:a}"
+        else
+            $0 ".$vcs"
+        fi
+        [[ -n "$1" ]] && cd "${1[2,-1]}"
         return
-    fi
+    }
     local parent; parent='.'
-    local fname; fname="$1"
     while [[ "${parent:a}" != "/" ]]; do
-        parent="$parent/.."
-        [[ -e "$parent/$fname" ]] && cd "$parent" && return
+        parent="../$parent"
+        [[ "${parent:a:t}" = "$1" ]] && cd "$parent" && return
+        [[ -e "$parent/$1" ]] && cd "$parent" && return
     done
     return 1
+}
+function gu () {
+    [[ "$1" = '-h' || "$1" = '--help' ]] && {
+        echo "Usage: $0 [ /<relative> | <directory> | <file> ]"
+        cat <<EOT
+Go up to the repository root.
+Options:
+  /<relative>    The destination is <relative> under the repository root.
+  <directory>    The destination is an ancestor of the current directory,
+                 where the name of the ancestor matches <directory>.
+  <file>         The destination is an ancestor of the current directory,
+                 where the ancestor contains a file whose name matches <file>.
+EOT
+        return
+    }
+    local stack; stack=("${${(f)$(dirs -lp)}[@]}")
+    local dir; dir="${$(pwd):a}"
+    _gu $@
+    dirs $stack
+    [[ "$dir" != "${$(pwd):a}" ]] && return
+    popd
+    [[ -z "$1" ]] && cd ..
 }
 
 function watchdir () {
