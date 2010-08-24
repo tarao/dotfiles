@@ -67,7 +67,13 @@
 (setq vimpulse-want-vi-keys-in-dired t
       woman-use-own-frame nil) ; don't create new frame for manpages
 (require 'vimpulse)
+
+;; vimpulse-surround
 (load "vimpulse-surround")
+(setq vimpulse-surround-excludes '(Buffer-menu-mode dired-mode))
+(add-hook 'after-change-major-mode-hook
+          '(lambda () (when (memq major-mode vimpulse-surround-excludes)
+                        (vimpulse-surround-mode -1))))
 
 ;; ex-commands
 (setq my-viper-extra-ex-commands
