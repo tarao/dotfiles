@@ -1,4 +1,4 @@
-alias ls='env ls -F $=LS_OPTIONS'
+alias ls='command ls -F $=LS_OPTIONS'
 alias dir='ls -l'
 alias la='ls -la'
 alias ll='ls -alF'
@@ -18,8 +18,8 @@ function scd () {
 alias fwd='ssh -N -F ~/.ssh/fwd_config -N'
 alias proxy='ssh -F ~/.ssh/proxy_config -N'
 
-alias man='LANG=${LANG/en_US.UTF-8/en_US} env man'
-alias grep='env grep -nH --color'
+alias man='LANG=${LANG/en_US.UTF-8/en_US} command man'
+alias grep='command grep -nH --color'
 alias od='od -A x -t xCz'
 alias apt='LANG=C aptitude'
 alias sapt='LANG=C sudo aptitude'
@@ -28,13 +28,13 @@ alias wcat='wget -q -O -'
 function diff () {
     colordiff -u $@ | v
 }
-alias last='env last | v'
+alias last='command last | v'
 
 function { # local scope
     local w
     w="-Wall -Wextra -Wcast-qual -Wwrite-strings -Wno-missing-field-initializers -Wnon-virtual-dtor -Weffc++ -Wold-style-cast -Woverloaded-virtual"
-    alias c++="env g++ -lstdc++ -std=c++98 -pedantic-errors $w"
-    alias c++now="env g++ -lstdc++ -std=c++98 -pedantic-errors"
-    alias g++="env g++ -lstdc++ -std=gnu++98 -pedantic $w"
-    alias g++now="env g++ -lstdc++ -std=gnu++98 -pedantic"
+    alias c++="command g++ -lstdc++ -std=c++98 -pedantic-errors $w"
+    alias c++now="command g++ -lstdc++ -std=c++98 -pedantic-errors"
+    alias g++="command g++ -lstdc++ -std=gnu++98 -pedantic $w"
+    alias g++now="command g++ -lstdc++ -std=gnu++98 -pedantic"
 }

@@ -76,7 +76,7 @@ function git() {
         local args; args=`git2hg $@`
         hg ${=args}
     else
-        env git $@
+        command git $@
     fi
 }
 

@@ -5,7 +5,8 @@ alias emacs='emacs-standalone'
 function emacsb {
     [[ -z "$1" ]] &&
     echo "Usage: $0 [compile FILE | install URL | update]..." && return
-    local cmd; cmd=(env emacs-snapshot --batch)
+    local cmd; cmd=`alias -m emacs-standalone | cut -f2 -d=`
+    cmd=($cmd --batch)
     local install; install=($cmd -l ~/.emacs.d/dot/install.el)
     local action; action=$1; shift
     case "$action" in
