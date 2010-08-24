@@ -80,13 +80,8 @@ EOT
     zle -N afu+delete-unambiguous-prefix
     function afu-ad-delete-unambiguous-prefix () {
         local afufun="$1"
-        local code; code=${"$(<=(cat <<EOT
-            zle afu+delete-unambiguous-prefix
-            __accepted
-EOT
-        ))"}
-        code=${functions[$afufun]/__accepted/$code}
-        eval "function $afufun () { $code }"
+        local code; code=$functions[$afufun]
+        eval "function $afufun () { zle afu+delete-unambiguous-prefix; $code }"
     }
     afu-ad-delete-unambiguous-prefix afu+accept-line
     afu-ad-delete-unambiguous-prefix afu+accept-line-and-down-history
