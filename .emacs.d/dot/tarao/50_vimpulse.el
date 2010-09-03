@@ -49,6 +49,8 @@
   (unless (eq major-mode 'text-mode) (indent-according-to-mode)))
 (defadvice viper-Open-line (after viper-Open-line-with-indentation activate)
   (unless (eq major-mode 'text-mode) (indent-according-to-mode)))
+;; no auto indent
+(add-hook 'bibtex-mode-hook '(lambda () (setq viper-auto-indent nil)))
 
 ;; vi keys in the message buffer
 (save-excursion
