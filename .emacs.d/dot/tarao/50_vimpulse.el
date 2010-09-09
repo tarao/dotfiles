@@ -101,24 +101,15 @@
   (kbd ";") 'viper-ex)
 
 ;; user key bindings
-(define-key viper-vi-global-user-map
-  (kbd ":") 'anything-for-files)
-(define-key viper-vi-global-user-map
-  (kbd "C-w") 'kill-region)
-(define-key viper-insert-global-user-map
-  (kbd "C-w") 'kill-region)
-(define-key viper-vi-global-user-map
-  (kbd "C-r") 'undo-tree-redo)
-(define-key viper-vi-global-user-map
-  (kbd "j") 'next-line)
-(define-key viper-vi-global-user-map
-  (kbd "k") 'previous-line)
-(define-key viper-vi-global-user-map
-  (kbd "J") 'viper-scroll-up)
-(define-key viper-vi-global-user-map
-  (kbd "K") 'viper-scroll-down)
-(define-key viper-vi-global-user-map
-  (kbd "gw") 'what-cursor-position)
+(vimpulse-global-set-key 'vi-state (kbd ":") 'anything-for-files)
+(vimpulse-global-set-key 'vi-state (kbd "C-w") 'kill-region)
+(vimpulse-global-set-key 'insert-state (kbd "C-w") 'kill-region)
+(vimpulse-global-set-key 'vi-state (kbd "C-r") 'undo-tree-redo)
+(vimpulse-global-set-key 'vi-state (kbd "j") 'next-line)
+(vimpulse-global-set-key 'vi-state (kbd "k") 'previous-line)
+(vimpulse-global-set-key 'vi-state (kbd "J") 'viper-scroll-up)
+(vimpulse-global-set-key 'vi-state (kbd "K") 'viper-scroll-down)
+(vimpulse-global-set-key 'vi-state (kbd "gw") 'what-cursor-position)
 
 ;; remove key bindings
 (define-key viper-vi-basic-map
