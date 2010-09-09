@@ -13,7 +13,7 @@ autoload -U compinit
 compinit
 
 # incremental completion
-if [[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]]; then
+if is-at-least 4.3.10; then
     function () { # precompile
         local A
         A=~/.zsh/modules/auto-fu/auto-fu.zsh

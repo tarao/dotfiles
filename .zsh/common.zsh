@@ -41,6 +41,9 @@ typeset -ga chpwd_functions
 typeset -ga precmd_functions
 typeset -ga preexec_functions
 
+# utilities
+autoload -Uz is-at-least
+
 source ~/.zsh/env.zsh
 source ~/.zsh/alias.zsh
 source ~/.zsh/complete.zsh
@@ -48,4 +51,4 @@ source ~/.zsh/function.zsh
 source ~/.zsh/emacs.zsh
 source ~/.zsh/cdd.zsh
 source ~/.zsh/term.compat.zsh
-[[ $ZSH_VERSION == (<5->|4.<4->|4.3.<10->)* ]] && source ~/.zsh/term.zsh
+is-at-least 4.3.10 && source ~/.zsh/term.zsh
