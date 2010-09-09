@@ -80,5 +80,5 @@
 ;; skk
 (setq skk-init-file "dot/.skk")
 (setq skk-user-directory "~/.ddskk")
-(require 'skk-autoloads)
+(load-library "skk-autoloads") ; load again if already loaded
 (global-set-key (kbd "C-x C-j") 'skk-mode)
