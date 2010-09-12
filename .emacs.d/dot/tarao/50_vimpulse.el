@@ -9,7 +9,7 @@
       viper-case-fold-search t
       viper-inhibit-startup-message t
       viper-u-always-undo t)
-(setq-default viper-auto-indent t)
+(setq-default viper-auto-indent nil)
 
 (require 'viper)
 
@@ -49,8 +49,6 @@
   (unless (eq major-mode 'text-mode) (indent-according-to-mode)))
 (defadvice viper-Open-line (after viper-Open-line-with-indentation activate)
   (unless (eq major-mode 'text-mode) (indent-according-to-mode)))
-;; no auto indent
-(add-hook 'bibtex-mode-hook '(lambda () (setq viper-auto-indent nil)))
 
 ;; vi keys in the message buffer
 (save-excursion
