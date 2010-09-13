@@ -62,9 +62,9 @@ function cdd() {
 
     local arg
     arg=`echo $1|cut -d':' -f1`
-    if grep "^$arg:" "$CDD_PWD_FILE" > /dev/null 2>&1 ; then
+    if command grep "^$arg:" "$CDD_PWD_FILE" > /dev/null 2>&1 ; then
         local res
-        res=`grep "^$arg:" "$CDD_PWD_FILE"|sed -e "s/^$arg://;"|tr -d "\n"`
+        res=`command grep "^$arg:" "$CDD_PWD_FILE"|sed -e "s/^$arg://;"|tr -d "\n"`
         echo "$res"
         cd "$res"
     else
@@ -74,7 +74,7 @@ function cdd() {
 
 compctl -K _cdd cdd
 functions _cdd() {
-    reply=(`grep -v "^$WINDOW:" "$CDD_PWD_FILE"`)
+    reply=(`command grep -v "^$WINDOW:" "$CDD_PWD_FILE"`)
 }
 
 chpwd_functions+=_reg_pwd_screennum
