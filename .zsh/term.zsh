@@ -43,7 +43,10 @@ function { # use command name as a title
     function set_cmd_screen_title () {
         local -a cmd; cmd=(${(z)1})
         while [[ "$cmd[1]" =~ "[^\\]=" ]]; do shift cmd; done
-        if [[ "$cmd[1]" == "env" ]]; then shift cmd; fi
+        [[ "$cmd[1]" == "command" ]] && shift cmd
+        [[ "$cmd[1]" == "builtin" ]] && shift cmd
+        [[ "$cmd[1]" == "env" ]] && shift cmd
+        [[ "$cmd[1]" == "/usr/bin/env" ]] && shift cmd
         if [[ -n "$SCREEN_TITLE_CMD_IGNORE[$cmd[1]]" ]]; then
             return
         elif [[ -n "$SCREEN_TITLE_CMD_ARG[$cmd[1]]" ]]; then
