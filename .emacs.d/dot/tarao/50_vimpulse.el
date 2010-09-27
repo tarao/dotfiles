@@ -9,7 +9,7 @@
       viper-case-fold-search t
       viper-inhibit-startup-message t
       viper-u-always-undo t)
-(setq-default viper-auto-indent nil)
+(setq-default viper-auto-indent t)
 
 (require 'viper)
 
