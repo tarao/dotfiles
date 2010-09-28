@@ -88,6 +88,7 @@
 
 ;; operator
 (require 'vimpulse-operator-comment)
+(require 'vimpulse-relative-linum)
 
 ;; textobj
 (require 'vimpulse-textobj-between)
