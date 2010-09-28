@@ -1,8 +1,8 @@
 ;; show line numbers
 (require 'linum)
 (require 'linum+)
-(global-set-key (kbd "M-N") 'linum-mode)
-(global-set-key (kbd "M-n") 'relative-linum-mode)
+(global-set-key (kbd "M-n") 'linum-mode)
+(global-set-key (kbd "M-N") 'relative-linum-mode)
 (set-face-attribute 'linum nil :foreground "aquamarine4")
 
 ;; wc (CC/WW/LL)
