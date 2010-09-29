@@ -8,6 +8,6 @@ function emacs() {
         emacs-standalone $@
     else
         emacsd status >/dev/null || emacsd start
-        emacsc $@
+        DISPLAY="$DISPLAY" emacsc $@
     fi
 }
