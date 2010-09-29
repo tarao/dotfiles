@@ -23,8 +23,9 @@ function term-compat() {
     local col1
     local col2
     col1='0;4;32'
-    col2='0;33'
-    PROMPT="%{[${col1}m%}%n@%m%{[m%}:%1(j.%j.)%(!.#.>) "
-    RPROMPT="[%{[${col2}m%}%~%{[m%}]"
+    col2='0;4;31'
+    col3='0;33'
+    PROMPT="%{[%(!.${col2}.${col1})m%}%n@%m%{[m%}:%1(j.%j.)%(!.#.>) "
+    RPROMPT="[%{[${col3}m%}%~%{[m%}]"
 }
 term-compat
