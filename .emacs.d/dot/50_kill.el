@@ -1,6 +1,7 @@
 ;; synchronize kill buffer
 (defun xsel-copy (start end)
-  (when (and (executable-find "xsel") (getenv "DISPLAY"))
+  (when (and (executable-find "xsel")
+             (not (string= "" (or (getenv "DISPLAY") ""))))
     (let* ((process-connection-type nil)
            (proc (start-process "xsel" "*Messages*" "xsel" "-i")))
       (process-send-region proc start end)
