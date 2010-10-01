@@ -2,7 +2,7 @@
 ## display
 
 function screen_attach_with_display () {
-    ( sleep 1; screen -X eval "setenv DISPLAY $DISPLAY" ) &! screen -xR
+    ( sleep 1; screen -X eval "setenv DISPLAY '$DISPLAY'" ) &! screen -xR
 }
 function screen_display_auto () {
     [[ -z "$1" ]] && 1=on
