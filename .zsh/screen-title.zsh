@@ -76,5 +76,7 @@ function screen_title() {
     fi
 }
 
-precmd_functions+=precmd_screen_window_title
-preexec_functions+=preexec_screen_window_title
+[[ -n "$STY" ]] && {
+    precmd_functions+=precmd_screen_window_title
+    preexec_functions+=preexec_screen_window_title
+}
