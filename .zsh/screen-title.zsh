@@ -67,11 +67,11 @@ function screen_title() {
     if [[ -n "$SCREENTITLE" ]]; then
         if [[ -n "$1" ]]; then
             # set title explicitly
-            export SCREENTITLE=explicit
+            SCREENTITLE=explicit
             _screen_set_title "$1"
         else
             # automatically set title
-            export SCREENTITLE=auto
+            SCREENTITLE=auto
         fi
     fi
 }
