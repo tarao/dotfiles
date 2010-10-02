@@ -7,14 +7,6 @@ alias ...='cd ../..'
 alias -- +='pushd .'
 alias -- -='popd'
 
-alias sc='screen'
-function sca () {
-    [[ -z "$STY" ]] && screen -xR
-}
-function scd () {
-    [[ -n "$STY" ]] && screen -d $STY >/dev/null
-}
-
 alias fwd='ssh -N -F ~/.ssh/fwd_config -N'
 alias proxy='ssh -F ~/.ssh/proxy_config -N'
 

@@ -53,3 +53,6 @@ source ~/.zsh/cdd.zsh
 source ~/.zsh/term.compat.zsh
 is-at-least 4.3.10 && source ~/.zsh/term.zsh
 is-at-least 4.3.10 && source ~/.zsh/screen.zsh
+is-at-least 4.3.10 && source ~/.zsh/screen-title.zsh
+is-at-least 4.3.10 && source ~/.zsh/screen-attach.zsh
+source ~/.zsh/screen-alias.zsh
