@@ -45,7 +45,7 @@ setenv SCRPASTE 'screen -X eval "readbuf" "paste ."'
 bind P eval "exec !!! zsh -c '$SCRYANKCMD; $SCRPASTE'"
 
 # automatically set title
-setenv SCREENTITLE auto
+setenv SCREEN_TITLE auto
 
 # reset env
 unsetenv SCRHSTCLR

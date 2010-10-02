@@ -2,7 +2,7 @@
 function _screen_set_title () { echo -ne "\ek$1\e\\" }
 function { # use current directory as a title
     function precmd_screen_window_title () {
-        if [[ "$SCREENTITLE" = 'auto' ]]; then
+        if [[ "$SCREEN_TITLE" = 'auto' ]]; then
             local dir
             dir=`pwd`
             dir=`print -nD "$dir"`
@@ -37,7 +37,7 @@ function { # use command name as a title
     }
     function preexec_screen_window_title () {
         local -a cmd; cmd=(${(z)2}) # command in a single line
-        if [[ "$SCREENTITLE" = 'auto' ]]; then
+        if [[ "$SCREEN_TITLE" = 'auto' ]]; then
             case $cmd[1] in
                 fg)
                     if (( $#cmd == 1 )); then
@@ -64,14 +64,14 @@ function { # use command name as a title
     }
 }
 function screen_title() {
-    if [[ -n "$SCREENTITLE" ]]; then
+    if [[ -n "$SCREEN_TITLE" ]]; then
         if [[ -n "$1" ]]; then
             # set title explicitly
-            SCREENTITLE=explicit
+            SCREEN_TITLE=explicit
             _screen_set_title "$1"
         else
             # automatically set title
-            SCREENTITLE=auto
+            SCREEN_TITLE=auto
         fi
     fi
 }
