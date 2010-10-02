@@ -1,5 +1,5 @@
 # set window title of screen
-function screen_set_title () { echo -ne "\ek$1\e\\" }
+function _screen_set_title () { echo -ne "\ek$1\e\\" }
 function { # use current directory as a title
     function precmd_screen_window_title () {
         if [[ "$SCREENTITLE" = 'auto' ]]; then
@@ -13,14 +13,14 @@ function { # use current directory as a title
                 # name of directory
                 dir=${dir:t}
             fi
-            screen_set_title "$dir"
+            _screen_set_title "$dir"
         fi
     }
 }
 typeset -A SCREEN_TITLE_CMD_ARG; SCREEN_TITLE_CMD_ARG=(ssh -1 su -1 man -1)
 typeset -A SCREEN_TITLE_CMD_IGNORE; SCREEN_TITLE_CMD_IGNORE=()
 function { # use command name as a title
-    function screen_set_cmd_title () {
+    function _screen_set_cmd_title () {
         local -a cmd; cmd=(${(z)1})
         while [[ "$cmd[1]" =~ "[^\\]=" ]]; do shift cmd; done
         [[ "$cmd[1]" == "command" ]] && shift cmd
@@ -33,7 +33,7 @@ function { # use command name as a title
             # argument of command
             cmd[1]=$cmd[$SCREEN_TITLE_CMD_ARG[$cmd[1]]]
         fi
-        screen_set_title "$cmd[1]:t"
+        _screen_set_title "$cmd[1]:t"
     }
     function preexec_screen_window_title () {
         local -a cmd; cmd=(${(z)2}) # command in a single line
@@ -50,7 +50,7 @@ function { # use command name as a title
                     cmd=(builtin jobs -l $cmd[1])
                     ;;
                 *)
-                    screen_set_cmd_title "$cmd"
+                    _screen_set_cmd_title "$cmd"
                     return
                     ;;
             esac
@@ -58,7 +58,7 @@ function { # use command name as a title
             local -A jt; jt=(${(kv)jobtexts})
             $cmd >>(read num rest
                 cmd=(${(z)${(e):-\$jt$num}})
-                set_cmd_screen_title "$cmd"
+                _screen_set_cmd_title "$cmd"
             ) 2>/dev/null
         fi
     }
@@ -68,7 +68,7 @@ function screen_title() {
         if [[ -n "$1" ]]; then
             # set title explicitly
             export SCREENTITLE=explicit
-            screen_set_title "$1"
+            _screen_set_title "$1"
         else
             # automatically set title
             export SCREENTITLE=auto

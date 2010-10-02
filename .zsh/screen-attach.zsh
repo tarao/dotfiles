@@ -1,12 +1,12 @@
 SCREEN_EXPORT_ENV=(DISPLAY XAUTHORITY SSH_CONNECTION SSH_CLIENT SSH_TTY)
-function screen_export_env () {
+function _screen_export_env () {
     local e; local sty; sty="$1"
     [[ -z "$sty" ]] && return
     foreach e in ${SCREEN_EXPORT_ENV}
         screen -S "$sty" -X eval "setenv ${e} '${(P)e}'"
     end
 }
-function screen_import_env () {
+function _screen_import_env () {
     local e; local evar; local val
     foreach e in ${SCREEN_EXPORT_ENV}
         evar='${'"$e"'}'
@@ -31,7 +31,7 @@ function screen_auto_env () {
 }
 [[ -n "$STY" ]] && {
     function preexec_screen_import_env () {
-        [[ -z "$_screen_no_auto_env" ]] && screen_import_env
+        [[ -z "$_screen_no_auto_env" ]] && _screen_import_env
     }
     preexec_functions+=preexec_screen_import_env
 }
@@ -60,7 +60,7 @@ function screen_attach () {
             return
         }
     }
-    ( sleep 1; screen_export_env "$sty" ) &! screen -x -r "$sty"
+    ( sleep 1; _screen_export_env "$sty" ) &! screen -x -r "$sty"
 }
 function screen_detach () {
     [[ -n "$STY" ]] && screen -d "$STY" > /dev/null
