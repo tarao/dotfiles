@@ -1,14 +1,27 @@
+SCREEN_AUTO_ENV_KEYS=(DISPLAY SSH_CONNECTION)
 SCREEN_EXPORT_ENV=(DISPLAY XAUTHORITY SSH_CONNECTION SSH_CLIENT SSH_TTY)
+
+function _screen_make_env_id () {
+    local id; local ids; ids=()
+    foreach id in ${SCREEN_AUTO_ENV_KEYS}; ids+="${(P)id}"; end
+    echo "${(j: - :)ids}"
+}
 function _screen_export_env () {
+    # set environment variables
     local e; local sty; sty="$1"
     [[ -z "$sty" ]] && return
     foreach e in ${SCREEN_EXPORT_ENV}
         screen -S "$sty" -X eval "setenv ${e} '${(P)e}'"
     end
+
+    # make new ID for the environment
+    local id; id=`_screen_make_env_id`
+    screen -S "$sty" -X eval "setenv SCREEN_ENV_ID '$id'"
 }
-function _screen_import_env () {
+function __screen_import_env () {
     local e; local evar; local val
-    foreach e in ${SCREEN_EXPORT_ENV}
+    local imports; imports=(${SCREEN_EXPORT_ENV} SCREEN_ENV_ID)
+    foreach e in $imports
         evar='${'"$e"'}'
         val=`screen -S "$STY" -Q echo "$evar"`
         if [[ $? == 0 ]] && [[ -n "${val}" ]]; then
@@ -17,6 +30,11 @@ function _screen_import_env () {
             unset ${e}
         fi
     end
+}
+function _screen_import_env () {
+    local id; id=`screen -S "$STY" -Q echo '\$SCREEN_ENV_ID'`
+    [[ "$id" == "$SCREEN_ENV_ID" ]] && return # no change in the environment
+    __screen_import_env
 }
 function screen_auto_env () {
     [[ -z "$1" ]] && 1=on
@@ -49,8 +67,8 @@ function screen_attach () {
         screen_list > /dev/null
         foreach k in ${(k)_screen_list}
             st=(${(z)_screen_list[$k]})
-            [[ -n "$st[(r)attached]" ]] && attached=($attached $k)
-            [[ -n "$st[(r)detached]" ]] && detached=($detached $k)
+            [[ -n "$st[(r)attached]" ]] && attached+="$k"
+            [[ -n "$st[(r)detached]" ]] && detached+="$k"
         end
         (( ${#attached} > 0 )) && sty="$attached[1]"
         (( ${#detached} > 0 )) && sty="$detached[1]"

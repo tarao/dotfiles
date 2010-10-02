@@ -1,5 +1,6 @@
 typeset -A _screen_list
 function screen_list () {
+    _screen_list=()
     local ls; ls=`screen -ls`; local line
     foreach line in ${(f)ls}
         [[ "$line" =~ '\s*(\S+)\s+\((.*+)\)' ]] && {
