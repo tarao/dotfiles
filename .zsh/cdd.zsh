@@ -8,7 +8,7 @@ function _cdd_pwd_file() {
         echo "\n" >> "$CDD_PWD_FILE"
         touch "$CDD_PWD_FILE.t"
         if [ $? = 1 ]; then
-            echo "Error: Cannot write $CDD_PWD_FILE."
+            echo "cdd: cannot write '$CDD_PWD_FILE'." > /dev/stdrr
             return 1
         fi
         chmod 600 "$CDD_PWD_FILE"

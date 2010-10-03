@@ -56,7 +56,7 @@ function screen_auto_env () {
 
 function screen_attach () {
     [[ -n "$STY" ]] && {
-        echo "$0: already attached"
+        echo "$0: already attached" > /dev/stderr
         return
     }
     local sty; sty="$1"

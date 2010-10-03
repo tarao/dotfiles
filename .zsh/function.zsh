@@ -63,7 +63,7 @@ function watchdir () {
                 inotifywait -q $@ $dir
             done
         else
-            echo 'inotifywait not found'
+            echo "$0: inotifywait not found" > /dev/stderr
         fi
     else
         echo "Usage: $0 <dir> [-e event1 -e event2 ...]"

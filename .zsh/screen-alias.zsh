@@ -7,7 +7,7 @@ function sc () {
         if [[ "${+functions[$cmd]}" == 1 ]]; then
             $cmd $@
         else
-            echo "$0: action '$action' not found"
+            echo "$0: action '$action' not found" > /dev/stderr
         fi
     fi
 }
