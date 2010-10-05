@@ -3,11 +3,19 @@
 (global-set-key (kbd "M-!") 'shell-command+)
 (global-set-key (kbd "M-|") 'shell-command-on-region+)
 
-;; completer
-(require 'completer)
-(setq completion-ignore-case t)
+;; zsh like completion
+(require 'zlc)
+(let ((map minibuffer-local-map))
+  (define-key map (kbd "C-c") 'zlc-reset)
+  (define-key map (kbd "C-p") 'zlc-select-previous-vertical)
+  (define-key map (kbd "C-n") 'zlc-select-next-vertical)
+  (define-key map (kbd "C-b") 'zlc-select-previous)
+  (define-key map (kbd "C-f") 'zlc-select-next)
+  (define-key map (kbd "<up>") 'zlc-select-previous-vertical)
+  (define-key map (kbd "<down>") 'zlc-select-next-vertical)
+  (define-key map (kbd "<left>") 'zlc-select-previous)
+  (define-key map (kbd "<right>") 'zlc-select-next))
 (setq read-file-name-completion-ignore-case t)
-(setq completer-words "---. <_")
 
 ;; anything
 (require 'anything-config)
