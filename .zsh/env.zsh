@@ -8,11 +8,12 @@ if test -x /usr/bin/dircolors ; then
         eval "`dircolors -b /etc/DIR_COLORS`"
     fi
 fi
-LS_OPTIONS=--color=tty
-LS_OPTIONS="-N $LS_OPTIONS -T 0"
 if test "$EMACS" = "t" ; then
-    LS_OPTIONS='-N --color=none -T 0';
+    LS_OPTIONS='--color=none';
     test -I -Q
     stty coocked pass8 dec nl -echo
+else
+    LS_OPTIONS='--color=tty'
 fi
+LS_OPTIONS="-N -T 0 --time-style=long-iso $LS_OPTIONS"
 export LS_OPTIONS
