@@ -6,14 +6,10 @@
 ;; zsh like completion
 (require 'zlc)
 (let ((map minibuffer-local-map))
-  (define-key map (kbd "C-p") 'zlc-select-previous-vertical)
-  (define-key map (kbd "C-n") 'zlc-select-next-vertical)
-  (define-key map (kbd "C-b") 'zlc-select-previous)
-  (define-key map (kbd "C-f") 'zlc-select-next)
+  (define-key map (kbd "C-p") 'zlc-select-previous)
+  (define-key map (kbd "C-n") 'zlc-select-next)
   (define-key map (kbd "<up>") 'zlc-select-previous-vertical)
   (define-key map (kbd "<down>") 'zlc-select-next-vertical)
-  (define-key map (kbd "<left>") 'zlc-select-previous)
-  (define-key map (kbd "<right>") 'zlc-select-next)
   (define-key map (kbd "C-u") 'backward-kill-path-element))
 (setq read-file-name-completion-ignore-case t)
 
@@ -31,7 +27,6 @@
 (require 'anything-match-plugin)
 (require 'anything-complete)
 (setq anything-complete-sort-candidates t)
-;; (anything-read-string-mode 1)
 (substitute-key-definition 'execute-extended-command
                            'anything-execute-extended-command global-map)
 (require 'anything-grep)
