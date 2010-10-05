@@ -11,5 +11,5 @@ umask 022
 unsetopt nomatch
 
 function xsel() {
-    [[ -n "$DISPLAY" ]] && env xsel $@
+    [[ -n "$DISPLAY" ]] && command xsel $@ 2>/dev/null
 }

@@ -11,7 +11,11 @@ function _screen_export_env () {
     local e; local sty; sty="$1"
     [[ -z "$sty" ]] && return
     foreach e in ${SCREEN_EXPORT_ENV}
-        screen -S "$sty" -X eval "setenv ${e} '${(P)e}'"
+        if [[ -z "${(P)e}" ]]; then
+            screen -S "$sty" -X eval "unsetenv ${e}"
+        else
+            screen -S "$sty" -X eval "setenv ${e} '${(P)e}'"
+        fi
     end
 
     # make new ID for the environment
