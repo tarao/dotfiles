@@ -12,6 +12,8 @@
   (define-key map (kbd "<down>") 'zlc-select-next-vertical)
   (define-key map (kbd "C-u") 'backward-kill-path-element))
 (setq read-file-name-completion-ignore-case t)
+(require 'yaicomplete)
+(yaicomplete-mode)
 
 ;; anything
 (require 'anything-config)
