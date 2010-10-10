@@ -12,7 +12,7 @@ autodetach      on
 defencoding     utf-8
 encoding        utf-8 utf-8
 cjkwidth        on
-altscreen       on
+# altscreen       on
 caption splitonly "%?%F%{= Wk}%:%{= wk}%?%3n %t"
 hardstatus alwayslastline "$SCRHSTCLR%H%{-} %-w%{=b bw}%n %t%{-}%+w"
 
