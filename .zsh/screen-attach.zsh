@@ -3,40 +3,35 @@ SCREEN_EXPORT_ENV=(DISPLAY XAUTHORITY SSH_CONNECTION SSH_CLIENT SSH_TTY)
 
 function _screen_make_env_id () {
     local id; local ids; ids=()
-    foreach id in ${SCREEN_AUTO_ENV_KEYS}; ids+="${(P)id}"; end
+    for id in ${SCREEN_AUTO_ENV_KEYS}; do ids+="${(P)id}"; done
     echo "${(j: - :)ids}"
 }
 function _screen_export_env () {
     # set environment variables
     local e; local sty; sty="$1"
     [[ -z "$sty" ]] && return
-    foreach e in ${SCREEN_EXPORT_ENV}
-        if [[ -z "${(P)e}" ]]; then
-            screen -S "$sty" -X eval "unsetenv ${e}"
-        else
-            screen -S "$sty" -X eval "setenv ${e} '${(P)e}'"
-        fi
-    end
+    for e in ${SCREEN_EXPORT_ENV}; do
+        screen_setenv "$sty" "$e" "${(P)e}"
+    done
 
     # make new ID for the environment
     local id; id=`_screen_make_env_id`
-    screen -S "$sty" -X eval "setenv SCREEN_ENV_ID '$id'"
+    screen_setenv "$sty" SCREEN_ENV_ID "$id"
 }
 function __screen_import_env () {
     local e; local evar; local val
     local imports; imports=(${SCREEN_EXPORT_ENV} SCREEN_ENV_ID)
-    foreach e in $imports
-        evar='${'"$e"'}'
-        val=`screen -S "$STY" -Q echo "$evar"`
+    for e in $imports; do
+        val=`screen_getenv "$STY" "$e"`
         if [[ $? == 0 ]] && [[ -n "${val}" ]]; then
             export ${e}="${val}"
         else
             unset ${e}
         fi
-    end
+    done
 }
 function _screen_import_env () {
-    local id; id=`screen -S "$STY" -Q echo '\$SCREEN_ENV_ID'`
+    local id; id=`screen_getenv "$STY" SCREEN_ENV_ID`
     [[ "$id" == "$SCREEN_ENV_ID" ]] && return # no change in the environment
     __screen_import_env
 }
@@ -69,11 +64,11 @@ function screen_attach () {
         local attached; local detached; local k; local st
         attached=(); detached=()
         screen_list > /dev/null
-        foreach k in ${(k)_screen_list}
+        for k in ${(k)_screen_list}; do
             st=(${(z)_screen_list[$k]})
             [[ -n "$st[(r)attached]" ]] && attached+="$k"
             [[ -n "$st[(r)detached]" ]] && detached+="$k"
-        end
+        done
         (( ${#attached} > 0 )) && sty="$attached[1]"
         (( ${#detached} > 0 )) && sty="$detached[1]"
         [[ -z "$sty" ]] && {
