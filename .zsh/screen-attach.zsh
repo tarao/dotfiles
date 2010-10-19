@@ -17,7 +17,10 @@ function _screen_export_env () {
     screen_attach_hook=`screen_getenv "$sty" SCREEN_ATTACH_HOOK`
     for hook_name in ${(z)screen_attach_hook}; do
         hook_val=`screen_getenv "$sty" "$hook_name"`
-        [[ -n "${hook_val}" ]] && eval "${hook_val}"
+        [[ -n "${hook_val}" ]] && {
+            eval "${hook_val} >/dev/null 2>&1"
+            (( $? != 0 )) && screen_remove_attach_hook "$sty" "$hook_name"
+        }
     done
 
     # make new ID for the environment
@@ -92,8 +95,15 @@ function screen_detach () {
 function screen_add_attach_hook () {
     local sty; sty="$STY"; local hooks
     (( $# >= 3 )) && { sty="$1"; shift }
-    hooks=`screen_getenv "$sty" SCREEN_ATTACH_HOOK`
-    hooks=(${hooks} "$1")
+    hooks=`screen_getenv "$sty" SCREEN_ATTACH_HOOK`; hooks=(${(z)hooks})
+    if [[ -z "$2" ]]; then
+        hooks[(i)$1]=()   # remove
+    else
+        hooks[(i)$1]="$1" # add or replace
+    fi
     screen_setenv "$sty" SCREEN_ATTACH_HOOK "$hooks"
     screen_setenv "$sty" "$1" "$2"
+}
+function screen_remove_attach_hook () {
+    screen_add_attach_hook $@ ""
 }

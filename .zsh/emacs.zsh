@@ -1,7 +1,7 @@
 alias emacsclient='emacsclient.emacs-snapshot'
 alias emacsc='emacsclient -nw'
 alias emacs-standalone='emacs-snapshot'
-function emacsb {
+function emacsb () {
     [[ -z "$1" ]] &&
     echo "Usage: $0 [compile FILE | install URL | update]..." && return
     local cmd; cmd=`alias -m emacs-standalone | cut -f2 -d=`
@@ -30,7 +30,7 @@ function emacsb {
 alias emacs-compile="emacsb compile"
 
 # Emacs server
-function emacsd() {
+function emacsd () {
     local cmd; cmd=`alias -m emacs-standalone | cut -f2 -d=`
     cmd=($cmd --daemon)
     [[ -z "$1" ]] && 1='help'
@@ -78,7 +78,7 @@ function _emacs_get_comm () {
     (( $#opts > 0 )) && echo ${opts[-1]#=}
 }
 
-function emacs() {
+function emacs () {
     if [[ -z "$EMACS_USE_DAEMON" ]] || [[ `id -ur` = 0 ]]; then
         emacs-standalone $@
     else
@@ -90,23 +90,21 @@ function emacs() {
 
             # get daemons already registered
             local reg; reg=`screen_getenv "$STY" SCREEN_EMACSD`;
-            reg=${(s.:.)reg}
+            reg=(${(s.:.)reg})
 
             # register emacs daemon to screen
-            [[ -z "$reg[(r)$comm]" ]] && {
-                reg=($reg $comm)
-                screen_setenv "$STY" SCREEN_EMACSD "${(j.:.)reg}"
-                local num; num=$#reg; local hook;
-                hook="emacsclient $@ -e '(screen-sync-env \"$STY\")'"
-                screen_add_attach_hook "$STY" "SCREEN_EMACSD_ENV$num" "$hook"
-            }
+            local num; num=$reg[(i)$comm]; local hook
+            reg[$num]="$comm"
+            screen_setenv "$STY" SCREEN_EMACSD "${(j.:.)reg}"
+            hook="emacsclient $@ -e '(screen-sync-env \"$STY\")'"
+            screen_add_attach_hook "$STY" "SCREEN_EMACSD_ENV$num" "$hook"
         }
         DISPLAY="$DISPLAY" emacsc $@
     fi
 }
 
 # See: http://d.hatena.ne.jp/rubikitch/20091208/anythingzsh
-function anything-history() {
+function anything-history () {
     local tmpfile; tmpfile=`mktemp`
     emacsclient -nw --eval \
         "(anything-zsh-history-from-zle \"$tmpfile\" \"$BUFFER\")"
