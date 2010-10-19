@@ -1,7 +1,6 @@
 alias emacsclient='emacsclient.emacs-snapshot'
 alias emacsc='emacsclient -nw'
 alias emacs-standalone='emacs-snapshot'
-alias emacs='emacs-standalone'
 function emacsb {
     [[ -z "$1" ]] &&
     echo "Usage: $0 [compile FILE | install URL | update]..." && return
@@ -70,6 +69,40 @@ function emacsd() {
             echo "Usage: $0 status|start|stop|restart"
             ;;
     esac
+}
+
+function _emacs_get_comm () {
+    local -a opts
+    [[ -n "$EMACS_SERVER_FILE" ]] && opts[1]="$EMACS_SERVER_FILE"
+    zparseopts -E -a opts s: -socket-name: f: -server-file:
+    (( $#opts > 0 )) && echo ${opts[-1]#=}
+}
+
+function emacs() {
+    if [[ -z "$EMACS_USE_DAEMON" ]] || [[ `id -ur` = 0 ]]; then
+        emacs-standalone $@
+    else
+        emacsd status >/dev/null || emacsd start
+        [[ -n "$STY" ]] && {
+            # identifier of the target emacs daemon
+            local comm; comm=`_emacs_get_comm $@`
+            [[ -z "$comm" ]] && comm='default'
+
+            # get daemons already registered
+            local reg; reg=`screen_getenv "$STY" SCREEN_EMACSD`;
+            reg=${(s.:.)reg}
+
+            # register emacs daemon to screen
+            [[ -z "$reg[(r)$comm]" ]] && {
+                reg=($reg $comm)
+                screen_setenv "$STY" SCREEN_EMACSD "${(j.:.)reg}"
+                local num; num=$#reg; local hook;
+                hook="emacsclient $@ -e '(screen-sync-env \"$STY\")'"
+                screen_add_attach_hook "$STY" "SCREEN_EMACSD_ENV$num" "$hook"
+            }
+        }
+        DISPLAY="$DISPLAY" emacsc $@
+    fi
 }
 
 # See: http://d.hatena.ne.jp/rubikitch/20091208/anythingzsh

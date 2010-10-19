@@ -1,4 +1,10 @@
 typeset -A _screen_list
+function screen_debug_log () {
+    [[ -n "$SCREEN_DEBUG_LOG" ]] && {
+        local date; date=`date --iso=seconds`
+        echo "$date $1" >> "$SCREEN_DEBUG_LOG"
+    }
+}
 function screen_list () {
     _screen_list=()
     local ls; ls=`screen -ls`; local line
@@ -20,7 +26,10 @@ function screen_setenv () {
     (( $# >= 3 )) && { sty="$1"; shift }
     if [[ -z "$2" ]]; then
         screen -S "$sty" -X eval "unsetenv $1"
+        screen_debug_log "[$sty] unsetenv $1"
     else
-        screen -S "$sty" -X eval "setenv $1 '$2'"
+        2="${2//\'/\\\'}"; 2="${2//\"/\\\\\"}"
+        screen -S "$sty" -X eval "setenv $1 \"$2\""
+        screen_debug_log "[$sty] setenv $1 \"$2\""
     fi
 }
