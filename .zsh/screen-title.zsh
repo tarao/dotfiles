@@ -1,6 +1,6 @@
 # set window title of screen
 function _screen_set_title () { echo -ne "\ek$1\e\\" }
-function { # use current directory as a title
+function _screen_title_install_precmd () { # use current directory as a title
     function precmd_screen_window_title () {
         if [[ "$SCREEN_TITLE" = 'auto' ]]; then
             local dir
@@ -17,12 +17,14 @@ function { # use current directory as a title
         fi
     }
 }
+_screen_title_install_precmd
 typeset -A SCREEN_TITLE_CMD_ARG; SCREEN_TITLE_CMD_ARG=(ssh -1 su -1 man -1)
 typeset -A SCREEN_TITLE_CMD_IGNORE; SCREEN_TITLE_CMD_IGNORE=()
-function { # use command name as a title
+function _screen_title_install_preexec { # use command name as a title
     function _screen_set_cmd_title () {
+        zmodload zsh/regex
         local -a cmd; cmd=(${(z)1})
-        while [[ "$cmd[1]" =~ "[^\\]=" ]]; do shift cmd; done
+        while [[ "$cmd[1]" -regex-match "[^\\]=" ]]; do shift cmd; done
         [[ "$cmd[1]" == "command" ]] && shift cmd
         [[ "$cmd[1]" == "builtin" ]] && shift cmd
         [[ "$cmd[1]" == "env" ]] && shift cmd
@@ -63,6 +65,7 @@ function { # use command name as a title
         fi
     }
 }
+_screen_title_install_preexec
 function screen_title() {
     if [[ -n "$SCREEN_TITLE" ]]; then
         if [[ -n "$1" ]]; then
