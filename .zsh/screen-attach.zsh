@@ -1,4 +1,4 @@
-SCREEN_AUTO_ENV_KEYS=(DISPLAY SSH_CONNECTION SSH_AUTH_SOCK)
+SCREEN_CRITICAL_ENV=(DISPLAY SSH_CONNECTION SSH_AUTH_SOCK)
 SCREEN_EXPORT_ENV=(
     DISPLAY XAUTHORITY
     SSH_CONNECTION SSH_CLIENT SSH_TTY SSH_AUTH_SOCK
@@ -6,7 +6,7 @@ SCREEN_EXPORT_ENV=(
 
 function _screen_make_env_id () {
     local id; local ids; ids=()
-    for id in ${SCREEN_AUTO_ENV_KEYS}; do ids+="${(P)id}"; done
+    for id in ${SCREEN_CRITICAL_ENV}; do ids+="${(P)id}"; done
     echo "${(j: - :)ids}"
 }
 function _screen_export_env () {
