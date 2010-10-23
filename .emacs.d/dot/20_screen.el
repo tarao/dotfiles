@@ -9,6 +9,7 @@
         (buffer-string)))))
 
 (defun screen-sync-env (sty)
+  (interactive (list (getenv "STY")))
   (dolist (sym screen-import-env)
     (let* ((name (symbol-name sym))
            (env (screen-getenv sty name)))
