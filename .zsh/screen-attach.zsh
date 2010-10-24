@@ -49,13 +49,19 @@ function _screen_import_env () {
 }
 
 function screen_auto_env () {
-    [[ -z "$1" ]] && 1=on
     case "$1" in
         on|1|true)
             unset _screen_no_auto_env
             ;;
         off|0|false)
             _screen_no_auto_env=1
+            ;;
+        *)
+            if [[ -z "$_screen_no_auto_env" ]]; then
+                echo on
+            else
+                echo off
+            fi
             ;;
     esac
 }
