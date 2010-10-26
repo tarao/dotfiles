@@ -96,7 +96,8 @@ function screen_attach () {
             return
         }
     }
-    ( sleep 1; _screen_export_env "$sty" ) &! screen -x -r "$sty"
+    _screen_export_env "$sty"
+    screen -x -r "$sty"
 }
 function screen_detach () {
     [[ -n "$STY" ]] && screen -d "$STY" > /dev/null
