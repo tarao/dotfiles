@@ -46,9 +46,11 @@ function! HighlightConsoleCodes()
         endfor
         if len(cterm)
             let highlight .= ' cterm=' . join(cterm, ',')
+            let g:ansi_escape_used=1
         endif
         if len(highlight)
             execute 'highlight' syntax_name highlight
+            let g:ansi_escape_used=1
         endif
     endwhile
     let @" = register_save
