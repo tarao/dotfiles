@@ -18,9 +18,11 @@ alias sapt='LANG=C sudo aptitude'
 alias wcat='wget -q -O -'
 
 function diff () {
-    colordiff -u $@ | v
+    colordiff -u $@ | $PAGER
 }
-alias last='command last | v'
+function last () {
+    command last $@ | $PAGER
+}
 
 function { # local scope
     local w
