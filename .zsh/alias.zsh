@@ -11,12 +11,20 @@ alias fwd='ssh -N -F ~/.ssh/fwd_config -N'
 alias proxy='ssh -F ~/.ssh/proxy_config -N'
 
 alias man='LANG=${LANG/en_US.UTF-8/en_US} command man'
-alias grep='command grep -nH --color'
 alias od='od -A x -t xCz'
 alias apt='LANG=C aptitude'
 alias sapt='LANG=C sudo aptitude'
 alias wcat='wget -q -O -'
 
+function grep () {
+    if env test -t 0; then
+        # stdin is a terminal
+        command grep -nH --color $@
+    else
+        # stdin is a pipe
+        command grep $@
+    fi
+}
 function diff () {
     colordiff -u $@ | $PAGER
 }
