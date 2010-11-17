@@ -15,6 +15,7 @@ alias od='od -A x -t xCz'
 alias apt='LANG=C aptitude'
 alias sapt='LANG=C sudo aptitude'
 alias wcat='wget -q -O -'
+alias whead='wget -S -O /dev/null'
 
 function grep () {
     if env test -t 0; then
