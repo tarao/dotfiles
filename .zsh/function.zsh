@@ -92,3 +92,18 @@ function git-set-remote () {
     git config --add branch.$branch.remote $remote
     git config --add branch.$branch.merge refs/heads/$brach
 }
+
+# file conversion
+function pdf2svg {
+    [[ "$1" == '-h' || "$1" == '--help' ]] && {
+        echo "Usage: $0 [-p <page>] <input> <output>"
+        return
+    }
+
+    local page; page=1
+    [[ "$1" == '-p' ]] && {
+        shift; page="$1"; shift
+    }
+    local catpdf; catpdf=(pdftk "$1" cat $page output -)
+    pstoedit -f plot-svg -dt -ssp =($catpdf) "$2"
+}
