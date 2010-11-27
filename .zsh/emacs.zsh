@@ -37,7 +37,9 @@ function emacsd () {
     local action; action=$1; shift
     case "$action" in
         status)
+            [[ "$cmd[1]" == 'command' ]] && cmd="$cmd[2,-1]"
             local grep; grep=(pgrep -f -u $USER "$cmd")
+            echo $grep
             if [[ -n `$grep` ]]; then
                 echo 'emacs daemon is running'
                 return 0
