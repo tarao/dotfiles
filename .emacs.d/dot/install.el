@@ -7,15 +7,16 @@
         "anything-config.el"
         "anything-grep.el"
         "anything-match-plugin.el"
+        "anything-obsolete.el"
         "browse-kill-ring.el"
         "browse-kill-ring+.el"
         "c-eldoc.el"
+        "csharp-mode.el"
         "descbinds-anything.el"
         "eldoc-extension.el"
         "key-chord.el"
         "shell-history.el"
         "space-chord.el"
-        "switch-window.el"
         "xquery-mode.el"
         ))
 (setq elisp-url-src
