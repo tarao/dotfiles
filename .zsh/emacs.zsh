@@ -1,11 +1,19 @@
-alias emacsclient='emacsclient.emacs-snapshot'
-alias emacsc='emacsclient -nw'
-alias emacs-standalone='emacs-snapshot'
+EMACS_CLIENT_CMD=emacsclient.emacs-snapshot
+EMACS_STANDALONE_CMD=emacs-snapshot
+function emacsclient () {
+    $EMACS_CLIENT_CMD $@
+}
+function emacsc () {
+    emacsclient -nw $@
+}
+function emacs-standalone () {
+    $EMACS_STANDALONE_CMD $@
+}
+
 function emacsb () {
     [[ -z "$1" ]] &&
     echo "Usage: $0 [compile FILE | install URL | update]..." && return
-    local cmd; cmd=`alias -m emacs-standalone | cut -f2 -d=`
-    cmd=($cmd --batch)
+    local cmd; cmd=(emacs-standalone --batch)
     local install; install=($cmd -l ~/.emacs.d/dot/install.el)
     local action; action=$1; shift
     case "$action" in
@@ -31,13 +39,14 @@ alias emacs-compile="emacsb compile"
 
 # Emacs server
 function emacsd () {
-    local cmd; cmd=`alias -m emacs-standalone | cut -f2 -d=`
-    cmd=($cmd --daemon)
+    local cmd; cmd=(emacs-standalone --daemon)
     [[ -z "$1" ]] && 1='help'
     local action; action=$1; shift
     case "$action" in
         status)
-            local grep; grep=(pgrep -f -u $USER "$cmd")
+            cmd=($EMACS_STANDALONE_CMD)
+            [[ "$cmd[1]" == 'command' ]] && cmd=$cmd[2,-1]
+            local grep; grep=(pgrep -f -u $USER "$cmd --daemon")
             if [[ -n `$grep` ]]; then
                 echo 'emacs daemon is running'
                 return 0
@@ -80,7 +89,7 @@ function _emacs_get_comm () {
 
 function emacs () {
     if [[ -z "$EMACS_USE_DAEMON" ]] || [[ `id -ur` = 0 ]]; then
-        emacs-standalone $@
+        $standalone $@
     else
         emacsd status >/dev/null || emacsd start
         [[ -n "$STY" ]] && {
