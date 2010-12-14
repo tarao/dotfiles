@@ -4,6 +4,19 @@
 (color-theme-initialize)
 (color-theme-dark-laptop)
 
+;; mode line color
+(require 'mode-line-color)
+(mode-line-color-mode)
+(defvar skk-j-mode-line-color "maroon")
+(defun skk-set-mode-line-color (setter)
+  (when (and (featurep 'skk) skk-j-mode
+             (or (not (featurep 'viper))
+                 (eq viper-current-state 'insert-state)))
+    (funcall setter skk-j-mode-line-color)))
+(add-hook 'mode-line-color-hook 'skk-set-mode-line-color)
+(defadvice skk-update-modeline (after ad-skk-mode-line-color activate)
+  (mode-line-color-update))
+
 ;; no cursor blinking
 (blink-cursor-mode nil)
 
