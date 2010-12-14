@@ -62,7 +62,8 @@
 (defadvice viper-maybe-checkout (around viper-dont-ask-checkout activate) nil)
 
 ;; auto-complete patches
-(define-key ac-completing-map (kbd "ESC") nil)
+(when (featurep 'auto-complete)
+  (define-key ac-completing-map (kbd "ESC") nil))
 
 (setq vimpulse-want-vi-keys-in-dired t
       woman-use-own-frame nil) ; don't create new frame for manpages
@@ -99,11 +100,17 @@
 (define-key viper-vi-basic-map
   (kbd ";") 'viper-ex)
 
+;; undo tree
+(when (featurep 'undo-tree)
+  (defadvice undo-tree-visualize (before ad-change-state-to-vi activate)
+    (when (not (eq viper-current-state 'vi-state))
+      (viper-change-state-to-vi)))
+  (vimpulse-global-set-key 'vi-state (kbd "C-r") 'undo-tree-redo))
+
 ;; user key bindings
 (vimpulse-global-set-key 'vi-state (kbd ":") 'anything-for-files)
 (vimpulse-global-set-key 'vi-state (kbd "C-w") 'kill-region)
 (vimpulse-global-set-key 'insert-state (kbd "C-w") 'kill-region)
-(vimpulse-global-set-key 'vi-state (kbd "C-r") 'undo-tree-redo)
 (vimpulse-global-set-key 'vi-state (kbd "j") 'next-line)
 (vimpulse-global-set-key 'vi-state (kbd "k") 'previous-line)
 (vimpulse-global-set-key 'vi-state (kbd "J") 'viper-scroll-up)
