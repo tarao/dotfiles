@@ -17,6 +17,7 @@
 (setq viper-mode-line-color
       '((vi-state       . "white")
         (insert-state   . "khaki4")
+        (replace-state  . "khaki4")
         (operator-state . "darkseagreen2")
         (visual-state   . "steelblue")
         (emacs-state    . "red")))
