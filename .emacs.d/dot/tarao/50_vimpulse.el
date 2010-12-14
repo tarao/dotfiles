@@ -13,6 +13,35 @@
 
 (require 'viper)
 
+;; mode-line color
+(setq viper-mode-line-color-buffers-regexp '("^\\*scratch\\*$"))
+(setq viper-mode-line-color-exclude-buffers-regexp '("^ .*" "\\*"))
+(setq viper-mode-line-color
+      '((vi-state       . "white")
+        (insert-state   . "khaki4")
+        (operator-state . "darkseagreen2")
+        (visual-state   . "steelblue")
+        (emacs-state    . "red")))
+(setq viper-skk-mode-line-color "maroon")
+(defun my-viper-set-mode-line-color ()
+  (let ((buf (buffer-name (current-buffer)))
+        (mem-pat
+         '(lambda (x l)
+            (member t (mapcar '(lambda (r) (when (string-match r x) t)) l)))))
+    (when (and
+           (not (minibufferp (current-buffer)))
+           (or (funcall mem-pat buf viper-mode-line-color-buffers-regexp)
+               (not (funcall mem-pat buf
+                             viper-mode-line-color-exclude-buffers-regexp))))
+      (set-face-background 'mode-line
+                           (if (and (eq viper-current-state 'insert-state)
+                                    (boundp 'skk-mode) skk-mode)
+                               viper-skk-mode-line-color
+                             (cdr (assq viper-current-state
+                                        viper-mode-line-color)))))))
+(defadvice skk-mode (after ad-skk-mode-set-mode-line-color activate)
+  (my-viper-set-mode-line-color))
+
 ;; mode-line
 (defun my-viper-state-id (&optional state)
   (unless state (setq state viper-current-state))
@@ -29,8 +58,10 @@
     (list "" line (list 'skk-mode "" tail))))
 (defun my-viper-update-mode-line ()
   (condition-case ()
-      (set (make-variable-buffer-local 'my-viper-mode-line)
-           (my-viper-mode-line-format))
+      (progn
+        (set (make-variable-buffer-local 'my-viper-mode-line)
+             (my-viper-mode-line-format))
+        (my-viper-set-mode-line-color))
     (error nil)))
 (defadvice viper-change-state (after ad-my-viper-update-mode-line activate)
   (my-viper-update-mode-line))
