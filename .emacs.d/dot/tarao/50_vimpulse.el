@@ -58,12 +58,16 @@
   (viper-change-state-to-vi))
 
 ;; viper-mode patches
-(require 'hexl-viper-patch)
+(require 'hexl-viper-patch nil t)
 (defadvice viper-maybe-checkout (around viper-dont-ask-checkout activate) nil)
 
 ;; auto-complete patches
 (when (featurep 'auto-complete)
   (define-key ac-completing-map (kbd "ESC") nil))
+
+(setq vimpulse-want-vi-keys-in-dired t
+      woman-use-own-frame nil) ; don't create new frame for manpages
+(require 'vimpulse)
 
 ;; undo tree
 (when (featurep 'undo-tree)
@@ -72,18 +76,13 @@
       (viper-change-state-to-vi)))
   (vimpulse-global-set-key 'vi-state (kbd "C-r") 'undo-tree-redo))
 
-;; dired
-(setq vimpulse-want-vi-keys-in-dired t
-      woman-use-own-frame nil) ; don't create new frame for manpages
-(require 'vimpulse)
-
 ;; vimpulse-surround
-(load "vimpulse-surround")
-(setq vimpulse-surround-excludes '())
-(add-hook 'after-change-major-mode-hook
-          '(lambda () (when (or buffer-read-only
-                                (memq major-mode vimpulse-surround-excludes))
-                        (vimpulse-surround-mode -1))))
+(when (require 'vimpulse-surround nil t)
+  (setq vimpulse-surround-excludes '())
+  (add-hook 'after-change-major-mode-hook
+            '(lambda () (when (or buffer-read-only
+                                  (memq major-mode vimpulse-surround-excludes))
+                          (vimpulse-surround-mode -1)))))
 
 ;; ex-commands
 (setq my-viper-extra-ex-commands
@@ -96,11 +95,11 @@
   (add-to-list 'ex-token-alist entry t))
 
 ;; operator
-(require 'vimpulse-operator-comment)
-(require 'vimpulse-relative-linum)
+(require 'vimpulse-operator-comment nil t)
+(require 'vimpulse-relative-linum nil t)
 
 ;; textobj
-(require 'vimpulse-textobj-between)
+(require 'vimpulse-textobj-between nil t)
 
 ;; use ; for :
 (define-key vimpulse-visual-basic-map
@@ -128,4 +127,4 @@
 
 ;; CJK patch
 (setq vimpulse-cjk-want-japanese-phrase-as-word t)
-(require 'vimpulse-cjk)
+(require 'vimpulse-cjk nil t)
