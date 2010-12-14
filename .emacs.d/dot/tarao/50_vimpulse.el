@@ -71,7 +71,8 @@
 
 ;; undo tree
 (when (featurep 'undo-tree)
-  (defadvice undo-tree-visualize (before ad-change-state-to-vi activate)
+  (defadvice undo-tree-visualize
+    (before ad-undo-tree-visualize-change-state-to-vi activate)
     (when (not (eq viper-current-state 'vi-state))
       (viper-change-state-to-vi)))
   (vimpulse-global-set-key 'vi-state (kbd "C-r") 'undo-tree-redo))
