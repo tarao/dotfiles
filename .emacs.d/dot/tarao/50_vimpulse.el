@@ -35,7 +35,8 @@
     (cond
      ((boundp sym) (symbol-value sym))
      ((eq state 'visual-state)
-      (or (cdr (assoc vimpulse-visual-mode vimpulse-state-id-alist)) ""))
+      (or (cdr (assq vimpulse-visual-mode vimpulse-state-id-alist))
+          (cdr (assq 'normal vimpulse-state-id-alist))))
      (t ""))))
 (defun my-viper-mode-line-format (&optional state)
   (let* ((id (my-viper-state-id state)) (line id)
