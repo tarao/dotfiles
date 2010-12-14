@@ -65,6 +65,14 @@
 (when (featurep 'auto-complete)
   (define-key ac-completing-map (kbd "ESC") nil))
 
+;; undo tree
+(when (featurep 'undo-tree)
+  (defadvice undo-tree-visualize (before ad-change-state-to-vi activate)
+    (when (not (eq viper-current-state 'vi-state))
+      (viper-change-state-to-vi)))
+  (vimpulse-global-set-key 'vi-state (kbd "C-r") 'undo-tree-redo))
+
+;; dired
 (setq vimpulse-want-vi-keys-in-dired t
       woman-use-own-frame nil) ; don't create new frame for manpages
 (require 'vimpulse)
@@ -99,13 +107,6 @@
   (kbd ";") (lambda () (interactive) (viper-ex t)))
 (define-key viper-vi-basic-map
   (kbd ";") 'viper-ex)
-
-;; undo tree
-(when (featurep 'undo-tree)
-  (defadvice undo-tree-visualize (before ad-change-state-to-vi activate)
-    (when (not (eq viper-current-state 'vi-state))
-      (viper-change-state-to-vi)))
-  (vimpulse-global-set-key 'vi-state (kbd "C-r") 'undo-tree-redo))
 
 ;; user key bindings
 (vimpulse-global-set-key 'vi-state (kbd ":") 'anything-for-files)
