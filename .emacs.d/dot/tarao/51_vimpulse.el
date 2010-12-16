@@ -1,6 +1,5 @@
 ;; viper minor mode
-(setq viper-custom-file-name (locate-library "dot/.viper")
-      viper-mode t
+(setq viper-mode t
       viper-toggle-key (kbd "C-x C-z")
       viper-ex-style-motion nil
       viper-ex-style-editing nil
