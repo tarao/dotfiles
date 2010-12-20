@@ -89,7 +89,7 @@ function _emacs_get_comm () {
 
 function emacs () {
     if [[ -z "$EMACS_USE_DAEMON" ]] || [[ `id -ur` = 0 ]]; then
-        $standalone $@
+        emacs-standalone $@
     else
         emacsd status >/dev/null || emacsd start
         [[ -n "$STY" ]] && {
