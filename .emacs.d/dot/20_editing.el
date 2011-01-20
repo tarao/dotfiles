@@ -11,6 +11,9 @@
 (setq auto-insert-query nil)
 (setq auto-insert-alist nil)
 
+;; automatically make script executable
+(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
+
 ;; browse-kill-ring
 (autoload 'browse-kill-ring "browse-kill-ring" nil t)
 (load "browse-kill-ring+")
