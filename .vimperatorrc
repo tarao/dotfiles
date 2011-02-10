@@ -32,6 +32,7 @@ liberator.globalVariables.plugin_loader_plugins = <>
     migemo_hint
     no-reading
     pluginManager
+    twittperator
 </>.toString().split(/\s+/).filter(function(n) n);
 EOM
 
