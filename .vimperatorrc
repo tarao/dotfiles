@@ -15,7 +15,7 @@ hi Hint z-index:5000; font-family:monospace; font-size:12px; letter-spacing:0.1e
 set hintchars=hjklgfdsayuioptrewq
 
 " plugin_loader.js
-let g:plugin_loader_roots='~/.vimperator/plugin-available/';
+let g:plugin_loader_roots='~/.vimperator/plugin-available/ ~/.vimperator/vimerator-plugins';
 js <<EOM
 liberator.globalVariables.plugin_loader_plugins = <>
     _libly
