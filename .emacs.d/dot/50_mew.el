@@ -55,3 +55,9 @@
 (add-hook
  'mew-summary-mode-hook
  '(lambda () (set (make-local-variable 'show-trailing-whitespace) nil)))
+
+;; mew-start-process-disp sets DISPLAY from frame-parameters
+;; We know that DISPLAY has appropriate value
+;; and no need to lookup frame-parameters
+(defadvice mew-start-process-disp (before ad-mew-start-process-disp activate)
+  (set-frame-parameter nil 'display (getenv "DISPLAY")))
