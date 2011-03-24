@@ -9,7 +9,7 @@ function _screen_title_install_precmd () { # use current directory as a title
             if [[ ( -n "$vcs" ) && ( "$repos" != "$dir" ) ]]; then
                 # name of repository and directory
                 dir="${repos:t}:${dir:t}"
-            else
+            elif [[ "$dir" != "/" ]]; then
                 # name of directory
                 dir=${dir:t}
             fi
