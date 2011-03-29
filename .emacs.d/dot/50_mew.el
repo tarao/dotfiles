@@ -61,3 +61,7 @@
 ;; and no need to lookup frame-parameters
 (defadvice mew-start-process-disp (before ad-mew-start-process-disp activate)
   (set-frame-parameter nil 'display (getenv "DISPLAY")))
+
+;; no end mark for mew-summary-mode
+(when (featurep 'end-mark)
+  (add-to-list 'end-mark-exclude-modes 'mew-summary-mode))
