@@ -36,6 +36,7 @@
   (define-key mew-summary-mode-map (kbd "C-@") 'mew-summary-scroll-down)
   (define-key mew-summary-mode-map (kbd "C-SPC") 'mew-summary-scroll-down)
   (define-key mew-summary-mode-map "s" 'mew-summary-refile-spam)
+  (define-key mew-summary-mode-map (kbd "l s") 'mew-summary-ls)
   (when (featurep 'vimpulse)
     (vimpulse-add-vi-bindings mew-summary-mode-map
                               '(viper-next-line
