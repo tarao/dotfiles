@@ -1,130 +1,50 @@
-(function(){
-    liberator.plugins.libly.$U.around(
-        liberator.modules.commandline, 'open',
-        function(original, args) {
-            if (liberator.modules.commandline.nowildoptflag) {
-                liberator.modules.commandline.nowildoptflag = false;
-                liberator.modules.options.get('wildoptions').set('');
-            } else {
-                liberator.modules.options.get('wildoptions').set('auto,sort');
-            }
-            original();
-        });
-    var openfunc = function(name/*, nowild, url*/) {
-        var nowild = arguments[1];
-        var url = arguments[2];
-        return function() {
-            liberator.modules.commandline.nowildoptflag = nowild;
-            liberator.modules.commandline.open(
-                ':',
-                name+' '+(url ? liberator.modules.buffer.URL : ''),
-                liberator.modules.modes.EX);
-        };
-    };
-
+(function() {
     liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.NORMAL],
-        ['o'], 'Open one or more URLs',
-        openfunc('open', true));
-    liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.NORMAL],
-        ['O'], 'Open one or more URLs, based on current location',
-        openfunc('open', true, true));
-    liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.NORMAL],
-        ['t'], 'Open one or more URLs in a new tab',
-        openfunc('tabopen', true));
-    liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.NORMAL],
-        ['T'], 'Open one or more URLs in a new tab, based on current location',
-        openfunc('tabopen', true, true));
-    liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.NORMAL],
-        ['<C-o>'], ':open in the wild mode with tag',
-        openfunc('open +'));
-    liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.NORMAL],
-        ['<C-l>'], ':tabopen in the wild mode with tag',
-        openfunc('tabopen +'));
-    liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.NORMAL],
-        [',o'], ':open in the wild mode',
-        openfunc('open'));
-    liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.NORMAL],
-        [',l'], ':tabopen in the wild mode',
-        openfunc('tabopen'));
-    liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.NORMAL],
-        [',b'], ':open from bookmarks in the wild mode',
-        openfunc('open *'));
-    liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.NORMAL],
-        [',B'], ':tabopen from bookmarks in the wild mode',
-        openfunc('tabopen *'));
-//     liberator.modules.mappings.addUserMap(
-//         [liberator.modules.modes.NORMAL],
-//         ['s'], ':gsearch',
-//         openfunc('gsearch', true));
-//     liberator.modules.mappings.addUserMap(
-//         [liberator.modules.modes.NORMAL],
-//         ['S'], ':gsearch!',
-//         openfunc('gsearch!', true));
-
-//     liberator.plugins.map.deepRemap('++', '<C-a>');
-//     liberator.plugins.map.deepRemap('--', '<C-x>');
-
-    liberator.execute('noremap <C-a> <C-v><C-a>', null, true);
-    liberator.execute('inoremap <C-a> <C-v><C-a>', null, true);
-    liberator.execute('cnoremap <C-a> <C-v><C-a>', null, true);
-
-    liberator.execute('inoremap <C-x> <S-Del>', null, true);
-    liberator.execute('cnoremap <C-x> <S-Del>', null, true);
-
-    liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.NORMAL],
-        ['<C-c>'], 'Copy selected text',
+        [liberator.modules.modes.INSERT,
+         liberator.modules.modes.TEXTAREA,
+         liberator.modules.modes.COMMAND_LINE],
+        ['<C-a>'],
+        'Move cursor to beginning of current line or select all text if ' +
+                'the cursor is already at the beginning',
         function() {
-            var sel = [
-                [ window.content, 'getSelection'],
-                [ window, 'getSelection'],
-                [ window.content.document, 'getSelection'],
-            ].reduce(function(p,v) {
-                return (p && p.length && p) || (v[0][v[1]] && ''+v[0][v[1]]());
-            }, '');
-            if (sel.length) {
-                liberator.modules.util.copyToClipboard(sel, true);
+            var editor = liberator.modules.editor;
+            editor.executeCommand('cmd_selectBeginLine', 1);
+            if (editor.selectedText().length > 0) {
+                // not at the beginning of line or
+                // there was selected text
+                editor.executeCommand('cmd_beginLine', 1);
             } else {
-                window.BrowserStop();
-                liberator.echo('Stopped loading!');
+                // already at the beginning of line
+                editor.executeCommand('cmd_selectAll', 1);
             }
         });
 
-    liberator.plugins.libly.$U.around(
-        liberator.modules.bookmarks, 'add',
-        function(original, args/*starOnly, title, url, keyword, tags, bang*/) {
-            // force using the unfiledBookmarksFolder
-            args[0] = true; // starOnly
-            return original(args);
-        });
-
-    liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.NORMAL],
-        ['B'], 'Show tabbar',
+    liberator.modules.commands.addUserCommand(
+        ['tabb[ar]'],
+        'Toggle tab bar',
         function() {
-            if (TreeStyleTabService != null) {
+            if (typeof TreeStyleTabService != 'undefined') {
                 var b;
                 var sv = (b = TreeStyleTabService.browser) && b.treeStyleTab;
                 sv && sv.toggleAutoHide();
+                liberator.execute('set gui=tabs');
+            } else {
+                var options = liberator.modules.options;
+                var f = (options.parseOpt('gui').optionValues||[]);
+                var t = 'tabs';
+                liberator.execute('set gui='+(f.indexOf(t)<0 ? '' : 'no')+t);
             }
         });
 
-    liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.NORMAL],
-        ['b'], 'Open a prompt to switch buffers',
-        function() {
-            liberator.modules.commandline.open(':',
-                                               'buffer! ',
-                                               liberator.modules.modes.EX);
-        });
+    if (liberator.plugins.libly) {
+        liberator.plugins.libly.$U.around(
+            liberator.modules.bookmarks, 'add', function(proceed, args) {
+                // args: starOnly, title, url, keyword, tags, bang
+
+                // force using the unfiledBookmarksFolder
+                args[0] = true; // starOnly
+
+                return proceed(args);
+            });
+    }
 })();
