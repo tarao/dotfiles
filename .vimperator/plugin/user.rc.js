@@ -1,7 +1,6 @@
 (function() {
     liberator.modules.mappings.addUserMap(
         [liberator.modules.modes.INSERT,
-         liberator.modules.modes.TEXTAREA,
          liberator.modules.modes.COMMAND_LINE],
         ['<C-a>'],
         'Move cursor to beginning of current line or select all text if ' +
