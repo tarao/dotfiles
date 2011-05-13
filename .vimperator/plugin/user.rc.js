@@ -26,7 +26,6 @@
                 var b;
                 var sv = (b = TreeStyleTabService.browser) && b.treeStyleTab;
                 sv && sv.toggleAutoHide();
-                liberator.execute('set gui=tabs');
             } else {
                 var options = liberator.modules.options;
                 var f = (options.parseOpt('gui').optionValues||[]);
@@ -34,6 +33,15 @@
                 liberator.execute('set gui='+(f.indexOf(t)<0 ? '' : 'no')+t);
             }
         });
+
+    var initializeTabs = function() {
+        var opt = liberator.modules.options;
+        var reg = new RegExp('(?:,|^)treestyletab@piro.sakura.ne.jp:');
+        if (reg.test(opt.getPref('extensions.enabledAddons'))) {
+            liberator.execute('set gui=tabs');
+        }
+    };
+    initializeTabs();
 
     if (liberator.plugins.libly) {
         liberator.plugins.libly.$U.around(
