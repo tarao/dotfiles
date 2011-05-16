@@ -8,19 +8,17 @@ function screen_debug_log () {
 function screen_list () {
     zmodload zsh/regex
     local line
-    local ls; ls=`screen -ls`
-    foreach line in ${(f)ls}
+    for line in ${(f)"$(screen -ls)"}; do
         [[ "$line" -regex-match '\s*(\S+)\s+\((.*+)\)' ]] && {
             st=(${(ps:, :)match[2]})
             echo "$match[1] ($st)"
         }
-    end
+    done
 }
 function screen_list_filter () {
     zmodload zsh/regex
     local filter; filter="$1"; local line
-    local ls; ls=`screen_list`
-    for line in ${(f)ls}; do
+    for line in ${(f)"$(screen_list)"}; do
         [[ "$line" -regex-match "$1" ]] && echo "$line"
     done
 }
@@ -29,8 +27,7 @@ function screen_list_filter_status () {
     emulate -L zsh
     unsetopt case_match
     local filter; filter="\\((\\S+ )*$1( \\S+)*\\)$"; local line
-    local ls; ls=`screen_list_filter "$filter"`
-    for line in ${(f)ls}; do
+    for line in ${(f)"$(screen_list_filter "$filter")"}; do
         [[ "$line" -regex-match '^(.*) \(.*\)$' ]] && echo "$match[1]"
     done
 }
