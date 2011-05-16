@@ -1,22 +1,43 @@
-typeset -A _screen_list
 function screen_debug_log () {
     [[ -n "$SCREEN_DEBUG_LOG" ]] && {
         local date; date=`date --iso=seconds`
         echo "$date $1" >> "$SCREEN_DEBUG_LOG"
     }
 }
+
 function screen_list () {
     zmodload zsh/regex
-    _screen_list=()
-    local ls; ls=`screen -ls`; local line
-    foreach line in ${(f)ls}
+    local line
+    foreach line in ${(f)$(screen -ls)}
         [[ "$line" -regex-match '\s*(\S+)\s+\((.*+)\)' ]] && {
             st=(${(ps:, :)match[2]})
-            _screen_list[$match[1]]="$st"
             echo "$match[1] ($st)"
         }
     end
 }
+function screen_list_filter () {
+    zmodload zsh/regex
+    local filter; filter="$1"; local line
+    for line in ${(f)$(screen_list)}; do
+        [[ "$line" -regex-match "$1" ]] &&  echo "$line"
+    done
+}
+function screen_list_filter_status () {
+    zmodload zsh/regex
+    emulate -L zsh
+    unsetopt case_match
+    local filter; filter="\\((\\S+ )*$1( \\S+)*\\)$"; local line
+    for line in ${(f)$(screen_list_filter "$filter")}; do
+        [[ "$line" -regex-match '^(.*) \(.*\)$' ]] && echo "$match[1]"
+    done
+}
+function screen_list_attached () {
+    screen_list_filter_status attached
+}
+function screen_list_detached () {
+    screen_list_filter_status detached
+}
+
 function screen_getenv () {
     local sty; sty="$STY"; local evar
     (( $# >= 2 )) && { sty="$1"; shift }; evar='${'"$1"'}'
