@@ -58,6 +58,10 @@ noremap <C-x> <Nop>
 
 " ============== PLUGIN SETTINGS ================
 
+let g:ime_activate_key='\[Control]\[Shift]$'
+let g:ime_inactivate_key='\[Control]\[Shift] '
+let g:imeoff='cmd'
+
 " plugin_loader.js
 let g:plugin_loader_roots='~/.vimperator/vimperator-plugins ~/.vimperator/plugin-available/';
 js <<EOM
@@ -66,7 +70,6 @@ liberator.globalVariables.plugin_loader_plugins = <>
     caret-hint
     gmperator
     hatena-bookmark-search
-    ime_controller
     pluginManager
 </>.toString().split(/\s+/).filter(function(n) n);
 EOM
@@ -86,6 +89,3 @@ if (typeof hBookmark != 'undefined') {
     );
 }
 EOM
-
-let g:ex_ime_mode='inactive';
-let g:textarea_ime_mode='inactive';

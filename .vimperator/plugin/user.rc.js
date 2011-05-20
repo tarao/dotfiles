@@ -43,6 +43,13 @@
     };
     initializeTabs();
 
+    liberator.modules.mappings.addUserMap(
+        [liberator.modules.modes.INSERT,
+         liberator.modules.modes.COMMAND_LINE],
+        ['<C-j>'],
+        'Activate IME',
+        function() { liberator.plugins.system.ime.on(); });
+
     if (liberator.plugins.libly) {
         liberator.plugins.libly.$U.around(
             liberator.modules.bookmarks, 'add', function(proceed, args) {
