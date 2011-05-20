@@ -15,15 +15,34 @@ liberator.plugins.system = (function() {
     var sendKey = (function() {
         if (has('xvkbd')) {
             return function(key){ system("xvkbd -text '"+key+"'"); };
+        } else if (liberator.has('Windows')) {
+            return function(key) {
+                var file = services.get("directory").get("TmpD", Ci.nsIFile);
+                file.append('vimperator_send_keys.js');
+                file = File(file);
+                if (!file.exists()) {
+                    file.write([
+                        'var sh = WScript.CreateObject("WScript.Shell");',
+                        'sh.SendKeys(WScript.Arguments(0));',
+                        ''
+                    ].join("\n"), File.MODE_WRONLY | File.MODE_CREATE, 0644);
+                }
+                io.run('wscript.exe', [ file.path, key ]);
+            };
         }
         return function(){}; // unsupported
     })();
 
     var ime = (function() {
-        var keys = {
-            on: 'ime_activate_key',
-            off: 'ime_inactivate_key'
+        var xkeys = {
+            on: 'ime_activate_xkey',
+            off: 'ime_inactivate_xkey'
         };
+        var wkeys = {
+            on: 'ime_activate_wkey',
+            off: 'ime_inactivate_wkey'
+        };
+        var keys = liberator.has('Windows') ? wkeys : xkeys;
         var send = function(v) {
             var key = liberator.globalVariables[v];
             if (key) sendKey(key);

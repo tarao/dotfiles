@@ -48,7 +48,9 @@
          liberator.modules.modes.COMMAND_LINE],
         ['<C-j>'],
         'Activate IME',
-        function() { liberator.plugins.system.ime.on(); });
+        function() {
+            setTimeout(function(){ liberator.plugins.system.ime.on(); }, 200);
+        });
 
     if (liberator.plugins.libly) {
         liberator.plugins.libly.$U.around(

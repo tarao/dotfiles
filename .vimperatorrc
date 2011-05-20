@@ -58,8 +58,10 @@ noremap <C-x> <Nop>
 
 " ============== PLUGIN SETTINGS ================
 
-let g:ime_activate_key='\[Control]\[Shift]$'
-let g:ime_inactivate_key='\[Control]\[Shift] '
+let g:ime_activate_xkey='\[Control]\[Shift]$'
+let g:ime_inactivate_xkey='\[Control]\[Shift] '
+let g:ime_activate_wkey='%`'
+let g:ime_inactivate_wkey='^{F11}'
 let g:imeoff='cmd'
 
 " plugin_loader.js
