@@ -1,12 +1,10 @@
 (function() {
-    liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.INSERT,
-         liberator.modules.modes.COMMAND_LINE],
+    mappings.addUserMap(
+        [modes.INSERT, modes.COMMAND_LINE],
         ['<C-a>'],
         'Move cursor to beginning of current line or select all text if ' +
                 'the cursor is already at the beginning',
         function() {
-            var editor = liberator.modules.editor;
             editor.executeCommand('cmd_selectBeginLine', 1);
             if (editor.selectedText().length > 0) {
                 // not at the beginning of line or
@@ -18,7 +16,7 @@
             }
         });
 
-    liberator.modules.commands.addUserCommand(
+    commands.addUserCommand(
         ['tabb[ar]'],
         'Toggle tab bar',
         function() {
@@ -27,7 +25,6 @@
                 var sv = (b = TreeStyleTabService.browser) && b.treeStyleTab;
                 sv && sv.toggleAutoHide();
             } else {
-                var options = liberator.modules.options;
                 var f = (options.parseOpt('gui').optionValues||[]);
                 var t = 'tabs';
                 liberator.execute('set gui='+(f.indexOf(t)<0 ? '' : 'no')+t);
@@ -35,17 +32,15 @@
         });
 
     var initializeTabs = function() {
-        var opt = liberator.modules.options;
         var reg = new RegExp('(?:,|^)treestyletab@piro.sakura.ne.jp:');
-        if (reg.test(opt.getPref('extensions.enabledAddons'))) {
+        if (reg.test(options.getPref('extensions.enabledAddons'))) {
             liberator.execute('set gui=tabs');
         }
     };
     initializeTabs();
 
-    liberator.modules.mappings.addUserMap(
-        [liberator.modules.modes.INSERT,
-         liberator.modules.modes.COMMAND_LINE],
+    mappings.addUserMap(
+        [modes.INSERT, modes.COMMAND_LINE],
         ['<C-j>'],
         'Activate IME',
         function() {
@@ -54,7 +49,7 @@
 
     if (liberator.plugins.libly) {
         liberator.plugins.libly.$U.around(
-            liberator.modules.bookmarks, 'add', function(proceed, args) {
+            bookmarks, 'add', function(proceed, args) {
                 // args: starOnly, title, url, keyword, tags, bang
 
                 // force using the unfiledBookmarksFolder

@@ -1,8 +1,8 @@
 liberator.plugins.system = (function() {
     var system = function(cmd, input) {
         var ret;
-        liberator.modules.commandline.runSilently(function(){
-            ret = liberator.modules.io.system(cmd, input);
+        commandline.runSilently(function(){
+            ret = io.system(cmd, input);
         });
         return ret;
     };
@@ -18,7 +18,7 @@ liberator.plugins.system = (function() {
         } else if (liberator.has('Windows')) {
             return function(key) {
                 var file = services.get("directory").get("TmpD", Ci.nsIFile);
-                file.append('vimperator_send_keys.js');
+                file.append('vimperator_external_command_send_keys.js');
                 file = File(file);
                 if (!file.exists()) {
                     file.write([
@@ -54,7 +54,7 @@ liberator.plugins.system = (function() {
             inactivate: liberator.globalVariables.imeoff.split(/[,| ]/)
         };
 
-        liberator.modules.options.add(
+        options.add(
             ['imeoff'],
             'Automatically inactivate IME',
             'stringlist',
@@ -70,15 +70,14 @@ liberator.plugins.system = (function() {
             });
 
         if (liberator.plugins.libly) {
-            var c = liberator.modules.commandline;
             var advice = function(proceed, args) {
                 var ret = proceed(args);
                 if (ime.inactivate.indexOf('cmd') >= 0) ime.off();
                 return ret;
             };
 
-            liberator.plugins.libly.$U.around(c, 'open', advice);
-            liberator.plugins.libly.$U.around(c, 'input', advice);
+            liberator.plugins.libly.$U.around(commandline, 'open', advice);
+            liberator.plugins.libly.$U.around(commandline, 'input', advice);
         }
 
         return self;
