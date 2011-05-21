@@ -3,7 +3,10 @@
         var methods = {};
 
         methods.x = {
-            cond: function(){ return io.run('which', ['xvkbd'], true) == 0; },
+            cond: function() {
+                return !liberator.has('Windows') &&
+                        io.run('which', ['xvkbd'], true) == 0;
+            },
             send: function(key){ io.run('xvkbd', [ '-text', key ]); }
         };
 
