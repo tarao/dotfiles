@@ -1,22 +1,15 @@
-liberator.plugins.system = (function() {
-    var system = function(cmd, input) {
-        var ret;
-        commandline.runSilently(function(){
-            ret = io.system(cmd, input);
-        });
-        return ret;
-    };
+(function() {
+    var sendKeys = (function() {
+        var methods = {};
 
-    var has = function(cmd) {
-        cmd = 'which '+cmd+' >/dev/null 2>&1 && echo t || echo';
-        return !liberator.has('Windows') && system(cmd).length > 0
-    };
+        methods.x = {
+            cond: function(){ return io.run('which', ['xvkbd'], true) == 0; },
+            send: function(key){ io.run('xvkbd', [ '-text', key ]); }
+        };
 
-    var sendKey = (function() {
-        if (has('xvkbd')) {
-            return function(key){ system("xvkbd -text '"+key+"'"); };
-        } else if (liberator.has('Windows')) {
-            return function(key) {
+        methods.w = {
+            cond: function(){ return liberator.has('Windows'); },
+            send: function(key) {
                 var file = services.get("directory").get("TmpD", Ci.nsIFile);
                 file.append('vimperator_external_command_send_keys.js');
                 file = File(file);
@@ -28,29 +21,42 @@ liberator.plugins.system = (function() {
                     ].join("\n"), File.MODE_WRONLY | File.MODE_CREATE, 0644);
                 }
                 io.run('wscript.exe', [ file.path, key ]);
-            };
-        }
-        return function(){}; // unsupported
+            }
+        };
+
+        var func = function(k) {
+            var key = function(m){ return k; };
+            key = (typeof k == 'object' && function(m){ return k[m]; }) || key;
+
+            for (var m in methods) {
+                if (methods[m].cond()) {
+                    methods[m].send(key(m));
+                    return;
+                }
+            }
+        };
+
+        func.methods = methods;
+        return func;
     })();
+    liberator.plugins.sendKeys = sendKeys;
 
     var ime = (function() {
-        var xkeys = {
-            on: 'ime_activate_xkey',
-            off: 'ime_inactivate_xkey'
-        };
-        var wkeys = {
-            on: 'ime_activate_wkey',
-            off: 'ime_inactivate_wkey'
-        };
-        var keys = liberator.has('Windows') ? wkeys : xkeys;
-        var send = function(v) {
-            var key = liberator.globalVariables[v];
-            if (key) sendKey(key);
+        var methods = [];
+        for (var m in sendKeys.methods) methods.push(m);
+
+        var keys = function(action) {
+            var k = {};
+            methods.forEach(function(m) {
+                var name = [ 'ime', action, m+'key' ].join('_');
+                k[m] = liberator.globalVariables[name];
+            });
+            return k;
         };
 
         var self = {
-            on: function(){ send(keys.on); },
-            off: function(){ send(keys.off); },
+            on: function(){ sendKeys(keys('activate')); },
+            off: function(){ sendKeys(keys('inactivate')); },
             inactivate: liberator.globalVariables.imeoff.split(/[,| ]/)
         };
 
@@ -108,9 +114,5 @@ liberator.plugins.system = (function() {
 
         return self;
     })();
-
-    system.has = has;
-    system.ime = ime;
-
-    return system;
+    liberator.plugins.imekeys = ime;
 })();

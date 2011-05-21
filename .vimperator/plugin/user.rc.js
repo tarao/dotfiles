@@ -44,7 +44,7 @@
         ['<C-j>'],
         'Activate IME',
         function() {
-            setTimeout(function(){ liberator.plugins.system.ime.on(); }, 200);
+            setTimeout(function(){ liberator.plugins.imekeys.on(); }, 200);
         });
 
     if (liberator.plugins.libly) {
