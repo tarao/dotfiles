@@ -60,8 +60,8 @@ noremap <C-x> <Nop>
 
 let g:ime_activate_xkey='\[Control]\[Shift]$'
 let g:ime_inactivate_xkey='\[Control]\[Shift] '
-let g:ime_activate_wkey='%`'
-let g:ime_inactivate_wkey='^{F11}'
+let g:ime_activate_wkey='^{F11}'
+let g:ime_inactivate_wkey='^+{F11}'
 let g:imeoff='cmd'
 
 " plugin_loader.js
