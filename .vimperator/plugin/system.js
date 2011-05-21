@@ -64,20 +64,46 @@ liberator.plugins.system = (function() {
                     return this.joinValues(self.inactivate);
                 },
                 setter: function(value) {
-                    self.inactivate = this.parseValues(value);
-                    return value;
+                    self.inactivate = (function(vals) {
+                        if (vals.indexOf('all') >= 0) {
+                            return [ 'cmd', 'insert' ];
+                        } else {
+                            return vals.filter(function(v){return v!='none';});
+                        }
+                    })(this.parseValues(value));
+
+                    return this.getter();
+                },
+                completer: function(context) {
+                    var completions = [
+                        [ 'all', 'on all possible elements' ],
+                        [ 'none', 'on no element' ],
+                        [ 'cmd', 'on command line' ],
+                        [ 'insert', 'on input element' ]
+                    ];
+                    context.completions = completions;
+                    return completions;
                 }
             });
 
         if (liberator.plugins.libly) {
-            var advice = function(proceed, args) {
+            var cmd = function(proceed, args) {
                 var ret = proceed(args);
                 if (ime.inactivate.indexOf('cmd') >= 0) ime.off();
                 return ret;
             };
+            var insert = function(proceed, args) {
+                var ret = proceed(args);
+                if (ime.inactivate.indexOf('insert') >= 0 &&
+                    args[0] == modes.INSERT) {
+                    ime.off();
+                }
+                return ret;
+            };
 
-            liberator.plugins.libly.$U.around(commandline, 'open', advice);
-            liberator.plugins.libly.$U.around(commandline, 'input', advice);
+            liberator.plugins.libly.$U.around(commandline, 'open', cmd);
+            liberator.plugins.libly.$U.around(commandline, 'input', cmd);
+            liberator.plugins.libly.$U.around(modes, 'set', insert);
         }
 
         return self;
