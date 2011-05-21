@@ -45,6 +45,8 @@
     liberator.plugins.sendKeys = sendKeys;
 
     var ime = (function() {
+        var self = {};
+
         var methods = [];
         for (var m in sendKeys.methods) methods.push(m);
 
@@ -57,56 +59,64 @@
             return k;
         };
 
-        var self = {
-            on: function(){ sendKeys(keys('activate')); },
-            off: function(){ sendKeys(keys('inactivate')); },
-            inactivate: liberator.globalVariables.imeoff.split(/[,| ]/)
+        var add = function(name, prop) {
+            self[name] = function(){ sendKeys(keys(prop)); };
+            var varname = 'ime'+name;
+            var defaultValue = liberator.globalVariables[varname] || '';
+            self[prop] = defaultValue.split(/[,| ]/);
+
+            options.add(
+                [varname],
+                'Automatically '+prop+' IME',
+                'stringlist',
+                defaultValue,
+                {
+                    getter: function() {
+                        return this.joinValues(self[prop]);
+                    },
+                    setter: function(value) {
+                        self[prop] = (function(vals) {
+                            if (vals.indexOf('all') >= 0) {
+                                return [ 'cmd', 'insert' ];
+                            } else {
+                                return vals.filter(function(v) {
+                                    return v != 'none';
+                                });
+                            }
+                        })(this.parseValues(value));
+
+                        return this.getter();
+                    },
+                    completer: function(context) {
+                        var completions = [
+                            [ 'all', 'on all possible elements' ],
+                            [ 'none', 'on no element' ],
+                            [ 'cmd', 'on command line' ],
+                            [ 'insert', 'on input element' ]
+                        ];
+                        context.completions = completions;
+                        return completions;
+                    }
+                });
         };
 
-        options.add(
-            ['imeoff'],
-            'Automatically inactivate IME',
-            'stringlist',
-            self.inactivate,
-            {
-                getter: function() {
-                    return this.joinValues(self.inactivate);
-                },
-                setter: function(value) {
-                    self.inactivate = (function(vals) {
-                        if (vals.indexOf('all') >= 0) {
-                            return [ 'cmd', 'insert' ];
-                        } else {
-                            return vals.filter(function(v){return v!='none';});
-                        }
-                    })(this.parseValues(value));
-
-                    return this.getter();
-                },
-                completer: function(context) {
-                    var completions = [
-                        [ 'all', 'on all possible elements' ],
-                        [ 'none', 'on no element' ],
-                        [ 'cmd', 'on command line' ],
-                        [ 'insert', 'on input element' ]
-                    ];
-                    context.completions = completions;
-                    return completions;
-                }
-            });
+        var l = [ ['on', 'activate'], ['off', 'deactivate'] ];
+        l.forEach(function(x){ add(x[0], x[1]); });
 
         if (liberator.plugins.libly) {
+            var advice = function(c) {
+                l.some(function(x) {
+                    return self[x[1]].indexOf(c)>=0 && (self[x[0]]()||true);
+                });
+            };
             var cmd = function(proceed, args) {
                 var ret = proceed(args);
-                if (ime.inactivate.indexOf('cmd') >= 0) ime.off();
+                advice('cmd');
                 return ret;
             };
             var insert = function(proceed, args) {
                 var ret = proceed(args);
-                if (ime.inactivate.indexOf('insert') >= 0 &&
-                    args[0] == modes.INSERT) {
-                    ime.off();
-                }
+                if (args[0] == modes.INSERT) advice('insert');
                 return ret;
             };
 
