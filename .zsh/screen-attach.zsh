@@ -81,8 +81,8 @@ function screen_attach () {
     [[ -z "$sty" ]] && {
         # find detached screen or select first one
         local attached; local detached
-        attached=(${(f)"$(screen_list_attached)"})
-        detached=(${(f)"$(screen_list_detached)"})
+        attached=(${(f)"$(screen_list_attached)"%\n})
+        detached=(${(f)"$(screen_list_detached)"%\n})
         [[ ${#attached} > 0 ]] && sty="$attached[1]"
         [[ ${#detached} > 0 ]] && sty="$detached[1]"
         [[ -z "$sty" ]] && {
