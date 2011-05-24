@@ -32,7 +32,7 @@
             key = (typeof k == 'object' && function(m){ return k[m]; }) || key;
 
             for (var m in methods) {
-                if (key(m) && smethods[m].cond()) {
+                if (key(m) && methods[m].cond()) {
                     methods[m].send(key(m));
                     return;
                 }
