@@ -24,7 +24,8 @@ if is-at-least 4.3.10; then
     function zle-line-init () { auto-fu-init }
     zle -N zle-line-init
     zstyle ':auto-fu:highlight' input bold
-    zstyle ':auto-fu:highlight' completion fg=white
+    zstyle ':auto-fu:highlight' completion fg=white,dim
+    zstyle ':auto-fu:highlight' completion/one fg=blue,dim
     zstyle ':auto-fu:var' postdisplay ''
     function afu+cancel () {
         afu-clearing-maybe
