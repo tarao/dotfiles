@@ -1,4 +1,4 @@
-SCREEN_TITLE_CMD_ARG=(ssh -1 su -1 man -1 v -1)
+SCREEN_TITLE_CMD_ARG+=(v -1 vi -1 git 2)
 bindkey '^R' anything-history
 bindkey -M afu >/dev/null 2>&1 && bindkey -M afu '^R' anything-history
 

@@ -18,24 +18,32 @@ function _screen_title_install_precmd () { # use current directory as a title
     }
 }
 _screen_title_install_precmd
+typeset -A SCREEN_TITLE_ARG; SCREEN_TITLE_ARG=()
 typeset -A SCREEN_TITLE_CMD_ARG; SCREEN_TITLE_CMD_ARG=(ssh -1 su -1 man -1)
 typeset -A SCREEN_TITLE_CMD_IGNORE; SCREEN_TITLE_CMD_IGNORE=()
 function _screen_title_install_preexec { # use command name as a title
     function _screen_set_cmd_title () {
         zmodload zsh/regex
-        local -a cmd; cmd=(${(z)1})
+        local -a cmd; cmd=(${(z)1}); local prefix; local title
         while [[ "$cmd[1]" -regex-match "[^\\]=" ]]; do shift cmd; done
         [[ "$cmd[1]" == "command" ]] && shift cmd
         [[ "$cmd[1]" == "builtin" ]] && shift cmd
-        [[ "$cmd[1]" == "env" ]] && shift cmd
-        [[ "$cmd[1]" == "/usr/bin/env" ]] && shift cmd
-        if [[ -n "$SCREEN_TITLE_CMD_IGNORE[$cmd[1]]" ]]; then
+        [[ "${cmd[1]:t}" == "env" ]] && shift cmd
+        [[ "$cmd[1]" == "sudo" ]] && shift cmd && prefix='#'
+        if [[ -n "$SCREEN_TITLE_CMD_IGNORE[${cmd[1]:t}]" ]]; then
             return
-        elif [[ -n "$SCREEN_TITLE_CMD_ARG[$cmd[1]]" ]]; then
+        elif [[ -n "$SCREEN_TITLE_ARG[${cmd[1]:t}]" ]]; then
             # argument of command
-            cmd[1]=$cmd[$SCREEN_TITLE_CMD_ARG[$cmd[1]]]
+            title="${cmd[$SCREEN_TITLE_ARG[${cmd[1]:t}]]:t}"
+        elif [[ -n "$SCREEN_TITLE_CMD_ARG[${cmd[1]:t}]" ]]; then
+            # command itself and argument of command
+            title="${cmd[$SCREEN_TITLE_CMD_ARG[${cmd[1]:t}]]:t}"
+            [[ $#cmd > 1 || -z "$title" ]] && {
+                prefix+="${cmd[1]:t}"
+                [[ -n "$title" ]] && prefix+=':'
+            }
         fi
-        _screen_set_title "$cmd[1]:t"
+        _screen_set_title "$prefix$title"
     }
     function preexec_screen_window_title () {
         local -a cmd; cmd=(${(z)2}) # command in a single line
