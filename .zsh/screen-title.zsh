@@ -42,6 +42,8 @@ function _screen_title_install_preexec { # use command name as a title
                 prefix+="${cmd[1]:t}"
                 [[ -n "$title" ]] && prefix+=':'
             }
+        else
+            title="${cmd[1]:t}"
         fi
         _screen_set_title "$prefix$title"
     }
