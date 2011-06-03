@@ -30,7 +30,7 @@ markkeys ^D=J:^U=K
 
 # set copy buffer
 setenv SCRCOPYBUFFER $HOME/.screen/exchange
-setenv SCRCOPYCMD "cat $SCRCOPYBUFFER | xsel -i"
+setenv SCRCOPYCMD "cat $SCRCOPYBUFFER | xsel -b -i"
 bufferfile $SCRCOPYBUFFER
 
 # pass copy buffer to xclip
@@ -40,7 +40,7 @@ bindkey -m y eval 'stuff y' writebuf "exec !!! zsh -c '$SCRCOPYCMD'"
 bindkey -m W eval 'stuff W' writebuf "exec !!! zsh -c '$SCRCOPYCMD'"
 
 # paste from xclip
-setenv SCRYANKCMD "xsel -o > $SCRCOPYBUFFER"
+setenv SCRYANKCMD "xsel -b -o > $SCRCOPYBUFFER"
 setenv SCRPASTE 'screen -X eval "readbuf" "paste ."'
 bind P eval "exec !!! zsh -c '$SCRYANKCMD; $SCRPASTE'"
 
