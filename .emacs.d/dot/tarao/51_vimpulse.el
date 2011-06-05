@@ -130,6 +130,7 @@
 (vimpulse-global-set-key 'vi-state (kbd ":") 'anything-for-files)
 (vimpulse-global-set-key 'vi-state (kbd "C-w") 'kill-region)
 (vimpulse-global-set-key 'insert-state (kbd "C-w") 'kill-region)
+(vimpulse-global-set-key 'insert-state (kbd "C-y") 'yank)
 (vimpulse-global-set-key 'vi-state (kbd "j") 'next-line)
 (vimpulse-global-set-key 'vi-state (kbd "k") 'previous-line)
 (vimpulse-global-set-key 'vi-state (kbd "J") 'viper-scroll-up)
