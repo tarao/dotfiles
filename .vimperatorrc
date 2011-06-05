@@ -17,10 +17,8 @@ set hintchars=hjklgfdsayuioptrewq
 noremap ; :
 noremap : ;
 
-noremap j 3<C-e>
-noremap k 3<C-y>
-vnoremap j j
-vnoremap k k
+nnoremap j 3j
+nnoremap k 3k
 noremap J <C-d>
 noremap K <C-u>
 
