@@ -65,14 +65,16 @@ let g:ime_activate_wkey='^{F11}'
 let g:imeoff='cmd'
 
 " plugin_loader.js
-let g:plugin_loader_roots='~/.vimperator/vimperator-plugins ~/.vimperator/plugin-available/';
+let g:plugin_loader_roots='~/.vimperator/vimperator-plugins/ ~/.vimperator/plugin-available/ ~/.vimperator/tarao-plugins/';
 js <<EOM
 liberator.globalVariables.plugin_loader_plugins = <>
     _libly
     caret-hint
     gmperator
     hatena-bookmark-search
+    imekeys
     pluginManager
+    switch_language
 </>.toString().split(/\s+/).filter(function(n) n);
 EOM
 
