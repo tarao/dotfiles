@@ -1,5 +1,6 @@
 # VCS
 autoload -Uz vcs_info
+zstyle ':vcs_info:*' max-exports 4
 zstyle ':vcs_info:(git|svn):*' formats '%R' '%S' '%b' '%s'
 zstyle ':vcs_info:(git|svn):*' actionformats '%R' '%S' '%b|%a' '%s'
 zstyle ':vcs_info:*' formats '%R' '%S' '%s:%b' '%s'
