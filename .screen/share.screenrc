@@ -1,0 +1,28 @@
+source $HOME/.screenrc
+
+# allow client-side commands
+setenv ALLOWED_CMD "help"
+setenv ALLOWED_CMD "$ALLOWED_CMD,colon"
+setenv ALLOWED_CMD "$ALLOWED_CMD,select,next,prev,other"
+setenv ALLOWED_CMD "$ALLOWED_CMD,split,only,focus"
+setenv ALLOWED_CMD "$ALLOWED_CMD,displays"
+setenv ALLOWED_CMD "$ALLOWED_CMD,detach"
+
+# acl commands
+setenv ACL_READ_ONLY "aclchg $SHARE_USERS -w-x *"
+setenv ACL_ALLOW_CMD "aclchg $SHARE_USERS +x $ALLOWED_CMD"
+
+# allow multi users
+multiuser on
+acladd $USER
+acladd $SHARE_USERS
+
+# restrict commands
+eval "$ACL_READ_ONLY"
+eval "$ACL_ALLOW_CMD"
+bind c eval screen "$ACL_READ_ONLY" "$ACL_ALLOW_CMD"
+
+unsetenv SHARE_USERS
+unsetenv ALLOWED_CMD
+unsetenv ACL_READ_ONLY
+unsetenv ACL_ALLOW_CMD

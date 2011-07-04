@@ -55,4 +55,5 @@ is-at-least 4.3.10 && source ~/.zsh/term.zsh
 source ~/.zsh/screen.zsh
 source ~/.zsh/screen-title.zsh
 source ~/.zsh/screen-attach.zsh
+source ~/.zsh/screen-share.zsh
 source ~/.zsh/screen-alias.zsh
