@@ -63,7 +63,8 @@ function emacsd () {
             ;;
         stop)
             $0 status >/dev/null &&
-            emacsclient -e '(progn (defun yes-or-no-p (p) t) (kill-emacs))'
+            cmd=($EMACS_CLIENT_CMD)
+            $cmd -e '(progn (defun yes-or-no-p (p) t) (kill-emacs))'
             ;;
         restart)
             $0 stop
