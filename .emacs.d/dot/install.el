@@ -15,6 +15,8 @@
         "descbinds-anything.el"
         "eldoc-extension.el"
         "key-chord.el"
+        "moccur.el"
+        "color-moccur.el"
         "shell-history.el"
         "space-chord.el"
         "xquery-mode.el"

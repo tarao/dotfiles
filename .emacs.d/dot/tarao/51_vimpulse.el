@@ -116,6 +116,8 @@
 ;; operator
 (require 'vimpulse-operator-comment nil t)
 (require 'vimpulse-relative-linum nil t)
+(when (functionp 'moccur-grep-find-region)
+  (require 'vimpulse-operator-moccur nil t))
 
 ;; textobj
 (require 'vimpulse-textobj-between nil t)
