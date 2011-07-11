@@ -10,7 +10,7 @@ alias -- -='popd'
 alias fwd='ssh -N -F ~/.ssh/fwd_config -N'
 alias proxy='ssh -F ~/.ssh/proxy_config -N'
 
-alias man='LANG=${LANG/en_US.UTF-8/en_US} command man'
+alias man='LANG=C command man'
 alias od='od -A x -t xCz'
 alias apt='LANG=C aptitude'
 alias sapt='LANG=C sudo aptitude'
