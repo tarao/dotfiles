@@ -95,6 +95,12 @@
       (viper-change-state-to-vi)))
   (vimpulse-global-set-key 'vi-state (kbd "C-r") 'undo-tree-redo))
 
+;; Buffer menu
+(vimpulse-define-key 'Buffer-menu-mode 'vi-state (kbd "q")
+                     '(lambda ()
+                        (interactive)
+                        (kill-buffer (current-buffer))))
+
 ;; vimpulse-surround
 (when (require 'vimpulse-surround nil t)
   (setq vimpulse-surround-excludes '())
