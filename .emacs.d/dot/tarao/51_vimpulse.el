@@ -116,7 +116,7 @@
 ;; operator
 (require 'vimpulse-operator-comment nil t)
 (require 'vimpulse-relative-linum nil t)
-(when (functionp 'moccur-grep-find-region)
+(when (featurep 'color-moccur)
   (require 'vimpulse-operator-moccur nil t))
 
 ;; textobj
