@@ -122,8 +122,7 @@
 ;; operator
 (require 'vimpulse-operator-comment nil t)
 (require 'vimpulse-relative-linum nil t)
-(when (featurep 'color-moccur)
-  (require 'vimpulse-operator-moccur nil t))
+(require 'vimpulse-operator-moccur nil t)
 
 ;; textobj
 (require 'vimpulse-textobj-between nil t)
