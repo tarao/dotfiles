@@ -6,6 +6,18 @@
 (set-face-attribute 'linum nil :foreground "aquamarine4")
 
 ;; wc (CC/WW/LL)
+(defun add-local-hook (hook function &optional append)
+  (if (and (boundp 'emacs-major-version)
+           (< emacs-major-version 21))
+      (progn
+        (make-local-hook hook)
+        (add-hook hook function append t))
+    (add-hook hook function append t)))
+(defun remove-local-hook (hook function)
+  (when (or (not (and (boundp 'emacs-major-version)
+                      (< emacs-major-version 21)))
+            (local-variable-p hook (current-buffer)))
+    (remove-hook hook function t)))
 (autoload 'word-count-mode "word-count" "Minor mode to count words." t nil)
 (global-set-key (kbd "M-+") 'word-count-mode)
 
