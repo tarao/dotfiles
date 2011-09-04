@@ -1,3 +1,7 @@
+;; make *scratch* immortal
+(require 'immortal-buffer)
+(make-buffer-immortal "*scratch*")
+
 ;; auto-save
 (defun auto-save-buffer (&optional buffer)
   (interactive)

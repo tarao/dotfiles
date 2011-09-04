@@ -7,7 +7,3 @@
 (setq explicit-shell-file-name "zsh")
 (setq shell-file-name "zsh")
 (setq shell-command-switch "-c")
-
-;; make *scratch* immortal
-(require 'immortal-buffer)
-(make-buffer-immortal "*scratch*")
