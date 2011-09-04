@@ -1,0 +1,1 @@
+WORDCHARS=${WORDCHARS:s,/,,}
