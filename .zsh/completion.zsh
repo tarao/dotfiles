@@ -2,6 +2,7 @@
 setopt   auto_list auto_param_slash list_packed rec_exact
 unsetopt list_beep
 zstyle ':completion:*' menu select
+zstyle ':completion:*' list-colors 'di=1;34'
 zstyle ':completion:*' format '%F{white}%d%f'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
