@@ -19,3 +19,7 @@
   (interactive)
   (set (make-variable-buffer-local 'make-backup-files) nil)
   (auto-save-mode 0))
+
+;; use directory name instead of <num>
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
