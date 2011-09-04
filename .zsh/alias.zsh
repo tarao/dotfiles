@@ -1,4 +1,13 @@
-alias ls='command ls -F $=LS_OPTIONS'
+function ls () {
+    if env test -t 1; then
+        # stdout is a terminal
+        command ls -F $=LS_OPTIONS $@
+    else
+        # stdout is a pipe
+        command ls $=LS_OPTIONS $@
+    fi
+}
+
 alias dir='ls -l'
 alias la='ls -la'
 alias ll='ls -alF'
