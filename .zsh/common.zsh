@@ -46,7 +46,7 @@ autoload -Uz is-at-least
 
 source ~/.zsh/env.zsh
 source ~/.zsh/alias.zsh
-source ~/.zsh/complete.zsh
+source ~/.zsh/completion.zsh
 source ~/.zsh/function.zsh
 source ~/.zsh/emacs.zsh
 source ~/.zsh/cdd.zsh
