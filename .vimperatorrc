@@ -9,6 +9,7 @@ hi Hint z-index:5000; font-family:monospace; font-size:12px; letter-spacing:0.1e
 set hintchars=hjklgfdsayuioptrewq
 
 :style -name commandline-ime chrome://* #liberator-commandline-command input {ime-mode: inactive;}
+:style -name toolbar chrome://* #liberator-customize-toolbar { -moz-appearance: none ! important; }
 
 " ================ KEY BINDINGS ================
 
@@ -74,6 +75,7 @@ liberator.globalVariables.plugin_loader_plugins = <>
     hatena-bookmark-search
     imekeys
     pluginManager
+    statusline-toolbar
     switch_language
 </>.toString().split(/\s+/).filter(function(n) n);
 EOM
