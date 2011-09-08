@@ -1,4 +1,5 @@
 set gui=none
+set showstatuslinks=2
 set ic
 set visualbell
 set hlsearch
@@ -71,6 +72,7 @@ js <<EOM
 liberator.globalVariables.plugin_loader_plugins = <>
     _libly
     caret-hint
+    commandline-status
     gmperator
     hatena-bookmark-search
     imekeys
