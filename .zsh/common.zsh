@@ -23,7 +23,7 @@ setopt   auto_pushd pushd_to_home pushd_minus pushd_silent auto_cd
 setopt   extended_glob glob_dots
 ## Input/Output
 setopt   correct rc_quotes
-unsetopt correct_all
+unsetopt correct_all ignore_eof
 ## Job Control
 setopt   long_list_jobs auto_resume
 unsetopt bg_nice hup
