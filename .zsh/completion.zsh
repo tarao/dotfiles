@@ -33,6 +33,7 @@ if is-at-least 4.3.10; then
         afu-clearing-maybe
         ((afu_in_p == 1)) && { afu_in_p=0; BUFFER="$buffer_cur"; }
     }
+    zle -N afu+cancel
     function bindkey-advice-before () {
         local key="$1"
         local advice="$2"
