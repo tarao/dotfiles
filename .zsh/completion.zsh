@@ -23,12 +23,16 @@ if is-at-least 4.3.10; then
         zsh -c "source $A; auto-fu-zcompile $A ${A:h}" >/dev/null 2>&1
     }
     source ~/.zsh/modules/auto-fu/auto-fu; auto-fu-install
-    function zle-line-init () { auto-fu-init }
-    zle -N zle-line-init
+
     zstyle ':auto-fu:highlight' input bold
     zstyle ':auto-fu:highlight' completion fg=white,dim
     zstyle ':auto-fu:highlight' completion/one fg=blue,dim
     zstyle ':auto-fu:var' postdisplay ''
+    zstyle ':auto-fu:var' track-keymap-skip opp
+
+    function zle-line-init () { auto-fu-init }; zle -N zle-line-init
+    zle -N zle-keymap-select auto-fu-zle-keymap-select
+
     function afu+cancel () {
         afu-clearing-maybe
         ((afu_in_p == 1)) && { afu_in_p=0; BUFFER="$buffer_cur"; }
