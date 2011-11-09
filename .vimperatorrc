@@ -11,6 +11,7 @@ set hintchars=hjklgfdsayuioptrewq
 
 :style -name commandline-ime chrome://* #liberator-commandline-command input {ime-mode: inactive;}
 :style -name toolbar chrome://* #liberator-customize-toolbar { -moz-appearance: none ! important; }
+highlight ModeMsg background-color: white; color: #666666
 
 " ================ KEY BINDINGS ================
 
