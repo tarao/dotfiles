@@ -7,6 +7,8 @@ set editor="notepad.exe"
 set verbose=10
 
 hi Hint z-index:5000; font-family:monospace; font-size:12px; letter-spacing:0.1em; color:#404040; background-color:#e0e0ff; outline-style:solid; outline-width:1px; outline-color:blue; padding:2px 4px; position:absolute;
+set hinttags+="|//*[@role='button' or @role='checkbox' or @role='combobox' or @role='listbox' or @role='listitem' or @role='menuitem' or @role='menuitemcheckbox' or @role='menuitemradio' or @role='option' or @role='radio' or @role='scrollbar' or @role='slider' or @role='spinbutton' or @role='tab' or @role='textbox' or @role='treeitem']"
+set hinttags+="|//*[@tabindex]"
 set hintchars=hjklgfdsayuioptrewq
 
 :style -name commandline-ime chrome://* #liberator-commandline-command input {ime-mode: inactive;}
