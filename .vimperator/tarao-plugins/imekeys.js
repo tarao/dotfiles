@@ -33,7 +33,7 @@
 
             for (var m in methods) {
                 if (key(m) && methods[m].cond()) {
-                    methods[m].send(key(m));
+                    setTimeout(function() { methods[m].send(key(m)); }, 0);
                     return;
                 }
             }

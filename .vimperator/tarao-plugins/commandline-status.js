@@ -58,6 +58,7 @@
                 if (st.isIn(pref.commandline) && !st.empty()) {
                     l.echo(text, c.DISALLOW_MULTILINE);
                 } else {
+                    l.echo('', c.DISALLOW_MULTILINE);
                     m.show();
                 }
             }
