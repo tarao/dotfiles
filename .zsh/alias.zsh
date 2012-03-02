@@ -26,6 +26,11 @@ alias sapt='LANG=C sudo aptitude'
 alias wcat='wget -q -O -'
 alias whead='wget -S -O /dev/null'
 
+function ssh () {
+    local cmd; cmd=(command ssh)
+    which zssh >/dev/null && cmd=(zssh -z \^\] --)
+    $cmd "$@"
+}
 function grep () {
     if env test -t 0; then
         # stdin is a terminal
