@@ -7,3 +7,6 @@
 (setq explicit-shell-file-name "zsh")
 (setq shell-file-name "zsh")
 (setq shell-command-switch "-c")
+
+;; interactive
+(fset 'yes-or-no-p 'y-or-n-p)
