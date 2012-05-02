@@ -1,3 +1,6 @@
+.:
+  <src>:
+    .gitconfig: tarao.gitconfig
 .emacs.d/dot:
   99_local.el: tarao.luxaky.el
   .viper.el: local/viper.el

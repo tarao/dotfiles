@@ -1,0 +1,18 @@
+[core]
+    excludesfile = ~/.gitignore
+[rerere]
+    enabled = true
+[alias]
+    st = status
+    di = diff
+    co = checkout
+    ci = commit
+    br = branch
+    wdiff = diff --color-words
+[color]
+    ui = auto
+[tig]
+    line-graphics = ascii
+[user]
+    name = tarao
+    email = tarao.gnn@gmail.com
