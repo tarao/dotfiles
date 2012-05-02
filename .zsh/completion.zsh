@@ -31,7 +31,7 @@ if is-at-least 4.3.10; then
     zstyle ':auto-fu:var' track-keymap-skip opp
 
     function zle-line-init () { auto-fu-init }; zle -N zle-line-init
-    zle -N zle-keymap-select auto-fu-zle-keymap-select
+    # zle -N zle-keymap-select auto-fu-zle-keymap-select
 
     function afu+cancel () {
         afu-clearing-maybe
