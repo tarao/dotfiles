@@ -1,3 +1,5 @@
+which win > /dev/null || return
+
 alias ii='win cygstart'
 alias ck='win ck -e ssh luxaky'
 alias wgui='win --interactive'
