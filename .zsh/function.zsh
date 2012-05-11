@@ -90,7 +90,7 @@ function git-set-remote () {
     [[ -z "$brach" ]] &&  branch=master
     [[ -z "$remote" ]] && remote=origin
     git config --add branch.$branch.remote $remote
-    git config --add branch.$branch.merge refs/heads/$brach
+    git config --add branch.$branch.merge refs/heads/$branch
 }
 
 # file conversion
