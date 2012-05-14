@@ -16,6 +16,7 @@
 (yaicomplete-mode)
 
 ;; anything
+(setq dired-bind-jump nil)
 (require 'anything-config)
 (setq anything-enable-shortcuts 'alphabet)
 (setq anything-for-files-prefered-list
