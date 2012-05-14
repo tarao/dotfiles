@@ -1,4 +1,4 @@
-(load "multi-mode-util" t)
+(require 'multi-mode-util)
 (defun hatena-diary-init ()
   (interactive)
   (no-backup)
