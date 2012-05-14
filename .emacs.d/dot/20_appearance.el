@@ -11,7 +11,11 @@
 (defun skk-set-mode-line-color (setter)
   (when (and (featurep 'skk) skk-j-mode
              (or (not (featurep 'viper))
-                 (eq viper-current-state 'insert-state)))
+                 (not viper-mode)
+                 (eq viper-current-state 'insert-state))
+             (or (not (featurep 'evil))
+                 (not evil-mode)
+                 (eq evil-state 'insert)))
     (funcall setter skk-j-mode-line-color)))
 (add-hook 'mode-line-color-hook 'skk-set-mode-line-color)
 (defadvice skk-update-modeline (after ad-skk-mode-line-color activate)

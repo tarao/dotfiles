@@ -14,6 +14,7 @@
         "csharp-mode.el"
         "descbinds-anything.el"
         "eldoc-extension.el"
+        "goto-chg.el"
         "key-chord.el"
         "moccur.el"
         "color-moccur.el"

@@ -37,20 +37,43 @@
   (define-key mew-summary-mode-map (kbd "C-SPC") 'mew-summary-scroll-down)
   (define-key mew-summary-mode-map "s" 'mew-summary-refile-spam)
   (define-key mew-summary-mode-map (kbd "l s") 'mew-summary-ls)
+
+  ;; mew-message-mode key maps
+  (define-key mew-message-mode-map (kbd "q") 'mew-message-close)
+
+  (when (featurep 'evil)
+    ;; mew-summary-mode key maps
+    (evil-make-overriding-map mew-summary-mode-map 'normal t)
+    (evil-define-key 'normal mew-summary-mode-map
+                     "j" (lookup-key evil-motion-state-map "j")
+                     "k" (lookup-key evil-motion-state-map "k")
+                     "G" (lookup-key evil-motion-state-map "G")
+                     "J" (lookup-key evil-motion-state-map "J")
+                     "K" (lookup-key evil-motion-state-map "K")
+                     ":" (lookup-key evil-normal-state-map ":")
+                     ";" (lookup-key evil-normal-state-map ";"))
+    ;; mew-message-mode key maps
+    (evil-make-overriding-map mew-message-mode-map 'normal t)
+    (evil-define-key 'normal mew-message-mode-map
+                     "h" (lookup-key evil-motion-state-map "h")
+                     "j" (lookup-key evil-motion-state-map "j")
+                     "k" (lookup-key evil-motion-state-map "k")
+                     "l" (lookup-key evil-motion-state-map "l")
+                     ":" (lookup-key evil-normal-state-map ":")))
+
   (when (featurep 'vimpulse)
+    ;; mew-summary-mode key maps
     (vimpulse-add-vi-bindings mew-summary-mode-map
                               '(viper-next-line
                                 viper-previous-line
                                 viper-scroll-down
                                 viper-scroll-up
                                 viper-goto-line
-                                anything-for-files) t))
-  ;; mew-message-mode key maps
-  (when (featurep 'vimpulse)
+                                anything-for-files) t)
+    ;; mew-message-mode key maps
     (vimpulse-add-core-movement-cmds mew-message-mode-map)
     (vimpulse-add-movement-cmds mew-message-mode-map t)
-  (vimpulse-add-vi-bindings mew-message-mode-map '(anything-for-files) t))
-  (define-key mew-message-mode-map (kbd "q") 'mew-message-close))
+    (vimpulse-add-vi-bindings mew-message-mode-map '(anything-for-files) t)))
 (eval-after-load 'mew-key '(mew-install-user-map))
 
 (add-hook
