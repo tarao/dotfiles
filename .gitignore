@@ -19,6 +19,7 @@ local.install.yml
 .emacs.d/ac-comphist.dat
 .emacs.d/bmk
 .emacs.d/recentf
+.emacs.d/tramp
 .emacs.d/site-lisp
 .emacs.d/dot/.*
 .emacs.d/dot/99_local.el
