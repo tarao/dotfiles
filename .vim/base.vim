@@ -29,5 +29,7 @@ endif
 noremap ; :
 noremap j gj
 noremap k gk
+noremap gj j
+noremap gk k
 noremap J <C-d>
 noremap K <C-u>

@@ -66,6 +66,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; key bindings
 
+(defun evil-swap-key (map key1 key2)
+  (let ((def1 (lookup-key map key1))
+        (def2 (lookup-key map key2)))
+    (define-key map key1 def2)
+    (define-key map key2 def1)))
+
 ;; use ; for :
 (evil-define-command evil-resend-ex ()
   "Enter an Ex command."
@@ -85,6 +91,8 @@
 (define-key evil-normal-state-map (kbd "gw") 'what-cursor-position)
 (define-key evil-normal-state-map (kbd "gW") 'describe-char)
 (define-key evil-normal-state-map (kbd "gA") 'describe-char)
+(evil-swap-key evil-motion-state-map "j" "gj")
+(evil-swap-key evil-motion-state-map "k" "gk")
 (define-key evil-motion-state-map (kbd "J") 'evil-scroll-down)
 (define-key evil-motion-state-map (kbd "K") 'evil-scroll-up)
 (define-key evil-visual-state-map (kbd "C-w") 'evil-delete)
