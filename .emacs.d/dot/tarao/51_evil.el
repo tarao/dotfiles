@@ -91,6 +91,7 @@
 (define-key evil-normal-state-map (kbd "gw") 'what-cursor-position)
 (define-key evil-normal-state-map (kbd "gW") 'describe-char)
 (define-key evil-normal-state-map (kbd "gA") 'describe-char)
+(define-key evil-normal-state-map (kbd "C-j") 'evil-join)
 (evil-swap-key evil-motion-state-map "j" "gj")
 (evil-swap-key evil-motion-state-map "k" "gk")
 (define-key evil-motion-state-map (kbd "J") 'evil-scroll-down)
