@@ -163,3 +163,9 @@
 ;; others
 
 (require 'evil-relative-linum nil t)
+
+(when (require 'evil-little-word nil t)
+  ;; w for Japanese phrase
+  ;; lw for Japanese word
+  (setq evil-cjk-emacs-word-boundary t)
+  (setq evil-little-word-cjk t))
