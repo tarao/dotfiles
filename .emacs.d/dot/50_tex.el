@@ -1,12 +1,11 @@
 (setq TeX-default-mode 'japanese-latex-mode)
 (setq auto-mode-alist
   (append
-   '(("\\.sty$" . LaTeX-mode)
-     ("\\.tex$" . LaTeX-mode))
+   `(("\\.sty$" . ,TeX-default-mode)
+     ("\\.tex$" . ,TeX-default-mode))
    auto-mode-alist))
 (setq japanese-TeX-command-default "pTeX")
 (setq japanese-LaTeX-command-default "pLaTeX")
-(setq latex-run-command "platex")
 (setq default-file-coding-system-alist
       (append
        '(("\\.tex$" . euc-jp-unix)
