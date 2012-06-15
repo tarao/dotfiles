@@ -80,14 +80,12 @@
   (setq this-command last-command)
   (setq prefix-arg current-prefix-arg)
   (reset-this-command-lengths))
-(define-key evil-visual-state-map (kbd ";") 'evil-resend-ex)
-(define-key evil-visual-state-map [evil-ex] 'evil-ex)
-(define-key evil-normal-state-map (kbd ";") 'evil-resend-ex)
-(define-key evil-normal-state-map [evil-ex] 'evil-ex)
+(define-key evil-motion-state-map (kbd ";") 'evil-resend-ex)
+(define-key evil-motion-state-map [evil-ex] 'evil-ex)
 
 ;; user key bindings
 (when (fboundp 'anything-for-files)
-  (define-key evil-normal-state-map (kbd ":") 'anything-for-files))
+  (define-key evil-motion-state-map (kbd ":") 'anything-for-files))
 (define-key evil-normal-state-map (kbd "gw") 'what-cursor-position)
 (define-key evil-normal-state-map (kbd "gW") 'describe-char)
 (define-key evil-normal-state-map (kbd "gA") 'describe-char)
