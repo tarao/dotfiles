@@ -5,4 +5,19 @@
 (setq howm-menu-lang 'en)
 (setq auto-mode-alist (append '(("\\.howm$" . rdoc-mode)) auto-mode-alist))
 
-(require 'howm)
+(when (require 'howm nil t)
+  ;; evil
+  (eval-after-load 'evil
+    '(progn
+       ;; menu
+       (evil-make-overriding-map howm-menu-mode-map 'normal)
+       (add-hook 'howm-menu-hook
+                 '(lambda () (define-key howm-menu-mode-local-map ":" nil)))
+
+       ;; list
+       (evil-make-overriding-map howm-view-summary-mode-map 'normal)
+       (evil-define-key 'normal howm-view-summary-mode-map
+         "j" (lookup-key evil-motion-state-map "j")
+         "k" (lookup-key evil-motion-state-map "k")
+         "J" 'evil-scroll-down
+         "K" 'evil-scroll-up))))

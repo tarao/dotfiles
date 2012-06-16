@@ -50,8 +50,8 @@
       "G" (lookup-key evil-motion-state-map "G")
       "J" (lookup-key evil-motion-state-map "J")
       "K" (lookup-key evil-motion-state-map "K")
-      ":" (lookup-key evil-normal-state-map ":")
-      ";" (lookup-key evil-normal-state-map ";"))
+      ":" (lookup-key evil-motion-state-map ":")
+      ";" (lookup-key evil-motion-state-map ";"))
     ;; mew-message-mode key maps
     (evil-make-overriding-map mew-message-mode-map 'normal t)
     (evil-define-key 'normal mew-message-mode-map
@@ -59,7 +59,7 @@
       "j" (lookup-key evil-motion-state-map "j")
       "k" (lookup-key evil-motion-state-map "k")
       "l" (lookup-key evil-motion-state-map "l")
-      ":" (lookup-key evil-normal-state-map ":"))
+      ":" (lookup-key evil-motion-state-map ":"))
     ;; mew-draft-mode key maps
     (defun mew-draft-evil-open-below (count)
       (interactive "p")
