@@ -12,7 +12,8 @@
                 editor.executeCommand('cmd_beginLine', 1);
             } else {
                 // already at the beginning of line
-                editor.executeCommand('cmd_selectAll', 1);
+                editor.executeCommand('cmd_moveTop', 1);
+                editor.executeCommand('cmd_selectBottom', 1);
             }
         });
 
