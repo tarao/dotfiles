@@ -87,7 +87,7 @@ function git-set-remote () {
     fi
     local branch=$1
     local remote=$2
-    [[ -z "$brach" ]] &&  branch=master
+    [[ -z "$branch" ]] &&  branch=master
     [[ -z "$remote" ]] && remote=origin
     git config --add branch.$branch.remote $remote
     git config --add branch.$branch.merge refs/heads/$branch
