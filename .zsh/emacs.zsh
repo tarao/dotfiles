@@ -15,7 +15,7 @@ function emacsb () {
     echo "Usage: $0 [-L dir]... [compile FILE | install URL | update]..." && return
     local cmd; cmd=(emacs-standalone --batch)
     local -a libs; libs=()
-    local install; install=($cmd -l ~/.emacs.d/dot/install.el)
+    local install; install=($cmd -l ~/.emacs.d/init/install.el)
     local action; action=$1; shift
     while [[ "$1" == "-L" ]]; do
         libs=($libs $1 "$2"); shift; shift
