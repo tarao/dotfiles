@@ -12,7 +12,7 @@ function emacs-standalone () {
 
 function emacsb () {
     [[ -z "$1" ]] &&
-    echo "Usage: $0 [-L dir]... [compile FILE | install URL | update]..." && return
+    echo "Usage: $0 [compile [-L dir ...] FILE | install URL | update]..." && return
     local cmd; cmd=(emacs-standalone --batch)
     local -a libs; libs=()
     local install; install=($cmd -l ~/.emacs.d/init/install.el)
