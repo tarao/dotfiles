@@ -1,5 +1,5 @@
 (setq skk-dcomp-activate t)
-(setq skk-dcomp-multiple-activate t)
+;(setq skk-dcomp-multiple-activate t)
 
 (when (memq 'skk-dcomp-multiple-face (face-list))
   ;; dcomp-multiple supported
@@ -13,7 +13,7 @@
 (setq skk-henkan-strict-okuri-precedence t)
 (setq skk-show-annotation t)
 (require 'skk-hint)
-(require 'skk-study)
+;(require 'skk-study)
 
 ;; SandS (works only for the first character)
 (loop for k from ?a to ?z do
