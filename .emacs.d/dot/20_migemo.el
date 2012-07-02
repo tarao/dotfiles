@@ -1,2 +1,1 @@
-(require 'migemo)
-(migemo-init)
+../init/migemo.el

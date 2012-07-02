@@ -1,1 +1,1 @@
-(load "haskell-site-file")
+../init/haskell.el

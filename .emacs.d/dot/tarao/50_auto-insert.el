@@ -1,3 +1,1 @@
-(setq auto-insert-alist
-      (append '(("\\.xhtml$" . ["insert.xhtml" my-template]))
-              auto-insert-alist))
+../../init/tarao/auto-insert.el

@@ -1,5 +1,1 @@
-(autoload 'zen2han-region "zen2han" "zen <=> han" t)
-(autoload 'zen2han-buffer "zen2han" "zen <=> han" t)
-(autoload 'zen2han-all-fill-paragraph-region "zen2han" "zen <=> han" t)
-(autoload 'zen2han-all-fill-paragraph-buffer "zen2han" "zen <=> han" t)
-(autoload 'zen2han-chop-line-end-space "zen2han" "zen <=> han" t)
+../../init/tarao/zen2han.el

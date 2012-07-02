@@ -1,2 +1,1 @@
-(setq vc-follow-symlinks nil
-      vc-stay-local t)
+../../init/tarao/vc.el

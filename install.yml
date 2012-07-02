@@ -11,9 +11,9 @@
     .zsh: .zsh
     .zshenv: .zshenv
 .emacs.d/dot:
-  .emacs-w3m.el: local/emacs-w3m.el
-  .skk.el: local/skk.el
-  99_local.el: local.dummy.el
+  .emacs-w3m.el: ../init/local/emacs-w3m.el
+  .skk.el: ../init/local/skk.el
+  99_local.el: ../init/local.dummy.el
 .screen:
   local.screenrc: luxaky.screenrc
 .vim:

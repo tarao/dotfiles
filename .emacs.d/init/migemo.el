@@ -1,0 +1,2 @@
+(require 'migemo)
+(migemo-init)

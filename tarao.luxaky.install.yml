@@ -2,8 +2,7 @@
   <src>:
     .gitconfig: tarao.gitconfig
 .emacs.d/dot:
-  99_local.el: tarao.luxaky.el
-  .viper.el: local/viper.el
+  99_local.el: ../init/tarao.luxaky.el
 .vim:
   local.vim: tarao.vim
 .zsh:

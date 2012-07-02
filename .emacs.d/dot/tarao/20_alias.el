@@ -1,2 +1,1 @@
-(defalias 'comm 'comment-region)
-(defalias 'unc 'uncomment-region)
+../../init/tarao/alias.el

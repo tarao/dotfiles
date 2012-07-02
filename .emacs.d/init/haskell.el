@@ -1,0 +1,1 @@
+(load "haskell-site-file")
