@@ -139,6 +139,16 @@
 (push 'moccur-grep-mode evil-emacs-state-modes)
 
 ;; skk
+(eval-after-load 'ccc
+  '(progn
+     (defadvice update-buffer-local-cursor-color
+       (around ad-update-buffer-local-cursor-color-in-insert-state activate)
+       (when (and (eq evil-state 'insert) (featurep 'skk) skk-j-mode)
+         ad-do-it))
+     (defadvice evil-refresh-cursor
+       (around ad-refresh-cursor-unless-skk-mode activate)
+       (unless (and (eq evil-state 'insert) (featurep 'skk) skk-j-mode)
+         ad-do-it))))
 (eval-after-load 'skk
   '(progn
      (defadvice skk-mode-string-to-indicator
