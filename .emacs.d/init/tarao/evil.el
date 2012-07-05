@@ -43,7 +43,7 @@
   (let* ((msg (my-evil-state-msg state)) (line msg)
          (empty (= (length msg) 0)) (tail (if empty "-" "--")))
     (unless empty (setq line (concat "--" msg)))
-    (list "" line (list 'skk-mode "" tail))))
+    (list "" line tail)))
 (defun my-evil-update-mode-line ()
  (condition-case ()
       (progn
@@ -137,6 +137,14 @@
 
 ;; use raw key bindings in moccur
 (push 'moccur-grep-mode evil-emacs-state-modes)
+
+;; skk
+(eval-after-load 'skk
+  '(progn
+     (defadvice skk-mode-string-to-indicator
+       (before ad-remove----from-skk-mode-string (mode string) activate)
+       (when (string-match "^--" string)
+         (setq string (substring string 2))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; plugins
