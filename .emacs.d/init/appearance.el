@@ -4,6 +4,9 @@
 (color-theme-initialize)
 (color-theme-dark-laptop)
 
+;; colors
+(set-face-background 'region  "#8c8ce8")
+
 ;; mode line color
 (require 'mode-line-color)
 (mode-line-color-mode)
@@ -21,12 +24,9 @@
 (defadvice skk-update-modeline (after ad-skk-mode-line-color activate)
   (mode-line-color-update))
 
-;; no cursor blinking
-(blink-cursor-mode nil)
-
 ;; eof mark
 (require 'end-mark)
-(unless window-system (global-end-mark-mode))
+(global-end-mark-mode)
 
 ;; line-wrap character
 (defface wrap-face
