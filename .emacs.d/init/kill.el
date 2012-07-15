@@ -11,7 +11,9 @@
    (process-send-eof proc)))
 (defun xsel-output (type)
   (let ((type (if (eq type 'PRIMARY) "-p" "-b")))
-    (mapconcat '(lambda (x) x) (process-lines "xsel" type "-o") "\n")))
+    (with-temp-buffer
+      (call-process "xsel" nil (current-buffer) nil type "-o")
+      (buffer-substring-no-properties (point-min) (point-max)))))
 (defun xsel-clear (type)
  (let ((type (if (eq type 'PRIMARY) "-p" "-b")))
    (call-process "xsel" nil "*Messages*" nil type "-c")))
