@@ -15,14 +15,18 @@ autoload -U compinit
 compinit
 
 # incremental completion
-if is-at-least 4.3.10; then
-    function () { # precompile
-        local A
-        A=~/.zsh/modules/auto-fu/auto-fu.zsh
-        [[ -e "${A:r}.zwc" ]] && [[ "$A" -ot "${A:r}.zwc" ]] ||
-        zsh -c "source $A; auto-fu-zcompile $A ${A:h}" >/dev/null 2>&1
-    }
-    source ~/.zsh/modules/auto-fu/auto-fu; auto-fu-install
+is-at-least 4.3.10 || return
+
+function () { # precompile
+    local A
+    A=~/.zsh/modules/auto-fu/auto-fu.zsh
+    [[ -e "${A:r}.zwc" ]] && [[ "$A" -ot "${A:r}.zwc" ]] ||
+    zsh -c "source $A; auto-fu-zcompile $A ${A:h}" >/dev/null 2>&1
+}
+source ~/.zsh/modules/auto-fu/auto-fu
+
+function install-auto-fu () {
+    auto-fu-install
 
     zstyle ':auto-fu:highlight' input bold
     zstyle ':auto-fu:highlight' completion fg=white,dim
@@ -94,4 +98,12 @@ EOT
     afu-ad-delete-unambiguous-prefix afu+accept-line
     afu-ad-delete-unambiguous-prefix afu+accept-line-and-down-history
     afu-ad-delete-unambiguous-prefix afu+accept-and-hold
-fi
+
+    # dot this only once
+    precmd_functions=("${(@)precmd_functions:#install-auto-fu}")
+}
+
+# We should install auto-fu after all configuration changes since it
+# inherits 'emacs' keymap and adding key bindings to 'emacs' keymap
+# after installing auto-fu has no effect.
+precmd_functions+=install-auto-fu
