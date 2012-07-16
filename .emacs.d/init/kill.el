@@ -23,7 +23,7 @@
 (setq x-select-enable-primary t)
 (setq x-select-enable-clipboard t)
 
-;; yank to X clipboard even if we are in terminal mode Emacs
+;; kill to X clipboard even if we are in terminal mode Emacs
 (defadvice x-select-text (around ad-x-select-text (text) activate)
   (if (or (eq system-type 'windows-nt)
           (featurep 'ns)
@@ -37,7 +37,7 @@
               (symbol-function 'xsel-clear)))
       ad-do-it))))
 
-;; paste from X clipboard even if we are in terminal mode Emacs
+;; yank from X clipboard even if we are in terminal mode Emacs
 (defadvice x-selection-value (around ad-x-selection-value-xsel activate)
   (if (or (eq (framep (selected-frame)) 'x) (not (xsel-available-p)))
       ad-do-it
