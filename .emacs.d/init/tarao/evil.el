@@ -156,6 +156,11 @@
        (when (string-match "^--" string)
          (setq string (substring string 2))))))
 
+;; view mode
+(add-hook 'view-mode-hook 'evil-initialize-state)
+(evil-define-key 'motion view-mode-map (kbd "v")
+  #'(lambda () (interactive) (view-mode 0)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; plugins
 
