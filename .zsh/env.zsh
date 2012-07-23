@@ -1,5 +1,5 @@
 export MANPAGER='less -s'
-export PAGER='v'
+export PAGER='command v'
 export EDITOR='vi'
 export TIME_STYLE=long-iso
 
