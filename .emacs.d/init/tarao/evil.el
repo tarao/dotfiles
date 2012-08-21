@@ -188,5 +188,5 @@
 (when (require 'evil-little-word nil t)
   ;; w for Japanese phrase
   ;; lw for Japanese word
-  (setq evil-cjk-emacs-word-boundary t)
-  (setq evil-little-word-cjk t))
+  (setq evil-cjk-word-separating-categories word-separating-categories)
+  (setq evil-cjk-word-combining-categories word-combining-categories))
