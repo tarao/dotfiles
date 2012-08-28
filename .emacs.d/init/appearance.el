@@ -4,9 +4,8 @@
     (when (require 'color-theme nil t)
       (color-theme-initialize)
       (color-theme-dark-laptop)
-      (set-face-background 'mode-line "#2b2b2b")
       (set-face-foreground 'mode-line "#8fb28f")
-      (set-face-background 'mode-line-buffer-id "#2b2b2b")
+      (set-face-background 'mode-line-buffer-id "#3f3f3f")
       (set-face-foreground 'mode-line-buffer-id "#f0dfaf"))
   (load-theme 'zenburn t)
   (let ((class '((class color) (min-colors 89)))
@@ -18,6 +17,9 @@
 
 ;; colors
 (set-face-background 'region "#8c8ce8")
+(set-face-background 'mode-line "#3f3f3f")
+(set-face-background 'mode-line-inactive "#5f5f5f")
+(set-face-background 'header-line "#3f3f3f")
 
 ;; mode line color
 (require 'mode-line-color)
