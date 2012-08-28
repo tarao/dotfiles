@@ -15,12 +15,12 @@
 
 ;; mode-line color
 (setq evil-mode-line-color
-      '((normal   . "white")
-        (insert   . "khaki4")
-        (replace  . "khaki4")
-        (operator . "darkseagreen2")
-        (visual   . "steelblue")
-        (emacs    . "red")))
+      `((normal   . ,(face-attribute 'mode-line :background))
+        (insert   . "#575735")
+        (replace  . "#575735")
+        (operator . "DarkSeaGreen4")
+        (visual   . "SteelBlue4")
+        (emacs    . "#8c5353")))
 (when (featurep 'mode-line-color)
   (add-hook 'mode-line-color-hook
             '(lambda (setter)

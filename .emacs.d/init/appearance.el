@@ -1,16 +1,28 @@
 ;; coloring
 (setq frame-background-mode 'dark)
-(require 'color-theme)
-(color-theme-initialize)
-(color-theme-dark-laptop)
+(if (or (< emacs-major-version 24) (not (fboundp 'load-theme)))
+    (when (require 'color-theme nil t)
+      (color-theme-initialize)
+      (color-theme-dark-laptop)
+      (set-face-background 'mode-line "#2b2b2b")
+      (set-face-foreground 'mode-line "#8fb28f")
+      (set-face-background 'mode-line-buffer-id "#2b2b2b")
+      (set-face-foreground 'mode-line-buffer-id "#f0dfaf"))
+  (load-theme 'zenburn t)
+  (let ((class '((class color) (min-colors 89)))
+        (zenburn-fg "#dcdccc")
+        (zenburn-bg "#1f1f1f"))
+    (custom-theme-set-faces
+     'zenburn
+     `(default ((,class (:foreground ,zenburn-fg :background ,zenburn-bg)))))))
 
 ;; colors
-(set-face-background 'region  "#8c8ce8")
+(set-face-background 'region "#8c8ce8")
 
 ;; mode line color
 (require 'mode-line-color)
 (mode-line-color-mode)
-(defvar skk-j-mode-line-color "maroon")
+(defvar skk-j-mode-line-color "IndianRed4")
 (defun skk-set-mode-line-color (setter)
   (when (and (featurep 'skk) skk-j-mode
              (or (not (featurep 'viper))

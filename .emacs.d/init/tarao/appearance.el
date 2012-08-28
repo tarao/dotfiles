@@ -5,7 +5,7 @@
 
 (defun darken-comment ()
   (interactive)
-  (set-comment-color "brightblack"))
+  (set-comment-color "gray32"))
 
 (defun lighten-comment ()
   (interactive)

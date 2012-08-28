@@ -7,6 +7,7 @@
       (setq load-path (cons dir load-path))
       (normal-top-level-add-subdirs-to-load-path))))
 (setq load-path (cons "~/.emacs.d/auto-install" load-path))
+(setq custom-theme-directory "~/.emacs.d/themes")
 
 ;; load init files
 (require 'init-loader)
