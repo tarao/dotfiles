@@ -1,6 +1,6 @@
 ;; coloring
 (setq frame-background-mode 'dark)
-(if (or (< emacs-major-version 24) (not (fboundp 'load-theme)))
+(if (not (and (>= emacs-major-version 24) (>= emacs-minor-version 1)))
     (when (require 'color-theme nil t)
       (color-theme-initialize)
       (color-theme-dark-laptop)
