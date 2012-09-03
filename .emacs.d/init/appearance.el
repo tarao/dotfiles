@@ -20,6 +20,7 @@
 (set-face-background 'mode-line "#3f3f3f")
 (set-face-attribute 'mode-line nil :box nil)
 (set-face-background 'mode-line-inactive "#5f5f5f")
+(set-face-attribute 'mode-line-inactive nil :box nil)
 (set-face-background 'header-line "#3f3f3f")
 (set-face-attribute 'header-line nil :box nil)
 
