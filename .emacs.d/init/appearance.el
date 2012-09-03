@@ -18,8 +18,10 @@
 ;; colors
 (set-face-background 'region "#8c8ce8")
 (set-face-background 'mode-line "#3f3f3f")
+(set-face-attribute 'mode-line nil :box nil)
 (set-face-background 'mode-line-inactive "#5f5f5f")
 (set-face-background 'header-line "#3f3f3f")
+(set-face-attribute 'header-line nil :box nil)
 
 ;; mode line color
 (require 'mode-line-color)
