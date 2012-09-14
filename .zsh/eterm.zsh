@@ -38,6 +38,7 @@ function switch-to-line-mode () {
     zle kill-buffer
     zle reset-prompt
     zle -R
+    osc_emacs 'm' 'sh-mode' # TODO: check 'mode' flag in $INSIDE_EMACS
     osc_sel "$1" "$buf"
     RPROMPT="$rprompt"
 }
@@ -48,6 +49,7 @@ function switch-to-line-mode-insert () {
     switch-to-line-mode 'i'
 }
 
+# TODO: check 'evil' flag in $INSIDE_EMACS
 zle -N switch-to-line-mode-normal
 zle -N switch-to-line-mode-insert
 
