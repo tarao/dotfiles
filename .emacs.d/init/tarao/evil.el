@@ -15,19 +15,15 @@
 
 ;; mode-line color
 (setq evil-mode-line-color
-      `((normal   . ,(face-attribute 'mode-line :background))
+      `((normal   . ,(face-background 'mode-line))
         (insert   . "#575735")
         (replace  . "#575735")
         (operator . "DarkSeaGreen4")
         (visual   . "SteelBlue4")
         (emacs    . "#8c5353")))
 (when (featurep 'mode-line-color)
-  (add-hook 'mode-line-color-hook
-            '(lambda (setter)
-               (unless mode-line-color-color
-                 (funcall setter
-                          (cdr (assq evil-state
-                                     evil-mode-line-color)))))))
+  (define-mode-line-color (color)
+    (unless color (cdr (assq evil-state evil-mode-line-color)))))
 
 ;; mode-line
 (defun my-evil-state-msg (&optional state)

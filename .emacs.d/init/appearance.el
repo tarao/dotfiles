@@ -25,21 +25,20 @@
 (set-face-attribute 'header-line nil :box nil)
 
 ;; mode line color
-(require 'mode-line-color)
-(mode-line-color-mode)
-(defvar skk-j-mode-line-color "IndianRed4")
-(defun skk-set-mode-line-color (setter)
-  (when (and (featurep 'skk) skk-j-mode
-             (or (not (featurep 'viper))
-                 (not viper-mode)
-                 (eq viper-current-state 'insert-state))
-             (or (not (featurep 'evil))
-                 (not evil-mode)
-                 (eq evil-state 'insert)))
-    (funcall setter skk-j-mode-line-color)))
-(add-hook 'mode-line-color-hook 'skk-set-mode-line-color)
-(defadvice skk-update-modeline (after ad-skk-mode-line-color activate)
-  (mode-line-color-update))
+(when (require 'mode-line-color nil t)
+  (mode-line-color-mode)
+  (defvar skk-j-mode-line-color "IndianRed4")
+  (define-mode-line-color (color)
+    (when (and (featurep 'skk) skk-j-mode
+               (or (not (featurep 'viper))
+                   (not viper-mode)
+                   (eq viper-current-state 'insert-state))
+               (or (not (featurep 'evil))
+                   (not evil-mode)
+                   (eq evil-state 'insert)))
+      skk-j-mode-line-color))
+  (defadvice skk-update-modeline (after ad-skk-mode-line-color activate)
+    (mode-line-color-update)))
 
 ;; eof mark
 (require 'end-mark)
