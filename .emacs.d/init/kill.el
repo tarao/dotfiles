@@ -1,12 +1,16 @@
 (eval-when-compile (require 'cl))
 
 ;; xsel command
-(defun x-available-p ()
+(defvar x-available nil)
+(defun x-available-p-1 ()
   (condition-case nil
       (or (x-open-connection (or x-display-name
                                  (setq x-display-name (getenv "DISPLAY"))))
           t)
     (error nil)))
+(defun x-available-p ()
+  (unless x-available (setq x-available (if (x-available-p-1) 1 0)))
+  (eq x-available 1))
 (defsubst xsel-available-p () (and (executable-find "xsel") (x-available-p)))
 (defun xsel-input (type text)
   (let* ((process-connection-type nil)
