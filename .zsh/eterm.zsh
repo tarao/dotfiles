@@ -13,18 +13,18 @@ function osc_sel () {
 # set current directory
 function precmd_eterm_cwd () {
     local dir; dir=`pwd`
-    osc_emacs 'd' "$dir"
+    osc_emacs 'cd' "$dir"
 }
 precmd_functions+=precmd_eterm_cwd
 
 # set host and user
 function eterm_current_host () {
     local host; host=`hostname`
-    osc_emacs 'h' "$host"
+    osc_emacs 'host' "$host"
 }
 function eterm_current_user () {
     local user; user=`id -run`
-    osc_emacs 'u' "$user"
+    osc_emacs 'user' "$user"
 }
 
 eterm_current_host
@@ -38,7 +38,7 @@ function switch-to-line-mode () {
     zle kill-buffer
     zle reset-prompt
     zle -R
-    osc_emacs 'm' 'sh-mode' # TODO: check 'mode' flag in $INSIDE_EMACS
+    osc_emacs 'mode' 'sh-mode' # TODO: check 'mode' flag in $INSIDE_EMACS
     osc_sel "$1" "$buf"
     RPROMPT="$rprompt"
 }
@@ -71,7 +71,7 @@ function o () {
 
     if (( $#inputs > 0 )) && [[ -t 0 && -t 1 ]]; then
         # there are inputs and no piped output
-        osc_sel 'o' "${(j:;:)inputs}"
+        osc_emacs 'open' "${(j:;:)inputs}"
         return
     fi
 
@@ -104,7 +104,7 @@ function v () {
 
     if (( $#inputs > 0 )) && [[ -t 0 && -t 1 ]]; then
         # there are inputs and no piped output
-        osc_sel 'v' "${(j:;:)inputs}"
+        osc_emacs 'view' "${(j:;:)inputs}"
         return
     fi
 
