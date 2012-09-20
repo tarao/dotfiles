@@ -53,8 +53,6 @@ source ~/.zsh/completion.zsh
 source ~/.zsh/zle.zsh
 source ~/.zsh/function.zsh
 source ~/.zsh/emacs.zsh
-[[ -n "$INSIDE_EMACS" ]] && source ~/.zsh/eterm.zsh
-source ~/.zsh/cdd.zsh
 source ~/.zsh/term.compat.zsh
 is-at-least 4.3.10 && source ~/.zsh/term.zsh
 source ~/.zsh/screen.zsh
@@ -62,3 +60,5 @@ source ~/.zsh/screen-title.zsh
 source ~/.zsh/screen-attach.zsh
 source ~/.zsh/screen-share.zsh
 source ~/.zsh/screen-alias.zsh
+source ~/.zsh/cdd.zsh
+source ~/.zsh/eterm.zsh
