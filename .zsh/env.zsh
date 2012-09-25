@@ -1,5 +1,6 @@
 export MANPAGER='less -s'
-export PAGER='command v'
+export PAGER='less -R'
+whence v >/dev/null && export PAGER=`whence v`
 export EDITOR='vi'
 export TIME_STYLE=long-iso
 
