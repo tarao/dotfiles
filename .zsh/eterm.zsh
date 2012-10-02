@@ -3,11 +3,11 @@
 
 # send OSC 51 ; Ps ; Pd ST commans
 function osc_emacs () {
-    echo -ne "\e]51;$1;$2\e\\" > /dev/tty
+    sleep 0; echo -ne "\e]51;$1;$2\e\\" > /dev/tty
 }
 # send OSC 52 ; Pc ; Pd ST commans
 function osc_sel () {
-    echo -ne "\e]52;$1;$2\e\\" > /dev/tty
+    sleep 0; echo -ne "\e]52;$1;$2\e\\" > /dev/tty
 }
 
 # set current directory
