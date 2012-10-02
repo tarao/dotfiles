@@ -67,19 +67,23 @@ bindkey '^[' switch-to-line-mode-normal
 bindkey '^[i' switch-to-line-mode-insert
 bindkey '^R' history-search-eterm
 
-function o () {
-    [[ "$1" == '-h' || "$1" == '--help' ]] && {
-        echo "Usage: $0 file..."
-        return
-    }
-
+function _eterm_input_files () {
     local -a inputs; inputs=()
     local rest
     for f in $@; do
         [[ -n "$rest" || "$f" != '-'* ]] && { inputs=("${(@)inputs}" $f) }
         [[ "$f" == '--' ]] && { rest='true' }
     done
+    echo "${(j:\n:)inputs}"
+}
 
+function o () {
+    [[ "$1" == '-h' || "$1" == '--help' ]] && {
+        echo "Usage: $0 file..."
+        return
+    }
+
+    local -a inputs; inputs=(`_eterm_input_files "$@"`)
     if (( $#inputs > 0 )) && [[ -t 0 && -t 1 ]]; then
         # there are inputs and no piped output
         osc_emacs 'open' "${(j:;:)inputs}"
@@ -106,13 +110,7 @@ function v () {
         return
     }
 
-    local -a inputs; inputs=()
-    local rest
-    for f in $@; do
-        [[ -n "$rest" || "$f" != '-'* ]] && { inputs=("${(@)inputs}" $f) }
-        [[ "$f" == '--' ]] && { rest='true' }
-    done
-
+    local -a inputs; inputs=(`_eterm_input_files "$@"`)
     if (( $#inputs > 0 )) && [[ -t 0 && -t 1 ]]; then
         # there are inputs and no piped output
         osc_emacs 'view' "${(j:;:)inputs}"
@@ -130,6 +128,49 @@ function v () {
         echo 'No viewer'
     fi
 }
+
+function get () {
+    [[ "$1" == '-h' || "$1" == '--help' ]] && {
+        echo "Usage: $0 file..."
+        return
+    }
+
+    local -a inputs; inputs=(`_eterm_input_files "$@"`)
+    if (( $#inputs > 0 )) && [[ -t 0 && -t 1 ]]; then
+        # there are inputs and no piped output
+        osc_emacs 'get' "${(j:;:)inputs}"
+        return
+    fi
+
+    # piped or not in Emacs
+    if type -p "$0" >/dev/null; then
+        command "$0" "$@"
+    fi
+}
+
+function put () {
+    [[ "$1" == '-h' || "$1" == '--help' ]] && {
+        echo "Usage: $0 [-m]"
+        return
+    }
+
+    if [[ -t 0 && -t 1 ]]; then
+        # there are inputs and no piped output
+        if [[ "$1" == '-m' ]]; then
+            osc_emacs 'put' "m"
+        else
+            osc_emacs 'put' ""
+        fi
+        return
+    fi
+
+    # piped or not in Emacs
+    if type -p "$0" >/dev/null; then
+        command "$0" "$@"
+    fi
+}
+
+# TODO: compdef for o, v, get, put
 
 ### cdd
 
