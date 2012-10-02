@@ -26,9 +26,13 @@ function eterm_current_user () {
     local user; user=`id -run`
     osc_emacs 'user' "$user"
 }
+function eterm_current_histfile () {
+    osc_emacs 'histfile' "$HISTFILE"
+}
 
 eterm_current_host
 eterm_current_user
+eterm_current_histfile
 
 # switch to term-line-mode
 function switch-to-line-mode () {
@@ -48,13 +52,20 @@ function switch-to-line-mode-normal () {
 function switch-to-line-mode-insert () {
     switch-to-line-mode 'i'
 }
+function history-search-eterm () {
+    local buf="$BUFFER"
+    zle kill-buffer
+    osc_sel 'h' "$buf"
+}
 
 # TODO: check 'evil' flag in $INSIDE_EMACS
 zle -N switch-to-line-mode-normal
 zle -N switch-to-line-mode-insert
+zle -N history-search-eterm
 
 bindkey '^[' switch-to-line-mode-normal
 bindkey '^[i' switch-to-line-mode-insert
+bindkey '^R' history-search-eterm
 
 function o () {
     [[ "$1" == '-h' || "$1" == '--help' ]] && {
