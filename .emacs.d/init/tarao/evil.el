@@ -157,6 +157,9 @@
 (evil-define-key 'motion view-mode-map (kbd "v")
   #'(lambda () (interactive) (view-mode 0)))
 
+;; dired mode
+(evil-define-key 'normal dired-mode-map "c" 'dired-do-copy)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; plugins
 
