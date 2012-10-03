@@ -99,7 +99,7 @@ EOT
     afu-ad-delete-unambiguous-prefix afu+accept-line-and-down-history
     afu-ad-delete-unambiguous-prefix afu+accept-and-hold
 
-    # dot this only once
+    # run this function just once
     precmd_functions=("${(@)precmd_functions:#install-auto-fu}")
 }
 
