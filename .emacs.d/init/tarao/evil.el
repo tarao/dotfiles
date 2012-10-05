@@ -67,6 +67,9 @@
         (def2 (lookup-key map key2)))
     (define-key map key1 def2)
     (define-key map key2 def1)))
+(defsubst evil-define-command-line-key (key def)
+  (define-key evil-ex-completion-map key def)
+  (define-key evil-ex-search-keymap key def))
 
 ;; use ; for :
 (evil-define-command evil-resend-ex ()
@@ -189,3 +192,6 @@
   ;; lw for Japanese word
   (setq evil-cjk-word-separating-categories word-separating-categories)
   (setq evil-cjk-word-combining-categories word-combining-categories))
+
+(when (require 'evil-more-registers nil t)
+  (evil-define-command-line-key (kbd "C-r") #'evil-ex-paste-from-register))
