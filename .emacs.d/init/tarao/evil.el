@@ -76,21 +76,21 @@
   (setq this-command last-command)
   (setq prefix-arg current-prefix-arg)
   (reset-this-command-lengths))
-(define-key evil-motion-state-map (kbd ";") 'evil-resend-ex)
-(define-key evil-motion-state-map [evil-ex] 'evil-ex)
+(define-key evil-motion-state-map (kbd ";") #'evil-resend-ex)
+(define-key evil-motion-state-map [evil-ex] #'evil-ex)
 
 ;; user key bindings
 (when (fboundp 'anything-for-files)
-  (define-key evil-motion-state-map (kbd ":") 'anything-for-files))
-(define-key evil-normal-state-map (kbd "gw") 'what-cursor-position)
-(define-key evil-normal-state-map (kbd "gW") 'describe-char)
-(define-key evil-normal-state-map (kbd "gA") 'describe-char)
-(define-key evil-normal-state-map (kbd "C-j") 'evil-join)
+  (define-key evil-motion-state-map (kbd ":") #'anything-for-files))
+(define-key evil-normal-state-map (kbd "gw") #'what-cursor-position)
+(define-key evil-normal-state-map (kbd "gW") #'describe-char)
+(define-key evil-normal-state-map (kbd "gA") #'describe-char)
+(define-key evil-normal-state-map (kbd "C-j") #'evil-join)
 (evil-swap-key evil-motion-state-map "j" "gj")
 (evil-swap-key evil-motion-state-map "k" "gk")
-(define-key evil-motion-state-map (kbd "J") 'evil-scroll-down)
-(define-key evil-motion-state-map (kbd "K") 'evil-scroll-up)
-(define-key evil-visual-state-map (kbd "C-w") 'evil-delete)
+(define-key evil-motion-state-map (kbd "J") #'evil-scroll-down)
+(define-key evil-motion-state-map (kbd "K") #'evil-scroll-up)
+(define-key evil-visual-state-map (kbd "C-w") #'evil-delete)
 
 ;; use default emacs key bindings
 (define-key evil-normal-state-map (kbd "J") nil)
@@ -120,9 +120,9 @@
 ;; when anything-complete is active, alcs-make-candidates in
 ;; after-init-hook breaks the initialization of *scratch* buffer.
 (defun evil-ensure-initializing-state ()
-  (remove-hook 'pre-command-hook 'evil-ensure-initializing-state)
+  (remove-hook 'pre-command-hook #'evil-ensure-initializing-state)
   (when evil-local-mode (evil-initialize-state)))
-(add-hook 'pre-command-hook 'evil-ensure-initializing-state)
+(add-hook 'pre-command-hook #'evil-ensure-initializing-state)
 
 ;; exit insert-state by ESC even if auto-complete is showing candidates
 (when (featurep 'auto-complete)
@@ -153,7 +153,7 @@
          (setq string (substring string 2))))))
 
 ;; view mode
-(add-hook 'view-mode-hook 'evil-initialize-state)
+(add-hook 'view-mode-hook #'evil-initialize-state)
 (evil-define-key 'motion view-mode-map (kbd "v")
   #'(lambda () (interactive) (view-mode 0)))
 
