@@ -139,6 +139,10 @@
 ;; use raw key bindings in moccur
 (push 'moccur-grep-mode evil-emacs-state-modes)
 
+;; yaicomplete
+(when (featurep 'yaicomplete)
+  (add-to-list 'yaicomplete-exclude 'evil-ex-current-buffer))
+
 ;; skk
 (eval-after-load 'ccc
   '(progn
