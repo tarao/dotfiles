@@ -156,6 +156,10 @@
          ad-do-it))))
 (eval-after-load 'skk
   '(progn
+     (defadvice evil-ex-search-update-pattern
+       (around evil-inhibit-ex-search-update-pattern-in-skk-henkan activate)
+       (when (not skk-henkan-mode)
+         ad-do-it))
      (defadvice skk-mode-string-to-indicator
        (before ad-remove----from-skk-mode-string (mode string) activate)
        (when (string-match "^--" string)
