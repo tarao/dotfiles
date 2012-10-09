@@ -245,5 +245,5 @@ is a kind of temporary one which is not confirmed yet."
   (setq evil-cjk-word-separating-categories word-separating-categories)
   (setq evil-cjk-word-combining-categories word-combining-categories))
 
-(when (require 'evil-more-registers nil t)
+(when (require 'evil-ex-registers nil t)
   (evil-define-command-line-key (kbd "C-r") #'evil-ex-paste-from-register))
