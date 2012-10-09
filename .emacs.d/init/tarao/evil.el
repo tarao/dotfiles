@@ -7,7 +7,8 @@
               evil-echo-state nil
               evil-want-C-i-jump nil
               evil-want-fine-undo t
-              evil-search-module 'evil-search)
+              evil-search-module 'evil-search
+              evil-ex-search-vim-style-regexp t)
 (require 'goto-chg nil t)
 (require 'evil)
 (evil-mode 1)
