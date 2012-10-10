@@ -115,7 +115,8 @@ We have our own \"--\" put by `my-evil-mode-line-format'."
 
 ;; user key bindings
 (when (fboundp 'anything-for-files)
-  (define-key evil-motion-state-map (kbd ":") #'anything-for-files))
+  (define-key evil-motion-state-map (kbd ":") #'anything-for-files)
+  (define-key evil-motion-state-map (kbd "M-;") #'anything-for-files))
 (define-key evil-normal-state-map (kbd "gw") #'what-cursor-position)
 (define-key evil-normal-state-map (kbd "gW") #'describe-char)
 (define-key evil-normal-state-map (kbd "gA") #'describe-char)
@@ -229,7 +230,8 @@ is a kind of temporary one which is not confirmed yet."
 (when (require 'evil-operator-moccur nil t)
   (global-evil-operator-moccur-mode 1)
   (when (fboundp 'anything-for-files)
-    (define-key moccur-mode-map (kbd ":") 'anything-for-files)))
+    (define-key moccur-mode-map (kbd ":") #'anything-for-files)
+    (define-key moccur-mode-map (kbd "M-;") #'anything-for-files)))
 
 ;; text objects
 
