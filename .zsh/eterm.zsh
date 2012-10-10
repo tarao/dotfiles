@@ -1,5 +1,12 @@
 # require term+
-[[ `echo $INSIDE_EMACS | cut -f 2 -d ,` = term:*+ ]] || return
+typeset -a eterm_options
+eterm_options=(${(s:,:)INSIDE_EMACS})
+[[ -n "$eterm_options[(r)term:*+]" ]] || return
+
+function eterm_has () {
+    [[ -n "$eterm_options[(r)$1]" ]] && return
+    return 1
+}
 
 # send OSC 51 ; Ps ; Pd ST commans
 function osc_emacs () {
@@ -34,6 +41,17 @@ eterm_current_host
 eterm_current_user
 eterm_current_histfile
 
+eterm_has mux && {
+    # automatically set title
+    whence precmd_screen_window_title >/dev/null && {
+        precmd_functions+=precmd_screen_window_title
+    }
+    whence preexec_screen_window_title >/dev/null && {
+        preexec_functions+=preexec_screen_window_title
+    }
+    SCREEN_TITLE=auto
+}
+
 # switch to term-line-mode
 function switch-to-line-mode () {
     local rprompt="$RPROMPT"
@@ -42,7 +60,7 @@ function switch-to-line-mode () {
     zle kill-buffer
     zle reset-prompt
     zle -R
-    osc_emacs 'mode' 'sh-mode' # TODO: check 'mode' flag in $INSIDE_EMACS
+    eterm_has mode && osc_emacs 'mode' 'sh-mode'
     osc_sel "$1" "$buf"
     RPROMPT="$rprompt"
 }
@@ -58,13 +76,14 @@ function history-search-eterm () {
     osc_sel 'h' "$buf"
 }
 
-# TODO: check 'evil' flag in $INSIDE_EMACS
-zle -N switch-to-line-mode-normal
+eterm_has evil && {
+    zle -N switch-to-line-mode-normal
+    bindkey '^[' switch-to-line-mode-normal
+}
 zle -N switch-to-line-mode-insert
-zle -N history-search-eterm
-
-bindkey '^[' switch-to-line-mode-normal
 bindkey '^[i' switch-to-line-mode-insert
+
+zle -N history-search-eterm
 bindkey '^R' history-search-eterm
 
 function _eterm_input_files () {
@@ -265,6 +284,11 @@ function _cdd_select () {
 }
 
 function cdd () {
+    eterm_has mux || {
+        _cdd_original "$@" && return
+        return 1
+    }
+
     [[ "$1" = '-h' || "$1" = '--help' ]] && {
         echo "Usage: $0"
         echo "       $0 -l"
@@ -288,7 +312,7 @@ function cdd () {
         return
     }
 
-    if [[ -z "$1" ]]; then # TODO: check 'mux' flag in $INSIDE_EMACS
+    if [[ -z "$1" ]]; then
         osc_emacs 'cdd' "$*"
         read -r -s
         _cdd_cd "$REPLY"
@@ -296,7 +320,7 @@ function cdd () {
         shift; _cdadd "$@"
     elif [[ "$1" = '-d' && -n "$functions[_cddel]" ]]; then
         shift; _cddel "$@"
-    elif [[ "$1" = '-b' ]]; then  # TODO: check 'mux' flag in $INSIDE_EMACS
+    elif [[ "$1" = '-b' ]]; then
         shift; _cdd_original "$@"
     elif [[ "$1" = '-m' || "$1" = '-l' ]]; then
         shift; _cdd_select "$@"

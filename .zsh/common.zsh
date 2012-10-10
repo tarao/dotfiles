@@ -40,9 +40,9 @@ unalias  run-help 2>/dev/null || true
 autoload run-help
 
 # functions as array
-typeset -ga chpwd_functions
-typeset -ga precmd_functions
-typeset -ga preexec_functions
+typeset -Uga chpwd_functions
+typeset -Uga precmd_functions
+typeset -Uga preexec_functions
 
 # utilities
 autoload -Uz is-at-least
