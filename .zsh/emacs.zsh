@@ -1,13 +1,13 @@
 EMACS_CLIENT_CMD=emacsclient.emacs-snapshot
 EMACS_STANDALONE_CMD=emacs-snapshot
 function emacsclient () {
-    $EMACS_CLIENT_CMD $@
+    $EMACS_CLIENT_CMD "$@"
 }
 function emacsc () {
-    emacsclient -nw $@
+    emacsclient -nw "$@"
 }
 function emacs-standalone () {
-    $EMACS_STANDALONE_CMD $@
+    $EMACS_STANDALONE_CMD "$@"
 }
 
 function emacsb () {
@@ -50,7 +50,7 @@ function emacsd () {
         status)
             cmd=($EMACS_STANDALONE_CMD)
             [[ "$cmd[1]" == 'command' ]] && cmd=$cmd[2,-1]
-            local grep; grep=(pgrep -f -u $USER "$cmd --daemon")
+            local grep; grep=(pgrep -f -u $USER "^$cmd --daemon")
             if [[ -n `$grep` ]]; then
                 echo 'emacs daemon is running'
                 return 0
@@ -113,7 +113,7 @@ function emacs () {
             hook="emacsclient $@ -e '(screen-sync-env \"$STY\")'"
             screen_add_attach_hook "$STY" "SCREEN_EMACSD_ENV$num" "$hook"
         }
-        DISPLAY="$DISPLAY" emacsc $@
+        DISPLAY="$DISPLAY" emacsc "$@"
     fi
 }
 
