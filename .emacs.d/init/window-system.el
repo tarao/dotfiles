@@ -24,6 +24,17 @@
 (defvar default-font nil)
 
 (defun setup-window-system-configuration (&optional frame)
+  "Initialize configurations for window system.
+Configurations, which require X (there exists a frame), are
+placed in this function.
+
+When Emacs is started as a GUI application, just running this
+function initializes the configurations.
+
+When Emacs is started as a daemon, this function should be called
+just after the first frame is created by a client.  For this,
+this function is added to `after-make-frame-functions' and
+removed from them after the first call."
   (with-selected-frame (or frame (selected-frame))
     (when window-system
       ;; default font
@@ -43,6 +54,7 @@
                     (append `((font . ,default-font)) default-frame-alist))
       ;; current frame
       (set-frame-parameter (selected-frame) 'font default-font)
+      ;; call once
       (remove-hook 'after-make-frame-functions
                    #'setup-window-system-configuration))))
 
