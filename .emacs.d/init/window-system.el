@@ -29,10 +29,10 @@
                                     nil "menloja")
     (set-fontset-font "fontset-menloja"
                       'unicode
-                      (font-spec :family "Hiragino Kaku Gothic ProN"
-                                 :size 16)
+                      (font-spec :family "Hiragino Kaku Gothic ProN")
                       nil
                       'append)
+    (setq face-font-rescale-alist '(("Hiragino.*" . 1.2)))
     (setq default-font "fontset-menloja")
     (set-default-font default-font)
     (setq-default initial-frame-alist
