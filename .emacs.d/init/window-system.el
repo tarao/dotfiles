@@ -24,7 +24,7 @@
 (defvar window-system-configured nil)
 (defun setup-window-system-configuration ()
   (when (and window-system (not window-system-configured))
-    ;; font
+    ;; default font
     (create-fontset-from-ascii-font "Menlo-14:weight=normal:slant=normal"
                                     nil "menloja")
     (set-fontset-font "fontset-menloja"
@@ -39,6 +39,8 @@
                   (append `((font . ,default-font)) initial-frame-alist))
     (setq-default default-frame-alist
                   (append `((font . ,default-font)) default-frame-alist))
+    ;; current frame
+    (set-frame-parameter (selected-frame) 'font default-font)
     (setq window-system-configured t)))
 
 (if window-system
