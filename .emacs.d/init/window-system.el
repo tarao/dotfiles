@@ -16,12 +16,16 @@
          (vertical-scroll-bars . nil)
          (foreground-color . "#aaaaaa")
          (background-color . "#1f1f1f"))))
-  (setq-default initial-frame-alist
-                (append frame-alist initial-frame-alist))
-  (setq-default default-frame-alist
-                (append frame-alist default-frame-alist)))
+  (setq-default initial-frame-alist (append frame-alist initial-frame-alist)
+                default-frame-alist (append frame-alist default-frame-alist)))
 
-(defvar default-font nil)
+;; font settings
+(defconst default-fontset-name "menloja")
+(defconst default-base-font-name "Menlo")
+(defconst default-base-font-size 14)
+(defconst default-ja-font-name "Hiragino Kaku Gothic ProN")
+(defconst default-ja-font-pat "Hiragino.*")
+(defconst default-ja-font-scale 1.2)
 
 (defun setup-window-system-configuration (&optional frame)
   "Initialize configurations for window system.
@@ -37,26 +41,28 @@ this function is added to `after-make-frame-functions' and
 removed from them after the first call."
   (with-selected-frame (or frame (selected-frame))
     (when window-system
-      ;; default font
-      (create-fontset-from-ascii-font "Menlo-14:weight=normal:slant=normal"
-                                      nil "menloja")
-      (set-fontset-font "fontset-menloja"
-                        'unicode
-                        (font-spec :family "Hiragino Kaku Gothic ProN")
-                        nil
-                        'append)
-      (setq face-font-rescale-alist '(("Hiragino.*" . 1.2)))
-      (setq default-font "fontset-menloja")
-      (set-default-font default-font)
-      (setq-default initial-frame-alist
-                    (append `((font . ,default-font)) initial-frame-alist))
-      (setq-default default-frame-alist
-                    (append `((font . ,default-font)) default-frame-alist))
-      ;; current frame
-      (set-frame-parameter (selected-frame) 'font default-font)
-      ;; call once
-      (remove-hook 'after-make-frame-functions
-                   #'setup-window-system-configuration))))
+      (let* ((fontset-name default-fontset-name)
+             (base default-base-font-name) (size default-base-font-size)
+             (ja default-ja-font-name) (ja-pat default-ja-font-pat)
+             (scale default-ja-font-scale)
+             (base-font (format "%s-%d:weight=normal:slant=normal" base size))
+             (ja-font (font-spec :family ja))
+             (fsn (concat "fontset-" fontset-name))
+             (elt (list (cons 'font fsn))))
+        ;; create font
+        (create-fontset-from-ascii-font base-font nil fontset-name)
+        (set-fontset-font fsn 'unicode ja-font nil 'append)
+        (add-to-list 'face-font-rescale-alist (cons ja-pat scale))
+        ;; default
+        (set-default-font fsn)
+        (setq-default initial-frame-alist (append elt initial-frame-alist)
+                      default-frame-alist (append elt default-frame-alist))
+        ;; current frame
+        (set-frame-parameter (selected-frame) 'font fsn)
+        ;; call once
+        (remove-hook 'after-init-hook #'setup-window-system-configuration)
+        (remove-hook 'after-make-frame-functions
+                     #'setup-window-system-configuration)))))
 
 (if window-system
     (setup-window-system-configuration)
