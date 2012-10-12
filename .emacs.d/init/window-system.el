@@ -65,5 +65,5 @@ removed from them after the first call."
                      #'setup-window-system-configuration)))))
 
 (if window-system
-    (setup-window-system-configuration)
+    (add-hook 'after-init-hook #'setup-window-system-configuration)
   (add-hook 'after-make-frame-functions #'setup-window-system-configuration))
