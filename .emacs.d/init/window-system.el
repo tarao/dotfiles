@@ -67,3 +67,22 @@ removed from them after the first call."
 (if window-system
     (add-hook 'after-init-hook #'setup-window-system-configuration)
   (add-hook 'after-make-frame-functions #'setup-window-system-configuration))
+
+(defun close-frame-display (frame)
+  "Close FRAME's X connection."
+  (let* ((get-display #'(lambda (f)
+                          (and (eq (framep f) 'x)
+                               (terminal-name (frame-terminal f)))))
+         (display (funcall get-display frame))
+         (frames (remq frame (frame-list)))
+         (displays (and display (mapcar get-display frames)))
+         (hook (and (boundp 'delete-frame-functions)
+                    (memq 'close-frame-display delete-frame-functions))))
+    (when (and display (not (member display displays)))
+      (remove-hook 'delete-frame-functions #'close-frame-display)
+      (delete-frame frame)
+      (x-close-connection display)
+      (when hook (add-hook 'delete-frame-functions #'close-frame-display)))))
+;; close frame display when the frame is deleted (we need this to
+;; ensure that an emacs daemon without X window has no X connection)
+(add-hook 'delete-frame-functions #'close-frame-display)

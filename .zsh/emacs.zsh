@@ -63,7 +63,7 @@ function emacsd () {
                 echo 'emacs daemon is already running'
                 return 1
             fi
-            $cmd
+            SESSION_MANAGER= $cmd
             ;;
         stop)
             $0 status >/dev/null &&
