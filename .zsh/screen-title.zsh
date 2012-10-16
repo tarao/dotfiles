@@ -1,5 +1,5 @@
 # set window title of screen
-function _screen_set_title () { echo -ne "\ek$1\e\\" }
+function _screen_set_title () { echo -ne "\ek$1\e\\" >/dev/tty }
 function _screen_title_install_precmd () { # use current directory as a title
     function precmd_screen_window_title () {
         if [[ "$SCREEN_TITLE" = 'auto' ]]; then
