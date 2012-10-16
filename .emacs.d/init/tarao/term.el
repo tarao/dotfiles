@@ -1,4 +1,5 @@
-(define-key term+char-map (kbd "C-z") term+mux-map)
+(eval-after-load 'evil
+  '(progn (evil-define-key 'emacs term+char-map (kbd "C-z") term+mux-map)))
 
 (when (featurep 'anything)
   (define-key term+char-map (kbd "M-;") #'anything-for-files)
