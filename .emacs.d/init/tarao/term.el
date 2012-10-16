@@ -1,9 +1,10 @@
 (eval-after-load 'evil
   '(progn (evil-define-key 'emacs term+char-map (kbd "C-z") term+mux-map)))
 
-(when (featurep 'anything)
-  (define-key term+char-map (kbd "M-;") #'anything-for-files)
-  (define-key term+line-map (kbd "M-;") #'anything-for-files))
+(eval-after-load 'anything
+  '(progn
+     (define-key term+char-map (kbd "M-;") #'anything-for-files)
+     (define-key term+line-map (kbd "M-;") #'anything-for-files)))
 
 (setq ansi-term-color-vector
       [unspecified
