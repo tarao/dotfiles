@@ -1,3 +1,5 @@
+(define-key term+char-map (kbd "C-z") term+mux-map)
+
 (when (featurep 'anything)
   (define-key term+char-map (kbd "M-;") #'anything-for-files)
   (define-key term+line-map (kbd "M-;") #'anything-for-files))
