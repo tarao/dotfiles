@@ -79,8 +79,20 @@ function emacsd () {
         done
         $0 start
         ;;
+    setenv)
+        cmd=($EMACS_CLIENT_CMD)
+        local bs='\\\\'
+        local val="$2"; val="${val//\\/${~bs}}"; val="${val//\"/\\\"}"
+        $cmd -e "(let ((val \"$val\")) \
+                   (setenv \"$1\" (if (> (length val) 0) val nil)))"
+        ;;
+    update-env)
+        while [[ -n "$1" ]]; do
+            $0 setenv "$1" "${(P)1}" >/dev/null; shift
+        done
+        ;;
     *)
-        echo "Usage: $0 status|start|stop|restart"
+        echo "Usage: $0 status|start|stop|restart|setenv|update-env"
         ;;
     esac
 }
