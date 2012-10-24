@@ -21,22 +21,22 @@ function emacsb () {
         libs=($libs $1 "$2"); shift; shift
     done
     case "$action" in
-        compile)
-            $cmd -L . $libs -f batch-byte-compile "$@"
-            ;;
-        install)
-            local url; url=$1; shift
-            $install --eval "(install-elisp \"$url\")" "$@"
-            ;;
-        update)
-            $install -f update-remote-emacs-lisp "$@"
-            ;;
-        help)
-            $0
-            ;;
-        *)
-            $cmd "$@"
-            ;;
+    compile)
+        $cmd -L . $libs -f batch-byte-compile "$@"
+        ;;
+    install)
+        local url; url=$1; shift
+        $install --eval "(install-elisp \"$url\")" "$@"
+        ;;
+    update)
+        $install -f update-remote-emacs-lisp "$@"
+        ;;
+    help)
+        $0
+        ;;
+    *)
+        $cmd "$@"
+        ;;
     esac
 }
 alias emacs-compile="emacsb compile"
@@ -47,41 +47,41 @@ function emacsd () {
     [[ -z "$1" ]] && 1='help'
     local action; action=$1; shift
     case "$action" in
-        status)
-            cmd=($EMACS_STANDALONE_CMD)
-            [[ "$cmd[1]" == 'command' ]] && cmd=$cmd[2,-1]
-            local grep; grep=(pgrep -f -u $USER "^$cmd --daemon")
-            if [[ -n `$grep` ]]; then
-                echo 'emacs daemon is running'
-                return 0
-            fi
-            echo 'emacs daemon is not running'
+    status)
+        cmd=($EMACS_STANDALONE_CMD)
+        [[ "$cmd[1]" == 'command' ]] && cmd=$cmd[2,-1]
+        local grep; grep=(pgrep -f -u $USER "^$cmd --daemon")
+        if [[ -n `$grep` ]]; then
+            echo 'emacs daemon is running'
+            return 0
+        fi
+        echo 'emacs daemon is not running'
+        return 1
+        ;;
+    start)
+        if $0 status >/dev/null; then
+            echo 'emacs daemon is already running'
             return 1
-            ;;
-        start)
-            if $0 status >/dev/null; then
-                echo 'emacs daemon is already running'
-                return 1
-            fi
-            SESSION_MANAGER= $cmd
-            ;;
-        stop)
-            $0 status >/dev/null &&
-            cmd=($EMACS_CLIENT_CMD)
-            $cmd -e '(progn (defun yes-or-no-p (p) t) (kill-emacs))'
-            ;;
-        restart)
-            $0 stop
-            local -i c; c=0
-            while (( c < 10 )) && $0 status >/dev/null; do
-                (( c++ ))
-                sleep 0.1
-            done
-            $0 start
-            ;;
-        *)
-            echo "Usage: $0 status|start|stop|restart"
-            ;;
+        fi
+        SESSION_MANAGER= $cmd
+        ;;
+    stop)
+        $0 status >/dev/null &&
+        cmd=($EMACS_CLIENT_CMD)
+        $cmd -e '(progn (defun yes-or-no-p (p) t) (kill-emacs))'
+        ;;
+    restart)
+        $0 stop
+        local -i c; c=0
+        while (( c < 10 )) && $0 status >/dev/null; do
+            (( c++ ))
+            sleep 0.1
+        done
+        $0 start
+        ;;
+    *)
+        echo "Usage: $0 status|start|stop|restart"
+        ;;
     esac
 }
 
