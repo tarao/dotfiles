@@ -1,5 +1,6 @@
 EMACS_CLIENT_CMD=emacsclient.emacs-snapshot
 EMACS_STANDALONE_CMD=emacs-snapshot
+EMACS_DAEMON_LOG="$HOME/.emacs.d/daemon.log"
 function emacsclient () {
     $EMACS_CLIENT_CMD "$@"
 }
@@ -59,11 +60,15 @@ function emacsd () {
         return 1
         ;;
     start)
-        if $0 status >/dev/null; then
+        $0 status >/dev/null && {
             echo 'emacs daemon is already running'
             return 1
+        }
+        if [[ -n "$EMACS_DAEMON_LOG" ]]; then
+            SESSION_MANAGER= $cmd 2>&1 | tee "$EMACS_DAEMON_LOG"
+        else
+            SESSION_MANAGER= $cmd
         fi
-        SESSION_MANAGER= $cmd
         ;;
     stop)
         $0 status >/dev/null &&
