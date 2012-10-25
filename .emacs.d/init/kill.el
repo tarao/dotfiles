@@ -3,11 +3,11 @@
 ;; xsel command
 (defvar x-available nil)
 (defun x-available-p-1 ()
-  (condition-case nil
-      (or (x-open-connection (or x-display-name
-                                 (setq x-display-name (getenv "DISPLAY"))))
-          t)
-    (error nil)))
+  (let ((display (or x-display-name (getenv "DISPLAY"))))
+    (condition-case nil
+        (and (stringp display) (> (length display) 0)
+             (or (x-open-connection display) (x-close-connection display) t))
+      (error nil))))
 (defun x-available-p ()
   (unless x-available (setq x-available (if (x-available-p-1) 1 0)))
   (eq x-available 1))
