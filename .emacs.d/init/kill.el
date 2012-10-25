@@ -19,7 +19,7 @@
 (defun xsel-input (type text)
   (let* ((process-connection-type nil)
          (type (if (eq type 'PRIMARY) "-p" "-b"))
-         (proc (start-process "xsel" "*Messages*" "xsel" type "-i")))
+         (proc (start-process "xsel" nil "xsel" type "-i")))
     (process-send-string proc text)
     (process-send-eof proc)))
 (defun xsel-output (type)
@@ -29,7 +29,7 @@
       (buffer-substring-no-properties (point-min) (point-max)))))
 (defun xsel-clear (type)
  (let ((type (if (eq type 'PRIMARY) "-p" "-b")))
-   (call-process "xsel" nil "*Messages*" nil type "-c")))
+   (call-process "xsel" nil 0 nil type "-c")))
 
 ;; Some applications recognize only PRIMARY section
 ;; See http://garin.jp/doc/Linux/xwindow_clipboard for details
