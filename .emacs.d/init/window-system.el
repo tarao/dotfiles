@@ -9,6 +9,9 @@
 
 ;; do not use dialog box
 (setq use-dialog-box nil)
+(defun message-box (str &rest args)
+  "Display a message at the bottom of the screen."
+  (apply #'message str args))
 
 ;; initial frame parameters
 (let ((frame-alist
