@@ -159,14 +159,6 @@ to next line."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; patches
 
-(defun evil-ensure-initializing-state ()
-  "Ensure calling `evil-initialize-state'.
-When anything-complete is active, `alcs-make-candidates' in
-`after-init-hook' breaks the initialization of *scratch* buffer."
-  (remove-hook 'pre-command-hook #'evil-ensure-initializing-state)
-  (when evil-local-mode (evil-initialize-state)))
-(add-hook 'pre-command-hook #'evil-ensure-initializing-state)
-
 ;; auto-complete
 (when (featurep 'auto-complete)
   ;; exit insert-state by ESC even if auto-complete is showing candidates
