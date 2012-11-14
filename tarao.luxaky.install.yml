@@ -1,9 +1,13 @@
 .:
   <src>:
     .gitconfig: tarao.gitconfig
+    .vimperator: .vimperator
+    .vimperatorrc: .vimperatorrc
 .emacs.d/dot:
   99_local.el: ../init/tarao.luxaky.el
 .vim:
   local.vim: tarao.vim
+.vimperator/plugin:
+  plugin_loader.js: ../vimperator-plugins/plugin_loader.js
 .zsh:
   local.zsh: tarao.luxaky.zsh
