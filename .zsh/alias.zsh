@@ -44,10 +44,10 @@ function grep () {
     fi
 }
 function diff () {
-    colordiff -u $@ | $PAGER
+    colordiff -u $@ | ${=PAGER}
 }
 function last () {
-    command last $@ | $PAGER
+    command last $@ | ${=PAGER}
 }
 
 function { # local scope
