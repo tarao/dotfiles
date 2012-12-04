@@ -84,8 +84,8 @@
 
         var add = function(name, prop) {
             self[name] = function() {
-                var filter = liberator.globalVariables['ime_methods'] || all;
-                filter = filter.split(/[,| ]/);
+                var filter = liberator.globalVariables['imekeys_methods'];
+                filter = (filter || all).split(/[,| ]/);
                 if (filter.indexOf('ibus') >= 0 && ibus.cond()) {
                     ibus[name]();
                     return;
