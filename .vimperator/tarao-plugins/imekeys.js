@@ -1,4 +1,25 @@
 (function() {
+    var ibus = (function() {
+        var cmd = function(action) {
+            return [
+                'import ibus',
+                'bus=ibus.Bus()',
+                'ic=ibus.InputContext(bus,bus.current_input_contxt())',
+                'ic.'+action+'()'
+            ].join(";");
+        };
+
+        return {
+            cond: function() {
+                return io.run('which', ['python'], true) == 0 &&
+                        io.run('which', ['ibus-setup'], true) == 0;
+            },
+            on: function(){ io.run('python', [ '-c', cmd('enable') ]); },
+            off: function(){ io.run('python', [ '-c', cmd('disable') ]); }
+        };
+    })();
+    liberator.plugins.ibus = ibus;
+
     var sendKeys = (function() {
         var methods = {};
 
@@ -27,11 +48,12 @@
             }
         };
 
-        var func = function(k) {
+        var func = function(k, filter) {
             var key = function(m){ return k; };
             key = (typeof k == 'object' && function(m){ return k[m]; }) || key;
 
             for (var m in methods) {
+                if (filter && filter.indexOf(m) < 0) continue;
                 if (key(m) && methods[m].cond()) {
                     setTimeout(function() { methods[m].send(key(m)); }, 0);
                     return;
@@ -49,6 +71,7 @@
 
         var methods = [];
         for (var m in sendKeys.methods) methods.push(m);
+        var all = ['ibus'].concat(methods).join(',');
 
         var keys = function(action) {
             var k = {};
@@ -60,7 +83,15 @@
         };
 
         var add = function(name, prop) {
-            self[name] = function(){ sendKeys(keys(prop)); };
+            self[name] = function() {
+                var filter = liberator.globalVariables['ime_methods'] || all;
+                filter = filter.split(/[,| ]/);
+                if (filter.indexOf('ibus') >= 0 && ibus.cond()) {
+                    ibus[name]();
+                    return;
+                }
+                sendKeys(keys(prop), filter);
+            };
             var varname = 'ime'+name;
             var defaultValue = liberator.globalVariables[varname] || '';
             self[prop] = defaultValue.split(/[,| ]/);
