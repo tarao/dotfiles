@@ -9,44 +9,45 @@
             ].join(";");
         };
 
-        return {
-            cond: function() {
-                return io.run('which', ['python'], true) == 0 &&
-                        io.run('which', ['ibus-setup'], true) == 0;
-            },
-            on: function(){ io.run('python', [ '-c', cmd('enable') ]); },
-            off: function(){ io.run('python', [ '-c', cmd('disable') ]); }
-        };
+        if (io.run('which', ['python'], true) == 0 &&
+            io.run('which', ['ibus-setup'], true) == 0) {
+            return {
+                on: function(){ io.run('python', [ '-c', cmd('enable') ]); },
+                off: function(){ io.run('python', [ '-c', cmd('disable') ]); }
+
+            };
+        }
     })();
     liberator.plugins.ibus = ibus;
 
     var sendKeys = (function() {
         var methods = {};
 
-        methods.x = {
-            cond: function() {
-                return !liberator.has('Windows') &&
-                        io.run('which', ['xvkbd'], true) == 0;
-            },
-            send: function(key){ io.run('xvkbd', [ '-text', key ]); }
-        };
+        if (!liberator.has('Windows') &&
+            io.run('which', ['xvkbd'], true) == 0) {
+            methods.x = {
+                send: function(key){ io.run('xvkbd', [ '-text', key ]); }
+            };
+        }
 
-        methods.w = {
-            cond: function(){ return liberator.has('Windows'); },
-            send: function(key) {
-                var file = services.get("directory").get("TmpD", Ci.nsIFile);
-                file.append('vimperator_external_command_send_keys.js');
-                file = File(file);
-                if (!file.exists()) {
-                    file.write([
-                        'var sh = WScript.CreateObject("WScript.Shell");',
-                        'sh.SendKeys(WScript.Arguments(0));',
-                        ''
-                    ].join("\n"), File.MODE_WRONLY | File.MODE_CREATE, 0644);
+        if (liberator.has('Windows')) {
+            methods.w = {
+                send: function(key) {
+                    var dirs = services.get("directory");
+                    var file = dirs.get("TmpD", Ci.nsIFile);
+                    file.append('vimperator_external_command_send_keys.js');
+                    file = File(file);
+                    if (!file.exists()) {
+                        file.write([
+                            'var sh = WScript.CreateObject("WScript.Shell");',
+                            'sh.SendKeys(WScript.Arguments(0));',
+                            ''
+                        ].join("\n"), File.MODE_WRONLY|File.MODE_CREATE, 0644);
+                    }
+                    io.run('wscript.exe', [ file.path, key ]);
                 }
-                io.run('wscript.exe', [ file.path, key ]);
-            }
-        };
+            };
+        }
 
         var func = function(k, filter) {
             var key = function(m){ return k; };
@@ -54,7 +55,7 @@
 
             for (var m in methods) {
                 if (filter && filter.indexOf(m) < 0) continue;
-                if (key(m) && methods[m].cond()) {
+                if (key(m) && methods[m]) {
                     setTimeout(function() { methods[m].send(key(m)); }, 0);
                     return;
                 }
@@ -86,7 +87,7 @@
             self[name] = function() {
                 var filter = liberator.globalVariables['imekeys_methods'];
                 filter = (filter || all).split(/[,| ]/);
-                if (filter.indexOf('ibus') >= 0 && ibus.cond()) {
+                if (filter.indexOf('ibus') >= 0 && ibus) {
                     ibus[name]();
                     return;
                 }
