@@ -10,7 +10,8 @@
         };
 
         if (io.run('which', ['python'], true) == 0 &&
-            io.run('which', ['ibus-setup'], true) == 0) {
+            io.run('which', ['ibus-setup'], true) == 0 &&
+            io.run('python', [ '-c', 'import ibus' ], true) == 0) {
             return {
                 on: function(){ io.run('python', [ '-c', cmd('enable') ]); },
                 off: function(){ io.run('python', [ '-c', cmd('disable') ]); }
