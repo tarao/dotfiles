@@ -8,6 +8,7 @@ function ls () {
     fi
 }
 
+whence xdg-open > /dev/null && alias ii='xdg-open'
 alias dir='ls -l'
 alias la='ls -la'
 alias ll='ls -alF'
@@ -31,7 +32,7 @@ function wexif() {
 
 function ssh () {
     local cmd; cmd=(command ssh)
-    which zssh >/dev/null && cmd=(zssh -z \^\] --)
+    whence zssh >/dev/null && cmd=(zssh -z \^\] --)
     $cmd "$@"
 }
 function grep () {
@@ -44,10 +45,14 @@ function grep () {
     fi
 }
 function diff () {
-    colordiff -u $@ | ${=PAGER}
+    whence colordiff >/dev/null && [ -n "$PAGER" ] && {
+        colordiff -u "$@" | ${=PAGER}
+    } || comand diff "$@"
 }
 function last () {
-    command last $@ | ${=PAGER}
+    [ -n "$PAGER" ] && {
+        command last "$@" | ${=PAGER}
+    } || command last "$@"
 }
 
 function { # local scope
