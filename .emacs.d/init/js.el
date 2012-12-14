@@ -1,13 +1,9 @@
-;;; javascript
-(load "javascript")
 (setq auto-mode-alist
-      (append '(("\\.json$" . javascript-mode)
-                ("\\.js$" . javascript-mode))
-              auto-mode-alist))
-
-(autoload 'javascript-mode "javascript" nil t)
-(setq javascript-indent-level 4)
-(setq javascript-expr-indent-offset 4)
+      (append '(("\\.json$" . js-mode)
+                ("\\.js$" . js-mode))
+              auto-mode-alist)
+      js-indent-level 4
+      js-expr-indent-offset 4)
 
 (defconst flymake-allowed-js-file-name-masks
   '(("\\.json$" flymake-js-init)
@@ -55,7 +51,7 @@
   (setq flymake-err-line-patterns flymake-js-err-line-patterns)
   (flymake-mode t))
 
-(add-hook 'javascript-mode-hook
+(add-hook 'js-mode-hook
           '(lambda ()
              (progn
                (hs-enable)
