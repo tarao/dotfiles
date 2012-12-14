@@ -209,7 +209,7 @@ function max_package_length() {
     for p in "${(@)packages}"; do
         parse_spec "$p"
         dir="$sources[1]"
-        name="$sources[1]";
+        name="${${src:r}:t}";
         [ -n "$targets[1]" ] && name="$targets[1]"
         (( $len < $#name )) && len=$#name
     done
@@ -226,7 +226,7 @@ function install() {
         protocol=
         parse_spec "$p"
         dir="$sources[1]"
-        name="$sources[1]";
+        name="${${src:r}:t}";
         [ -n "$targets[1]" ] && name="$targets[1]"
 
         # filter the package
