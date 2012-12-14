@@ -15,6 +15,7 @@ Thumbs.db
 .svn
 CVS
 local.install.yml
+.emacs.d/daemon.log
 .emacs.d/anything-c-adaptive-history
 .emacs.d/ac-comphist.dat
 .emacs.d/bmk
