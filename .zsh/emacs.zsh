@@ -12,18 +12,29 @@ function emacs-standalone () {
 }
 
 function emacsb () {
-    [[ -z "$1" ]] &&
-    echo "Usage: $0 [compile [-L dir ...] FILE | install URL | update]..." && return
+    [[ -z "$1" ]] && {
+        cat <<EOF
+Usage: $0 [compile [-p] [-L dir ...] FILE | install URL | update]...
+EOF
+        return
+    }
     local cmd; cmd=(emacs-standalone --batch)
     local -a libs; libs=()
     local install; install=($cmd -l ~/.emacs.d/init/install.el)
+    local compile; compile=($cmd -l ~/.emacs.d/init/compile.el)
     local action; action=$1; shift
-    while [[ "$1" == "-L" ]]; do
+    local package=0
+    [ "x$1" = 'x-p' ] && { package=1; shift; }
+    while [[ "x$1" = 'x-L' ]]; do
         libs=($libs $1 "$2"); shift; shift
     done
     case "$action" in
     compile)
-        $cmd -L . $libs -f batch-byte-compile "$@"
+        if [ $package = 1 ]; then
+            $compile -L . $libs -f batch-byte-compile-with-package "$@"
+        else
+            $cmd -L . $libs -f batch-byte-compile "$@"
+        fi
         ;;
     install)
         local url; url=$1; shift

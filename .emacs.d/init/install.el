@@ -1,36 +1,5 @@
-(setq elisp-emacswiki-src
-      '(
-        "install-elisp.el"
-        "auto-install.el"
-        "anything.el"
-        "anything-match-plugin.el"
-        "anything-config.el"
-        "anything-obsolete.el"
-        "anything-complete.el"
-        "anything-grep.el"
-        "browse-kill-ring.el"
-        "browse-kill-ring+.el"
-        "c-eldoc.el"
-        "csharp-mode.el"
-        "descbinds-anything.el"
-        "eldoc-extension.el"
-        "goto-chg.el"
-        "key-chord.el"
-        "moccur.el"
-        "color-moccur.el"
-        "shell-history.el"
-        "space-chord.el"
-        "xquery-mode.el"
-        ))
-(setq elisp-url-src
-      '(
-        "http://www.brgeight.se/downloads/emacs/css-mode.el"
-        "http://svn.coderepos.org/share/lang/elisp/init-loader/init-loader.el"
-        "http://homepage3.nifty.com/satomii/software/jaspace.el"
-        "http://www.brgeight.se/downloads/emacs/javascript.el"
-        "http://www.loveshack.ukfsn.org/emacs/multi-mode.el"
-        "http://taiyaki.org/elisp/word-count/src/word-count.el"
-        ))
+(setq elisp-emacswiki-src '())
+(setq elisp-url-src '())
 
 (if (eq (user-real-uid) 0)
     ;;; root (install to the system directory)

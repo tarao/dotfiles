@@ -1,0 +1,326 @@
+#!/bin/zsh
+
+typeset verbose=0
+typeset package_dir="${${0:a}:h}"
+typeset install_dir="${package_dir:h}/site-lisp"
+typeset package_list="$package_dir/package-list"
+typeset -a names; names=("$@")
+typeset -A src_alias
+typeset -a packages
+typeset -a includes
+
+function help() {
+    cat <<EOF
+Usage: `basename $0` OPTIONS [--] [NAME...]
+Options:
+  -h,--help    Show this message.
+  -v           Verbose outputs.
+  -f FILE      Specify a package list file.
+               (default: ${package_list} or stdin)
+  -s DIR       Specify a directory to store package repository checkouts.
+               (default: ${package_dir})
+  -i DIR       Specify a directory to install packages.
+               (default: ${install_dir})
+Package List File Format:
+  ALIAS=STRING
+  URL
+  URL,DIR,...
+  URL,[SRC]DIR,...
+  URL,[SRC],...
+  :PROTOCOL:URL
+  :PROTOCOL:URL,DIR,...
+  :PROTOCOL:URL,[SRC]DIR,...
+  :PROTOCOL:URL,[SRC],...
+EOF
+    exit $1
+}
+
+function info() {
+    echo "$@"
+    return 0
+}
+
+function error() {
+    echo "$1" >&2
+    exit 1
+}
+
+function argument_error() {
+    echo "$1" >&2
+    help 1
+}
+
+function argument_require() {
+    [ -z "$1" ] && argument_error "$2: insufficient arguments"
+    return 0
+}
+
+function git() {
+    if [ "$verbose" != 0 ]; then
+        command git "$@"
+    else
+        command git "$@" >/dev/null 2>&1
+    fi
+}
+
+function git_retrieve() {
+    git clone "$@"
+}
+
+function git_update() {
+    git pull
+}
+
+function cvs() {
+    if [ "$verbose" != 0 ]; then
+        command cvs "$@"
+    else
+        command cvs "$@" >/dev/null 2>&1
+    fi
+}
+
+function cvs_retrieve() {
+    command cvs -d "$1" login
+    cvs -d "$1" co "$2"
+}
+
+function cvs_update() {
+    cvs update
+}
+
+function wget() {
+    if [ "$verbose" != 0 ]; then
+        command wget "$@"
+    else
+        command wget "$@" >/dev/null 2>&1
+    fi
+}
+
+function wget_retrieve() {
+    [ -d "$2" ] || mkdir -p "$2"
+    pushd "$2"
+    wget -O "${1:t}" "$1"
+    popd
+}
+
+function wget_update() {
+    wget -O "${1:t}" "$1"
+}
+
+function make() {
+    if [ "$verbose" != 0 ]; then
+        command make
+    else
+        command make >/dev/null 2>&1
+    fi
+}
+
+function emacs() {
+    if [ -n "$EMACS" ]; then
+        $EMACS "$@"
+    elif whence emacs >/dev/null; then
+        command emacs "$@"
+    elif whence emacs-snapshot >/dev/null; then
+        command emacs-snapshot "$@"
+    else
+        error 'No emacs command'
+    fi
+}
+
+function emacs_bcompile() {
+    local fun; fun='batch-byte-compile-with-package'
+    local quote; quote="'"
+    local code; code=${"$(<=(cat <<EOF
+(defun $fun ()
+  (when (require ${quote}package nil t)
+      (package-initialize))
+  (batch-byte-compile))
+EOF
+    ))"}
+    emacs --batch "${(@)includes}" -l =(echo "$code") -f "$fun" "$@"
+}
+
+function compile() {
+    local noloading; noloading='/^\(Loading\|Skipping\)/d'
+    if [ "$verbose" != 0 ]; then
+        emacs_bcompile "$@" 2>&1 | sed -e "$noloading" >&2
+    else
+        emacs_bcompile "$@" >/dev/null 2>&1
+    fi
+}
+
+function read_list() {
+    zmodload zsh/regex
+    local line
+    while read; do
+        line="$REPLY"
+        [[ "$line" =~ '^([a-zA-Z0-9_]+)=(.*$)' ]] && {
+            src_alias[$match[1]]="$match[2]"
+        } || {
+            packages+="$line"
+        }
+    done
+}
+
+function disalias() {
+    local src; src="$1"
+    for k in "${(@k)src_alias}"; do
+        src="${src/#$k:/$src_alias[$k]}"
+    done
+    echo "$src"
+}
+
+function parse_spec() {
+    local -a spec; spec=("${(s:,:)1}")
+    src="$spec[1]"; shift spec
+    [[ "$src" = :*:* ]] && {
+        protocol="${(M)src#:*:}"       # extract :...:
+        protocol="${${protocol#:}%:}"  # remove :
+        src="${src#:*:}"               # remove :...*
+    }
+    src=`disalias "$src"`
+
+    # package name and link targets
+    local d t s
+    sources=(); targets=()
+    (( $#spec > 0 )) && {
+        # source and target according to spec
+        # - DIR           source=DIR  target=DIR
+        # - [SRC]DIR      source=SRC  target=DIR
+        # - [SRC]         source=SRC  target=(empty)
+        for d in "${(@)spec}"; do
+            t="${d#\[*\]}"    # remove [...]
+            s="${(M)d#\[*\]}" # extract [...]
+            [ -n "$s" ] && {
+                s="${${s#\[}%\]}" # rmove [ and ]
+            } || s="$t" # use NAME because [SRC] is not specified
+            sources+="$s"
+            targets+="$t"
+        done
+    } || {
+        # default behaviour is to use basename of the source
+        sources+="${${src:r}:t}"
+        targets+="${${src:r}:t}"
+    }
+}
+
+function max_package_length() {
+    local protocol src p dir name len=0; local -a sources; local -a targets
+    for p in "${(@)packages}"; do
+        parse_spec "$p"
+        dir="$sources[1]"
+        name="$sources[1]";
+        [ -n "$targets[1]" ] && name="$targets[1]"
+        (( $len < $#name )) && len=$#name
+    done
+    echo $len
+}
+
+function install() {
+    local protocol src len p dir name t s i els e compiled notarget
+    local -a sources; local -a targets
+    len=`max_package_length`
+
+    pushd "$package_dir"
+    for p in "${(@)packages}"; do
+        protocol=
+        parse_spec "$p"
+        dir="$sources[1]"
+        name="$sources[1]";
+        [ -n "$targets[1]" ] && name="$targets[1]"
+
+        # filter the package
+        for t in "${(@)targets}"; do
+            [ -n "$t" ] && includes=($includes -L "$t")
+        done
+        [ -n "$names" ] && [[ "$names[(r)$name]" != "$name" ]] && continue
+        info -n "${(r:$len:)name} "
+
+        # deteremine protocol
+        [ -z "$protocol" ] && [[ "$src" = *.el ]] && protocol='wget'
+        [ -z "$protocol" ] && protocol='git'
+
+        # retrieve package
+        [ -d "$dir" ] && {
+            pushd "$dir"
+            ${protocol}_update "$src"
+            popd
+        } || ${protocol}_retrieve "$src" "$dir"
+        [ -d "$dir" ] || { info "failed [$protocol]"; continue; }
+
+        # make link and compile
+        notarget=0
+        compiled=0
+        pushd "$install_dir"
+        for (( i=1; $i <= $#targets; i++ )); do
+            s="$sources[$i]"; t="$targets[$i]"
+            [ -z "$t" ] && {
+                notarget=1
+                compiled=1
+                continue
+            }
+
+            # make link
+            (( $i > 1 )) && s="$dir/$s"
+            [ -h "$t" ] || ln -s "$package_dir/$s" "$t"
+
+            # make or compile
+            [ -f "$t/Makefile" ] && {
+                # make
+                pushd "$t"
+                make && {
+                    info -n '[make] '; compiled=1; popd
+                } || {
+                    info -n '[make failed] '; popd; false
+                }
+            } || {
+                # compile *.el
+                els=`ls -1b $t/*.el 2>/dev/null`
+                [ -n "$els" ] && {
+                    for e in "${(f)els}"; do
+                        notarget=0
+                        compiled=1
+                        compile "$e" && info -n . || info -n x
+                    done
+                }
+            }
+        done
+        [ $notarget = 1 ] && info -n '[no target]'
+        [ $compiled = 0 ] && info -n 'failed [no elisp]'
+        info
+        popd
+    done
+    popd
+}
+
+parsing=1
+while [ $parsing = 1 ] && [ -n "$1" ]; do
+    case "$1" in
+    -v) shift
+        verbose=1
+        ;;
+    -h|--help)
+        shift
+        help
+        ;;
+    -f) shift; package_list="$1"; argument_require "$1" '-f'; shift
+        ;;
+    -s) shift; package_dir="$1"; argument_require "$1" '-s'; shift
+        ;;
+    -i) shift; install_dir="$1"; argument_require "$1" '-i'; shift
+        ;;
+    --) shift
+        parsing=0
+        ;;
+    *)  parsing=0
+        ;;
+    esac
+done
+
+[ -d "$install_dir" ] || mkdir -p "$install_dir"
+if [ -r "$package_list" ]; then
+    cat "$package_list" | read_list
+else
+    read_list
+fi
+install

@@ -20,12 +20,12 @@ local.install.yml
 .emacs.d/bmk
 .emacs.d/recentf
 .emacs.d/tramp
-.emacs.d/site-lisp
 .emacs.d/dot/.*
 .emacs.d/dot/99_local.el
-.emacs.d/repos
-.emacs.d/theme-repos
-.emacs.d/themes
+.emacs.d/site-lisp
+.emacs.d/elpa/*
+.emacs.d/packages/*
+.emacs.d/themes/*
 .screen/exchange
 .screen/local.screenrc
 .vim/info

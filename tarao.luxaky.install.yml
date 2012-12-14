@@ -3,6 +3,8 @@
     .gitconfig: tarao.gitconfig
     .vimperator: .vimperator
     .vimperatorrc: .vimperatorrc
+.emacs.d/packages:
+  package-list: package-list.tarao
 .emacs.d/dot:
   99_local.el: ../init/tarao.luxaky.el
 .vim:
