@@ -11,8 +11,6 @@ mirror:browse-kill-ring.git
 mirror:browse-kill-ring-plus.git
 mirror:eldoc-extension.git
 mirror:c-eldoc.git
-mirror:key-chord.git
-mirror:space-chord.git
 mirror:word-count
 mirror:xquery-mode.git
 mirror:howm.git
