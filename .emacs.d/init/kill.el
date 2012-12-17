@@ -6,7 +6,10 @@
   (let ((display (or x-display-name (getenv "DISPLAY"))))
     (condition-case nil
         (and (stringp display) (> (length display) 0)
-             (or (x-open-connection display) (x-close-connection display) t))
+             (or (x-open-connection display)
+                 ;; causes segfault in Emacs <= 24.3.50 + GTK3
+                 (x-close-connection display)
+                 t))
       (error nil))))
 (defun x-available-p ()
   (let* ((frame (selected-frame))
@@ -33,8 +36,8 @@
 
 ;; Some applications recognize only PRIMARY section
 ;; See http://garin.jp/doc/Linux/xwindow_clipboard for details
-(setq x-select-enable-primary t)
-(setq x-select-enable-clipboard t)
+(setq x-select-enable-primary t
+      x-select-enable-clipboard t)
 
 ;; kill to X clipboard even if we are in terminal mode Emacs
 (defadvice x-select-text (around ad-x-select-text (text &rest args) activate)

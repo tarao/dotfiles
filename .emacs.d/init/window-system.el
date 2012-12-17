@@ -84,7 +84,7 @@ removed from them after the first call."
     (when (and display (not (member display displays)))
       (remove-hook 'delete-frame-functions #'close-frame-display)
       (delete-frame frame)
-      (x-close-connection display)
+      (x-close-connection display) ; causes segfault in Emacs <= 24.3.50 + GTK3
       (when hook (add-hook 'delete-frame-functions #'close-frame-display)))))
 ;; close frame display when the frame is deleted (we need this to
 ;; ensure that an emacs daemon without X window has no X connection)
