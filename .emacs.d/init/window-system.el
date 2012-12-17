@@ -25,10 +25,10 @@
 ;; font settings
 (defconst default-fontset-name "menloja")
 (defconst default-base-font-name "Menlo")
-(defconst default-base-font-size 14)
+(defconst default-base-font-size 10)
 (defconst default-ja-font-name "Hiragino Kaku Gothic ProN")
 (defconst default-ja-font-pat "Hiragino.*")
-(defconst default-ja-font-scale 1.2)
+(defconst default-ja-font-scale 1.3)
 
 (defun setup-window-system-configuration (&optional frame)
   "Initialize configurations for window system.
