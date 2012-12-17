@@ -96,22 +96,7 @@ We have our own \"--\" put by `my-evil-mode-line-format'."
 ;; use ; for : as
 ;;   noremap ; :
 ;; in Vim
-;;
-;; we can simply do
-;;   (define-key evil-motion-state (kbd ";") #'evil-ex)
-;; but in this case, unlike Vim, ";" is shown as a prompt
-;;
-;; the following hack binds `evil-ex' to another key
-;; with preserving the prompt string
-(evil-define-command evil-resend-ex ()
-  "Enter an Ex command."
-  :keep-visual t
-  (push 'evil-ex unread-command-events)
-  (setq this-command last-command)
-  (setq prefix-arg current-prefix-arg)
-  (reset-this-command-lengths))
-(define-key evil-motion-state-map (kbd ";") #'evil-resend-ex)
-(define-key evil-motion-state-map [evil-ex] #'evil-ex)
+(define-key evil-motion-state-map (kbd ";") #'evil-ex)
 
 ;; user key bindings
 (when (fboundp 'anything-for-files)
