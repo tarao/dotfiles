@@ -14,13 +14,12 @@ function emacs-standalone () {
 function emacsb () {
     [[ -z "$1" ]] && {
         cat <<EOF
-Usage: $0 [compile [-p] [-L dir ...] FILE | install URL | update]...
+Usage: $0 [compile [-p] [-L dir ...] FILE]...
 EOF
         return
     }
     local cmd; cmd=(emacs-standalone --batch)
     local -a libs; libs=()
-    local install; install=($cmd -l ~/.emacs.d/init/install.el)
     local compile; compile=($cmd -l ~/.emacs.d/init/compile.el)
     local action; action=$1; shift
     local package=0
@@ -35,13 +34,6 @@ EOF
         else
             $cmd -L . $libs -f batch-byte-compile "$@"
         fi
-        ;;
-    install)
-        local url; url=$1; shift
-        $install --eval "(install-elisp \"$url\")" "$@"
-        ;;
-    update)
-        $install -f update-remote-emacs-lisp "$@"
         ;;
     help)
         $0
