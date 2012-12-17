@@ -68,9 +68,10 @@ function emacsd () {
             return 1
         }
         if [[ -n "$EMACS_DAEMON_LOG" ]]; then
-            SESSION_MANAGER= $cmd 2>&1 | tee "$EMACS_DAEMON_LOG"
+            local log; log="$EMACS_DAEMON_LOG"
+            DBUS_SESSION_BUS_ADDRESS= SESSION_MANAGER= $cmd 2>&1 | tee "$log"
         else
-            SESSION_MANAGER= $cmd
+            DBUS_SESSION_BUS_ADDRESS= SESSION_MANAGER= $cmd
         fi
         ;;
     stop)
