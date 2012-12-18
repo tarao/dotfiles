@@ -1,5 +1,5 @@
 (defun install-packages (&optional no-fetch)
-  (when (require 'package)
+  (when (require 'package nil t)
     ;; package source
     (add-to-list 'package-archives
                  '("melpa" . "http://melpa.milkbox.net/packages/") t)
