@@ -14,7 +14,7 @@
     (let (el-get-master-branch)
       (goto-char (point-max))
       (eval-print-last-sexp))))
-(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get/recipes")
+(add-to-list 'el-get-recipe-path "~/.emacs.d/recipes")
 (require 'bundle)
 
 (bundle tarao-elisp)
