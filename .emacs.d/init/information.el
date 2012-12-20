@@ -1,9 +1,9 @@
 ;; show line numbers
-(require 'linum)
-(require 'linum+)
-(global-set-key (kbd "M-n") 'linum-mode)
-(global-set-key (kbd "M-N") 'relative-linum-mode)
-(set-face-attribute 'linum nil :foreground "aquamarine4")
+(when (require 'linum nil t)
+  (global-set-key (kbd "M-n") 'linum-mode)
+  (set-face-attribute 'linum nil :foreground "aquamarine4"))
+(bundle linum+ :name tarao-elisp
+  (global-set-key (kbd "M-N") 'relative-linum-mode))
 
 ;; wc (CC/WW/LL)
 (defun add-local-hook (hook function &optional append)
@@ -18,14 +18,16 @@
                       (< emacs-major-version 21)))
             (local-variable-p hook (current-buffer)))
     (remove-hook hook function t)))
-(autoload 'word-count-mode "word-count" "Minor mode to count words." t nil)
-(global-set-key (kbd "M-+") 'word-count-mode)
+(bundle word-count :url "http://github.com/emacsmirror/word-count.git"
+  (global-set-key (kbd "M-+") 'word-count-mode))
 
 ;; eldoc
-(require 'c-eldoc)
-(require 'eldoc-extension)
-(setq eldoc-idle-delay 0)
-(setq eldoc-echo-area-use-multiline-p t)
+(bundle c-eldoc)
+(bundle eldoc-extension)
+;; (require 'c-eldoc)
+;; (require 'eldoc-extension)
+(setq eldoc-idle-delay 0
+      eldoc-echo-area-use-multiline-p t)
 (dolist (hook '(emacs-lisp-mode-hook
                 lisp-interaction-mode-hook
                 ielm-mode-hook))

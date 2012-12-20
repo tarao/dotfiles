@@ -1,22 +1,26 @@
 ;; load-path
-(setq load-path (cons "~/.emacs.d" load-path))
+(add-to-list 'load-path "~/.emacs.d")
 
-;; packages
-(load "elpa-bootstrap.el")
-(install-packages t)
+;; ;; packages
+;; (load "elpa-bootstrap.el")
+;; (install-packages t)
 
-;; put subdirectories into load-path
-(when (fboundp 'normal-top-level-add-subdirs-to-load-path)
-  (let* ((dir "~/.emacs.d/site-lisp")
-         (default-directory dir))
-    (when (file-directory-p dir)
-      (setq load-path (cons dir load-path))
-      (normal-top-level-add-subdirs-to-load-path))))
-(setq load-path (cons "~/.emacs.d/auto-install" load-path))
-(setq custom-theme-directory "~/.emacs.d/themes")
+;; el-get
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "http://raw.github.com/dimitri/el-get/master/el-get-install.el")
+    (let (el-get-master-branch)
+      (goto-char (point-max))
+      (eval-print-last-sexp))))
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get/recipes")
+(require 'bundle)
+
+(bundle tarao-elisp)
 
 ;; load init files
-(when (require 'init-loader nil t)
+(bundle init-loader :url "http://gist.github.com/1021706.git"
   (setq init-loader-show-log-after-init nil)
   (defadvice init-loader--re-load-files
     (around ad-init-loader-filter-backup-files activate)
@@ -28,3 +32,11 @@
           (l ad-do-it))
       (setq ad-return-value (funcall filter "~$" l))))
   (init-loader-load "~/.emacs.d/dot"))
+
+;; put site-lisp and its subdirectories into load-path
+(when (fboundp 'normal-top-level-add-subdirs-to-load-path)
+  (let* ((dir "~/.emacs.d/site-lisp")
+         (default-directory dir))
+    (when (file-directory-p dir)
+      (add-to-list 'load-path dir)
+      (normal-top-level-add-subdirs-to-load-path))))

@@ -1,0 +1,3 @@
+(:name tarao-elisp
+       :type git
+       :url "git://github.com/tarao/elisp.git")

@@ -75,10 +75,12 @@
 (if (equal (getenv "TERM")  "cygwin")
     (set-terminal-coding-system 'sjis)
   (set-terminal-coding-system 'utf-8-unix))
-(require 'default-file-coding-systems)
+(bundle default-file-coding-systems :name tarao-elisp)
 
 ;; skk
-(setq skk-init-file "dot/.skk")
-(setq skk-user-directory "~/.ddskk")
-(load-library "skk-autoloads") ; load again if already loaded
-(global-set-key (kbd "C-x C-j") 'skk-mode)
+(setq skk-init-file "dot/.skk"
+      skk-user-directory "~/.ddskk")
+(bundle ddskk
+  (global-set-key (kbd "C-x C-j") 'skk-mode))
+;; (load-library "skk-autoloads") ; load again if already loaded
+;; (global-set-key (kbd "C-x C-j") 'skk-mode)

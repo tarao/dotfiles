@@ -1,19 +1,22 @@
 ;; coloring
 (setq frame-background-mode 'dark)
 (if (not (and (>= emacs-major-version 24) (>= emacs-minor-version 1)))
-    (when (require 'color-theme nil t)
+    (bundle color-theme
       (color-theme-initialize)
       (color-theme-dark-laptop)
       (set-face-foreground 'mode-line "#8fb28f")
       (set-face-background 'mode-line-buffer-id "#3f3f3f")
       (set-face-foreground 'mode-line-buffer-id "#f0dfaf"))
-  (load-theme 'zenburn t)
-  (let ((class '((class color) (min-colors 89)))
-        (zenburn-fg "#dcdccc")
-        (zenburn-bg "#1f1f1f"))
-    (custom-theme-set-faces
-     'zenburn
-     `(default ((,class (:foreground ,zenburn-fg :background ,zenburn-bg)))))))
+  (bundle zenburn-theme
+    :url "http://raw.github.com/bbatsov/zenburn-emacs/master/zenburn-theme.el"
+    (progn
+      (load-theme 'zenburn t)
+      (let ((class '((class color) (min-colors 89)))
+            (fg "#dcdccc")
+            (bg "#1f1f1f"))
+        (custom-theme-set-faces
+         'zenburn
+         `(default ((,class (:foreground ,fg :background ,bg)))))))))
 
 ;; colors
 (set-face-background 'region "#8c8ce8")
@@ -25,7 +28,7 @@
 (set-face-attribute 'header-line nil :box nil)
 
 ;; mode line color
-(when (require 'mode-line-color nil t)
+(bundle mode-line-color :name tarao-elisp
   (mode-line-color-mode)
   (defvar skk-j-mode-line-color "IndianRed4")
   (define-mode-line-color (color)
@@ -41,8 +44,8 @@
     (mode-line-color-update)))
 
 ;; eof mark
-(require 'end-mark)
-(global-end-mark-mode)
+(bundle end-mark :name tarao-elisp
+  (global-end-mark-mode))
 
 ;; line-wrap character
 (defface wrap-face
@@ -62,10 +65,10 @@
                         (make-glyph-code #xbb 'wrap-face))
 
 ;; show fullwidth-spaces and tabs
-(require 'jaspace)
-(setq jaspace-highlight-tabs t)
-(setq jaspace-highlight-tabs ?>)
-(setq jaspace-mode-string " WS")
+(bundle jaspace :url "http://homepage3.nifty.com/satomii/software/jaspace.el"
+  (setq jaspace-highlight-tabs t
+        jaspace-highlight-tabs ?>
+        jaspace-mode-string " WS"))
 
 ;; show trailing whitespace
 (setq-default show-trailing-whitespace t)

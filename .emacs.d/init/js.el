@@ -41,15 +41,20 @@
     (list "js" (flymake-js-command-opt (list local-file)))))
 (defun flymake-js-load ()
   (interactive)
-  (defadvice flymake-post-syntax-check
-    (before flymake-force-check-was-interrupted)
-    (setq flymake-check-was-interrupted t))
-  (ad-activate 'flymake-post-syntax-check)
-  (setq flymake-allowed-file-name-masks
-        (append flymake-allowed-file-name-masks
-                flymake-allowed-js-file-name-masks))
-  (setq flymake-err-line-patterns flymake-js-err-line-patterns)
+  ;; (defadvice flymake-post-syntax-check
+  ;;   (before flymake-force-check-was-interrupted)
+  ;;   (setq flymake-check-was-interrupted t))
+  ;; (ad-activate 'flymake-post-syntax-check)
+  (set (make-local-variable 'flymake-err-line-patterns)
+       flymake-js-err-line-patterns)
   (flymake-mode t))
+(defadvice flymake-post-syntax-check
+  (before flymake-force-check-was-interrupted activate)
+  (setq flymake-check-was-interrupted t))
+
+(setq flymake-allowed-file-name-masks
+      (append flymake-allowed-file-name-masks
+              flymake-allowed-js-file-name-masks))
 
 (add-hook 'js-mode-hook
           '(lambda ()

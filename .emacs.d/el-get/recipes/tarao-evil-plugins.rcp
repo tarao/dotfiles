@@ -1,0 +1,3 @@
+(:name tarao-evil-plugins
+       :type git
+       :url "git://github.com/tarao/evil-plugins.git")

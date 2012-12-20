@@ -9,8 +9,8 @@
               evil-want-fine-undo t
               evil-search-module 'evil-search
               evil-ex-search-vim-style-regexp t)
-(require 'goto-chg nil t)
-(require 'evil)
+(bundle goto-chg)
+(bundle evil)
 (evil-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -196,15 +196,17 @@ is a kind of temporary one which is not confirmed yet."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; plugins
 
+(bundle tarao-evil-plugins)
+
 ;; operators
 
-(when (require 'surround nil t)
+(bundle evil-surround
   (global-surround-mode 1))
 
-(when (require 'evil-operator-comment nil t)
+(bundle evil-operator-comment :name tarao-evil-plugins
   (global-evil-operator-comment-mode 1))
 
-(when (require 'evil-operator-moccur nil t)
+(bundle evil-operator-moccur :name tarao-evil-plugins
   (global-evil-operator-moccur-mode 1)
   (when (fboundp 'anything-for-files)
     (define-key moccur-mode-map (kbd ":") #'anything-for-files)
@@ -212,17 +214,17 @@ is a kind of temporary one which is not confirmed yet."
 
 ;; text objects
 
-(require 'evil-textobj-between nil t)
+(bundle evil-textobj-between :name tarao-evil-plugins)
 
 ;; others
 
-(require 'evil-relative-linum nil t)
+(bundle evil-relative-linum :name tarao-evil-plugins)
 
-(when (require 'evil-little-word nil t)
+(bundle evil-little-word :name tarao-evil-plugins
   ;; w for Japanese phrase
   ;; lw for Japanese word
-  (setq evil-cjk-word-separating-categories word-separating-categories)
-  (setq evil-cjk-word-combining-categories word-combining-categories))
+  (setq evil-cjk-word-separating-categories word-separating-categories
+        evil-cjk-word-combining-categories word-combining-categories))
 
-(when (require 'evil-ex-registers nil t)
+(bundle evil-ex-registers :name tarao-evil-plugins
   (evil-define-command-line-key (kbd "C-r") #'evil-ex-paste-from-register))

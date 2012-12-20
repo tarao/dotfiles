@@ -1,7 +1,7 @@
 ;; cursor
 (blink-cursor-mode 0)
-(setq cursor-type 'box)
-(setq default-cursor-color "white")
+(setq cursor-type 'box
+      default-cursor-color "white")
 (set-cursor-color default-cursor-color)
 
 ;; line space

@@ -1,5 +1,5 @@
 ;; dim:switch-window
-(require 'switch-window)
+(bundle switch-window)
 
 ;; move window
 (windmove-default-keybindings)

@@ -1,6 +1,6 @@
 ;; make *scratch* immortal
-(require 'immortal-buffer)
-(make-buffer-immortal "*scratch*")
+(bundle immortal-buffer :name tarao-elisp
+  (make-buffer-immortal "*scratch*"))
 
 ;; auto-save
 (defun auto-save-buffer (&optional buffer)
@@ -21,8 +21,8 @@
   (auto-save-mode 0))
 
 ;; use directory name instead of <num>
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
+(when (require 'uniquify nil 'noerror)
+  (setq uniquify-buffer-name-style 'forward))
 
 ;; Buffer-menu
 (add-hook 'Buffer-menu-mode-hook

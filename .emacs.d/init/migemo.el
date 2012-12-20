@@ -1,2 +1,2 @@
-(require 'migemo)
-(migemo-init)
+(when (require 'migemo nil t)
+  (migemo-init))
