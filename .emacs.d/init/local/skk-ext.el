@@ -15,10 +15,6 @@
 (require 'skk-hint)
 ;(require 'skk-study)
 
-;; SandS (works only for the first character)
-(loop for k from ?a to ?z do
-      (space-chord-define skk-j-mode-map k (upcase (char-to-string k))))
-
 (setq-default skk-kutouten-type 'en)
 (setq my-skk-rom-kana-rule-list-base
       (append
