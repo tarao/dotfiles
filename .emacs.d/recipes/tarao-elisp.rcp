@@ -1,3 +1,10 @@
 (:name tarao-elisp
-       :type git
-       :url "git://github.com/tarao/elisp.git")
+       :type github
+       :pkgname "tarao/elisp"
+       :prepare
+       (progn
+         (autoload 'shell-command+ "shell-command+" nil t)
+         (autoload 'shell-command-on-region+ "shell-command+" nil t)
+         (autoload 'make-buffer-immortal "immortal-buffer")
+         (autoload 'relative-linum-mode "linum+"
+           "Relative line numbers in the left marginal area." t)))

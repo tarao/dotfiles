@@ -9,14 +9,12 @@
       (set-face-foreground 'mode-line-buffer-id "#f0dfaf"))
   (bundle zenburn-theme
     :url "http://raw.github.com/bbatsov/zenburn-emacs/master/zenburn-theme.el"
-    (progn
-      (load-theme 'zenburn t)
-      (let ((class '((class color) (min-colors 89)))
-            (fg "#dcdccc")
-            (bg "#1f1f1f"))
-        (custom-theme-set-faces
-         'zenburn
-         `(default ((,class (:foreground ,fg :background ,bg)))))))))
+    (load-theme 'zenburn t)
+    (let ((class '((class color) (min-colors 89)))
+          (fg "#dcdccc") (bg "#1f1f1f"))
+      (custom-theme-set-faces
+       'zenburn
+       `(default ((,class (:foreground ,fg :background ,bg))))))))
 
 ;; colors
 (set-face-background 'region "#8c8ce8")
@@ -28,7 +26,7 @@
 (set-face-attribute 'header-line nil :box nil)
 
 ;; mode line color
-(bundle mode-line-color :name tarao-elisp
+(bundle tarao-elisp
   (mode-line-color-mode)
   (defvar skk-j-mode-line-color "IndianRed4")
   (define-mode-line-color (color)
@@ -44,7 +42,7 @@
     (mode-line-color-update)))
 
 ;; eof mark
-(bundle end-mark :name tarao-elisp
+(bundle tarao-elisp
   (global-end-mark-mode))
 
 ;; line-wrap character

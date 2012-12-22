@@ -1,0 +1,5 @@
+(:name c-eldoc
+       :type emacswiki
+       :description "helpful description of the arguments to C functions"
+       :prepare
+       (autoload 'c-turn-on-eldoc-mode "c-eldoc" "Enable c-eldoc-mode" t))

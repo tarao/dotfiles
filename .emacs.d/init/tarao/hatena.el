@@ -1,4 +1,4 @@
-(require 'multi-mode-util)
+;(require 'multi-mode-util)
 (defun hatena-diary-init ()
   (interactive)
   (no-backup)

@@ -1,5 +1,5 @@
 ;; make *scratch* immortal
-(bundle immortal-buffer :name tarao-elisp
+(bundle tarao-elisp
   (make-buffer-immortal "*scratch*"))
 
 ;; auto-save

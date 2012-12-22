@@ -17,10 +17,8 @@
 (add-to-list 'el-get-recipe-path "~/.emacs.d/recipes")
 (require 'bundle)
 
-(bundle tarao-elisp)
-
 ;; load init files
-(bundle init-loader :url "http://gist.github.com/1021706.git"
+(bundle init-loader
   (setq init-loader-show-log-after-init nil)
   (defadvice init-loader--re-load-files
     (around ad-init-loader-filter-backup-files activate)

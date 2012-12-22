@@ -12,10 +12,11 @@ https://github.com/dimitri/el-get/issues/810 for details."
                  (not (plist-get def :autoloads)))
       ad-do-it)))
 
-(defun bundle-defined-p (src)
+(defun bundle-package-def (src)
   (condition-case nil
       (el-get-package-def (if (listp src) (el-get-source-name src) src))
     (error nil)))
+(defalias 'bundle-defined-p (symbol-function 'bundle-package-def))
 
 (defun bundle-guess-type (src)
   (cond
@@ -42,40 +43,64 @@ https://github.com/dimitri/el-get/issues/810 for details."
     (while (keywordp (nth 0 src))
       (setq source (plist-put source (nth 0 src) (nth 1 src))
             src (cdr-safe (cdr src))))
-    (add-to-list 'el-get-sources source)))
+    (add-to-list 'el-get-sources source)
+    source))
 
 (defmacro bundle (feature &rest form)
-  "Require FEATURE and run init script specified by FORM.
+  "Install FEATURE and run init script specified by FORM.
 
 FORM may be started with a property list. In that case, the
 property list is pushed to `el-get-sources'.
 
 The rest of FORM is evaluated after FEATURE is loaded."
   (declare (indent defun) (debug t))
-  (let* ((featureq (or (and (consp feature) (eq (nth 0 feature) 'quote) feature)
-                       (list 'quote feature)))
-         (feature (or (and (listp feature) (nth 1 feature)) feature))
-         package src body after)
+  (let* ((feature (or (and (listp feature) (nth 1 feature)) feature))
+         package src body after require feats)
+    ;; (bundle FEATURE in PACKAGE ...) form
+    (when (eq (nth 0 form) 'in)
+      (let* ((name (nth 1 form))
+             (name (or (and (listp name) (nth 1 name)) name)))
+        (setq src (plist-put src :name name)))
+      (setq form (nthcdr 2 form) require t))
+    ;; parse keywords
     (while (keywordp (nth 0 form))
-      ;; parse keywords
       (setq src (plist-put src (nth 0 form) (nth 1 form))
             form (cdr-safe (cdr form))))
-    (unless (plist-member src :name)
-      ;; default name
-      (setq src (plist-put src :name feature)))
-    (unless (or (plist-member src :features)
-                (and (eq (plist-get src :name) feature)
-                     (bundle-defined-p src)))
-      ;; put default feature
-      (setq src (plist-put src :features feature)))
+    ;; package name
+    (unless (plist-member src :name) (setq src (plist-put src :name feature)))
+    (setq package (plist-get src :name))
+    ;; put default type
     (unless (or (plist-member src :type) (bundle-defined-p src))
-      ;; put default type
       (setq src (plist-put src :type (bundle-guess-type src))))
-    (setq package (list 'quote (plist-get src :name)))
-    (when form (setq src (plist-put src :after `(progn ,@form))))
+    ;; features
+    (when (plist-member src :feats)
+      (let* ((fs (plist-get src :feats))
+             (fs (or (and (listp fs) fs) (list fs))))
+        (setq feats (plist-put feats :features fs))))
+    (when (and require (or (not (plist-member feats :features))
+                           (plist-get feats :features)))
+      ;; put the feature into the features list
+      (let ((fs (plist-get feats :features)))
+        (add-to-list 'fs feature)
+        (setq feats (plist-put feats :features fs))))
+    ;; set eval after
+    (setq src (plist-put src :after (and form `(progn ,@form))))
+
     `(progn
-       (when ',src (bundle-merge-source ',src))
-       (let ((def (el-get-package-def (el-get-source-name ',src))) (sync t))
+       (let* ((src ',src) (def (bundle-package-def src)) (sync 'sync)
+              (feats ',feats) (fs (plist-get feats :features)))
+         ;; merge features
+         (when (plist-member def :features)
+           (let* ((old (plist-get def :features))
+                  (old (or (and (listp old) old) (list old))))
+             (dolist (f old) (add-to-list 'fs f))
+             (setq feats (plist-put feats :features fs))))
+         ;; update :features in src
+         (when (plist-member feats :features)
+           (setq src (plist-put src :features (plist-get feats :features))))
+         ;; merge src with the oriiginal definition
+         (setq def (bundle-merge-source src))
+
          (when (or (and (eq (plist-get def :type) 'cvs)
                         (eq (plist-get def :options) 'login))
                    (eq (plist-get def :type) 'apt)
@@ -83,6 +108,15 @@ The rest of FORM is evaluated after FEATURE is loaded."
                    (eq (plist-get def :type) 'pacman))
            ;; entering password via process-filter only works in async mode
            (setq sync nil))
-         (el-get sync ,package)))))
+
+         (el-get sync ',package)))))
+
+(defmacro bundle! (feature &rest args)
+  "Install FEATURE and run init script specified by FORM.
+It is the same as `bundle' except that FEATURE is explicitly
+required."
+  (if (eq (nth 0 args) 'in)
+      `(bundle ,feature ,@args)
+    `(bundle ,feature ,@(list* 'in feature args))))
 
 (provide 'bundle)

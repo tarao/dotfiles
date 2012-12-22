@@ -1,18 +1,18 @@
 ;; shell command (with saving the last command for default value)
-(bundle shell-command+ :name tarao-elisp
+(bundle tarao-elisp
   (global-set-key (kbd "M-!") 'shell-command+)
   (global-set-key (kbd "M-|") 'shell-command-on-region+))
 
 ;; zsh like completion
 (setq read-file-name-completion-ignore-case t)
-(bundle zlc :url "http://github.com/mooz/emacs-zlc.git"
+(bundle! zlc :url "http://github.com/mooz/emacs-zlc.git"
   (let ((map minibuffer-local-map))
     (define-key map (kbd "C-p") 'zlc-select-previous)
     (define-key map (kbd "C-n") 'zlc-select-next)
     (define-key map (kbd "<up>") 'zlc-select-previous-vertical)
     (define-key map (kbd "<down>") 'zlc-select-next-vertical)
     (define-key map (kbd "C-u") 'backward-kill-path-element)))
-(bundle yaicomplete :name tarao-elisp
+(bundle tarao-elisp
   (yaicomplete-mode))
 
 ;; anything
@@ -38,7 +38,7 @@
   (define-key anything-map (kbd "M-p") 'anything-previous-source))
 
 ;; auto completion like IntelliSense
-(bundle auto-complete :features auto-complete
+(bundle auto-complete
   (global-auto-complete-mode t)
   (setq ac-auto-show-menu 0.5)
   (define-key ac-complete-mode-map (kbd "C-n") 'ac-next)

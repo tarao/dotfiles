@@ -1,5 +1,6 @@
 (bundle multi-mode :url "http://github.com/emacsmirror/multi-mode.git")
-(bundle multi-mode-util :url "http://github.com/tarao/multi-mode-util.git")
+(bundle multi-mode-util
+  :url "http://raw.github.com/tarao/multi-mode-util/master/multi-mode-util.el")
 
 (defvar hatena-diary-filetypes
    '(a2ps a65 aap abap abaqus abc abel acedb actionscript ada aflex ahdl

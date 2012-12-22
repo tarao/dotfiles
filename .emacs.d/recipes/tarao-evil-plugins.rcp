@@ -1,3 +1,13 @@
 (:name tarao-evil-plugins
-       :type git
-       :url "git://github.com/tarao/evil-plugins.git")
+       :type github
+       :pkgname "tarao/evil-plugins"
+       :prepare
+       (progn
+         (autoload 'evil-a-between "evil-textobj-between"
+           "Select range between a character by which the command is followed."
+           t)
+         (autoload 'evil-inner-between "evil-textobj-between"
+           "Select inner range between a character by which the command is followed."
+           t)
+         (autoload 'evil-ex-paste-from-register "evil-ex-registers"
+           "Paste from REGISTER in command line." t)))

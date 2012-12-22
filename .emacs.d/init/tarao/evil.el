@@ -24,7 +24,8 @@
         (operator . "DarkSeaGreen4")
         (visual   . "SteelBlue4")
         (emacs    . "#8c5353")))
-(when (featurep 'mode-line-color)
+(bundle tarao-elisp
+  (mode-line-color-mode)
   (define-mode-line-color (color)
     (unless color (cdr (assq evil-state evil-mode-line-color)))))
 
@@ -99,7 +100,7 @@ We have our own \"--\" put by `my-evil-mode-line-format'."
 (define-key evil-motion-state-map (kbd ";") #'evil-ex)
 
 ;; user key bindings
-(when (fboundp 'anything-for-files)
+(bundle anything
   (define-key evil-motion-state-map (kbd ":") #'anything-for-files)
   (define-key evil-motion-state-map (kbd "M-;") #'anything-for-files))
 (define-key evil-normal-state-map (kbd "gw") #'what-cursor-position)
@@ -145,20 +146,20 @@ to next line."
 ;; patches
 
 ;; auto-complete
-(when (featurep 'auto-complete)
+(eval-after-load 'auto-complete
   ;; exit insert-state by ESC even if auto-complete is showing candidates
-  (define-key ac-completing-map (kbd "ESC") nil))
+  '(define-key ac-completing-map (kbd "ESC") nil))
 
 ;; hexl
-(require 'hexl-evil-patch nil t)
+(bundle hexl-evil-patch in tarao-evil-plugins)
 
 ;; use raw key bindings in moccur
 (push 'moccur-grep-mode evil-emacs-state-modes)
 
 ;; yaicomplete
-(when (featurep 'yaicomplete)
+(eval-after-load 'yaicomplete
   ;; inhibit yaicomplete in ex-mode minibuffer
-  (add-to-list 'yaicomplete-exclude 'evil-ex-current-buffer))
+  '(add-to-list 'yaicomplete-exclude 'evil-ex-current-buffer))
 
 ;; skk
 (eval-after-load 'ccc
@@ -193,38 +194,44 @@ is a kind of temporary one which is not confirmed yet."
 ;; dired mode
 (evil-define-key 'normal dired-mode-map "c" 'dired-do-copy)
 
+
+;; multi-mode
+(eval-after-load 'multi-mode-util
+  '(bundle multi-mode+evil
+     :url
+     "http://raw.github.com/tarao/multi-mode-util/master/multi-mode+evil.el"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; plugins
-
-(bundle tarao-evil-plugins)
 
 ;; operators
 
 (bundle evil-surround
   (global-surround-mode 1))
 
-(bundle evil-operator-comment :name tarao-evil-plugins
+(bundle tarao-evil-plugins
   (global-evil-operator-comment-mode 1))
 
-(bundle evil-operator-moccur :name tarao-evil-plugins
+(bundle tarao-evil-plugins
   (global-evil-operator-moccur-mode 1)
-  (when (fboundp 'anything-for-files)
-    (define-key moccur-mode-map (kbd ":") #'anything-for-files)
-    (define-key moccur-mode-map (kbd "M-;") #'anything-for-files)))
+  (define-key moccur-mode-map (kbd ":") #'anything-for-files)
+  (define-key moccur-mode-map (kbd "M-;") #'anything-for-files))
 
 ;; text objects
 
-(bundle evil-textobj-between :name tarao-evil-plugins)
+(bundle tarao-evil-plugins
+  (define-key evil-outer-text-objects-map "f" 'evil-a-between)
+  (define-key evil-inner-text-objects-map "f" 'evil-inner-between))
 
 ;; others
 
-(bundle evil-relative-linum :name tarao-evil-plugins)
+(bundle evil-relative-linum in tarao-evil-plugins)
 
-(bundle evil-little-word :name tarao-evil-plugins
+(bundle evil-little-word in tarao-evil-plugins
   ;; w for Japanese phrase
   ;; lw for Japanese word
   (setq evil-cjk-word-separating-categories word-separating-categories
         evil-cjk-word-combining-categories word-combining-categories))
 
-(bundle evil-ex-registers :name tarao-evil-plugins
+(bundle tarao-evil-plugins
   (evil-define-command-line-key (kbd "C-r") #'evil-ex-paste-from-register))

@@ -1,0 +1,5 @@
+(:name word-count
+       :type emacsmirror
+       :description "Counting word for Emacsen."
+       :prepare
+       (autoload 'word-count-mode "word-count" nil t))

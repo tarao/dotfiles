@@ -28,6 +28,7 @@ local.install.yml
 .emacs.d/elpa/*
 .emacs.d/packages/*
 .emacs.d/themes/*
+.emacs.d/url
 .screen/exchange
 .screen/local.screenrc
 .vim/info

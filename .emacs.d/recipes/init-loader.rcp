@@ -1,0 +1,6 @@
+(:name init-loader
+       :description "Load user init scripts"
+       :type git
+       :url "http://gist.github.com/1021706.git"
+       :prepare (autoload 'init-loader-load  "init-loader"
+                  "Load user init scripts in a directory." t))
