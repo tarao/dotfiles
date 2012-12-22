@@ -7,8 +7,8 @@
       (append '(("\\.pl$" . cperl-mode)
                 ("\\.pm$" . cperl-mode)
                 ("\\.t$" . cperl-mode))
-              auto-mode-alist))
-(setq cperl-indent-level 4
+              auto-mode-alist)
+      cperl-indent-level 4
       cperl-continued-statement-offset 4
       cperl-close-paren-offset -4
       cperl-comment-column 40
@@ -19,17 +19,13 @@
       cperl-font-lock t)
 
 ;; auto-insert package name
-(setq auto-insert-alist
-      (append '(("\\.pm$" . ["insert.pm" my-template]))
-              auto-insert-alist))
-(setq template-replacement-alist
-      (append
-       '(("%Perl-package%" . (lambda () (pm2package (buffer-file-name)))))
-       template-replacement-alist))
+(add-to-list 'auto-insert-alist '("\\.pm$" . ["insert.pm" template-replacer]))
+(add-to-list 'template-replacement-alist
+             '("%Perl-package%" . (lambda () (pm2package (buffer-file-name)))))
 
 (defun pm2package (fname)
   (let ((lib (findlib (split-string fname "/"))))
-    (let ((path (join-to-string "::" (if (consp lib) (cdr lib) lib))))
+    (let ((path (mapconcat 'identity (if (consp lib) (cdr lib) lib) "::")))
       (replace-regexp-in-string "\\.pm$" "" path))))
 
 (defun findlib (dirs)
@@ -51,6 +47,11 @@
     ("\\.t$" flymake-perl-init)
     ("\\.cgi$" flymake-perl-init)))
 
+(eval-after-load 'flymake
+  '(setq flymake-allowed-file-name-masks
+         (append flymake-allowed-file-name-masks
+                 flymake-allowed-perl-file-name-masks)))
+
 (defun flymake-perl-init ()
   (let* ((temp-file (flymake-init-create-temp-buffer-copy
                      'flymake-create-temp-inplace))
@@ -65,9 +66,9 @@
     (before flymake-force-check-was-interrupted)
     (setq flymake-check-was-interrupted t))
   (ad-activate 'flymake-post-syntax-check)
-  (setq flymake-allowed-file-name-masks (append flymake-allowed-file-name-masks flymake-allowed-perl-file-name-masks))
-  (setq flymake-err-line-patterns flymake-perl-err-line-patterns)
   (set-perl5lib)
-  (flymake-mode t))
+  (flymake-mode t)
+  (set (make-local-variable 'flymake-err-line-patterns)
+       flymake-perl-err-line-patterns))
 
 (add-hook 'cperl-mode-hook 'flymake-perl-load)

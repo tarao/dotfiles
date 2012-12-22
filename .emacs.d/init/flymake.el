@@ -1,13 +1,12 @@
-(require 'flymake)
-
-;; timeout
-(setq flymake-no-change-timeout 3)
-
-;; faces
-(set-face-background 'flymake-errline "red4")
-(set-face-foreground 'flymake-errline "black")
-(set-face-background 'flymake-warnline "yellow")
-(set-face-foreground 'flymake-warnline "black")
+(eval-after-load 'flymake
+  '(progn
+     ;; timeout
+     (setq flymake-no-change-timeout 3)
+     ;; faces
+     (set-face-background 'flymake-errline "IndianRed1")
+     (set-face-foreground 'flymake-errline "#444444")
+     (set-face-background 'flymake-warnline "LightGoldenrod1")
+     (set-face-foreground 'flymake-warnline "#444444")))
 
 ;; show errors on minibuffer
 ;; http://d.hatena.ne.jp/xcezx/20080314/1205475020

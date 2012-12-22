@@ -1,5 +1,3 @@
-(init-loader-load "~/.emacs.d/dot/tarao")
-
 ;; edit textarea
 (require 'textarea)
 (setq textarea-dir "~/win/var")

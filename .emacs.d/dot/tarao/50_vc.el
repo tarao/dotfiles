@@ -1,1 +1,0 @@
-../../init/tarao/vc.el

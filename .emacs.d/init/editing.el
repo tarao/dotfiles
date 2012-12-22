@@ -15,7 +15,6 @@
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
 ;; browse-kill-ring
-;(autoload 'browse-kill-ring "browse-kill-ring" nil t)
 (bundle browse-kill-ring)
 (bundle browse-kill-ring+
   (define-key global-map (kbd "M-y") 'browse-kill-ring)

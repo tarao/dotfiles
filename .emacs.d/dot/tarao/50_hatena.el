@@ -1,1 +1,0 @@
-../../init/tarao/hatena.el

@@ -25,6 +25,18 @@
 (set-face-background 'header-line "#3f3f3f")
 (set-face-attribute 'header-line nil :box nil)
 
+;; use darker comment
+(defun set-comment-color (color)
+  (set-face-foreground 'font-lock-comment-delimiter-face color)
+  (set-face-foreground 'font-lock-comment-face color))
+(defun darken-comment ()
+  (interactive)
+  (set-comment-color "gray32"))
+(defun lighten-comment ()
+  (interactive)
+  (set-comment-color "OrangeRed"))
+(darken-comment)
+
 ;; mode line color
 (bundle tarao-elisp
   (mode-line-color-mode)

@@ -1,7 +1,6 @@
-(setq flymake-c-command "/usr/bin/gcc")
-(setq flymake-cc-command "/usr/bin/g++")
-
-(setq flymake-cc-command-opt
+(setq flymake-c-command "/usr/bin/gcc"
+      flymake-cc-command "/usr/bin/g++"
+      flymake-cc-command-opt
       '("-fsyntax-only"
         ;; "-std=c++98" "-pedantic-errors"
         "-Wall" "-Wextra"
@@ -36,13 +35,17 @@
                         (file-name-directory buffer-file-name))))
       (list cmd (append flymake-cc-command-opt (list local-file))))))
 
+(eval-after-load 'flymake
+  '(progn
+     (push '("\\.c$" flymake-cc-init) flymake-allowed-file-name-masks)
+     (push '("\\.cpp$" flymake-cc-init) flymake-allowed-file-name-masks)))
+
 ;; C
 (autoload 'c-mode "cc-mode")
 (setq auto-mode-alist
       (append '(("\\.h$" . c-mode)
                 ("\\.c$" . c-mode))
               auto-mode-alist))
-(push '("\\.c$" flymake-cc-init) flymake-allowed-file-name-masks)
 (add-hook 'c-mode-hook
           '(lambda ()
              (c-set-style "stroustrup")
@@ -60,7 +63,6 @@
                 ("\\.hxx$" . c++-mode)
                 ("\\.cxx$" . c++-mode))
               auto-mode-alist))
-(push '("\\.cpp$" flymake-cc-init) flymake-allowed-file-name-masks)
 (add-hook 'c++-mode-hook
           '(lambda ()
              (c-set-style "stroustrup")

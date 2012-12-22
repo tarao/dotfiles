@@ -2,15 +2,14 @@
   ;; mew
   (autoload 'mew "mew" nil t)
   (autoload 'mew-send "mew" nil t)
-  (setq mew-smtp-user (user-login-name))
-  (setq mew-mail-domain "orezdnu.org")
-  (setq mew-mailbox-type 'mbox)
-  (setq mew-mbox-command "incm")
-  (setq mew-mbox-command-arg
+  (setq mew-smtp-user (user-login-name)
+        mew-mail-domain "orezdnu.org"
+        mew-mailbox-type 'mbox
+        mew-mbox-command "incm"
+        mew-mbox-command-arg
         (concat "-u -d /home/users/" (user-login-name) "/Maildir"))
   ;; emacs-w3m - a text browser
   (setq w3m-init-file "dot/.emacs-w3m")
-  (load "w3m")
   (add-hook 'w3m-mode-hook
             '(lambda () (setq show-trailing-whitespace nil)))
   ;; lookup - search dictionary

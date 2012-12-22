@@ -7,4 +7,7 @@
  '(indicate-buffer-boundaries (quote left))
  '(tool-bar-mode nil)
  '(menu-bar-mode nil)
- '(blink-matching-paren t))
+ '(blink-matching-paren t)
+ '(inhibit-startup-message t)
+ '(inhibit-startup-screen t)
+ '(initial-scratch-message nil))

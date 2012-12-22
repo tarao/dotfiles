@@ -23,12 +23,18 @@
        (setcdr pair 'nxml-mode)))
  magic-mode-alist)
 
+;; template for XHTML
+(add-to-list 'auto-insert-alist
+             '("\\.xhtml$" . ["insert.xhtml" template-replacer]))
+
 ;; use zen-coding
 (require 'zencoding-mode)
 (require 'zencoding-trie)
 (add-hook 'nxml-mode-hook 'zencoding-mode)
 (define-key zencoding-mode-keymap (kbd "C-j") 'zencoding-expand-line)
 (define-key zencoding-preview-keymap (kbd "RET") 'zencoding-preview-accept)
+(setq zencoding-preview-default nil ; no preview
+      zencoding-insert-flash-time 0.2)
 
 ;; xquery mode
 (autoload 'xquery-mode "xquery-mode" "Major mode for editing xquery" t)
