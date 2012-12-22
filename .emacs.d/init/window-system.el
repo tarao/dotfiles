@@ -16,6 +16,7 @@
 ;; initial frame parameters
 (let ((frame-alist
        `((cursor-color . ,default-cursor-color)
+         (mouse-color . ,default-cursor-color)
          (vertical-scroll-bars . nil)
          (foreground-color . "#aaaaaa")
          (background-color . "#1f1f1f"))))
