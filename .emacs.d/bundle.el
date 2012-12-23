@@ -102,7 +102,9 @@ The rest of FORM is evaluated after FEATURE is loaded."
          (setq def (bundle-merge-source src))
 
          (when (or (and (eq (plist-get def :type) 'cvs)
-                        (eq (plist-get def :options) 'login))
+                        (eq (plist-get def :options) 'login)
+                        (not (string-match-p "^:pserver:.*:.*@.*:.*$"
+                                             (plist-get def :url))))
                    (eq (plist-get def :type) 'apt)
                    (eq (plist-get def :type) 'fink)
                    (eq (plist-get def :type) 'pacman))
@@ -112,7 +114,7 @@ The rest of FORM is evaluated after FEATURE is loaded."
          (el-get sync ',package)))))
 
 (defmacro bundle! (feature &rest args)
-  "Install FEATURE and run init script specified by FORM.
+  "Install FEATURE and run init script.
 It is the same as `bundle' except that FEATURE is explicitly
 required."
   (if (eq (nth 0 args) 'in)
