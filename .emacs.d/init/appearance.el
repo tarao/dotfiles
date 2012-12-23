@@ -58,6 +58,7 @@
   (global-end-mark-mode))
 
 ;; line-wrap character
+(require 'disp-table)
 (defface wrap-face
   '((((class color) (min-colors 88) (background dark))
      :foreground "aquamarine4")

@@ -1,6 +1,7 @@
 *.o
 *.lo
 *.pyc
+*.elc
 #*#
 .*.rej
 *.rej

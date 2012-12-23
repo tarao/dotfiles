@@ -188,11 +188,13 @@ is a kind of temporary one which is not confirmed yet."
 
 ;; view mode
 (add-hook 'view-mode-hook #'evil-initialize-state)
-(evil-define-key 'motion view-mode-map (kbd "v")
-  #'(lambda () (interactive) (view-mode 0)))
+(eval-after-load 'view
+  '(evil-define-key 'motion view-mode-map (kbd "v")
+     #'(lambda () (interactive) (view-mode 0))))
 
 ;; dired mode
-(evil-define-key 'normal dired-mode-map "c" 'dired-do-copy)
+(eval-after-load 'dired
+  '(evil-define-key 'normal dired-mode-map "c" 'dired-do-copy))
 
 
 ;; multi-mode
@@ -212,6 +214,7 @@ is a kind of temporary one which is not confirmed yet."
 (bundle tarao-evil-plugins
   (global-evil-operator-comment-mode 1))
 
+(bundle color-moccur)
 (bundle tarao-evil-plugins
   (global-evil-operator-moccur-mode 1)
   (define-key moccur-mode-map (kbd ":") #'anything-for-files)
@@ -225,6 +228,7 @@ is a kind of temporary one which is not confirmed yet."
 
 ;; others
 
+(bundle tarao-elisp)
 (bundle evil-relative-linum in tarao-evil-plugins)
 
 (bundle evil-little-word in tarao-evil-plugins

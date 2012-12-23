@@ -19,17 +19,13 @@
 
 ;; load init files
 (bundle init-loader
+  ;; load
   (setq init-loader-show-log-after-init nil)
-  (defadvice init-loader--re-load-files
-    (around ad-init-loader-filter-backup-files activate)
-    "Don't load file whose name ends with '~'."
-    (let ((filter '(lambda (re l)
-                     (and (consp l)
-                          (let ((h (car l)) (rest (funcall filter re (cdr l))))
-                            (if (string-match re h) rest (cons h rest))))))
-          (l ad-do-it))
-      (setq ad-return-value (funcall filter "~$" l))))
-  (init-loader-load "~/.emacs.d/dot"))
+  (init-loader-load "~/.emacs.d/dot")
+
+  ;; hide compilation results
+  (let ((win (get-buffer-window "*Compile-Log*")))
+    (when win (delete-window win))))
 
 ;; put site-lisp and its subdirectories into load-path
 (when (fboundp 'normal-top-level-add-subdirs-to-load-path)

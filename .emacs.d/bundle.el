@@ -46,6 +46,36 @@ https://github.com/dimitri/el-get/issues/810 for details."
     (add-to-list 'el-get-sources source)
     source))
 
+(defun bundle-el-get (src feats)
+  (let ((package (plist-get src :name)) (def (bundle-package-def src))
+        (fs (plist-get feats :features)) (sync 'sync))
+    ;; merge features
+    (when (plist-member def :features)
+      (let* ((old (plist-get def :features))
+             (old (or (and (listp old) old) (list old))))
+        (dolist (f old) (add-to-list 'fs f))
+        (setq feats (plist-put feats :features fs))))
+    ;; update :features in src
+    (when (plist-member feats :features)
+      (setq src (plist-put src :features (plist-get feats :features))))
+    ;; merge src with the oriiginal definition
+    (setq def (bundle-merge-source src))
+
+    (when (or (and (eq (plist-get def :type) 'cvs)
+                   (eq (plist-get def :options) 'login)
+                   (not (string-match-p "^:pserver:.*:.*@.*:.*$"
+                                        (plist-get def :url))))
+              (eq (plist-get def :type) 'apt)
+              (eq (plist-get def :type) 'fink)
+              (eq (plist-get def :type) 'pacman))
+      ;; entering password via process-filter only works in async mode
+      (setq sync nil))
+
+    (el-get sync package)))
+
+(defun bundle-compile-init (src feats form)
+  form)
+
 (defmacro bundle (feature &rest form)
   "Install FEATURE and run init script specified by FORM.
 
@@ -68,7 +98,6 @@ The rest of FORM is evaluated after FEATURE is loaded."
             form (cdr-safe (cdr form))))
     ;; package name
     (unless (plist-member src :name) (setq src (plist-put src :name feature)))
-    (setq package (plist-get src :name))
     ;; put default type
     (unless (or (plist-member src :type) (bundle-defined-p src))
       (setq src (plist-put src :type (bundle-guess-type src))))
@@ -83,35 +112,18 @@ The rest of FORM is evaluated after FEATURE is loaded."
       (let ((fs (plist-get feats :features)))
         (add-to-list 'fs feature)
         (setq feats (plist-put feats :features fs))))
-    ;; set eval after
-    (setq src (plist-put src :after (and form `(progn ,@form))))
 
-    `(progn
-       (let* ((src ',src) (def (bundle-package-def src)) (sync 'sync)
-              (feats ',feats) (fs (plist-get feats :features)))
-         ;; merge features
-         (when (plist-member def :features)
-           (let* ((old (plist-get def :features))
-                  (old (or (and (listp old) old) (list old))))
-             (dolist (f old) (add-to-list 'fs f))
-             (setq feats (plist-put feats :features fs))))
-         ;; update :features in src
-         (when (plist-member feats :features)
-           (setq src (plist-put src :features (plist-get feats :features))))
-         ;; merge src with the oriiginal definition
-         (setq def (bundle-merge-source src))
+    ;; init script
+    (when form (setq form `(progn ,@form)))
 
-         (when (or (and (eq (plist-get def :type) 'cvs)
-                        (eq (plist-get def :options) 'login)
-                        (not (string-match-p "^:pserver:.*:.*@.*:.*$"
-                                             (plist-get def :url))))
-                   (eq (plist-get def :type) 'apt)
-                   (eq (plist-get def :type) 'fink)
-                   (eq (plist-get def :type) 'pacman))
-           ;; entering password via process-filter only works in async mode
-           (setq sync nil))
+    ;; make compiled init script
+    (eval-when (compile)
+      (defun bundle-compile-init (src feats form)
+        (bundle-el-get src feats)
+        `(funcall ,(byte-compile `(lambda () ,form)))))
+    (setq src (plist-put src :after (bundle-compile-init src feats form)))
 
-         (el-get sync ',package)))))
+    `(bundle-el-get ',src ',feats)))
 
 (defmacro bundle! (feature &rest args)
   "Install FEATURE and run init script.
