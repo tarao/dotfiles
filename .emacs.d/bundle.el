@@ -46,18 +46,15 @@ https://github.com/dimitri/el-get/issues/810 for details."
     (add-to-list 'el-get-sources source)
     source))
 
-(defun bundle-el-get (src feats)
+(defun bundle-el-get (src)
   (let ((package (plist-get src :name)) (def (bundle-package-def src))
-        (fs (plist-get feats :features)) (sync 'sync))
+        (fs (plist-get src :features)) (sync 'sync))
     ;; merge features
     (when (plist-member def :features)
       (let* ((old (plist-get def :features))
              (old (or (and (listp old) old) (list old))))
         (dolist (f old) (add-to-list 'fs f))
-        (setq feats (plist-put feats :features fs))))
-    ;; update :features in src
-    (when (plist-member feats :features)
-      (setq src (plist-put src :features (plist-get feats :features))))
+        (setq src (plist-put src :features fs))))
     ;; merge src with the oriiginal definition
     (setq def (bundle-merge-source src))
 
@@ -73,9 +70,6 @@ https://github.com/dimitri/el-get/issues/810 for details."
 
     (el-get sync package)))
 
-(defun bundle-compile-init (src feats form)
-  form)
-
 (defmacro bundle (feature &rest form)
   "Install FEATURE and run init script specified by FORM.
 
@@ -85,7 +79,7 @@ property list is pushed to `el-get-sources'.
 The rest of FORM is evaluated after FEATURE is loaded."
   (declare (indent defun) (debug t))
   (let* ((feature (or (and (listp feature) (nth 1 feature)) feature))
-         package src body after require feats)
+         src require)
     ;; (bundle FEATURE in PACKAGE ...) form
     (when (eq (nth 0 form) 'in)
       (let* ((name (nth 1 form))
@@ -102,28 +96,21 @@ The rest of FORM is evaluated after FEATURE is loaded."
     (unless (or (plist-member src :type) (bundle-defined-p src))
       (setq src (plist-put src :type (bundle-guess-type src))))
     ;; features
-    (when (plist-member src :feats)
-      (let* ((fs (plist-get src :feats))
+    (when (plist-member src :features)
+      (let* ((fs (plist-get src :features))
              (fs (or (and (listp fs) fs) (list fs))))
-        (setq feats (plist-put feats :features fs))))
-    (when (and require (or (not (plist-member feats :features))
-                           (plist-get feats :features)))
+        (setq src (plist-put src :features fs))))
+    (when (and require (or (not (plist-member src :features))
+                           (plist-get src :features)))
       ;; put the feature into the features list
-      (let ((fs (plist-get feats :features)))
+      (let ((fs (plist-get src :features)))
         (add-to-list 'fs feature)
-        (setq feats (plist-put feats :features fs))))
-
+        (setq src (plist-put src :features fs))))
     ;; init script
     (when form (setq form `(progn ,@form)))
+    (setq src (plist-put src :after form))
 
-    ;; make compiled init script
-    (eval-when (compile)
-      (defun bundle-compile-init (src feats form)
-        (bundle-el-get src feats)
-        `(funcall ,(byte-compile `(lambda () ,form)))))
-    (setq src (plist-put src :after (bundle-compile-init src feats form)))
-
-    `(bundle-el-get ',src ',feats)))
+    `(bundle-el-get ',src)))
 
 (defmacro bundle! (feature &rest args)
   "Install FEATURE and run init script.
