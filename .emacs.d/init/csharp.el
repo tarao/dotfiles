@@ -1,5 +1,5 @@
 (bundle csharp-mode
-  (setq auto-mode-alist (cons '("\\.cs$" . csharp-mode) auto-mode-alist)))
+  (add-to-list 'auto-mode-alist '("\\.cs$" . csharp-mode)))
 
 ;; use normal brace
 (defadvice csharp-insert-open-brace
