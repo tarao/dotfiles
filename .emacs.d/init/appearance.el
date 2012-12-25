@@ -17,8 +17,9 @@
        `(default ((,class (:foreground ,fg :background ,bg))))))))
 
 ;; colors
+(defvar mode-line-default-color "#3f3f3f")
 (set-face-background 'region "#8c8ce8")
-(set-face-background 'mode-line "#3f3f3f")
+(set-face-background 'mode-line mode-line-default-color)
 (set-face-attribute 'mode-line nil :box nil)
 (set-face-background 'mode-line-inactive "#5f5f5f")
 (set-face-attribute 'mode-line-inactive nil :box nil)
@@ -40,6 +41,7 @@
 ;; mode line color
 (bundle mode-line-color in tarao-elisp
   (mode-line-color-mode)
+  (setq mode-line-color-original mode-line-default-color)
   (defvar skk-j-mode-line-color "IndianRed4")
   (define-mode-line-color (color)
     (when (and (boundp 'skk-j-mode) skk-j-mode
