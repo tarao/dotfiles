@@ -25,6 +25,7 @@ local.install.yml
 .emacs.d/dot/.*
 .emacs.d/dot/99_local.el
 .emacs.d/site-lisp
+.emacs.d/bundle/init
 .emacs.d/el-get/*
 .emacs.d/elpa/*
 .emacs.d/packages/*

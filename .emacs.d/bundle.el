@@ -1,6 +1,21 @@
 (require 'el-get)
 (eval-when-compile (require 'cl))
 
+(defgroup bundle nil "bundle"
+  :group 'convenience)
+
+(defcustom bundle-byte-compile t
+  "t means to automatically byte-compile init forms."
+  :type 'boolean
+  :group 'bundle)
+
+(defcustom bundle-init-directory "~/.emacs.d/bundle/init/"
+  "Directory to save auto generated init files."
+  :type 'directory
+  :group 'bundle)
+
+(defvar bundle-inits nil)
+
 ;; patch
 (defadvice el-get-update-autoloads
   (around bundle-respect-autoloads (package) activate)
@@ -43,8 +58,52 @@ https://github.com/dimitri/el-get/issues/810 for details."
     (while (keywordp (nth 0 src))
       (setq source (plist-put source (nth 0 src) (nth 1 src))
             src (cdr-safe (cdr src))))
-    (add-to-list 'el-get-sources source)
     source))
+
+(defun bundle-init-id (&rest args)
+  (let* ((key (mapconcat #'(lambda (x) (format "%s" x)) args ";"))
+         (pair (assoc key bundle-inits)))
+    (if pair
+        (setcdr pair (1+ (cdr pair)))
+      (push (cons key 1) bundle-inits)
+      1)))
+
+(defun bundle-load-init (el)
+  (let ((lib (file-name-sans-extension el))
+        (elc (concat el "c")))
+    (when (or (not (file-exists-p elc))
+              (file-newer-than-file-p el elc))
+      (byte-compile-file el))
+    (load (expand-file-name lib))))
+
+(defun bundle-make-init (src)
+  (when (and bundle-byte-compile
+             (plist-get src :after)
+             load-file-name
+             (condition-case nil
+                 (or (file-exists-p bundle-init-directory)
+                     (make-directory bundle-init-directory t) t)
+               (error nil)))
+    (let* ((path (file-name-sans-extension (expand-file-name load-file-name)))
+           (path (split-string path "/"))
+           (call-site (mapconcat #'identity path "_"))
+           (package (plist-get src :name))
+           (id (bundle-init-id package call-site))
+           (init-file (concat bundle-init-directory
+                              (format "%s_%s-%d" package call-site id)))
+           (el (concat init-file ".el"))
+           (form (plist-get src :after)))
+      ;; generate .el file
+      (when (or (not (file-exists-p el))
+                (file-newer-than-file-p load-file-name el))
+        (with-temp-buffer
+          (if (listp form)
+              (dolist (exp form) (pp exp (current-buffer)))
+            (pp form (current-buffer)))
+          (write-region nil nil el)))
+
+      ;; loader
+      `((bundle-load-init ,el)))))
 
 (defun bundle-el-get (src)
   (let ((package (plist-get src :name)) (def (bundle-package-def src))
@@ -58,16 +117,23 @@ https://github.com/dimitri/el-get/issues/810 for details."
     ;; merge src with the oriiginal definition
     (setq def (bundle-merge-source src))
 
+    ;; entering password via process-filter only works in async mode
     (when (or (and (eq (plist-get def :type) 'cvs)
                    (eq (plist-get def :options) 'login)
                    (not (string-match-p "^:pserver:.*:.*@.*:.*$"
-                                        (plist-get def :url))))
+                                        (or (plist-get def :url) ""))))
               (eq (plist-get def :type) 'apt)
               (eq (plist-get def :type) 'fink)
               (eq (plist-get def :type) 'pacman))
-      ;; entering password via process-filter only works in async mode
       (setq sync nil))
 
+    ;; byte-compile :after script
+    (let ((form  (or (bundle-make-init def) (plist-get def :after))))
+      (when form
+        (setq def (plist-put def :after `(progn ,@form)))))
+
+    ;; get
+    (add-to-list 'el-get-sources def)
     (el-get sync package)))
 
 (defmacro bundle (feature &rest form)
@@ -107,7 +173,6 @@ The rest of FORM is evaluated after FEATURE is loaded."
         (add-to-list 'fs feature)
         (setq src (plist-put src :features fs))))
     ;; init script
-    (when form (setq form `(progn ,@form)))
     (setq src (plist-put src :after form))
 
     `(bundle-el-get ',src)))

@@ -17,7 +17,7 @@
 ;; mode line
 
 ;; mode-line color corresponds to state
-(setq evil-mode-line-color
+(defvar evil-mode-line-color
       `((normal   . ,(face-background 'mode-line))
         (insert   . "#575735")
         (replace  . "#575735")
@@ -168,13 +168,13 @@ to next line."
        (around evil-update-buffer-local-cursor-color-in-insert-state activate)
        "Allow ccc to update cursor color only when we are in
 insert state and in `skk-j-mode'."
-       (when (and (eq evil-state 'insert) (featurep 'skk) skk-j-mode)
+       (when (and (eq evil-state 'insert) (boundp 'skk-j-mode) skk-j-mode)
          ad-do-it))
      (defadvice evil-refresh-cursor
        (around evil-refresh-cursor-unless-skk-mode activate)
        "Allow ccc to update cursor color only when we are in
 insert state and in `skk-j-mode'."
-       (unless (and (eq evil-state 'insert) (featurep 'skk) skk-j-mode)
+       (unless (and (eq evil-state 'insert) (boundp 'skk-j-mode) skk-j-mode)
          ad-do-it))))
 (eval-after-load 'skk
   '(progn

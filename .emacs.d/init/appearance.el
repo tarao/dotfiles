@@ -38,11 +38,11 @@
 (darken-comment)
 
 ;; mode line color
-(bundle tarao-elisp
+(bundle mode-line-color in tarao-elisp
   (mode-line-color-mode)
   (defvar skk-j-mode-line-color "IndianRed4")
   (define-mode-line-color (color)
-    (when (and (featurep 'skk) skk-j-mode
+    (when (and (boundp 'skk-j-mode) skk-j-mode
                (or (not (featurep 'viper))
                    (not viper-mode)
                    (eq viper-current-state 'insert-state))
