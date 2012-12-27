@@ -1,4 +1,4 @@
-(setq gud-chdir-before-run nil)
+(setq-default gud-chdir-before-run nil)
 
 ;; show current line of code
 (defadvice gdb-display-source-buffer

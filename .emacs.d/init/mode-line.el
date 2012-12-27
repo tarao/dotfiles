@@ -1,5 +1,4 @@
-(setq mode-line-frame-identification " ")
-(setq default-mode-line-format
+(setq mode-line-format
       '(""
         mode-line-mule-info
         mode-line-modified

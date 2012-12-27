@@ -1,5 +1,4 @@
-(setq input-decode-alist-xterm
-      '(("\e[1;2A" . [S-up])))
+(defvar input-decode-alist-xterm '(("\e[1;2A" . [S-up])))
 
 (defun install-input-decode-alist (alist)
   (dolist (elt alist)

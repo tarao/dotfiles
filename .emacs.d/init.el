@@ -20,7 +20,7 @@
 ;; load init files
 (bundle init-loader
   ;; load
-  (setq init-loader-show-log-after-init nil)
+  (setq-default init-loader-show-log-after-init nil)
   (init-loader-load "~/.emacs.d/dot")
 
   ;; hide compilation results

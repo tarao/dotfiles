@@ -38,25 +38,28 @@
   (set-comment-color "OrangeRed"))
 (darken-comment)
 
-;; mode line color
-(bundle mode-line-color in tarao-elisp
+(bundle tarao-elisp
+  :features (mode-line-color)
+  ;; mode line color
   (mode-line-color-mode)
   (setq mode-line-color-original mode-line-default-color)
   (defvar skk-j-mode-line-color "IndianRed4")
+  (defsubst skk-j-mode-line-color-p ()
+    (cond
+     ((and (boundp 'viper-mode) (boundp 'viper-current-state)
+           viper-mode (not (eq viper-current-state 'insert-state)))
+      nil)
+     ((and (boundp 'evil-mode) (boundp 'evil-state)
+           evil-mode (not (eq evil-state 'insert)))
+      nil)
+     ((and (boundp 'skk-j-mode) skk-j-mode))))
   (define-mode-line-color (color)
-    (when (and (boundp 'skk-j-mode) skk-j-mode
-               (or (not (featurep 'viper))
-                   (not viper-mode)
-                   (eq viper-current-state 'insert-state))
-               (or (not (featurep 'evil))
-                   (not evil-mode)
-                   (eq evil-state 'insert)))
+    (when (skk-j-mode-line-color-p)
       skk-j-mode-line-color))
   (defadvice skk-update-modeline (after ad-skk-mode-line-color activate)
-    (mode-line-color-update)))
+    (mode-line-color-update))
 
-;; eof mark
-(bundle tarao-elisp
+  ;; eof mark
   (global-end-mark-mode))
 
 ;; line-wrap character
@@ -81,6 +84,7 @@
 (bundle jaspace :url "http://homepage3.nifty.com/satomii/software/jaspace.el"
   (setq jaspace-highlight-tabs t
         jaspace-highlight-tabs ?>
+        jaspace-alternate-jaspace-string (string #x25a1)
         jaspace-mode-string " WS"))
 
 ;; show trailing whitespace

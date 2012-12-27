@@ -1,24 +1,31 @@
 ;; See: http://d.hatena.ne.jp/rubikitch/20091208/anythingzsh
-(require 'anything-complete)
+
+(bundle anything)
+(bundle shell-history)
 
 (defun anything-zsh-history-from-zle (file &optional input)
-  (interactive)
+  (interactive '(nil))
+  (require 'anything-complete)
   (let ((anything-samewindow t)
-        (anything-display-function 'anything-default-display-buffer))
+        (anything-display-function 'anything-default-display-buffer)
+        (source (and (boundp 'anything-c-source-complete-shell-history)
+                     anything-c-source-complete-shell-history)))
     (azh/set-command
      (anything
       `(((name . "History")
          (action
           ("Paste" . identity)
           ("Edit" . azh/edit-command))
-         ,@anything-c-source-complete-shell-history))
+         ,@source))
       input
       nil nil nil
       "*anything zsh history*")
      file)))
 
 (defun azh/set-command (line file)
-  (write-region (or line "") nil file)
+  (if file
+      (write-region (or line "") nil file)
+    (message (or line "")))
   (delete-frame))
 
 (defun azh/edit-command (line)

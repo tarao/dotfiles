@@ -1,9 +1,10 @@
 ;; bookmark
-(setq bookmark-default-file "~/.emacs.d/bmk")
+(setq-default bookmark-default-file "~/.emacs.d/bmk")
 
 ;; recentf
-(setq recentf-save-file (convert-standard-filename "~/.emacs.d/recentf"))
+(setq-default recentf-save-file
+              (convert-standard-filename "~/.emacs.d/recentf"))
 
 ;; shell history
 (bundle shell-history
-  (setq shell-history-file "~/.zsh/history"))
+  (setq-default shell-history-file "~/.zsh/history"))

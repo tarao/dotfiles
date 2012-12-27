@@ -163,9 +163,6 @@ to next line."
   ;; exit insert-state by ESC even if auto-complete is showing candidates
   '(define-key ac-completing-map (kbd "ESC") nil))
 
-;; hexl
-(bundle hexl-evil-patch in tarao-evil-plugins)
-
 ;; yaicomplete
 (eval-after-load 'yaicomplete
   ;; inhibit yaicomplete in ex-mode minibuffer
@@ -219,8 +216,10 @@ is a kind of temporary one which is not confirmed yet."
 (bundle evil-surround ;; surround operator
   (global-surround-mode 1))
 
+(bundle tarao-elisp)
 (bundle color-moccur)
 (bundle tarao-evil-plugins
+  :features (evil-relative-linum evil-little-word hexl-evil-patch)
   ;; operators
 
   (global-evil-operator-comment-mode 1)
@@ -238,14 +237,10 @@ is a kind of temporary one which is not confirmed yet."
 
   ;; key bindings
 
-  (evil-define-command-line-key (kbd "C-r") #'evil-ex-paste-from-register))
+  (evil-define-command-line-key (kbd "C-r") #'evil-ex-paste-from-register)
 
-;; others
+  ;; others
 
-(bundle tarao-elisp)
-(bundle evil-relative-linum in tarao-evil-plugins)
-
-(bundle evil-little-word in tarao-evil-plugins
   ;; w for Japanese phrase
   ;; lw for Japanese word
   (setq evil-cjk-word-separating-categories word-separating-categories

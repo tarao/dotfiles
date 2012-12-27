@@ -4,6 +4,6 @@
   (mapc #'(lambda(c)
             (progn
               (goto-char (point-min))
-              (replace-string (car c) (funcall (cdr c)) nil)))
+              (perform-replace (car c) (funcall (cdr c)) nil nil nil)))
         template-replacement-alist)
   (goto-char (point-max)))

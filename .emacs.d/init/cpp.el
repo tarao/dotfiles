@@ -1,13 +1,13 @@
-(setq flymake-c-command "/usr/bin/gcc"
-      flymake-cc-command "/usr/bin/g++"
-      flymake-cc-command-opt
-      '("-fsyntax-only"
-        ;; "-std=c++98" "-pedantic-errors"
-        "-Wall" "-Wextra"
-        ;; "-Wcast-qual" "-Wwrite-strings"
-        ;; "-Wno-missing-field-initializers" "-Wnon-virtual-dtor"
-        ;; "-Weffc++" "-Wold-style-cast" "-Woverloaded-virtual"
-        ))
+(defvar flymake-c-command "/usr/bin/gcc")
+(defvar flymake-cc-command "/usr/bin/g++")
+(defvar flymake-cc-command-opt
+  '("-fsyntax-only"
+    ;; "-std=c++98" "-pedantic-errors"
+    "-Wall" "-Wextra"
+    ;; "-Wcast-qual" "-Wwrite-strings"
+    ;; "-Wno-missing-field-initializers" "-Wnon-virtual-dtor"
+    ;; "-Weffc++" "-Wold-style-cast" "-Woverloaded-virtual"
+    ))
 
 (defun flymake-extract-includes-from-makefile ()
   (let ((buf (current-buffer))
@@ -23,6 +23,7 @@
                     (set (make-local-variable 'flymake-cc-command-opt)
                          (append includes flymake-cc-command-opt))))))))))
 
+(autoload 'flymake-init-create-temp-buffer-copy "flymake")
 (defun flymake-cc-init ()
   (let ((cmd (cond
               ((eq major-mode 'c-mode) flymake-c-command)
@@ -47,12 +48,12 @@
                 ("\\.c$" . c-mode))
               auto-mode-alist))
 (add-hook 'c-mode-hook
-          '(lambda ()
-             (c-set-style "stroustrup")
-             (c-set-offset 'innamespace 0)
-             (setq c-basic-offset 2)
-             (flymake-extract-includes-from-makefile)
-             (flymake-mode t)))
+          #'(lambda ()
+              (c-set-style "stroustrup")
+              (c-set-offset 'innamespace 0)
+              (when (boundp 'c-basic-offset) (setq c-basic-offset 2))
+              (flymake-extract-includes-from-makefile)
+              (flymake-mode t)))
 
 ;; C++
 (autoload 'c++-mode "cc-mode")
@@ -64,9 +65,9 @@
                 ("\\.cxx$" . c++-mode))
               auto-mode-alist))
 (add-hook 'c++-mode-hook
-          '(lambda ()
-             (c-set-style "stroustrup")
-             (c-set-offset 'innamespace 0)
-             (setq c-basic-offset 2)
-             (flymake-extract-includes-from-makefile)
-             (flymake-mode t)))
+          #'(lambda ()
+              (c-set-style "stroustrup")
+              (c-set-offset 'innamespace 0)
+              (when (boundp 'c-basic-offset) (setq c-basic-offset 2))
+              (flymake-extract-includes-from-makefile)
+              (flymake-mode t)))

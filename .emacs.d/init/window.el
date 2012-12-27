@@ -2,5 +2,5 @@
 (bundle switch-window)
 
 ;; window selection by directional keys
+(setq-default windmove-wrap-around t)
 (windmove-default-keybindings)
-(setq windmove-wrap-around t)

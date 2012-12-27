@@ -4,9 +4,9 @@
   "Host part of function `system-name'.")
 
 ;; shell
-(setq explicit-shell-file-name "zsh")
-(setq shell-file-name "zsh")
-(setq shell-command-switch "-c")
+(setq-default explicit-shell-file-name "zsh")
+(setq shell-file-name "zsh"
+      shell-command-switch "-c")
 
 ;; interactive
 (fset 'yes-or-no-p 'y-or-n-p)

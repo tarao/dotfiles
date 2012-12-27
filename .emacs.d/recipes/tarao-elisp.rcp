@@ -6,5 +6,7 @@
          (autoload 'shell-command+ "shell-command+" nil t)
          (autoload 'shell-command-on-region+ "shell-command+" nil t)
          (autoload 'make-buffer-immortal "immortal-buffer")
+         (autoload 'mode-line-color-mode "mode-line-color")
+         (autoload 'define-mode-line-color "mode-line-color")
          (autoload 'relative-linum-mode "linum+"
            "Relative line numbers in the left marginal area." t)))

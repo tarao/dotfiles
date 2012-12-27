@@ -134,7 +134,9 @@ https://github.com/dimitri/el-get/issues/810 for details."
 
     ;; get
     (add-to-list 'el-get-sources def)
-    (el-get sync package)))
+    (prog1 (el-get sync package)
+      ;; prevent :after from running twice
+      (plist-put def :after nil))))
 
 (defmacro bundle (feature &rest form)
   "Install FEATURE and run init script specified by FORM.

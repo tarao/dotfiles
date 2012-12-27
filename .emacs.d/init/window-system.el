@@ -1,7 +1,7 @@
 ;; cursor
 (blink-cursor-mode 0)
-(setq cursor-type 'box
-      default-cursor-color "white")
+(setq cursor-type 'box)
+(defvar default-cursor-color "white")
 (set-cursor-color default-cursor-color)
 
 ;; line space
@@ -58,7 +58,7 @@ removed from them after the first call."
         (set-fontset-font fsn 'unicode ja-font nil 'append)
         (add-to-list 'face-font-rescale-alist (cons ja-pat scale))
         ;; default
-        (set-default-font fsn)
+        (set-frame-font fsn)
         (setq-default initial-frame-alist (append elt initial-frame-alist)
                       default-frame-alist (append elt default-frame-alist))
         ;; current frame
