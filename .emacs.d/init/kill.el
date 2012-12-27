@@ -1,5 +1,10 @@
 (eval-when-compile (require 'cl))
 
+(bundle browse-kill-ring
+  (define-key global-map (kbd "M-y") #'browse-kill-ring))
+
+(setq kill-do-not-save-duplicates t)
+
 ;; xsel command
 (defvar x-available nil)
 (defun x-available-p-1 ()

@@ -16,12 +16,6 @@
 (add-hook 'after-save-hook
           #'executable-make-buffer-file-executable-if-script-p)
 
-;; browse-kill-ring
-(bundle browse-kill-ring)
-(bundle browse-kill-ring+
-  (define-key global-map (kbd "M-y") 'browse-kill-ring)
-  (setq kill-do-not-save-duplicates t))
-
 ;; undo/redo
 (bundle undo-tree
   (setq-default undo-tree-mode-lighter nil)
