@@ -201,8 +201,7 @@ is a kind of temporary one which is not confirmed yet."
 
 ;; dired mode
 (eval-after-load 'dired
-  '(evil-define-key 'normal dired-mode-map "c" 'dired-do-copy))
-
+  '(evil-define-key 'normal dired-mode-map "c" #'dired-do-copy))
 
 ;; multi-mode
 (eval-after-load 'multi-mode-util
@@ -232,8 +231,8 @@ is a kind of temporary one which is not confirmed yet."
 
   ;; text objects
 
-  (define-key evil-outer-text-objects-map "f" 'evil-a-between)
-  (define-key evil-inner-text-objects-map "f" 'evil-inner-between)
+  (define-key evil-outer-text-objects-map "f" #'evil-a-between)
+  (define-key evil-inner-text-objects-map "f" #'evil-inner-between)
 
   ;; key bindings
 
