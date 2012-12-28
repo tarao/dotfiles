@@ -1,6 +1,0 @@
-(defun hs-enable ()
-  (interactive)
-  (hs-minor-mode)
-  (local-set-key (kbd "C-c h") 'hs-hide-block)
-  (local-set-key (kbd "C-c s") 'hs-show-block)
-  (local-set-key (kbd "C-c l") 'hs-hide-level))
