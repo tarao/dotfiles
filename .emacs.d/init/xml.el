@@ -1,5 +1,4 @@
 ;; nxml-mode
-(load "rng-auto")
 (add-to-list 'auto-mode-alist
              (cons (concat "\\."
                            (regexp-opt
@@ -7,7 +6,6 @@
                               "svg" "rss" "mxml") t)
                            "\\'")
                    'nxml-mode))
-(unify-8859-on-decoding-mode)
 (setq magic-mode-alist
       (cons '("<\\?xml " . nxml-mode)
             magic-mode-alist))
@@ -27,21 +25,20 @@
 (add-to-list 'auto-insert-alist
              '("\\.xhtml$" . ["insert.xhtml" template-replacer]))
 
-;; use zen-coding
-(require 'zencoding-mode)
-(require 'zencoding-trie)
-(add-hook 'nxml-mode-hook 'zencoding-mode)
-(define-key zencoding-mode-keymap (kbd "C-j") 'zencoding-expand-line)
-(define-key zencoding-preview-keymap (kbd "RET") 'zencoding-preview-accept)
-(setq zencoding-preview-default nil ; no preview
-      zencoding-insert-flash-time 0.2)
+;; zencoding
+(bundle zencoding-mode
+  (setq-default zencoding-preview-default nil ; no preview
+                zencoding-insert-flash-time 0.2)
+  (add-hook 'nxml-mode-hook #'zencoding-mode))
+(eval-after-load 'zencoding-mode
+  '(progn
+     (define-key zencoding-mode-keymap (kbd "C-j")
+       #'zencoding-expand-line)
+     (define-key zencoding-preview-keymap (kbd "RET")
+       #'zencoding-preview-accept)))
 
-;; xquery mode
-(autoload 'xquery-mode "xquery-mode" "Major mode for editing xquery" t)
-(setq auto-mode-alist (cons '("\\.xquery$" . xquery-mode) auto-mode-alist))
-
-(autoload 'yaml-mode "yaml-mode"
-  "Mode for editing YAML files" t)
+;; YAML
+(bundle yaml-mode)
 (setq auto-mode-alist
       (append '(("\\.yml$" . yaml-mode)
                 ("\\.yaml$" . yaml-mode)) auto-mode-alist))
