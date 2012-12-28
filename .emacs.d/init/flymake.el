@@ -1,7 +1,7 @@
 (bundle tarao-elisp)
 
 ;; timeout
-(setq-default flymake-no-change-timeout 3)
+(setq-default flymake-no-changes-timeout 3)
 
 (eval-after-load 'flymake
   '(progn
