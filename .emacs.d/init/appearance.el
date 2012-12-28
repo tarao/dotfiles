@@ -1,4 +1,4 @@
-;; coloring
+;; theme
 (setq frame-background-mode 'dark)
 (if (not (and (>= emacs-major-version 24) (>= emacs-minor-version 1)))
     (bundle color-theme
@@ -16,7 +16,7 @@
        'zenburn
        `(default ((,class (:foreground ,fg :background ,bg))))))))
 
-;; colors
+;; customize colors
 (defvar mode-line-default-color "#3f3f3f")
 (set-face-background 'region "#8c8ce8")
 (set-face-background 'mode-line mode-line-default-color)
