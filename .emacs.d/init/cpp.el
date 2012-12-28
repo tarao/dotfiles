@@ -1,6 +1,6 @@
 (defvar flymake-c-command "/usr/bin/gcc")
 (defvar flymake-cc-command "/usr/bin/g++")
-(defvar flymake-cc-command-opt
+(defvar flymake-cc-command-args
   '("-fsyntax-only"
     ;; "-std=c++98" "-pedantic-errors"
     "-Wall" "-Wextra"
@@ -20,8 +20,8 @@
             (if (re-search-forward "^INCLUDE\\s-*=\\s-*\\(.*\\)$" nil t nil)
                 (let ((includes (split-string (match-string 1) " \t\r\n")))
                   (with-current-buffer buf
-                    (set (make-local-variable 'flymake-cc-command-opt)
-                         (append includes flymake-cc-command-opt))))))))))
+                    (set (make-local-variable 'flymake-cc-command-args)
+                         (append includes flymake-cc-command-args))))))))))
 
 (autoload 'flymake-init-create-temp-buffer-copy "flymake")
 (defun flymake-cc-init ()
@@ -34,7 +34,7 @@
            (local-file (file-relative-name
                         temp-file
                         (file-name-directory buffer-file-name))))
-      (list cmd (append flymake-cc-command-opt (list local-file))))))
+      (list cmd (append flymake-cc-command-args (list local-file))))))
 
 (eval-after-load 'flymake
   '(progn
