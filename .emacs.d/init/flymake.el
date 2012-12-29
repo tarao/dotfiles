@@ -3,6 +3,10 @@
 ;; timeout
 (setq-default flymake-no-changes-timeout 0.7)
 
+(defadvice flymake-post-syntax-check
+  (before flymake-force-check-was-interrupted activate)
+  (setq flymake-check-was-interrupted t))
+
 (eval-after-load 'flymake
   '(progn
      ;; show errors on minibuffer
