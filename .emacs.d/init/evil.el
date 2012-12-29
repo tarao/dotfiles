@@ -209,6 +209,22 @@ is a kind of temporary one which is not confirmed yet."
      :url
      "http://raw.github.com/tarao/multi-mode-util/master/multi-mode+evil.el"))
 
+;; howm
+(eval-after-load 'howm
+  '(progn
+     ;; menu
+     (evil-make-overriding-map howm-menu-mode-map 'normal)
+     (add-hook 'howm-menu-hook
+               '(lambda () (define-key howm-menu-mode-local-map ":" nil)))
+
+     ;; list
+     (evil-make-overriding-map howm-view-summary-mode-map 'normal)
+     (evil-define-key 'normal howm-view-summary-mode-map
+       "j" (lookup-key evil-motion-state-map "j")
+       "k" (lookup-key evil-motion-state-map "k")
+       "J" 'evil-scroll-down
+       "K" 'evil-scroll-up)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; plugins
 
