@@ -1,4 +1,4 @@
-package %Perl-package%;
+package %Perl-Package%;
 use strict;
 use warnings;
 
