@@ -1,11 +1,17 @@
 (eval-when-compile (require 'cl))
 
+(defconst js-mode-files '("\\.js$" "\\.json$"))
+
+;; auto-mode
 (setq auto-mode-alist
-      (append '(("\\.json$" . js-mode)
-                ("\\.js$" . js-mode))
+      (append (mapcar #'(lambda (x) (cons x 'js-mode)) js-mode-files)
               auto-mode-alist))
+
+;; syntax
 (setq-default js-indent-level 4
               js-expr-indent-offset 4)
+
+;; flymake
 
 (defvar flymake-jshint-command "jshint")
 (defvar flymake-jshint-command-args nil)
@@ -13,6 +19,8 @@
 (defconst flymake-js-err-line-patterns
   '((".*: line \\([[:digit:]]+\\), col \\([[:digit:]]+\\), \\(.*\\)$"
      nil 1 2 3)))
+(defconst flymake-allowed-js-file-name-masks
+  (mapcar #'(lambda (x) (list x 'flymake-js-init)) js-mode-files))
 
 (autoload 'flymake-init-create-temp-buffer-copy "flymake")
 (defun flymake-js-init ()
@@ -28,9 +36,9 @@
     (list flymake-jshint-command args)))
 
 (eval-after-load 'flymake
-  '(progn
-     (push '("\\.json$" flymake-js-init) flymake-allowed-file-name-masks)
-     (push '("\\.js$" flymake-js-init) flymake-allowed-file-name-masks)))
+  '(setq flymake-allowed-file-name-masks
+         (append flymake-allowed-file-name-masks
+                 flymake-allowed-js-file-name-masks)))
 
 (add-hook 'js-mode-hook
           #'(lambda ()
