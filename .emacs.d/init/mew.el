@@ -1,3 +1,24 @@
+(eval-when-compile
+  (unless (require 'mew nil t)
+    ;; suppress compiler warnings
+    (defvar mew-summary-mode-map nil)
+    (defvar mew-message-mode-map nil)
+    (autoload 'mew-syntax-nums "mew")
+    (autoload 'mew-frame-id "mew")
+    (autoload 'mew-current-get-msg "mew")
+    (autoload 'mew-current-get-part "mew")
+    (autoload 'mew-window-configure "mew")
+    (autoload 'mew-summary-msg-or-part "mew")
+    (autoload 'mew-summary-message-number "mew")
+    (autoload 'mew-summary-not-in-draft "mew")
+    (autoload 'mew-summary-local-or-imap "mew")
+    (autoload 'mew-summary-refile-body "mew")
+    (autoload 'mew-summary-toggle-disp-msg "mew" nil t)
+    (autoload 'mew-message-goto-summary "mew" nil t)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; commands and keys
+
 (defun mew-summary-display-and-select-window ()
   (interactive)
   (mew-summary-msg-or-part
@@ -24,80 +45,36 @@
    (mew-summary-not-in-draft
     (mew-summary-local-or-imap
      (mew-summary-refile-body '("+spam"))))))
-;; patch
-(defadvice mew-draft-mode (before major-mode-convention activate)
-  (kill-all-local-variables))
 
 (defun mew-install-user-map ()
   ;; mew-summary-mode key maps
   (define-key mew-summary-mode-map (kbd "RET")
-    'mew-summary-display-and-select-window)
-  (define-key mew-summary-mode-map (kbd "SPC") 'mew-summary-scroll-up)
-  (define-key mew-summary-mode-map (kbd "C-@") 'mew-summary-scroll-down)
-  (define-key mew-summary-mode-map (kbd "C-SPC") 'mew-summary-scroll-down)
-  (define-key mew-summary-mode-map "s" 'mew-summary-refile-spam)
-  (define-key mew-summary-mode-map (kbd "l s") 'mew-summary-ls)
+    #'mew-summary-display-and-select-window)
+  (define-key mew-summary-mode-map (kbd "SPC") #'mew-summary-scroll-up)
+  (define-key mew-summary-mode-map (kbd "C-@") #'mew-summary-scroll-down)
+  (define-key mew-summary-mode-map (kbd "C-SPC") #'mew-summary-scroll-down)
+  (define-key mew-summary-mode-map "s" #'mew-summary-refile-spam)
+  (define-key mew-summary-mode-map (kbd "l s") #'mew-summary-ls)
 
   ;; mew-message-mode key maps
-  (define-key mew-message-mode-map (kbd "q") 'mew-message-close)
-
-  (when (featurep 'evil)
-    ;; mew-summary-mode key maps
-    (evil-make-overriding-map mew-summary-mode-map 'normal t)
-    (evil-define-key 'normal mew-summary-mode-map
-      "j" (lookup-key evil-motion-state-map "j")
-      "k" (lookup-key evil-motion-state-map "k")
-      "G" (lookup-key evil-motion-state-map "G")
-      "J" (lookup-key evil-motion-state-map "J")
-      "K" (lookup-key evil-motion-state-map "K")
-      ":" (lookup-key evil-motion-state-map ":")
-      ";" (lookup-key evil-motion-state-map ";"))
-    ;; mew-message-mode key maps
-    (evil-make-overriding-map mew-message-mode-map 'normal t)
-    (evil-define-key 'normal mew-message-mode-map
-      "h" (lookup-key evil-motion-state-map "h")
-      "j" (lookup-key evil-motion-state-map "j")
-      "k" (lookup-key evil-motion-state-map "k")
-      "l" (lookup-key evil-motion-state-map "l")
-      ":" (lookup-key evil-motion-state-map ":"))
-    ;; mew-draft-mode key maps
-    (defun mew-draft-evil-open-below (count)
-      (interactive "p")
-      (if (get-text-property (point) 'read-only)
-          (progn
-            (next-line count)
-            (evil-open-above 1))
-        (evil-open-below count)))
-    (dolist (map (list mew-draft-header-map mew-draft-body-map))
-      (evil-define-key 'normal map
-        "o" 'mew-draft-evil-open-below
-        "q" 'mew-draft-kill)))
-
-  (when (featurep 'vimpulse)
-    ;; mew-summary-mode key maps
-    (vimpulse-add-vi-bindings mew-summary-mode-map
-                              '(viper-next-line
-                                viper-previous-line
-                                viper-scroll-down
-                                viper-scroll-up
-                                viper-goto-line
-                                anything-for-files) t)
-    ;; mew-message-mode key maps
-    (vimpulse-add-core-movement-cmds mew-message-mode-map)
-    (vimpulse-add-movement-cmds mew-message-mode-map t)
-    (vimpulse-add-vi-bindings mew-message-mode-map '(anything-for-files) t)))
+  (define-key mew-message-mode-map (kbd "q") #'mew-message-close))
 (eval-after-load 'mew-key '(mew-install-user-map))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; patches
+
+;; summary fix
 (add-hook
  'mew-summary-mode-hook
- '(lambda () (set (make-local-variable 'show-trailing-whitespace) nil)))
+ #'(lambda () (set (make-local-variable 'show-trailing-whitespace) nil)))
+(eval-after-load 'end-mark
+  '(add-to-list 'end-mark-exclude-modes 'mew-summary-mode))
 
-;; mew-start-process-disp sets DISPLAY from frame-parameters
-;; We know that DISPLAY has appropriate value
-;; and no need to lookup frame-parameters
+(defadvice mew-draft-mode (before major-mode-convention activate)
+  (kill-all-local-variables))
+
 (defadvice mew-start-process-disp (before ad-mew-start-process-disp activate)
+  "`mew-start-process-disp' sets DISPLAY from frame parameters.
+We know that DISPLAY has appropriate value and no need to lookup
+frame parameters."
   (set-frame-parameter nil 'display (getenv "DISPLAY")))
-
-;; no end mark for mew-summary-mode
-(when (featurep 'end-mark)
-  (add-to-list 'end-mark-exclude-modes 'mew-summary-mode))

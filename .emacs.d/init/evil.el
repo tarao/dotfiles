@@ -225,7 +225,41 @@ is a kind of temporary one which is not confirmed yet."
        "J" 'evil-scroll-down
        "K" 'evil-scroll-up)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; mew
+(eval-after-load 'mew-key
+  '(progn
+     ;; mew-summary-mode key maps
+     (evil-make-overriding-map mew-summary-mode-map 'normal t)
+     (evil-define-key 'normal mew-summary-mode-map
+       "j" (lookup-key evil-motion-state-map "j")
+       "k" (lookup-key evil-motion-state-map "k")
+       "G" (lookup-key evil-motion-state-map "G")
+       "J" (lookup-key evil-motion-state-map "J")
+       "K" (lookup-key evil-motion-state-map "K")
+       ":" (lookup-key evil-motion-state-map ":")
+       ";" (lookup-key evil-motion-state-map ";"))
+     ;; mew-message-mode key maps
+     (evil-make-overriding-map mew-message-mode-map 'normal t)
+     (evil-define-key 'normal mew-message-mode-map
+       "h" (lookup-key evil-motion-state-map "h")
+       "j" (lookup-key evil-motion-state-map "j")
+       "k" (lookup-key evil-motion-state-map "k")
+       "l" (lookup-key evil-motion-state-map "l")
+       ":" (lookup-key evil-motion-state-map ":"))
+     ;; mew-draft-mode key maps
+     (defun mew-draft-evil-open-below (count)
+       (interactive "p")
+       (if (get-text-property (point) 'read-only)
+           (progn
+             (forward-line count)
+             (evil-open-above 1))
+         (evil-open-below count)))
+     (dolist (map (list mew-draft-header-map mew-draft-body-map))
+       (evil-define-key 'normal map
+         "o" #'mew-draft-evil-open-below
+         "q" #'mew-draft-kill))))
+
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; plugins
 
 (bundle evil-surround ;; surround operator
