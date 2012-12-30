@@ -1,9 +1,10 @@
-;; load-path
-(add-to-list 'load-path "~/.emacs.d")
-
-;; ;; packages
-;; (load "elpa-bootstrap.el")
-;; (install-packages t)
+;; put site-lisp and its subdirectories into load-path
+(when (fboundp 'normal-top-level-add-subdirs-to-load-path)
+  (let* ((dir "~/.emacs.d/site-lisp")
+         (default-directory dir))
+    (when (file-directory-p dir)
+      (add-to-list 'load-path dir)
+      (normal-top-level-add-subdirs-to-load-path))))
 
 ;; el-get
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
@@ -15,13 +16,21 @@
       (goto-char (point-max))
       (eval-print-last-sexp))))
 (add-to-list 'el-get-recipe-path "~/.emacs.d/recipes")
-(require 'bundle)
+
+;; bundle - an el-get wrapper
+(add-to-list 'el-get-sources
+             '(:name bundle
+                     :url "http://gist.github.com/raw/4414297/bundle.el"
+                     :type http
+                     :features (bundle)))
+(el-get 'sync 'bundle)
 
 ;; byte-compiling version of eval-after-load
-(require 'eval-after-load-compile)
+(bundle! eval-after-load-compile
+  :url "http://gist.github.com/raw/4414304/eval-after-load-compile.el")
 
 ;; load init files
-(bundle init-loader
+(bundle! init-loader :url "http://gist.github.com/raw/4362564/init-loader.el"
   ;; load
   (setq-default init-loader-show-log-after-init nil)
   (init-loader-load "~/.emacs.d/dot")
@@ -29,11 +38,3 @@
   ;; hide compilation results
   (let ((win (get-buffer-window "*Compile-Log*")))
     (when win (delete-window win))))
-
-;; put site-lisp and its subdirectories into load-path
-(when (fboundp 'normal-top-level-add-subdirs-to-load-path)
-  (let* ((dir "~/.emacs.d/site-lisp")
-         (default-directory dir))
-    (when (file-directory-p dir)
-      (add-to-list 'load-path dir)
-      (normal-top-level-add-subdirs-to-load-path))))
