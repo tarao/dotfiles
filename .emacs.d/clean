@@ -1,0 +1,11 @@
+#!/bin/sh
+
+cd `dirname $0`
+if [ "x$1" = 'x-f' ]; then
+    rm -rf el-get
+else
+    rm -f el-get/.*el
+    rm -f el-get/.*elc
+fi
+rm  -f dot/*.elc
+rm -rf bundle/init
