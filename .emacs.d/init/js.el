@@ -35,10 +35,10 @@
         (setq args (list* "--config" config args))))
     (list flymake-jshint-command args)))
 
-(eval-after-load 'flymake
-  '(setq flymake-allowed-file-name-masks
-         (append flymake-allowed-file-name-masks
-                 flymake-allowed-js-file-name-masks)))
+(eval-after-load-compile 'flymake
+  (setq flymake-allowed-file-name-masks
+        (append flymake-allowed-file-name-masks
+                flymake-allowed-js-file-name-masks)))
 
 (add-hook 'js-mode-hook
           #'(lambda ()

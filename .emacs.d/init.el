@@ -17,6 +17,9 @@
 (add-to-list 'el-get-recipe-path "~/.emacs.d/recipes")
 (require 'bundle)
 
+;; byte-compiling version of eval-after-load
+(require 'eval-after-load-compile)
+
 ;; load init files
 (bundle init-loader
   ;; load

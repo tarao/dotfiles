@@ -29,10 +29,9 @@
                   anything-c-source-locate)
                 anything-complete-sort-candidates t)
   (global-set-key (kbd "C-x b") #'anything-for-files)
-  (eval-after-load 'anything
-    '(progn
-       (define-key anything-map (kbd "M-n") #'anything-next-source)
-       (define-key anything-map (kbd "M-p") #'anything-previous-source)))
+  (eval-after-load-compile 'anything
+    (define-key anything-map (kbd "M-n") #'anything-next-source)
+    (define-key anything-map (kbd "M-p") #'anything-previous-source))
   (global-set-key [remap execute-extended-command]
                   #'anything-execute-extended-command))
 (bundle descbinds-anything)

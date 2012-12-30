@@ -29,13 +29,13 @@
 (bundle zencoding-mode
   (setq-default zencoding-preview-default nil ; no preview
                 zencoding-insert-flash-time 0.2)
-  (add-hook 'nxml-mode-hook #'zencoding-mode))
-(eval-after-load 'zencoding-mode
-  '(progn
-     (define-key zencoding-mode-keymap (kbd "C-j")
-       #'zencoding-expand-line)
-     (define-key zencoding-preview-keymap (kbd "RET")
-       #'zencoding-preview-accept)))
+  (add-hook 'nxml-mode-hook #'zencoding-mode)
+
+  (eval-after-load-compile 'zencoding-mode
+    (define-key zencoding-mode-keymap (kbd "C-j")
+      #'zencoding-expand-line)
+    (define-key zencoding-preview-keymap (kbd "RET")
+      #'zencoding-preview-accept)))
 
 ;; YAML
 (bundle yaml-mode)

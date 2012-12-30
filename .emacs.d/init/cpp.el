@@ -36,10 +36,9 @@
                         (file-name-directory buffer-file-name))))
       (list cmd (append flymake-cc-command-args (list local-file))))))
 
-(eval-after-load 'flymake
-  '(progn
-     (push '("\\.c$" flymake-cc-init) flymake-allowed-file-name-masks)
-     (push '("\\.cpp$" flymake-cc-init) flymake-allowed-file-name-masks)))
+(eval-after-load-compile 'flymake
+  (push '("\\.c$" flymake-cc-init) flymake-allowed-file-name-masks)
+  (push '("\\.cpp$" flymake-cc-init) flymake-allowed-file-name-masks))
 
 ;; C
 (autoload 'c-mode "cc-mode")

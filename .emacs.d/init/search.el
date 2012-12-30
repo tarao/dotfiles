@@ -1,3 +1,5 @@
+(unless (featurep 'ibuffer) ; patch
+  (defun ibuffer-unmark-all (mark)))
 (bundle color-moccur
   (setq-default moccur-grep-default-word-near-point t)
   (global-set-key (kbd "C-M-m") #'moccur-grep-find)

@@ -13,6 +13,7 @@
 ;; dependencies
 (bundle anything)
 (bundle goto-chg)
+(bundle tarao-elisp)
 
 (bundle evil
   (evil-mode 1)
@@ -85,7 +86,6 @@ to next line."
 (bundle evil-surround ;; surround operator
   (global-surround-mode 1))
 
-(bundle tarao-elisp)
 (bundle color-moccur)
 (bundle tarao-evil-plugins
   :features (evil-mode-line evil-relative-linum
@@ -96,10 +96,9 @@ to next line."
   (global-evil-operator-comment-mode 1)
 
   (global-evil-operator-moccur-mode 1)
-  (eval-after-load 'color-moccur
-    '(progn
-       (define-key moccur-mode-map (kbd ":") #'anything-for-files)
-       (define-key moccur-mode-map (kbd "M-;") #'anything-for-files)))
+  (eval-after-load-compile 'color-moccur
+    (define-key moccur-mode-map (kbd ":") #'anything-for-files)
+    (define-key moccur-mode-map (kbd "M-;") #'anything-for-files))
 
   ;; text objects
 
@@ -121,49 +120,45 @@ to next line."
 ;; patches
 
 ;; auto-complete
-(eval-after-load 'auto-complete
+(eval-after-load-compile 'auto-complete
   ;; exit insert-state by ESC even if auto-complete is showing candidates
-  '(define-key ac-completing-map (kbd "ESC") nil))
+  (define-key ac-completing-map (kbd "ESC") nil))
 
 ;; yaicomplete
-(eval-after-load 'yaicomplete
+(eval-after-load-compile 'yaicomplete
   ;; inhibit yaicomplete in ex-mode minibuffer
-  '(add-to-list 'yaicomplete-exclude 'evil-ex-current-buffer))
+  (add-to-list 'yaicomplete-exclude 'evil-ex-current-buffer))
 
 ;; skk
-(eval-after-load 'ccc
-  '(progn
-     (defadvice update-buffer-local-cursor-color
-       (around evil-update-buffer-local-cursor-color-in-insert-state activate)
-       "Allow ccc to update cursor color only when we are in
-insert state and in `skk-j-mode'."
-       (when (and (eq evil-state 'insert) (boundp 'skk-j-mode) skk-j-mode)
-         ad-do-it))
-     (defadvice evil-refresh-cursor
-       (around evil-refresh-cursor-unless-skk-mode activate)
-       "Allow ccc to update cursor color only when we are in
-insert state and in `skk-j-mode'."
-       (unless (and (eq evil-state 'insert) (boundp 'skk-j-mode) skk-j-mode)
-         ad-do-it))))
-(eval-after-load 'skk
-  '(progn
-     (defadvice evil-ex-search-update-pattern
-       (around evil-inhibit-ex-search-update-pattern-in-skk-henkan activate)
-       "Inhibit search pattern update during `skk-henkan-mode'.
+(defadvice update-buffer-local-cursor-color
+  (around evil-update-buffer-local-cursor-color-in-insert-state activate)
+  "Allow ccc to update cursor color only when we are in insert
+state and in `skk-j-mode'."
+  (when (and (eq evil-state 'insert) (boundp 'skk-j-mode) skk-j-mode)
+    ad-do-it))
+(defadvice evil-refresh-cursor
+  (around evil-refresh-cursor-unless-skk-mode activate)
+  "Allow ccc to update cursor color only when we are in insert
+state and in `skk-j-mode'."
+  (unless (and (eq evil-state 'insert) (boundp 'skk-j-mode) skk-j-mode)
+    ad-do-it))
+(defadvice evil-ex-search-update-pattern
+  (around evil-inhibit-ex-search-update-pattern-in-skk-henkan activate)
+  "Inhibit search pattern update during `skk-henkan-mode'.
 This is reasonable since inserted text during `skk-henkan-mode'
 is a kind of temporary one which is not confirmed yet."
-       (when (not skk-henkan-mode)
-         ad-do-it))))
+  (unless (and (boundp 'skk-henkan-mode) skk-henkan-mode)
+    ad-do-it))
 
 ;; view mode
 (add-hook 'view-mode-hook #'evil-initialize-state)
-(eval-after-load 'view
-  '(evil-define-key 'motion view-mode-map (kbd "v")
-     #'(lambda () (interactive) (view-mode 0))))
+(eval-after-load-compile 'view
+  (evil-define-key 'motion view-mode-map (kbd "v")
+    #'(lambda () (interactive) (view-mode 0))))
 
 ;; dired mode
-(eval-after-load 'dired
-  '(evil-define-key 'normal dired-mode-map "c" #'dired-do-copy))
+(eval-after-load-compile 'dired
+  (evil-define-key 'normal dired-mode-map "c" #'dired-do-copy))
 
 ;; multi-mode
 (eval-after-load 'multi-mode-util
@@ -172,51 +167,49 @@ is a kind of temporary one which is not confirmed yet."
      "http://raw.github.com/tarao/multi-mode-util/master/multi-mode+evil.el"))
 
 ;; howm
-(eval-after-load 'howm
-  '(progn
-     ;; menu
-     (evil-make-overriding-map howm-menu-mode-map 'normal)
-     (add-hook 'howm-menu-hook
-               '(lambda () (define-key howm-menu-mode-local-map ":" nil)))
+(eval-after-load-compile 'howm
+  ;; menu
+  (evil-make-overriding-map howm-menu-mode-map 'normal)
+  (add-hook 'howm-menu-hook
+            '(lambda () (define-key howm-menu-mode-local-map ":" nil)))
 
-     ;; list
-     (evil-make-overriding-map howm-view-summary-mode-map 'normal)
-     (evil-define-key 'normal howm-view-summary-mode-map
-       "j" (lookup-key evil-motion-state-map "j")
-       "k" (lookup-key evil-motion-state-map "k")
-       "J" 'evil-scroll-down
-       "K" 'evil-scroll-up)))
+  ;; list
+  (evil-make-overriding-map howm-view-summary-mode-map 'normal)
+  (evil-define-key 'normal howm-view-summary-mode-map
+    "j" (lookup-key evil-motion-state-map "j")
+    "k" (lookup-key evil-motion-state-map "k")
+    "J" 'evil-scroll-down
+    "K" 'evil-scroll-up))
 
 ;; mew
-(eval-after-load 'mew-key
-  '(progn
-     ;; mew-summary-mode key maps
-     (evil-make-overriding-map mew-summary-mode-map 'normal t)
-     (evil-define-key 'normal mew-summary-mode-map
-       "j" (lookup-key evil-motion-state-map "j")
-       "k" (lookup-key evil-motion-state-map "k")
-       "G" (lookup-key evil-motion-state-map "G")
-       "J" (lookup-key evil-motion-state-map "J")
-       "K" (lookup-key evil-motion-state-map "K")
-       ":" (lookup-key evil-motion-state-map ":")
-       ";" (lookup-key evil-motion-state-map ";"))
-     ;; mew-message-mode key maps
-     (evil-make-overriding-map mew-message-mode-map 'normal t)
-     (evil-define-key 'normal mew-message-mode-map
-       "h" (lookup-key evil-motion-state-map "h")
-       "j" (lookup-key evil-motion-state-map "j")
-       "k" (lookup-key evil-motion-state-map "k")
-       "l" (lookup-key evil-motion-state-map "l")
-       ":" (lookup-key evil-motion-state-map ":"))
-     ;; mew-draft-mode key maps
-     (defun mew-draft-evil-open-below (count)
-       (interactive "p")
-       (if (get-text-property (point) 'read-only)
-           (progn
-             (forward-line count)
-             (evil-open-above 1))
-         (evil-open-below count)))
-     (dolist (map (list mew-draft-header-map mew-draft-body-map))
-       (evil-define-key 'normal map
-         "o" #'mew-draft-evil-open-below
-         "q" #'mew-draft-kill))))
+(defun mew-draft-evil-open-below (count)
+  (interactive "p")
+  (if (get-text-property (point) 'read-only)
+      (progn
+        (forward-line count)
+        (evil-open-above 1))
+    (evil-open-below count)))
+(eval-after-load-compile 'mew-key
+  ;; mew-summary-mode key maps
+  (evil-make-overriding-map mew-summary-mode-map 'normal t)
+  (evil-define-key 'normal mew-summary-mode-map
+    "j" (lookup-key evil-motion-state-map "j")
+    "k" (lookup-key evil-motion-state-map "k")
+    "G" (lookup-key evil-motion-state-map "G")
+    "J" (lookup-key evil-motion-state-map "J")
+    "K" (lookup-key evil-motion-state-map "K")
+    ":" (lookup-key evil-motion-state-map ":")
+    ";" (lookup-key evil-motion-state-map ";"))
+  ;; mew-message-mode key maps
+  (evil-make-overriding-map mew-message-mode-map 'normal t)
+  (evil-define-key 'normal mew-message-mode-map
+    "h" (lookup-key evil-motion-state-map "h")
+    "j" (lookup-key evil-motion-state-map "j")
+    "k" (lookup-key evil-motion-state-map "k")
+    "l" (lookup-key evil-motion-state-map "l")
+    ":" (lookup-key evil-motion-state-map ":"))
+  ;; mew-draft-mode key maps
+  (dolist (map (list mew-draft-header-map mew-draft-body-map))
+    (evil-define-key 'normal map
+      "o" #'mew-draft-evil-open-below
+      "q" #'mew-draft-kill)))
