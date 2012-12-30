@@ -17,82 +17,6 @@
 (bundle evil
   (evil-mode 1)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; mode line
-
-  ;; mode-line color corresponds to state
-  (defvar evil-mode-line-color
-    `((normal   . ,(face-background 'mode-line))
-      (insert   . "#575735")
-      (replace  . "#575735")
-      (operator . "DarkSeaGreen4")
-      (visual   . "SteelBlue4")
-      (emacs    . "#8c5353")))
-
-  (defconst evil-normal-state-msg "")
-  (defconst evil-insert-state-msg "INSERT")
-  (defconst evil-replace-state-msg "REPLACE")
-  (defconst evil-emacs-state-msg "x")
-  (defconst evil-state-msg-alist
-    '((normal . "VISUAL") (line . "VLINE") (block . "VBLOCK")))
-
-  (bundle mode-line-color in tarao-elisp
-    (mode-line-color-mode)
-    (define-mode-line-color (color)
-      (unless color (cdr (assq evil-state evil-mode-line-color)))))
-
-  (defun my-evil-state-msg (&optional state)
-    "Find a message string for STATE.
-If `evil-STATE-state-msg' is bound, use that value.  Otherwise,
-if STATE is a visual state, then `evil-state-msg-alist' is looked
-up by the return value of `evil-visual-type'.  If no message
-string is found, return an empty string."
-    (unless state (setq state evil-state))
-    (let ((sym (intern (concat "evil-" (symbol-name state) "-state-msg"))))
-      (cond
-       ((boundp sym) (symbol-value sym))
-       ((evil-visual-state-p)
-        (or (cdr (assq (evil-visual-type) evil-state-msg-alist))
-            (cdr (assq 'normal evil-state-msg-alist))))
-       (t ""))))
-
-  (defun my-evil-mode-line-format (&optional state)
-    "Make mode string for STATE.
-If `my-evil-state-msg' returns non-empty string, the mode string
-is \"--STATE MESSAGE--\".  Otherwise, the mode string is \"-\"."
-    (let* ((msg (my-evil-state-msg state)) (line msg)
-           (empty (= (length msg) 0)) (tail (if empty "-" "--")))
-      (unless empty (setq line (concat "--" msg)))
-      (list "" line tail)))
-  (eval-after-load 'skk
-    '(progn
-       (defadvice skk-mode-string-to-indicator
-         (before my-evil-remove----from-skk-mode-string (mode string) activate)
-         "Do not put \"--\" at the beginning of mode string.
-We have our own \"--\" put by `my-evil-mode-line-format'."
-         (when (string-match "^--" string)
-           (setq string (substring string 2))))))
-  (defvar my-evil-mode-line (my-evil-mode-line-format 'emacs-state))
-
-  (defun my-evil-update-mode-line ()
-    "Update `my-evil-mode-line' and update mode line color."
-    (condition-case ()
-        (progn
-          (set (make-local-variable 'my-evil-mode-line)
-               (my-evil-mode-line-format))
-          (when (featurep 'mode-line-color) (mode-line-color-update)))
-      (error nil)))
-
-  (defadvice evil-refresh-mode-line (after my-evil-update-mode-line activate)
-    "Update our own mode string by `my-evil-update-mode-line'."
-    (my-evil-update-mode-line))
-
-  (setq-default mode-line-format
-                (append '("" my-evil-mode-line) mode-line-format))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; key bindings
-
   (defun evil-swap-key (map key1 key2)
     "Swap KEY1 and KEY2 in MAP."
     (let ((def1 (lookup-key map key1))
@@ -154,6 +78,44 @@ to next line."
   (push 'moccur-grep-mode evil-emacs-state-modes)
 
   ) ;; bundle evil
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; plugins
+
+(bundle evil-surround ;; surround operator
+  (global-surround-mode 1))
+
+(bundle tarao-elisp)
+(bundle color-moccur)
+(bundle tarao-evil-plugins
+  :features (evil-mode-line evil-relative-linum
+             evil-little-word hexl-evil-patch)
+
+  ;; operators
+
+  (global-evil-operator-comment-mode 1)
+
+  (global-evil-operator-moccur-mode 1)
+  (eval-after-load 'color-moccur
+    '(progn
+       (define-key moccur-mode-map (kbd ":") #'anything-for-files)
+       (define-key moccur-mode-map (kbd "M-;") #'anything-for-files)))
+
+  ;; text objects
+
+  (define-key evil-outer-text-objects-map "f" #'evil-a-between)
+  (define-key evil-inner-text-objects-map "f" #'evil-inner-between)
+
+  ;; key bindings
+
+  (evil-define-command-line-key (kbd "C-r") #'evil-ex-paste-from-register)
+
+  ;; others
+
+  ;; w for Japanese phrase
+  ;; lw for Japanese word
+  (setq evil-cjk-word-separating-categories word-separating-categories
+        evil-cjk-word-combining-categories word-combining-categories))
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; patches
@@ -258,39 +220,3 @@ is a kind of temporary one which is not confirmed yet."
        (evil-define-key 'normal map
          "o" #'mew-draft-evil-open-below
          "q" #'mew-draft-kill))))
-
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; plugins
-
-(bundle evil-surround ;; surround operator
-  (global-surround-mode 1))
-
-(bundle tarao-elisp)
-(bundle color-moccur)
-(bundle tarao-evil-plugins
-  :features (evil-relative-linum evil-little-word hexl-evil-patch)
-  ;; operators
-
-  (global-evil-operator-comment-mode 1)
-
-  (global-evil-operator-moccur-mode 1)
-  (eval-after-load 'color-moccur
-    '(progn
-       (define-key moccur-mode-map (kbd ":") #'anything-for-files)
-       (define-key moccur-mode-map (kbd "M-;") #'anything-for-files)))
-
-  ;; text objects
-
-  (define-key evil-outer-text-objects-map "f" #'evil-a-between)
-  (define-key evil-inner-text-objects-map "f" #'evil-inner-between)
-
-  ;; key bindings
-
-  (evil-define-command-line-key (kbd "C-r") #'evil-ex-paste-from-register)
-
-  ;; others
-
-  ;; w for Japanese phrase
-  ;; lw for Japanese word
-  (setq evil-cjk-word-separating-categories word-separating-categories
-        evil-cjk-word-combining-categories word-combining-categories))
