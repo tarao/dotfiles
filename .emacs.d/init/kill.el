@@ -1,4 +1,7 @@
-(eval-when-compile (require 'cl))
+(eval-when-compile
+  (require 'cl)
+  (unless (fboundp 'cl-flet) (defalias 'cl-flet 'flet))
+  (unless (fboundp 'cl-letf) (defalias 'cl-letf 'letf)))
 
 (bundle browse-kill-ring
   (define-key global-map (kbd "M-y") #'browse-kill-ring))
@@ -51,9 +54,9 @@
           (eq (framep (selected-frame)) 'x)
           (not (xsel-available-p)))
       ad-do-it
-    (flet ((framep (frame) 'x)
+    (cl-flet ((framep (frame) 'x)
            (x-set-cut-buffer (str &optional push) nil))
-      (letf (((symbol-function 'x-own-selection-internal)
+      (cl-letf (((symbol-function 'x-own-selection-internal)
               (symbol-function 'xsel-input))
              ((symbol-function 'x-disown-selection-internal)
               (symbol-function 'xsel-clear)))
@@ -63,7 +66,7 @@
 (defadvice x-selection-value (around ad-x-selection-value-xsel activate)
   (if (or (eq (framep (selected-frame)) 'x) (not (xsel-available-p)))
       ad-do-it
-    (flet ((framep (frame) 'x))
-      (letf (((symbol-function 'x-selection-value-internal)
+    (cl-flet ((framep (frame) 'x))
+      (cl-letf (((symbol-function 'x-selection-value-internal)
               (symbol-function 'xsel-output)))
         ad-do-it))))
