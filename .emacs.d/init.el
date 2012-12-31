@@ -1,3 +1,5 @@
+(add-to-list 'load-path "~/.emacs.d")
+
 ;; put site-lisp and its subdirectories into load-path
 (when (fboundp 'normal-top-level-add-subdirs-to-load-path)
   (let* ((dir "~/.emacs.d/site-lisp")

@@ -1,33 +1,184 @@
-; personal settings
-(load "init/local/skk-ext")
+;; modules
+(require 'skk-hint)
 
-; use skk server
-(setq skk-server-host "localhost")
-(setq skk-server-portnum 1179)
+;; customization
+(setq-default skk-egg-like-newline t
+              skk-henkan-strict-okuri-precedence t
+              skk-show-annotation t
+              skk-dcomp-activate t
+              ;; skk-dcomp-multiple-activate t
+              skk-kutouten-type 'en)
 
-; skk-lookup (use dictionary server)
-;; (autoload 'skk-lookup-search "skk-lookup")
-;; (setq skk-search-prog-list
-;;       (append skk-search-prog-list
-;;               '(
-;;                 (skk-lookup-search)
-;;                 )))
+;; face
+(when (memq 'skk-dcomp-multiple-face (face-list))
+  (set-face-foreground 'skk-dcomp-multiple-face "black")
+  (set-face-background 'skk-dcomp-multiple-face "lightgray")
+  (set-face-foreground 'skk-dcomp-multiple-trailing-face "yellow")
+  (set-face-background 'skk-dcomp-multiple-selected-face "blue"))
 
-; standalone
-;; (setq skk-large-jisyo "/usr/share/skk/SKK-JISYO.L")
-;; (setq skk-search-prog-list
-;;       (append skk-search-prog-list
-;;               '(
-;;                 (skk-search-jisyo-file
-;;                  "/usr/share/skk/SKK-JISYO.pubdic+" 10000)
-;;                 (skk-search-jisyo-file
-;;                  "/usr/share/skk/SKK-JISYO.jinmei" 10000)
-;;                 (skk-search-jisyo-file
-;;                  "/usr/share/skk/SKK-JISYO.geo" 10000)
-;;                 (skk-search-jisyo-file
-;;                  "/usr/share/skk/SKK-JISYO.JIS2" 10000)
-;;                 (skk-search-jisyo-file
-;;                  "/usr/share/skk/SKK-JISYO.JIS3_4" 10000)
-;;                 (skk-search-jisyo-file
-;;                  "/usr/share/skk/SKK-JISYO.zipcode" 10000)
-;;                 )))
+;; dictionary
+
+(unless (and (boundp 'skk-server-host) skk-server-host)
+  (setq skk-server-host "localhost"
+        skk-server-portnum 1179))
+
+(defvar skk-fallback-large-jisyo "/usr/share/skk/SKK-JISYO.L")
+(defvar skk-fallback-extra-jisyo-files
+  '("/usr/share/skk/SKK-JISYO.pubdic+"
+    "/usr/share/skk/SKK-JISYO.jinmei"
+    "/usr/share/skk/SKK-JISYO.geo"
+    "/usr/share/skk/SKK-JISYO.JIS2"
+    "/usr/share/skk/SKK-JISYO.JIS3_4"
+    "/usr/share/skk/SKK-JISYO.JIS2004"
+    "/usr/share/skk/SKK-JISYO.zipcode"))
+
+(require 'skk-server)
+(unless (skk-server-live-p (skk-open-server))
+  ;; deactivate skk-server-host
+  (setq skk-server-host nil)
+
+  ;; fallback to local files
+  (unless (listp skk-fallback-large-jisyo)
+    (setq skk-fallback-large-jisyo (list skk-fallback-large-jisyo)))
+  (let ((list skk-fallback-large-jisyo))
+    (while (and (not skk-large-jisyo) list)
+      (when (file-readable-p (car list)) (setq skk-large-jisyo (car list)))
+      (setq list (cdr list))))
+  (dolist (file skk-fallback-extra-jisyo-files)
+    (when (file-readable-p file)
+      (add-to-list 'skk-extra-jisyo-file-list file t))))
+
+;; rom -> kana rules
+
+(defvar my-skk-rom-kana-rule-list-base
+      (append
+       '(
+         ("h." nil ".")
+         ("h," nil ",")
+         ("h!" nil "!")
+         ("h?" nil "?")
+         ("h;" nil ";")
+         ("h:" nil ":")
+         ("h-" nil "-")
+         ("h~" nil "~")
+         ("h/" nil "/")
+         ("h@" nil "@")
+         ("h=" nil "=")
+         ("h(" nil "(")
+         ("h)" nil ")")
+         ("h[" nil "[")
+         ("h]" nil "]")
+         ("h<" nil "<")
+         ("h>" nil ">")
+         ("h\\" nil "\\")
+         ("h$" nil "$")
+         ("ht" nil "\t")
+         ("z " nil "　")
+         ("z." nil "。")
+         ("z," nil "、")
+         ("z!" nil "！")
+         ("z?" nil "？")
+         ("z;" nil "；")
+         ("z:" nil "：")
+         ("z-" nil "ー")
+         ("z~" nil "〜")
+         ("z/" nil "・")
+         ("z@" nil "＠")
+         ("z=" nil "＝")
+         ("z(" nil "（")
+         ("z)" nil "）")
+         ("z[" nil "「")
+         ("z]" nil "」")
+         ("z<" nil "＜")
+         ("z>" nil "＞")
+         ("zz-" nil "…")
+         ("zz[" nil "『")
+         ("zz]" nil "』")
+         ("ca" nil "∧")
+         ("co" nil "∨")
+         ("cn" nil "¬")
+         ("ci" nil "⊃")
+         ("cf" nil "⊥")
+         ("cy" nil "⇒")
+         ("cY" nil "→")
+         ("cd" nil "≡")
+         ("cA" nil "∀")
+         ("cE" nil "∃")
+         ("ce" nil "∈")
+         ("cu" nil "Π")
+         ("cl" nil "λ")
+         ("c<" nil "《")
+         ("c>" nil "》")
+         ("cp" nil "├")
+         )
+       skk-rom-kana-rule-list))
+(defvar my-skk-rom-kana-rule-list-en
+      (append
+       '(
+         ("." nil ".")
+         ("," nil ",")
+         ("!" nil "!")
+         ("?" nil "?")
+         (";" nil ";")
+         (":" nil ":")
+       ; ("-" nil "-")
+         ("~" nil "~")
+       ; ("/" nil "/")
+         ("@" nil "@")
+         ("=" nil "=")
+         ("(" nil "(")
+         (")" nil ")")
+         ("[" nil "[")
+         ("]" nil "]")
+         ("<" nil "<")
+         (">" nil ">")
+       ; ("\\" nil "\\")
+       ; ("$" nil "$")
+         )
+       my-skk-rom-kana-rule-list-base))
+(defvar my-skk-rom-kana-rule-list-ja
+      (append
+       '(
+         ("." nil "。")
+         ("," nil "、")
+         ("!" nil "！")
+         ("?" nil "？")
+         ("-" nil "ー")
+         ("@" nil "＠")
+         ("[" nil "「")
+         ("]" nil "」")
+         )
+       my-skk-rom-kana-rule-list-base))
+(defvar my-skk-rom-kana-rule-list-JA
+      (append
+       '(
+         ("." nil "．")
+         ("," nil "，")
+         ("!" nil "！")
+         ("?" nil "？")
+         ("-" nil "ー")
+         ("@" nil "＠")
+         ("[" nil "「")
+         ("]" nil "」")
+         )
+       my-skk-rom-kana-rule-list-base))
+(defun skk-reconstruct-rule-tree ()
+  (setq skk-rule-tree (skk-compile-rule-list
+                       skk-rom-kana-base-rule-list
+                       skk-rom-kana-rule-list)))
+(defun skk-use-en-signs ()
+  (interactive)
+  (setq skk-rom-kana-rule-list my-skk-rom-kana-rule-list-en)
+  (skk-reconstruct-rule-tree))
+(defun skk-use-ja-signs ()
+  (interactive)
+  (setq skk-rom-kana-rule-list my-skk-rom-kana-rule-list-ja)
+  (skk-reconstruct-rule-tree))
+(defun skk-use-JA-signs ()
+  (interactive)
+  (setq skk-rom-kana-rule-list my-skk-rom-kana-rule-list-JA)
+  (skk-reconstruct-rule-tree))
+
+(skk-use-en-signs)
+(make-variable-buffer-local 'skk-rule-tree)
+(make-variable-buffer-local 'skk-rom-kana-rule-list)
