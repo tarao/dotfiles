@@ -1,16 +1,12 @@
-(setq TeX-default-mode 'japanese-latex-mode
-      auto-mode-alist
-      (append
-       `(("\\.sty$" . ,TeX-default-mode)
-         ("\\.tex$" . ,TeX-default-mode))
-       auto-mode-alist)
-      japanese-TeX-command-default "pTeX"
-      japanese-LaTeX-command-default "pLaTeX"
-      default-file-coding-system-alist
-      (append
-       '(("\\.tex$" . euc-jp-unix)
-         ("\\.sty$" . euc-jp-unix)
-         ("\\.bib$" . euc-jp-unix))
-       default-file-coding-system-alist))
-(add-hook 'TeX-mode-hook 'turn-on-reftex)
-(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+(bundle auctex
+  (defconst TeX-default-mode 'japanese-latex-mode)
+  (defconst TeX-mode-files '("\\.sty$" "\\.tex$"))
+
+  (dolist (ext TeX-mode-files)
+    (add-to-list 'auto-mode-alist (cons ext TeX-default-mode)))
+
+  (setq-default japanese-TeX-command-default "pTeX"
+                japanese-LaTeX-command-default "pLaTeX")
+
+  (add-hook 'TeX-mode-hook #'turn-on-reftex)
+  (add-hook 'LaTeX-mode-hook #'turn-on-reftex))
