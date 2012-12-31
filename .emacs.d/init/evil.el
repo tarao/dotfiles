@@ -171,7 +171,7 @@ is a kind of temporary one which is not confirmed yet."
   ;; menu
   (evil-make-overriding-map howm-menu-mode-map 'normal)
   (add-hook 'howm-menu-hook
-            '(lambda () (define-key howm-menu-mode-local-map ":" nil)))
+            #'(lambda () (define-key howm-menu-mode-local-map ":" nil)))
 
   ;; list
   (evil-make-overriding-map howm-view-summary-mode-map 'normal)
