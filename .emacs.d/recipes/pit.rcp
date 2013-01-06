@@ -1,0 +1,7 @@
+(:name pit
+       :type http
+       :url "https://gist.github.com/raw/4468816/pit.el"
+       :prepare
+       (progn
+         (autoload 'pit/get "pit")
+         (autoload 'pit/set "pit")))

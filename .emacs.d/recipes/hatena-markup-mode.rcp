@@ -1,0 +1,3 @@
+(:name hatena-markup-mode
+       :type http
+       :url "http://gist.github.com/raw/4428666/hatena-markup-mode.el")

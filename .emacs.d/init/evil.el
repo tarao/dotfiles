@@ -213,3 +213,9 @@ is a kind of temporary one which is not confirmed yet."
     (evil-define-key 'normal map
       "o" #'mew-draft-evil-open-below
       "q" #'mew-draft-kill)))
+
+;; hatena-diary
+(push 'hatena:d:list-mode evil-motion-state-modes)
+(eval-after-load-compile 'hatena-diary
+  (evil-make-overriding-map hatena:d:list-mode-map)
+  (evil-add-hjkl-bindings hatena:d:list-mode-map 'motion))
