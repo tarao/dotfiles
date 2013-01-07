@@ -1,0 +1,6 @@
+(:name multi-mode+evil
+       :type http
+       :depends multi-mode-util
+       :url
+       "http://raw.github.com/tarao/multi-mode-util/master/multi-mode+evil.el"
+       :features multi-mode+evil)

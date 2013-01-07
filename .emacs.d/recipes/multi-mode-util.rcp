@@ -1,0 +1,5 @@
+(:name multi-mode-util
+       :type http
+       :depends multi-mode
+       :url
+       "http://raw.github.com/tarao/multi-mode-util/master/multi-mode-util.el")

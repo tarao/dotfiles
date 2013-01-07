@@ -161,10 +161,8 @@ is a kind of temporary one which is not confirmed yet."
   (evil-define-key 'normal dired-mode-map "c" #'dired-do-copy))
 
 ;; multi-mode
-(eval-after-load 'multi-mode-util
-  '(bundle multi-mode+evil
-     :url
-     "http://raw.github.com/tarao/multi-mode-util/master/multi-mode+evil.el"))
+(eval-after-load-compile 'multi-mode-util
+  (bundle multi-mode+evil))
 
 ;; howm
 (eval-after-load-compile 'howm

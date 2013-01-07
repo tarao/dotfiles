@@ -1,0 +1,4 @@
+(:name hatena-multi-mode
+       :type http
+       :depends multi-mode-util
+       :url "http://gist.github.com/raw/4475652/hatena-multi-mode.el")
