@@ -1,13 +1,5 @@
 (add-to-list 'load-path "~/.emacs.d")
 
-;; put site-lisp and its subdirectories into load-path
-(when (fboundp 'normal-top-level-add-subdirs-to-load-path)
-  (let* ((dir "~/.emacs.d/site-lisp")
-         (default-directory dir))
-    (when (file-directory-p dir)
-      (add-to-list 'load-path dir)
-      (normal-top-level-add-subdirs-to-load-path))))
-
 ;; el-get
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 (unless (require 'el-get nil 'noerror)
@@ -40,3 +32,11 @@
   ;; hide compilation results
   (let ((win (get-buffer-window "*Compile-Log*")))
     (when win (delete-window win))))
+
+;; put site-lisp and its subdirectories into load-path
+(when (fboundp 'normal-top-level-add-subdirs-to-load-path)
+  (let* ((dir "~/.emacs.d/site-lisp")
+         (default-directory dir))
+    (when (file-directory-p dir)
+      (add-to-list 'load-path dir)
+      (normal-top-level-add-subdirs-to-load-path))))
