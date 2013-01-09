@@ -7,8 +7,7 @@
 
 (eval-after-load-compile 'hatena-diary
   ;; load account information via pit
-  (let* ((spec '((username . "")
-                 (password . "")))
+  (let* ((spec '((username . "") (password . "")))
          (config (pit/get 'hatena `(require ,spec))) (sym "hatena:%s"))
     (mapc #'(lambda (k) (set (intern (format sym k)) (cdr (assq k config))))
           (mapcar #'car spec)))
