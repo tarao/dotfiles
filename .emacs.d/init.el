@@ -26,7 +26,8 @@
 ;; load init files
 (bundle! init-loader :url "http://gist.github.com/raw/4362564/init-loader.el"
   ;; load
-  (setq-default init-loader-show-log-after-init nil)
+  (setq-default init-loader-show-log-after-init nil
+                init-loader-load-after-compile t)
   (init-loader-load "~/.emacs.d/dot")
 
   ;; hide compilation results
