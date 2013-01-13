@@ -189,7 +189,7 @@ is a kind of temporary one which is not confirmed yet."
     (evil-open-below count)))
 (eval-after-load-compile 'mew-key
   ;; mew-summary-mode key maps
-  (evil-make-overriding-map mew-summary-mode-map 'normal t)
+  (evil-make-overriding-map mew-summary-mode-map 'normal)
   (evil-define-key 'normal mew-summary-mode-map
     "j" (lookup-key evil-motion-state-map "j")
     "k" (lookup-key evil-motion-state-map "k")
@@ -199,7 +199,7 @@ is a kind of temporary one which is not confirmed yet."
     ":" (lookup-key evil-motion-state-map ":")
     ";" (lookup-key evil-motion-state-map ";"))
   ;; mew-message-mode key maps
-  (evil-make-overriding-map mew-message-mode-map 'normal t)
+  (evil-make-overriding-map mew-message-mode-map 'normal)
   (evil-define-key 'normal mew-message-mode-map
     "h" (lookup-key evil-motion-state-map "h")
     "j" (lookup-key evil-motion-state-map "j")
