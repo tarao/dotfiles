@@ -55,12 +55,12 @@
           (not (xsel-available-p)))
       ad-do-it
     (cl-flet ((framep (frame) 'x)
-           (x-set-cut-buffer (str &optional push) nil))
+              (x-set-cut-buffer (str &optional push) nil))
       (cl-letf (((symbol-function 'x-own-selection-internal)
-              (symbol-function 'xsel-input))
-             ((symbol-function 'x-disown-selection-internal)
-              (symbol-function 'xsel-clear)))
-      ad-do-it))))
+                 (symbol-function 'xsel-input))
+                ((symbol-function 'x-disown-selection-internal)
+                 (symbol-function 'xsel-clear)))
+        ad-do-it))))
 
 ;; yank from X clipboard even if we are in terminal mode Emacs
 (defadvice x-selection-value (around ad-x-selection-value-xsel activate)
@@ -68,5 +68,5 @@
       ad-do-it
     (cl-flet ((framep (frame) 'x))
       (cl-letf (((symbol-function 'x-selection-value-internal)
-              (symbol-function 'xsel-output)))
+                 (symbol-function 'xsel-output)))
         ad-do-it))))
