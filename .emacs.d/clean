@@ -3,7 +3,7 @@
 cd `dirname $0`
 if [ "x$1" = 'x-f' ]; then
     rm -rf el-get
-else
+elif [ "x$1" != 'x-i' ]; then
     rm -f el-get/.*el
     rm -f el-get/.*elc
 fi
