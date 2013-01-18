@@ -1,6 +1,7 @@
 (:name term+mux
        :type github
        :pkgname "tarao/term-plus-mux-el"
+       :submodule nil
        :depends (term+ tab-group)
        :prepare
        (progn
