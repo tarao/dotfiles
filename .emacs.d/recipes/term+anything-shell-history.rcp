@@ -1,0 +1,4 @@
+(:name term+anything-shell-history
+       :type github
+       :pkgname "tarao/term-plus-ash-el"
+       :depends (term+ anything))

@@ -1,0 +1,11 @@
+(:name term+
+       :type github
+       :pkgname "tarao/term-plus-el"
+       :prepare
+       (progn
+         (autoload 'term "term+"
+           "Start a terminal-emulator in a new buffer." t)
+         (autoload 'ansi-term "term+"
+           "Start a terminal-emulator in a new buffer." t)
+         (autoload 'term-mode "term+"
+           "Major mode for interacting with an inferior interpreter." t)))
