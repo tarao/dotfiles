@@ -14,17 +14,16 @@
 ;; bundle - an el-get wrapper
 (add-to-list 'el-get-sources
              '(:name bundle
-                     :url "http://gist.github.com/raw/4414297/bundle.el"
-                     :type http
+                     :url "http://gist.github.com/4414297.git"
+                     :type git
                      :features (bundle)))
 (el-get 'sync 'bundle)
 
 ;; byte-compiling version of eval-after-load
-(bundle! eval-after-load-compile
-  :url "http://gist.github.com/raw/4414304/eval-after-load-compile.el")
+(bundle! gist:4414304:eval-after-load-compile)
 
 ;; load init files
-(bundle! init-loader :url "http://gist.github.com/raw/4362564/init-loader.el"
+(bundle! gist:4362564:init-loader
   ;; load
   (setq-default init-loader-show-log-after-init nil)
   (init-loader-load "~/.emacs.d/dot")
