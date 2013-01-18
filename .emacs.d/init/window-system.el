@@ -18,6 +18,7 @@
        `((cursor-color . ,default-cursor-color)
          (mouse-color . ,default-cursor-color)
          (vertical-scroll-bars . nil)
+         (width . 80)
          (foreground-color . "#aaaaaa")
          (background-color . "#1f1f1f"))))
   (setq-default initial-frame-alist (append frame-alist initial-frame-alist)
