@@ -7,7 +7,9 @@
 
 ;; el-get
 (add-to-list 'load-path (user-emacs-directory-file "el-get/el-get"))
-(setq-default el-get-dir (user-emacs-directory-file "el-get"))
+(setq-default el-get-dir (user-emacs-directory-file "el-get")
+              el-get-emacswiki-base-url
+              "http://raw.github.com/emacsmirror/emacswiki.org/master/")
 (unless (require 'el-get nil 'noerror)
   (with-current-buffer
       (url-retrieve-synchronously
