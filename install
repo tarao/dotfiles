@@ -134,7 +134,7 @@ class Linker
       v.each do |l, f|
         if f.is_a?(Hash)
           sep = File::SEPARATOR
-          l = l.gsub(/(?:^|#{sep})<src>(?:$|#{sep})/, @dst)
+          l = l.gsub(/(?:^|#{sep})<src>(?:$|(?=#{sep}))/, @dst)
           f.each do |ll,ff|
             ff = File.expand_path(ff, l) if ff
             link = Link.new(dir, ll, ff)
