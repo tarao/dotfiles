@@ -1,6 +1,7 @@
 .:
   <src>:
     .emacs.d: .emacs.d
+    .fonts.conf: .fonts.conf
     .gitignore: dot.gitignore
     .irbrc: .irbrc
     .lesskey: .lesskey
@@ -10,6 +11,9 @@
     .vimrc: .vimrc
     .zsh: .zsh
     .zshenv: .zshenv
+.config:
+  fontconfig:
+    fonts.conf: fonts.conf
 .emacs.d/dot:
   .emacs-w3m.el: ../init/local/emacs-w3m.el
   .skk.el: ../init/local/skk.el
