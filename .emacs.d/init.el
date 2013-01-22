@@ -21,13 +21,8 @@
 
 ;; bundle - an el-get wrapper
 (add-to-list 'el-get-sources
-             '(:name bundle
-                     :url "http://gist.github.com/4414297.git"
-                     :type git))
+             '(:name bundle :type github :pkgname "tarao/bundle-el"))
 (el-get 'sync 'bundle)
-
-;; byte-compiling version of eval-after-load
-(bundle! gist:4414304:eval-after-load-compile)
 
 ;; load init files
 (bundle! gist:4362564:init-loader
