@@ -7,6 +7,7 @@
 
 ;; el-get
 (add-to-list 'load-path (user-emacs-directory-file "el-get/el-get"))
+(setq-default el-get-dir (user-emacs-directory-file "el-get"))
 (unless (require 'el-get nil 'noerror)
   (with-current-buffer
       (url-retrieve-synchronously
