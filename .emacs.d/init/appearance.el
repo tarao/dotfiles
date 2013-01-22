@@ -1,3 +1,7 @@
+;; frame title
+(setq frame-title-format
+      '("" invocation-name "-" emacs-version "@" system-name ": %b"))
+
 ;; theme
 (setq frame-background-mode 'dark)
 (if (not (and (>= emacs-major-version 24) (>= emacs-minor-version 1)))
