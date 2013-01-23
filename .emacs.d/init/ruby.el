@@ -7,3 +7,5 @@
                 ("Rakefile$" . ruby-mode)
                 ("\\.rdoc$" . rdoc-mode)) auto-mode-alist))
 (add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
+
+(setq-default ruby-deep-indent-paren-style nil)
