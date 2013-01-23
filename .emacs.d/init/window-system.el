@@ -69,9 +69,12 @@ removed from them after the first call."
         (remove-hook 'after-make-frame-functions
                      #'setup-window-system-configuration)))))
 
-(if window-system
-    (add-hook 'after-init-hook #'setup-window-system-configuration)
-  (add-hook 'after-make-frame-functions #'setup-window-system-configuration))
+(when window-system
+  (if after-init-time
+      ;; already initialized
+      (setup-window-system-configuration)
+    (add-hook 'after-init-hook #'setup-window-system-configuration)))
+(add-hook 'after-make-frame-functions #'setup-window-system-configuration)
 
 (defun close-frame-display (frame)
   "Close FRAME's X connection."
