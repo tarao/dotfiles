@@ -19,8 +19,8 @@
          (mouse-color . ,default-cursor-color)
          (vertical-scroll-bars . nil)
          (width . 80)
-         (foreground-color . "#aaaaaa")
-         (background-color . "#1f1f1f"))))
+         (foreground-color . ,(face-foreground 'default))
+         (background-color . ,(face-background 'default)))))
   (setq-default initial-frame-alist (append frame-alist initial-frame-alist)
                 default-frame-alist (append frame-alist default-frame-alist)))
 

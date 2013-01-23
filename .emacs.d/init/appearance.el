@@ -15,7 +15,7 @@
     :url "http://raw.github.com/bbatsov/zenburn-emacs/master/zenburn-theme.el"
     (load-theme 'zenburn t)
     (let ((class '((class color) (min-colors 89)))
-          (fg "#dcdccc") (bg "#1f1f1f"))
+          (fg "#aaaaaa") (bg "#1f1f1f"))
       (custom-theme-set-faces
        'zenburn
        `(default ((,class (:foreground ,fg :background ,bg))))))))
