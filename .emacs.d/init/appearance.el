@@ -4,6 +4,8 @@
 
 ;; theme
 (setq frame-background-mode 'dark)
+(defvar default-foreground-color "#aaaaaa")
+(defvar default-background-color "#1f1f1f")
 (if (not (and (>= emacs-major-version 24) (>= emacs-minor-version 1)))
     (bundle color-theme
       (color-theme-initialize)
@@ -15,13 +17,15 @@
     :url "http://raw.github.com/bbatsov/zenburn-emacs/master/zenburn-theme.el"
     (load-theme 'zenburn t)
     (let ((class '((class color) (min-colors 89)))
-          (fg "#aaaaaa") (bg "#1f1f1f"))
+          (fg default-foreground-color) (bg default-background-color))
       (custom-theme-set-faces
        'zenburn
        `(default ((,class (:foreground ,fg :background ,bg))))))))
 
 ;; customize colors
 (defvar mode-line-default-color "#3f3f3f")
+(set-face-foreground 'default default-foreground-color)
+(set-face-background 'default default-background-color)
 (set-face-background 'region "#8c8ce8")
 (set-face-background 'mode-line mode-line-default-color)
 (set-face-attribute 'mode-line nil :box nil)
