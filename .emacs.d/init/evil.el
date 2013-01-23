@@ -190,22 +190,16 @@ is a kind of temporary one which is not confirmed yet."
 (eval-after-load-compile 'mew-key
   ;; mew-summary-mode key maps
   (evil-make-overriding-map mew-summary-mode-map 'normal)
-  (evil-define-key 'normal mew-summary-mode-map
-    "j" (lookup-key evil-motion-state-map "j")
-    "k" (lookup-key evil-motion-state-map "k")
+  (evil-add-hjkl-bindings mew-summary-mode-map 'normal
+    "h" (lookup-key mew-summary-mode-map "h")
+    "l" (lookup-key mew-summary-mode-map "l")
     "G" (lookup-key evil-motion-state-map "G")
     "J" (lookup-key evil-motion-state-map "J")
     "K" (lookup-key evil-motion-state-map "K")
-    ":" (lookup-key evil-motion-state-map ":")
     ";" (lookup-key evil-motion-state-map ";"))
   ;; mew-message-mode key maps
   (evil-make-overriding-map mew-message-mode-map 'normal)
-  (evil-define-key 'normal mew-message-mode-map
-    "h" (lookup-key evil-motion-state-map "h")
-    "j" (lookup-key evil-motion-state-map "j")
-    "k" (lookup-key evil-motion-state-map "k")
-    "l" (lookup-key evil-motion-state-map "l")
-    ":" (lookup-key evil-motion-state-map ":"))
+  (evil-add-hjkl-bindings mew-message-mode-map 'normal)
   ;; mew-draft-mode key maps
   (dolist (map (list mew-draft-header-map mew-draft-body-map))
     (evil-define-key 'normal map
