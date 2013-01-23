@@ -64,11 +64,18 @@
 ;; patches
 
 ;; summary fix
+(eval-after-load-compile 'whitespace
+  (when (eq whitespace-global-modes t)
+    (setq whitespace-global-modes '(not)))
+  (when (and (listp whitespace-global-modes)
+             (eq (car-safe whitespace-global-modes) 'not))
+    (add-to-list 'whitespace-global-modes 'mew-summary-mode t)
+    (add-to-list 'whitespace-global-modes 'mew-draft-mode t)))
 (add-hook
  'mew-summary-mode-hook
- #'(lambda () (set (make-local-variable 'show-trailing-whitespace) nil)))
-(eval-after-load 'end-mark
-  '(add-to-list 'end-mark-exclude-modes 'mew-summary-mode))
+ #'(lambda () (setq show-trailing-whitespace nil)))
+(eval-after-load-compile 'end-mark
+  (add-to-list 'end-mark-exclude-modes 'mew-summary-mode))
 
 (defadvice mew-draft-mode (before major-mode-convention activate)
   (kill-all-local-variables))

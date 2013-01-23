@@ -96,7 +96,8 @@
 
 ;; visualize whitespace
 (eval-after-load-compile 'whitespace
-  (setq whitespace-style '(face tabs tab-mark fw-space-mark lines-tail))
+  (setq whitespace-global-modes '(not)
+        whitespace-style '(face tabs tab-mark fw-space-mark lines-tail))
   ;; tab
   (setcar (nthcdr 2 (assq 'tab-mark whitespace-display-mappings)) [?> ?\t])
   (let ((face  'whitespace-tab))
