@@ -48,6 +48,20 @@
     (when (file-readable-p file)
       (add-to-list 'skk-extra-jisyo-file-list file t))))
 
+;; kakutei hack
+(defun skk-j-mode-before-kakutei (arg)
+  (interactive "P")
+  (let ((valid-buffer '(lisp-interaction-mode)))
+    (cond
+     ((and (null (skk-in-minibuffer-p))
+           (null skk-henkan-mode)
+           (member major-mode valid-buffer))
+      (skk-emulate-original-map arg))
+     (t
+      (skk-kakutei arg)))))
+(add-to-list 'skk-rom-kana-rule-list
+             '(skk-kakutei-key nil skk-j-mode-before-kakutei))
+
 ;; rom -> kana rules
 
 (defvar my-skk-rom-kana-rule-list-base
