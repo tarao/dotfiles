@@ -66,6 +66,10 @@
   ;; eof mark
   (global-end-mark-mode))
 
+;; scroll bar
+(bundle yascroll
+  (global-yascroll-bar-mode))
+
 ;; line-wrap character
 (require 'disp-table)
 (defface wrap-face
