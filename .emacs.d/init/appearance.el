@@ -1,6 +1,8 @@
 ;; frame title
 (setq frame-title-format
-      '("" invocation-name "-" emacs-version "@" system-name ": %b"))
+      '("" invocation-name "-" emacs-version "@"
+        (:eval (nth 0 (split-string (system-name) "\\.")))
+        ": %b"))
 
 ;; theme
 (setq frame-background-mode 'dark)
