@@ -1,5 +1,5 @@
-EMACS_CLIENT_CMD=emacsclient.emacs-snapshot
-EMACS_STANDALONE_CMD=emacs-snapshot
+EMACS_CLIENT_CMD=(command emacsclient)
+EMACS_STANDALONE_CMD=(command emacs)
 EMACS_DAEMON_LOG="$HOME/.emacs.d/daemon.log"
 function emacsclient () {
     $EMACS_CLIENT_CMD "$@"
