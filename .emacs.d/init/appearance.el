@@ -29,6 +29,12 @@
            (faces (mapcar to-spec user-face-alist)))
       (apply #'custom-theme-set-faces `(user ,@faces)))))
 
+;; fix for non-frame mode; set face color explicitly
+(dolist (face '(default mode-line))
+  (let ((attrs (cdr (assq face user-face-alist))))
+    (set-face-foreground face (plist-get attrs :foreground))
+    (set-face-background face (plist-get attrs :background))))
+
 ;; use darker comment
 (defun set-comment-color (color)
   (set-face-foreground 'font-lock-comment-delimiter-face color)
