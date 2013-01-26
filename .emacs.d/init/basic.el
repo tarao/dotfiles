@@ -1,6 +1,6 @@
 ;; hostname
-(string-match "^\\([^\\.]+\\)\\(\\.\\(.*\\)\\)?$" (system-name))
-(defconst short-hostname (replace-match "\\1" t nil (system-name))
+(defconst short-hostname (or (nth 0 (split-string (system-name) "\\."))
+                             (system-name))
   "Host part of function `system-name'.")
 
 ;; shell
