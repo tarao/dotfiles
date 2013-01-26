@@ -2,37 +2,32 @@
 (setq frame-title-format
       '("" invocation-name "-" emacs-version "@" short-hostname ": %b"))
 
+(defconst user-face-alist
+  `((default   :foreground "#aaaaaa" :background "#1f1f1f")
+    (region                          :background "#8c8ce8")
+    (mode-line :foreground "#8fb28f" :background "#3f3f3f" :box nil)
+    (mode-line-inactive              :background "#5f5f5f" :box nil)
+    (header-line                     :background "#3f3f3f" :box nil))
+  "User defined face attributes to override default faces or theme faces.")
+
 ;; theme
 (setq frame-background-mode 'dark)
-(defconst user-foreground-color "#aaaaaa")
-(defconst user-background-color "#1f1f1f")
 (if (not (and (>= emacs-major-version 24) (>= emacs-minor-version 1)))
     (bundle color-theme
       (color-theme-initialize)
       (color-theme-dark-laptop)
-      (set-face-foreground 'mode-line "#8fb28f")
-      (set-face-background 'mode-line-buffer-id "#3f3f3f")
-      (set-face-foreground 'mode-line-buffer-id "#f0dfaf"))
+      ;; apply user defined faces
+      (dolist (elt user-face-alist)
+        (let ((name (car elt)) (attrs (cdr elt)))
+          (apply #'set-face-attribute `(,name nil ,@attrs)))))
   (bundle zenburn-theme
     :url "http://raw.github.com/bbatsov/zenburn-emacs/master/zenburn-theme.el"
     (load-theme 'zenburn t)
-    (let ((class '((class color) (min-colors 89)))
-          (fg user-foreground-color) (bg user-background-color))
-      (custom-theme-set-faces
-       'zenburn
-       `(default ((,class (:foreground ,fg :background ,bg))))))))
-
-;; customize colors
-(defvar mode-line-default-color "#3f3f3f")
-(set-face-foreground 'default user-foreground-color)
-(set-face-background 'default user-background-color)
-(set-face-background 'region "#8c8ce8")
-(set-face-background 'mode-line mode-line-default-color)
-(set-face-attribute 'mode-line nil :box nil)
-(set-face-background 'mode-line-inactive "#5f5f5f")
-(set-face-attribute 'mode-line-inactive nil :box nil)
-(set-face-background 'header-line "#3f3f3f")
-(set-face-attribute 'header-line nil :box nil)
+    ;; apply user defined faces
+    (let* ((class '((class color) (min-colors 89)))
+           (to-spec #'(lambda (elt) `(,(car elt) ((,class ,(cdr elt))))))
+           (faces (mapcar to-spec user-face-alist)))
+      (apply #'custom-theme-set-faces `(user ,@faces)))))
 
 ;; use darker comment
 (defun set-comment-color (color)
@@ -50,7 +45,7 @@
   :features (mode-line-color)
   ;; mode line color
   (mode-line-color-mode)
-  (setq mode-line-color-original mode-line-default-color)
+  (setq mode-line-color-original (face-background 'mode-line))
   (defvar skk-j-mode-line-color "IndianRed4")
   (defsubst skk-j-mode-line-color-p ()
     (cond
