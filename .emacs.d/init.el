@@ -23,9 +23,10 @@
 (el-get 'sync 'bundle)
 
 ;; load init files
-(bundle! gist:4362564:init-loader
+(bundle! emacs-jp/init-loader
   ;; load
-  (setq-default init-loader-show-log-after-init nil)
+  (setq-default init-loader-show-log-after-init nil
+                init-loader-byte-compile t)
   (init-loader-load (locate-user-emacs-file "dot"))
 
   ;; hide compilation results
