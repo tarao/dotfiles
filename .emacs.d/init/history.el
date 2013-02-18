@@ -1,8 +1,8 @@
 ;; bookmark
-(setq-default bookmark-default-file (user-emacs-directory-file "bmk"))
+(setq-default bookmark-default-file (locate-user-emacs-file "bmk"))
 
 ;; recentf
-(setq-default recentf-save-file (user-emacs-directory-file "recentf"))
+(setq-default recentf-save-file (locate-user-emacs-file "recentf"))
 
 ;; shell history
 (bundle shell-history
