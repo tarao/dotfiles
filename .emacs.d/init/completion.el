@@ -9,6 +9,7 @@
 ;; zsh like completion
 (setq read-file-name-completion-ignore-case t)
 (bundle! zlc :url "http://github.com/mooz/emacs-zlc.git"
+  (zlc-mode t)
   (let ((map minibuffer-local-map))
     (define-key map (kbd "C-p") 'zlc-select-previous)
     (define-key map (kbd "C-n") 'zlc-select-next)
