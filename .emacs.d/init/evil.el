@@ -119,11 +119,6 @@ to next line."
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; patches
 
-;; auto-complete
-(eval-after-load-compile 'auto-complete
-  ;; exit insert-state by ESC even if auto-complete is showing candidates
-  (define-key ac-completing-map (kbd "ESC") nil))
-
 ;; yaicomplete
 (eval-after-load-compile 'yaicomplete
   ;; inhibit yaicomplete in ex-mode minibuffer
