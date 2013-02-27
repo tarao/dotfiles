@@ -1,3 +1,5 @@
+(eval-when-compile (require 'cl))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; load
 
@@ -10,6 +12,50 @@
               evil-search-module 'evil-search
               evil-ex-search-vim-style-regexp t)
 
+(defconst evil-misc-map-alist
+  '((inner  . evil-inner-text-objects-map)
+    (outer  . evil-inner-text-objects-map)
+    (window . evil-window-map)
+    (ex     . evil-ex-completion-map)
+    (search . evil-ex-search-keymap)
+    (read   . evil-read-key-map)))
+
+(defmacro evil-define-keys (&rest definition)
+  "Define keys for Evil keymaps by DEFINITION.
+
+DEFINITION is a list whose element has one of the following forms:
+  (TYPE KEY1 DEF1 KEY2 DEF2...)
+  ((TYPE1 TYPE2...) KEY1 DEF1 KEY2 DEF2...)
+  (swap TYPE KEY1 KEY1' KEY2 KEY2'...)
+  (swap (TYPE1 TYPE2...) KEY1 KEY1' KEY2 KEY2'...)
+  (delete TYPE KEY1 KEY2...)
+  (delete (TYPE1 TYPE2...) KEY1 KEY2...)
+
+TYPE is either a state or one of `inner', `outer', `window',
+`ex', `search' or `read'."
+  `(loop for spec in ',definition
+         for swap = (eq (nth 0 spec) 'swap)
+         for del = (eq (nth 0 spec) 'delete)
+         when (or swap del) do (pop spec) end
+         for type = (nth 0 spec)
+         do (loop for type in (or (and (listp type) type) (list type))
+                  for map = (symbol-value
+                             (or (cdr (assq type evil-misc-map-alist))
+                                 (evil-state-property type :keymap)))
+                  do (loop for (key def) on (cdr spec) by (if del #'cdr #'cddr)
+                           when del do (setq def nil) end
+                           for elt = (cons (read-kbd-macro key) def)
+                           collect elt into defs
+                           when swap
+                           do (let ((key2 (read-kbd-macro def)))
+                                (setcdr elt (lookup-key map def))
+                                (push (cons key2 (lookup-key map key)) defs))
+                           end
+                           finally
+                           do (loop for (key . def) in defs
+                                    do (print `(define-key map ,key ,def))
+                                    do (define-key map key def))))))
+
 ;; dependencies
 (bundle anything)
 (bundle goto-chg)
@@ -18,44 +64,35 @@
 (bundle evil
   (evil-mode 1)
 
-  (defun evil-swap-key (map key1 key2)
-    "Swap KEY1 and KEY2 in MAP."
-    (let ((def1 (lookup-key map key1))
-          (def2 (lookup-key map key2)))
-      (define-key map key1 def2)
-      (define-key map key2 def1)))
-  (defsubst evil-define-command-line-key (key def)
-    (define-key evil-ex-completion-map key def)
-    (define-key evil-ex-search-keymap key def))
+  (evil-define-keys
+   ;; use ; for : as
+   ;;   noremap ; :
+   ;; in Vim
+   (motion ";"   evil-ex)
 
-  ;; use ; for : as
-  ;;   noremap ; :
-  ;; in Vim
-  (define-key evil-motion-state-map (kbd ";") #'evil-ex)
+   (motion ":"   anything-for-files
+           "M-;" anything-for-files
+           "gw"  what-cursor-position
+           "gW"  describe-char
+           "gA"  describe-char)
 
-  ;; user key bindings
-  (define-key evil-motion-state-map (kbd ":") #'anything-for-files)
-  (define-key evil-motion-state-map (kbd "M-;") #'anything-for-files)
-  (define-key evil-normal-state-map (kbd "gw") #'what-cursor-position)
-  (define-key evil-normal-state-map (kbd "gW") #'describe-char)
-  (define-key evil-normal-state-map (kbd "gA") #'describe-char)
-  ;; use C-j instead of J because we override J by `evil-scroll-down'
-  (define-key evil-normal-state-map (kbd "C-j") #'evil-join)
-  ;; move cursor visually by default
-  (evil-swap-key evil-motion-state-map "j" "gj")
-  (evil-swap-key evil-motion-state-map "k" "gk")
-  (define-key evil-motion-state-map (kbd "J") #'evil-scroll-down)
-  (define-key evil-motion-state-map (kbd "K") #'evil-scroll-up)
-  ;; `evil-window-map' in visual state does not make sense
-  (define-key evil-visual-state-map (kbd "C-w") #'evil-delete)
+   ;; move cursor visually by default
+   (swap motion  "j" "gj"  "k" "gk")
 
-  ;; use default emacs key bindings
-  (define-key evil-normal-state-map (kbd "J") nil)
-  (define-key evil-insert-state-map (kbd "C-e") nil)
-  (define-key evil-insert-state-map (kbd "C-y") nil)
-  (define-key evil-insert-state-map (kbd "C-k") nil)
-  (define-key evil-insert-state-map (kbd "C-n") nil)
-  (define-key evil-insert-state-map (kbd "C-p") nil)
+   ;; use C-j instead of J because we override J by `evil-scroll-down'
+   (normal "J"   nil
+           "C-j" evil-join)
+   (motion "J"   evil-scroll-down
+           "K"   evil-scroll-up)
+
+   ;; `evil-window-map' in visual state does not make sense
+   (visual "C-w" evil-delete)
+
+   ;; use default emacs key bindings
+   (delete insert "C-e" "C-y" "C-k" "C-n" "C-p" "C-t" "C-d")
+   (delete ex     "C-a" "C-b")
+
+   ) ;; evil-define-keys
 
   ;; C-p and C-n works as both Emacs and Evil command
   (defadvice evil-paste-pop (around evil-paste-or-move-line activate)
@@ -100,14 +137,13 @@ to next line."
     (define-key moccur-mode-map (kbd ":") #'anything-for-files)
     (define-key moccur-mode-map (kbd "M-;") #'anything-for-files))
 
-  ;; text objects
-
-  (define-key evil-outer-text-objects-map "f" #'evil-a-between)
-  (define-key evil-inner-text-objects-map "f" #'evil-inner-between)
-
   ;; key bindings
 
-  (evil-define-command-line-key (kbd "C-r") #'evil-ex-paste-from-register)
+  (evil-define-keys
+   (outer "f" evil-a-between)
+   (inner "f" evil-inner-between)
+   ((ex search) "C-r" evil-ex-paste-from-register)
+   ) ;; evil-define-keys
 
   ;; others
 
