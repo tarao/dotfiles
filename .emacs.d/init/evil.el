@@ -53,7 +53,6 @@ TYPE is either a state or one of `inner', `outer', `window',
                            end
                            finally
                            do (loop for (key . def) in defs
-                                    do (print `(define-key map ,key ,def))
                                     do (define-key map key def))))))
 
 ;; dependencies
