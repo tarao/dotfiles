@@ -69,8 +69,8 @@ TYPE is either a state or one of `inner', `outer', `window',
    ;; in Vim
    (motion ";"   evil-ex)
 
-   (motion ":"   anything-for-files
-           "M-;" anything-for-files
+   (motion ":"   tarao/anything-for-files
+           "M-;" tarao/anything-for-files
            "gw"  what-cursor-position
            "gW"  describe-char
            "gA"  describe-char)
@@ -133,8 +133,8 @@ to next line."
 
   (global-evil-operator-moccur-mode 1)
   (eval-after-load-compile 'color-moccur
-    (define-key moccur-mode-map (kbd ":") #'anything-for-files)
-    (define-key moccur-mode-map (kbd "M-;") #'anything-for-files))
+    (define-key moccur-mode-map (kbd ":") #'tarao/anything-for-files)
+    (define-key moccur-mode-map (kbd "M-;") #'tarao/anything-for-files))
 
   ;; key bindings
 

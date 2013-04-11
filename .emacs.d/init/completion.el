@@ -36,6 +36,24 @@
   (global-set-key [remap execute-extended-command]
                   #'anything-execute-extended-command))
 (bundle descbinds-anything)
+(bundle anything-git-project
+  (defun tarao/anything-for-files ()
+    (interactive)
+    (require 'anything-config)
+    (let* ((git-source (and (= 0 (call-process "git" nil nil nil "status"))
+                            (anything-c-sources-git-project-for)))
+           (other-source (or git-source
+                             '(anything-c-source-recentf
+                               anything-c-source-bookmarks
+                               anything-c-source-files-in-current-dir+
+                               anything-c-source-locate)))
+           (sources `(anything-c-source-buffers+
+                      anything-c-source-ffap-line
+                      anything-c-source-ffap-guesser
+                      ,@other-source)))
+      (anything-other-buffer sources "*anything for files*"))))
+(unless (fboundp 'tarao/anything-for-files)
+  (fset 'tarao/anything-for-files 'anything-for-files))
 
 ;; auto completion like IntelliSense
 (bundle! auto-complete
