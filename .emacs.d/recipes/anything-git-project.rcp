@@ -1,4 +1,4 @@
 (:name anything-git-project
        :type git
-       :url "https://gist.github.com/tarao/5360238"
+       :url "https://gist.github.com/5360238.git"
        :depends anything)
