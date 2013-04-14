@@ -13,6 +13,10 @@
 (bundle word-count
   (global-set-key (kbd "M-+") #'word-count-mode))
 
+;; git-gutter
+(bundle! git-gutter-fringe
+  (global-git-gutter-mode t))
+
 ;; eldoc
 (setq-default eldoc-idle-delay 0
               eldoc-echo-area-use-multiline-p t)

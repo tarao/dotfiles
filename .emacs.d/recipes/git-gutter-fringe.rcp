@@ -1,0 +1,4 @@
+(:name git-gutter-fringe
+       :type github
+       :pkgname "syohex/emacs-git-gutter-fringe"
+       :depends (fringe-helper git-gutter))
