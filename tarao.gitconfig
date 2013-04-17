@@ -17,4 +17,6 @@
     name = tarao
     email = tarao.gnn@gmail.com
 [merge]
-	ff = false
+    ff = false
+[push]
+    default = current
