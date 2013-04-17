@@ -16,7 +16,5 @@
 [user]
     name = tarao
     email = tarao.gnn@gmail.com
-[merge]
-    ff = false
 [push]
     default = current
