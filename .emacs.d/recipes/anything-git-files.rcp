@@ -1,0 +1,4 @@
+(:name anything-git-files
+       :type github
+       :pkgname "tarao/anything-git-files-el"
+       :depends anything)

@@ -36,20 +36,23 @@
   (global-set-key [remap execute-extended-command]
                   #'anything-execute-extended-command))
 (bundle descbinds-anything)
-(bundle anything-git-project
+(bundle anything-git-files
   (defun tarao/anything-for-files ()
     (interactive)
     (require 'anything-config)
-    (let* ((git-source (and (= 0 (call-process "git" nil nil nil "status"))
-                            (anything-c-sources-git-project-for)))
-           (other-source (or git-source
-                             '(anything-c-source-recentf
-                               anything-c-source-bookmarks
-                               anything-c-source-files-in-current-dir+
-                               anything-c-source-locate)))
+    (require 'anything-git-files)
+    (let* ((git-source (and (anything-git-files:git-p)
+                            '(anything-git-files:modified-source
+                              anything-git-files:untracked-source
+                              anything-git-files:all-source)))
+           (other-source '(anything-c-source-recentf
+                           anything-c-source-bookmarks
+                           anything-c-source-files-in-current-dir+
+                           anything-c-source-locate))
            (sources `(anything-c-source-buffers+
                       anything-c-source-ffap-line
                       anything-c-source-ffap-guesser
+                      ,@git-source
                       ,@other-source)))
       (anything-other-buffer sources "*anything for files*"))))
 (unless (fboundp 'tarao/anything-for-files)
