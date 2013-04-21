@@ -75,6 +75,13 @@ function git() {
     if [[ "$vcs" = 'hg' ]]; then
         local args; args=`git2hg $@`
         hg ${=args}
+    elif [[ "$1" = 'merge' ]]; then
+        shift
+        if [[ "$1" = -* ]]; then
+            command git merge $@
+        else
+            command git merge --no-ff $@
+        fi
     else
         command git $@
     fi
