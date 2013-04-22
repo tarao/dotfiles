@@ -48,7 +48,6 @@
                               ,@(anything-git-files:submodule-sources 'all))))
            (other-source '(anything-c-source-recentf
                            anything-c-source-bookmarks
-                           anything-c-source-files-in-current-dir+
                            anything-c-source-locate))
            (sources `(anything-c-source-buffers+
                       anything-c-source-ffap-line
