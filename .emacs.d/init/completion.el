@@ -45,7 +45,8 @@
                             `(anything-git-files:modified-source
                               anything-git-files:untracked-source
                               anything-git-files:all-source
-                              ,@(anything-git-files:submodule-sources 'all))))
+                              ;; ,@(anything-git-files:submodule-sources 'all)
+                              )))
            (other-source '(anything-c-source-recentf
                            anything-c-source-bookmarks
                            anything-c-source-locate))
