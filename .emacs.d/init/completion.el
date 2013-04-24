@@ -19,6 +19,11 @@
 
 ;; anything
 (bundle anything
+  (defvar anything-c-locate-command
+    (cond ((eq system-type 'gnu/linux) "locate -i -r %s")
+          ((eq system-type 'berkeley-unix) "locate -i %s")
+          ((eq system-type 'windows-nt) "es -i -r %s")
+          (t "locate %s")))
   (setq-default anything-enable-shortcuts 'alphabet
                 anything-for-files-prefered-list
                 '(anything-c-source-buffers+
