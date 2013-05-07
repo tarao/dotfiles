@@ -21,3 +21,8 @@ else
 fi
 LS_OPTIONS="-N -T 0 --time-style=long-iso $LS_OPTIONS"
 export LS_OPTIONS
+
+# SUDO_PATH used for completion
+typeset -xT SUDO_PATH sudo_path
+typeset -U sudo_path
+sudo_path=({/usr/local,/usr,/}/sbin(N-/))
