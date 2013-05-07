@@ -1,28 +1,34 @@
-export MANPAGER='less -s'
-export PAGER='less -R'
-whence v >/dev/null && export PAGER=`whence v`
-export EDITOR='vi'
-export TIME_STYLE=long-iso
+ZDOTDIR=~/.zsh
 
-# ls
-if test -x /usr/bin/dircolors ; then
-    if test -f $HOME/.dir_colors ; then
-        eval "`direcolors -b $HOME/.dir_colors`"
-    elif test -f /etc/DIR_COLORS ; then
-        eval "`dircolors -b /etc/DIR_COLORS`"
-    fi
-fi
-if test "$EMACS" = "t" ; then
-    LS_OPTIONS='--color=none';
-    test -I -Q
-    stty coocked pass8 dec nl -echo
+umask 022
+unsetopt nomatch
+
+whence xsel >/dev/null && {
+    function xsel() {
+        [[ -n "$DISPLAY" ]] && command xsel "$@" 2>/dev/null
+    }
+}
+
+# PATH
+if [ "`id -u`" -eq 0 ]; then
+  PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 else
-    LS_OPTIONS='--color=tty'
+  PATH="/usr/local/bin:/usr/bin:/bin:/usr/games"
 fi
-LS_OPTIONS="-N -T 0 --time-style=long-iso $LS_OPTIONS"
-export LS_OPTIONS
+export PATH="$HOME/bin:$PATH"
 
-# SUDO_PATH used for completion
-typeset -xT SUDO_PATH sudo_path
-typeset -U sudo_path
-sudo_path=({/usr/local,/usr,/}/sbin(N-/))
+# ruby
+path=(
+    ~/.gem/ruby/*/bin(N-/)
+    $path
+)
+export PATH
+
+# perl
+function _set_perl_env() {
+    local arch; arch="$(perl -MConfig -e 'print $Config{archname}')"
+    local extlib; extlib="$HOME/extlib/lib/perl/perl5"
+    export PERL5LIB="$extlib:$extlib/$arch"
+    whence cpanm >/dev/null && export PERL_CPANM_OPT="--local-lib=~/extlib"
+}
+whence perl >/dev/null && [[ -d ~/extlib ]] && _set_perl_env

@@ -47,7 +47,7 @@ typeset -Uga preexec_functions
 # utilities
 autoload -Uz is-at-least
 
-source ~/.zsh/env.zsh
+source ~/.zsh/shell-env.zsh
 source ~/.zsh/alias.zsh
 source ~/.zsh/completion.zsh
 source ~/.zsh/zle.zsh
