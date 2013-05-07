@@ -4,9 +4,10 @@ whence v >/dev/null && export PAGER=`whence v`
 export EDITOR='vi'
 export TIME_STYLE=long-iso
 
-for dir in `ls -d ~/.gem/ruby/*/bin`; do
-    PATH="$dir":"$PATH"
-done
+path=(
+    ~/.gem/ruby/*/bin(N-/)
+    $path
+)
 export PATH
 
 if test -x /usr/bin/dircolors ; then
