@@ -29,7 +29,7 @@ _set_path_env
 # perl
 function _set_perl_env() {
     local arch; arch="$(perl -MConfig -e 'print $Config{archname}')"
-    local extlib; extlib="$HOME/extlib/lib/perl/perl5"
+    local extlib; extlib="$HOME/extlib/lib/perl5"
     export PERL5LIB="$extlib:$extlib/$arch"
     whence cpanm >/dev/null && export PERL_CPANM_OPT="--local-lib=~/extlib"
 }
