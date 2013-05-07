@@ -4,22 +4,6 @@ whence v >/dev/null && export PAGER=`whence v`
 export EDITOR='vi'
 export TIME_STYLE=long-iso
 
-# ruby
-path=(
-    ~/.gem/ruby/*/bin(N-/)
-    $path
-)
-export PATH
-
-# perl
-function _set_perl_env() {
-    local arch; arch="$(perl -MConfig -e 'print $Config{archname}')"
-    local extlib; extlib="$HOME/extlib/lib/perl/perl5"
-    export PERL5LIB="$extlib:$extlib/$arch"
-    whence cpanm >/dev/null && export PERL_CPANM_OPT="--local-lib=~/extlib"
-}
-whence perl >/dev/null && [[ -d ~/extlib ]] && _set_perl_env
-
 # ls
 if test -x /usr/bin/dircolors ; then
     if test -f $HOME/.dir_colors ; then
