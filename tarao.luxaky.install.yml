@@ -3,6 +3,7 @@
     .bundle: .bundle
     .gemrc: .gemrc
     .gitconfig: tarao.gitconfig
+    .jshintrc: .jshintrc
     .vimperator: .vimperator
     .vimperatorrc: .vimperatorrc
 .emacs.d/dot:

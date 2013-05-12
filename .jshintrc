@@ -1,0 +1,9 @@
+{   // global
+    "browser" : true,
+    "devel" : true,
+    "jquery" : true,
+
+    // relaxing
+    "loopfunc" : true,
+    "expr" : true
+}
