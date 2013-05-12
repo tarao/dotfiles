@@ -42,6 +42,9 @@
   (eval-after-load-compile 'anything
     (define-key anything-map (kbd "M-n") #'anything-next-source)
     (define-key anything-map (kbd "M-p") #'anything-previous-source))
+  (eval-after-load-compile 'anything-config
+    (dolist (src tarao/anything-other-sources)
+      (add-to-list src '(delayed))))
   (global-set-key [remap execute-extended-command]
                   #'anything-execute-extended-command))
 (bundle descbinds-anything)
