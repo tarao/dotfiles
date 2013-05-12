@@ -18,6 +18,14 @@
     (define-key map (kbd "C-u") 'backward-kill-path-element)))
 
 ;; anything
+(defvar tarao/anything-basic-sources
+  '(anything-c-source-buffers+
+    anything-c-source-ffap-line
+    anything-c-source-ffap-guesser))
+(defvar tarao/anything-other-sources
+  '(anything-c-source-recentf
+    anything-c-source-bookmarks
+    anything-c-source-locate))
 (bundle anything
   (defvar anything-c-locate-command
     (cond ((eq system-type 'gnu/linux) "locate -i -r %s")
@@ -26,13 +34,9 @@
           (t "locate %s")))
   (setq-default anything-enable-shortcuts 'alphabet
                 anything-for-files-prefered-list
-                '(anything-c-source-buffers+
-                  anything-c-source-ffap-line
-                  anything-c-source-ffap-guesser
-                  anything-c-source-recentf
-                  anything-c-source-bookmarks
+                `(,@tarao/anything-basic-sources
                   anything-c-source-files-in-current-dir+
-                  anything-c-source-locate)
+                  ,@tarao/anything-other-sources)
                 anything-complete-sort-candidates t)
   (global-set-key (kbd "C-x b") #'anything-for-files)
   (eval-after-load-compile 'anything
@@ -46,19 +50,15 @@
     (interactive)
     (require 'anything-config)
     (require 'anything-git-files)
-    (let* ((git-source (and (anything-git-files:git-p)
-                            `(anything-git-files:modified-source
-                              anything-git-files:untracked-source
-                              anything-git-files:all-source
-                              ,@(anything-git-files:submodule-sources 'all))))
-           (other-source '(anything-c-source-recentf
-                           anything-c-source-bookmarks
-                           anything-c-source-locate))
-           (sources `(anything-c-source-buffers+
-                      anything-c-source-ffap-line
-                      anything-c-source-ffap-guesser
+    (let* ((git-source (if (anything-git-files:git-p)
+                           `(anything-git-files:modified-source
+                             anything-git-files:untracked-source
+                             anything-git-files:all-source
+                             ,@(anything-git-files:submodule-sources 'all))
+                         '(anything-c-source-files-in-current-dir+)))
+           (sources `(,@tarao/anything-basic-sources
                       ,@git-source
-                      ,@other-source)))
+                      ,@tarao/anything-other-sources)))
       (anything-other-buffer sources "*anything for files*"))))
 (unless (fboundp 'tarao/anything-for-files)
   (fset 'tarao/anything-for-files 'anything-for-files))
