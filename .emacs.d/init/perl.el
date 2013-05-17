@@ -2,34 +2,36 @@
 
 (defconst perl-mode-files '("\\.pl$" "\\.pm$" "\\.t$"))
 
-;; auto-mode
-(setq auto-mode-alist
-      (append (mapcar #'(lambda (x) (cons x 'cperl-mode)) perl-mode-files)
-              auto-mode-alist))
-(fset 'perl-mode 'cperl-mode)
+(bundle cperl-mode
+  ;; auto-mode
+  (setq auto-mode-alist
+        (append (mapcar #'(lambda (x) (cons x 'cperl-mode)) perl-mode-files)
+                auto-mode-alist))
+  (fset 'perl-mode 'cperl-mode)
 
-;; syntax
-(setq-default cperl-indent-level 4
-              cperl-continued-statement-offset 4
-              cperl-close-paren-offset -4
-              cperl-comment-column 40
-              cperl-highlight-variables-indiscriminately t
-              cperl-indent-parens-as-block t
-              cperl-label-offset -4
-              cperl-tab-always-indent nil
-              cperl-font-lock t)
+  ;; syntax
+  (setq-default cperl-indent-level 4
+                cperl-continued-statement-offset 4
+                cperl-close-paren-offset -4
+                cperl-comment-column 40
+                cperl-highlight-variables-indiscriminately t
+                cperl-indent-parens-as-block t
+                cperl-indent-subs-specially nil
+                cperl-label-offset -4
+                cperl-tab-always-indent t
+                cperl-font-lock t)
 
-;; auto-insert package template
-(add-to-list 'auto-insert-alist '("\\.pm$" . ["insert.pm" template-replacer]))
-(add-to-list 'template-replacement-alist '("%Perl-Package%" . pm2package))
-(defun last-member (item list)
-  (let ((right (member item list)))
-    (and right (or (last-member item (cdr right)) right))))
-(defun pm2package (&optional fname)
-  (unless fname (setq fname (buffer-file-name)))
-  (let* ((lib (cdr (last-member "lib" (split-string fname "/"))))
-         (package (mapconcat #'identity lib "::")))
-      (replace-regexp-in-string "\\.pm$" "" package)))
+  ;; auto-insert package template
+  (add-to-list 'auto-insert-alist '("\\.pm$" . ["insert.pm" template-replacer]))
+  (add-to-list 'template-replacement-alist '("%Perl-Package%" . pm2package))
+  (defun last-member (item list)
+    (let ((right (member item list)))
+      (and right (or (last-member item (cdr right)) right))))
+  (defun pm2package (&optional fname)
+    (unless fname (setq fname (buffer-file-name)))
+    (let* ((lib (cdr (last-member "lib" (split-string fname "/"))))
+           (package (mapconcat #'identity lib "::")))
+      (replace-regexp-in-string "\\.pm$" "" package))))
 
 ;; set PERL5LIB
 

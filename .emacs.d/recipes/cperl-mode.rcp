@@ -1,0 +1,3 @@
+(:name cperl-mode
+       :type github
+       :pkgname "jrockway/cperl-mode")
