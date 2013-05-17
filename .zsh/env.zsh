@@ -17,6 +17,7 @@ function _set_path_env() {
     local user_path; user_path=(
         ~/bin
         ~/.gem/ruby/*/bin(N-/) # ruby
+        ~/perl5/perlbrew/perls/current/bin(N-/) #perl
         {,/usr/local,/usr}/bin(N-/)
         {/usr,/usr/local}/games(N-/)
     )
