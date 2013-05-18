@@ -72,17 +72,14 @@ let g:imeoff='cmd'
 " plugin_loader.js
 let g:plugin_loader_roots='~/.vimperator/vimperator-plugins/ ~/.vimperator/plugin-available/ ~/.vimperator/tarao-plugins/';
 js <<EOM
-liberator.globalVariables.plugin_loader_plugins = <>
-    _libly
-    caret-hint
-    commandline-status
-    gmperator
-    hatena-bookmark-search
-    imekeys
-    pluginManager
-    statusline-toolbar
-    switch_language
-</>.toString().split(/\s+/).filter(function(n) n);
+liberator.globalVariables.plugin_loader_plugins = [
+    "_libly",
+    "caret-hint",
+    "commandline-status",
+    "imekeys",
+    "statusline-toolbar",
+    "switch_language",
+];
 EOM
 
 let g:hatena_bookmark_suffix_array='true';
