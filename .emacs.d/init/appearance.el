@@ -35,18 +35,6 @@
     (set-face-foreground face (plist-get attrs :foreground))
     (set-face-background face (plist-get attrs :background))))
 
-;; use darker comment
-(defun set-comment-color (color)
-  (set-face-foreground 'font-lock-comment-delimiter-face color)
-  (set-face-foreground 'font-lock-comment-face color))
-(defun darken-comment ()
-  (interactive)
-  (set-comment-color "gray32"))
-(defun lighten-comment ()
-  (interactive)
-  (set-comment-color "OrangeRed"))
-(darken-comment)
-
 (bundle tarao-elisp
   :features (mode-line-color)
   ;; mode line color
@@ -70,6 +58,27 @@
 
   ;; eof mark
   (global-end-mark-mode))
+
+;; use darker comment
+(defun set-comment-color (color)
+  (set-face-foreground 'font-lock-comment-delimiter-face color)
+  (set-face-foreground 'font-lock-comment-face color))
+(defun darken-comment ()
+  (interactive)
+  (set-comment-color "gray32"))
+(defun lighten-comment ()
+  (interactive)
+  (set-comment-color "OrangeRed"))
+(darken-comment)
+
+;; highlight specific keywords in comments
+(bundle fic-mode
+  (add-hook 'prog-mode-hook #'fic-mode) ;; Emacs 24
+  (eval-after-load-compile 'fic-mode
+    (push "XXX" fic-highlighted-words)
+    (dolist (face '(fic-face fic-author-face))
+      (set-face-foreground face "#d0bf8f")
+      (set-face-background face "gray40"))))
 
 ;; scroll bar
 (bundle yascroll
