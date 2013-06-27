@@ -91,15 +91,15 @@ function git() {
 
 function git-set-remote () {
     if [[ "$1" == '-h'  || "$1" == '--help' || "$1" == 'help' ]]; then
-        echo "Usage: $0 branch remote"
+        echo "Usage: $0 <remote=origin> <branch=CURRENT_BRANCH>"
         return
     fi
-    local branch=$1
-    local remote=$2
-    [[ -z "$branch" ]] &&  branch=master
-    [[ -z "$remote" ]] && remote=origin
-    git config --add branch.$branch.remote $remote
-    git config --add branch.$branch.merge refs/heads/$branch
+    local remote=$1
+    local branch=$2
+    [[ -n "$remote" ]] || remote=origin
+    [[ -n "$branch" ]] || branch=`git rev-parse --abbrev-ref HEAD`
+    git config --add "branch.$branch.remote" "$remote"
+    git config --add "branch.$branch.merge" "refs/heads/$branch"
 }
 
 # file conversion
