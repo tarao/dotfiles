@@ -55,19 +55,21 @@ EOT
 }
 
 function watchdir () {
-    if [[ "$1" != "" ]]; then
-        local dir="$1"; shift
-        if [[ -x "`which inotifywait`" ]]; then
-            ls $dir
-            while true; do
-                inotifywait -q $@ $dir
-            done
-        else
-            echo "$0: inotifywait not found" > /dev/stderr
-        fi
-    else
+    [[ -z "$1" ]] && {
         echo "Usage: $0 <dir> [-e event1 -e event2 ...]"
-    fi
+        return
+    }
+
+    whence inotifywait >/dev/null || {
+        echo "$0: inotifywait not found" > /dev/stderr
+        return
+    }
+
+    local dir="$1"; shift
+    ls $dir
+    while true; do
+        inotifywait -q "$@" "$dir"
+    done
 }
 
 # git-hg compatibility
