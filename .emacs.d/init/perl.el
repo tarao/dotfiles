@@ -131,6 +131,11 @@ is non-nil."
           when sublib collect sublib into sublibs
           finally return (append libs sublibs))))
 
+(defun perl:executable (&optional root)
+  (let ((local (expand-file-name "perl" (or root (perl:git-root)))))
+    (or (and (file-executable-p local) local)
+        "perl")))
+
 (defun perl:lib (lib path)
   (let* ((root (file-name-as-directory (expand-file-name (perl:git-root path))))
          (sym (intern root)))
@@ -187,7 +192,7 @@ invoking the process."
          (local-file (file-relative-name
                       temp-file
                       (file-name-directory buffer-file-name))))
-    (list "perl" (list "-wc" local-file))))
+    (list (perl:executable) (list "-wc" local-file))))
 
 (eval-after-load-compile 'flymake
   (setq flymake-allowed-file-name-masks
