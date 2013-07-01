@@ -186,7 +186,7 @@ invoking the process."
           flymake-allowed-perl-files))
 
 (autoload 'flymake-init-create-temp-buffer-copy "flymake")
-(defun flymake-perl-init ()
+(defadvice flymake-perl-init (around run-local-perl-binary activate)
   (let* ((temp-file (flymake-init-create-temp-buffer-copy
                      'flymake-create-temp-inplace))
          (local-file (file-relative-name
