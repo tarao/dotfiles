@@ -35,7 +35,7 @@
 
 ;; set PERL5LIB
 
-(defun findlib (lib &optional path root multi)
+(defun perl:findlib (lib &optional path root multi)
   "Find LIB in ancestors of PATH until ROOT.
 If MULTI is non-nil, then all occurrence of LIB in the ancestors
 are returned (as a list).  Otherwise, only the first occurrence
@@ -52,10 +52,10 @@ is returned (as a single string)."
     (if multi
         found
       (and found (car found)))))
-(defsubst findlibs (lib &optional path root)
-  (findlib lib path root t))
+(defsubst perl:findlibs (lib &optional path root)
+  (perl:findlib lib path root t))
 
-(defun shell-command-to-string-with-directory (dir cmd)
+(defun perl:shell-command-to-string-with-directory (dir cmd)
   "The same as `shell-command-to-string' but set DIR as the
 process's current directory."
   (with-output-to-string
@@ -63,60 +63,97 @@ process's current directory."
       (let ((default-directory dir))
         (process-file shell-file-name nil t nil shell-command-switch cmd)))))
 
-(autoload 'vc-git-root "vc-git")
+(autoload 'vc-file-getprop "vc-git")
+(autoload 'vc-file-setprop "vc-git")
+(autoload 'vc-git-command "vc-git")
 
-(defun git-submodule-dirs (&optional root)
+(defun perl:git-rev-parse (&rest args)
+  (replace-regexp-in-string
+   "[\r\n]+$" ""
+   (with-output-to-string
+     (with-current-buffer standard-output
+       (apply 'vc-git-command (current-buffer) 0 nil "rev-parse" args)))))
+
+(defun perl:git-root-1 ()
+  (file-name-as-directory (perl:git-rev-parse "--show-toplevel")))
+
+(defun perl:git-root (&optional dir)
+  (or (vc-file-getprop (or dir default-directory) 'git-root)
+      (vc-file-setprop (or dir default-directory) 'git-root (perl:git-root-1))))
+
+(defun perl:git-submodules-by-dot (&optional dotgitmodule)
+  (let ((exp "^[[:space:]]*path[[:space:]]*=[[:space:]]*\\(.*\\)[[:space:]]*$")
+        (result (list)))
+    (with-temp-buffer
+      (insert-file-contents-literally dotgitmodule)
+      (goto-char (point-min))
+      (while (re-search-forward exp nil t)
+        (push (file-name-as-directory (match-string 1)) result))
+      (reverse result))))
+
+(defun perl:git-submodules-by-foreach (&optional root)
+  (let ((default-directory root)
+        (args '("submodule" "--quiet" "foreach" "echo $path")))
+    (loop for module in
+          (split-string
+           (replace-regexp-in-string
+            "[\r\n]+$" ""
+            (with-output-to-string
+              (with-current-buffer standard-output
+                (apply 'vc-git-command (current-buffer) 0 nil args))))
+           "[\r\n]+")
+          if (> (length module) 0)
+          collect (file-name-as-directory module))))
+
+(defun perl:git-submodule-dirs (&optional root)
   "List submodule directories of a git repository ROOT.
 If ROOT is omitted, then the repository root of the buffer file
 is used."
-  (unless root (setq root (vc-git-root (buffer-file-name))))
-  (let* ((root (file-name-as-directory root))
-         (cmd "git submodule status")
-         (status (shell-command-to-string-with-directory root cmd))
-         (prefix-length 42))
-    (loop for l in (split-string status "\n")
-          for status = (replace-regexp-in-string " (.*)$" "" l)
-          when (> (length status) prefix-length)
-          collect (concat root (substring status prefix-length)))))
+  (let* ((root (or root (perl:git-root)))
+         (dotgitmodule (expand-file-name ".gitmodules" root)))
+    (if (file-exists-p dotgitmodule)
+        (perl:git-submodules-by-dot dotgitmodule)
+      (perl:git-submodules-by-foreach root))))
 
-(defun git-findlib (lib &optional path nosubmodule)
+(defun perl:git-findlib (lib &optional path nosubmodule)
   "Find LIB under the root of the git repository of PATH.
 If PATH is omitted, then the repository root of the buffer file
 is used.  Submodule directories are searched unless NOSUBMODULE
 is non-nil."
   (unless path (setq path (buffer-file-name)))
   (let* ((path (expand-file-name path))
-         (root (file-name-as-directory (vc-git-root path)))
-         (libs (findlib lib root root)))
+         (root (file-name-as-directory (perl:git-root path)))
+         (libs (perl:findlib lib root root)))
     (when libs (setq libs (list libs)))
-    (loop for dir in (and (not nosubmodule) (git-submodule-dirs root))
-          for dir = (file-name-as-directory dir)
-          for sublib = (findlib lib dir dir)
+    (loop for dir in (and (not nosubmodule) (perl:git-submodule-dirs root))
+          for dir = (file-name-as-directory (expand-file-name dir root))
+          for sublib = (perl:findlib lib dir dir)
           when sublib collect sublib into sublibs
           finally return (append libs sublibs))))
 
-(defun git-perl-lib (lib path)
-  (let* ((root (file-name-as-directory (expand-file-name (vc-git-root path))))
+(defun perl:lib (lib path)
+  (let* ((root (file-name-as-directory (expand-file-name (perl:git-root path))))
          (sym (intern root)))
     (or (get sym :perl-lib)
-        (put sym :perl-lib (git-findlib lib path)))))
+        (put sym :perl-lib (perl:git-findlib lib path)))))
 
 (defvar perl-lib nil)
 (make-variable-buffer-local 'perl-lib)
 (defconst perl-lib-env-name "PERL5LIB")
 
-(defun add-perl-lib (&rest libs)
+(defun perl:add-lib (&rest libs)
   "Add directory names in LIBS to Perl library paths."
-  (let* ((path (expand-file-name (or (buffer-file-name) default-directory)))
-         (git-root (vc-git-root path)) (root (or git-root "/")))
+  (let* ((path (expand-file-name default-directory))
+         (git-root (perl:git-root path)) (root (or git-root "/")))
     (dolist (lib libs)
       (setq perl-lib
-            (append perl-lib
-                    (and git-root (git-perl-lib lib path))
-                    (findlibs lib path root)))))
+            (delete-dups
+             (append perl-lib
+                     (and git-root (perl:lib lib path))
+                     (perl:findlibs lib path root))))))
   perl-lib)
 
-(defun update-perl-lib (libs)
+(defun perl:update-lib (libs)
   (let ((paths (split-string (or (getenv perl-lib-env-name) "") ":")))
     (dolist (l libs) (unless (member l paths) (push l paths)))
     (setenv perl-lib-env-name (mapconcat #'identity paths ":"))))
@@ -128,7 +165,7 @@ The old value of the environment variable is restored after
 invoking the process."
   (if perl-lib
       (let ((oldenv (getenv perl-lib-env-name)))
-        (update-perl-lib perl-lib)
+        (perl:update-lib perl-lib)
         ad-do-it
         (setenv perl-lib-env-name oldenv)) ; restore
     ad-do-it))
@@ -159,7 +196,7 @@ invoking the process."
 
 (add-hook 'cperl-mode-hook
           #'(lambda ()
-              (add-perl-lib "lib")
+              (perl:add-lib "lib")
               (flymake-mode 1)
               (when (boundp 'flymake-err-line-patterns)
                 (set (make-local-variable 'flymake-err-line-patterns)
