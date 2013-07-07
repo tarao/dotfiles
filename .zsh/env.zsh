@@ -19,6 +19,7 @@ function _set_path_env() {
         ~/.gem/ruby/*/bin(N-/) # ruby
         ~/perl5/perlbrew/perls/current/bin(N-/) # perl
         ~/extlib/bin(N-/)                       # perl
+        ~/node_modules/.bin(N-/) # js
         {,/usr/local,/usr}/bin(N-/)
         {/usr,/usr/local}/games(N-/)
     )
