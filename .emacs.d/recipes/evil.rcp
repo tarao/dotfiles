@@ -8,4 +8,5 @@
        :url "git://gitorious.org/evil/evil.git"
        :features evil
        :depends undo-tree
-       :build (("make" "all")))
+       :build (("make" "all"))
+       :info nil)
