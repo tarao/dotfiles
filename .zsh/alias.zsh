@@ -69,3 +69,7 @@ function { # local scope
     alias g++="command g++ -lstdc++ -std=gnu++98 -pedantic $w"
     alias g++now="command g++ -lstdc++ -std=gnu++98 -pedantic"
 }
+
+whence rlwrap >/dev/null && {
+    alias tinyrepl="rlwrap tinyrepl"
+}
