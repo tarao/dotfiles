@@ -34,6 +34,7 @@ alias whead='wget -S -O /dev/null'
 function wexif() {
     exif <(wget --no-check-certificate -O - "$@" 2>/dev/null)
 }
+alias xsel='xsel -b'
 
 function ssh () {
     local cmd; cmd=(command ssh)
