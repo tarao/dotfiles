@@ -74,6 +74,7 @@
 ;; highlight specific keywords in comments
 (bundle fic-mode
   (add-hook 'prog-mode-hook #'fic-mode) ;; Emacs 24
+  (add-hook 'cperl-mode-hook #'fic-mode)
   (eval-after-load-compile 'fic-mode
     (push "XXX" fic-highlighted-words)
     (dolist (face '(fic-face fic-author-face))
