@@ -53,7 +53,7 @@ function grep () {
 function diff () {
     whence colordiff >/dev/null && [ -n "$PAGER" ] && {
         colordiff -u "$@" | ${=PAGER}
-    } || comand diff "$@"
+    } || command diff "$@"
 }
 function last () {
     [ -n "$PAGER" ] && {
