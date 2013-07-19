@@ -72,18 +72,30 @@ function watchdir () {
     done
 }
 
-# git-hg compatibility
 function git() {
+    # git-hg compatibility
     if [[ "$vcs" = 'hg' ]]; then
         local args; args=`git2hg $@`
         hg ${=args}
+
+    # git merge default option
     elif [[ "$1" = 'merge' ]]; then
         shift
         if [[ "$1" = -* ]]; then
-            command git merge $@
+            command git merge "$@"
         else
-            command git merge --no-ff $@
+            command git merge --no-ff "$@"
         fi
+
+    # git grep default option
+    elif [[ "$1" = 'grep' ]]; then
+        shift
+        if [[ "$1" = -* ]]; then
+            command git grep "$@"
+        else
+            command git grep --line-number --heading --break "$@"
+        fi
+
     else
         command git $@
     fi
