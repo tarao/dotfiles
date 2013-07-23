@@ -18,7 +18,7 @@
   (global-git-gutter-mode t))
 
 ;; git-messenger
-(bundle! git-messenger)
+(bundle git-messenger)
 
 ;; eldoc
 (setq-default eldoc-idle-delay 0
