@@ -17,4 +17,4 @@
     name = tarao
     email = tarao.gnn@gmail.com
 [push]
-    default = current
+    default = upstream
