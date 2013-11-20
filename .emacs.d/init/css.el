@@ -16,7 +16,8 @@
       (less-css-compile)))
   (defun less-css-compile-with-timer ()
     (run-at-time "0 sec" nil #'less-css-compile-as))
-  (add-hook 'less-css-mode-hook
-            #'(lambda ()
-                (add-hook 'after-save-hook
-                          #'less-css-compile-with-timer nil t))))
+  ;; (add-hook 'less-css-mode-hook
+  ;;           #'(lambda ()
+  ;;               (add-hook 'after-save-hook
+  ;;                         #'less-css-compile-with-timer nil t)))
+  )
