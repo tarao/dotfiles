@@ -11,6 +11,10 @@
     wdiff = diff --color-words
 [color]
     ui = auto
+[pager]
+    diff = type diff-highlight >/dev/null && (diff-highlight|less) || less
+    show = type diff-highlight >/dev/null && (diff-highlight|less) || less
+    log = type diff-highlight >/dev/null && (diff-highlight|less) || less
 [tig]
     line-graphics = ascii
 [user]
