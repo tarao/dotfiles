@@ -23,7 +23,7 @@ function _set_path_env() {
         {/usr,/usr/local}/games(N-/)
     )
     path=($user_path $path)
-    [ "`id -u`" -eq 0 ] && path=($root_path $path)
+    [ "`id -u`" -eq 0 ] && path=($su_path $path)
     typeset -gxU path
 }
 _set_path_env
