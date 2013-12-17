@@ -16,9 +16,8 @@ function _set_path_env() {
     )
     local user_path; user_path=(
         ~/bin
+        $(whence plenv>/dev/null && plenv root)/shims(N-/) # perl
         ~/.gem/ruby/*/bin(N-/) # ruby
-        ~/perl5/perlbrew/perls/current/bin(N-/) # perl
-        ~/extlib/bin(N-/)                       # perl
         ~/node_modules/.bin(N-/) # js
         {,/usr/local,/usr}/bin(N-/)
         {/usr,/usr/local}/games(N-/)
@@ -31,9 +30,12 @@ _set_path_env
 
 # perl
 function _set_perl_env() {
-    local arch; arch="$(perl -MConfig -e 'print $Config{archname}')"
-    local extlib; extlib="$HOME/extlib/lib/perl5"
-    export PERL5LIB="$extlib:$extlib/$arch"
-    whence cpanm >/dev/null && export PERL_CPANM_OPT="--local-lib=~/extlib"
+    whence plenv >/dev/null && {
+        eval "$(plenv init -)"
+        local global_version=$(plenv global)
+        [[ -n "$global_version" ]] || return
+        PERL5LIB=$(PERL_VERSION="$global_version" perl -e'print join ";",@INC')
+        export PERL5LIB
+    }
 }
-whence perl >/dev/null && [[ -d ~/extlib ]] && _set_perl_env
+_set_perl_env
