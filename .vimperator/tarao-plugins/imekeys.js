@@ -48,7 +48,7 @@
                 if (line.indexOf(name) < 0) return;
                 if (new RegExp('^\\s+('+name+'[.0-9]*)\\s+').test(line)) {
                     libuim = open(RegExp.$1);
-                    return true;
+                    if (libuim) return true;
                 }
             });
         }
