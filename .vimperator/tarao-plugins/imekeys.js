@@ -1,4 +1,16 @@
 (function() {
+    var system = function(command) {
+        var echomsg = liberator.echomsg;
+        liberator.echomsg = function(){};
+        try {
+            return io.system(command);
+        } finally {
+            liberator.echomsg = echomsg;
+        }
+    };
+
+    var modules = {};
+
     var ibus = (function() {
         var cmd = function(action) {
             return [
@@ -19,7 +31,90 @@
             };
         }
     })();
-    liberator.plugins.ibus = ibus;
+    modules.ibus = liberator.plugins.ibus = ibus;
+
+    var uim = (function() {
+        Components.utils.import('resource://gre/modules/ctypes.jsm');
+        var open = function(lib) {
+            try { return ctypes.open(lib); } catch (err) { /* ignore */ }
+        };
+        var name = 'libuim.so';
+        var libuim = open(name);
+
+        if (!libuim && io.run('which', ['/sbin/ldconfig'])) {
+            // try to load libuim.so.VERSION
+            var list = system('/sbin/ldconfig -p');
+            list.split(/[\r\n]/).some(function(line) {
+                if (line.indexOf(name) < 0) return;
+                if (new RegExp('^\\s+('+name+'[.0-9]*)\\s+').test(line)) {
+                    libuim = open(RegExp.$1);
+                    return true;
+                }
+            });
+        }
+        if (!libuim) return;
+
+        __context__.onUnload = function(){ libuim.close(); };
+
+        var send = (function() {
+            var abi = ctypes.default_abi;
+            var disconnect = ctypes.FunctionType(abi, ctypes.void_t);
+            var api = {
+                init: libuim.declare(
+                    'uim_helper_init_client_fd', abi,
+                    ctypes.int, disconnect.ptr
+                ),
+                close: libuim.declare(
+                    'uim_helper_close_client_fd', abi,
+                    ctypes.void_t, ctypes.int
+                ),
+                send: libuim.declare(
+                    'uim_helper_send_message', abi,
+                    ctypes.void_t, ctypes.int, ctypes.char.ptr
+                )
+            };
+            return function(commands) {
+                var fd = api.init(disconnect.ptr(function(){ fd = -1; }));
+                if (fd < 0) return;
+                commands = Array.prototype.slice.call(arguments);
+                commands.push('');
+                api.send(fd, commands.join("\n"));
+                api.close(fd);
+            };
+        })();
+
+        // detect default IM
+        var im = liberator.globalVariables['uim_im'];
+        if (!im && io.run('which', ['uim-sh'])) {
+            var slist = function() {
+                return '('+Array.prototype.slice.call(arguments).join(' ')+')';
+            };
+            im = system([
+                'uim-sh',
+                '-e',
+                slist('or',
+                      slist('and',
+                            'custom-activate-default-im-name?',
+                            'default-im-name'),
+                      slist('and',
+                            'enable-im-toggle?',
+                            'toggle-im-alt-im'),
+                      slist('car',
+                            'enabled-im-list'))
+            ].join(' ')).replace(/^#f$/, '');
+        }
+
+        return {
+            on: function() {
+                if (!im) return;
+                send('im_change_this_application_only', im);
+            },
+            off: function() {
+                send('im_change_this_application_only', 'direct');
+            }
+        };
+    })();
+    modules.uim = liberator.plugins.uim = uim;
 
     var sendKeys = (function() {
         var methods = {};
@@ -71,9 +166,10 @@
     var ime = (function() {
         var self = {};
 
+        var moduleNames = Object.keys(modules);
         var methods = [];
         for (var m in sendKeys.methods) methods.push(m);
-        var all = ['ibus'].concat(methods).join(',');
+        var all = moduleNames.concat(methods).join(',');
 
         var keys = function(action) {
             var k = {};
@@ -88,10 +184,12 @@
             self[name] = function() {
                 var filter = liberator.globalVariables['imekeys_methods'];
                 filter = (filter || all).split(/[,| ]/);
-                if (filter.indexOf('ibus') >= 0 && ibus) {
-                    ibus[name]();
-                    return;
-                }
+                if (moduleNames.some(function(m) {
+                    if (filter.indexOf(m) >= 0 && modules[m]) {
+                        modules[m][name]();
+                        return true;
+                    }
+                })) return;
                 sendKeys(keys(prop), filter);
             };
             var varname = 'ime'+name;
