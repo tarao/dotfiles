@@ -36,6 +36,9 @@ function wexif() {
 }
 alias xsel='xsel -b'
 
+alias ce='carton exec --'
+alias be='bundle exec --'
+
 function ssh () {
     local cmd; cmd=(command ssh)
     whence zssh >/dev/null && cmd=(zssh -z \^\] --)
