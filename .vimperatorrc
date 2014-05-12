@@ -11,9 +11,10 @@ set hinttags+="|//*[@role='button' or @role='checkbox' or @role='combobox' or @r
 set hinttags+="|//*[@tabindex]"
 set hintchars=hjklgfdsayuioptrewq
 
+highlight ModeMsg background-color: white; color: #666666
 :style -name commandline-ime chrome://* #liberator-commandline-command input {ime-mode: inactive;}
 :style -name toolbar chrome://* #liberator-customize-toolbar { -moz-appearance: none ! important; }
-highlight ModeMsg background-color: white; color: #666666
+:style -name statusbarpanel chrome://* #hBookmark-statusBarPanel { -moz-appearance: none ! important; border: none ! important; }
 
 " ================ KEY BINDINGS ================
 
