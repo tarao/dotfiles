@@ -1,4 +1,4 @@
-set gui=tabs,nonavigation
+set gui=nonavigation
 set showstatuslinks=2
 set ic
 set visualbell

@@ -21,15 +21,9 @@
         ['tabb[ar]'],
         'Toggle tab bar',
         function() {
-            if (typeof TreeStyleTabService != 'undefined') {
-                var b;
-                var sv = (b = TreeStyleTabService.browser) && b.treeStyleTab;
-                sv && sv.toggleAutoHide();
-            } else {
-                var f = (options.parseOpt('gui').optionValues||[]);
-                var t = 'tabs';
-                liberator.execute('set gui='+(f.indexOf(t)<0 ? '' : 'no')+t);
-            }
+            var f = (options.parseOpt('gui').optionValues||[]);
+            var t = 'tabs';
+            liberator.execute('set gui='+(f.indexOf(t)<0 ? '' : 'no')+t);
         });
 
     var initializeTabs = function() {
