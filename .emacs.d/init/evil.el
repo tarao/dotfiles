@@ -120,7 +120,7 @@ to next line."
 ;; plugins
 
 (bundle evil-surround ;; surround operator
-  (global-surround-mode 1))
+  (global-evil-surround-mode 1))
 
 (bundle color-moccur)
 (bundle tarao-evil-plugins
