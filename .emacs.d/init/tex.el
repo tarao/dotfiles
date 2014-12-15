@@ -1,4 +1,5 @@
 (bundle auctex
+  :checkout "61fbbce678e4ad570672b50712f951dc1e6aa02d"
   (defconst TeX-default-mode 'japanese-latex-mode)
   (defconst TeX-mode-files '("\\.sty$" "\\.tex$"))
 
