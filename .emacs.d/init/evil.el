@@ -132,7 +132,7 @@ to next line."
   (global-evil-operator-comment-mode 1)
 
   (global-evil-operator-moccur-mode 1)
-  (eval-after-load-compile 'color-moccur
+  (with-eval-after-load-feature 'color-moccur
     (define-key moccur-mode-map (kbd ":") #'tarao/anything-for-files)
     (define-key moccur-mode-map (kbd "M-;") #'tarao/anything-for-files))
 
@@ -155,7 +155,7 @@ to next line."
 ;; patches
 
 ;; yaicomplete
-(eval-after-load-compile 'yaicomplete
+(with-eval-after-load-feature 'yaicomplete
   ;; inhibit yaicomplete in ex-mode minibuffer
   (add-to-list 'yaicomplete-exclude 'evil-ex-current-buffer))
 
@@ -182,20 +182,20 @@ is a kind of temporary one which is not confirmed yet."
 
 ;; view mode
 (add-hook 'view-mode-hook #'evil-initialize-state)
-(eval-after-load-compile 'view
+(with-eval-after-load-feature 'view
   (evil-define-key 'motion view-mode-map (kbd "v")
     #'(lambda () (interactive) (view-mode 0))))
 
 ;; dired mode
-(eval-after-load-compile 'dired
+(with-eval-after-load-feature 'dired
   (evil-define-key 'normal dired-mode-map "c" #'dired-do-copy))
 
 ;; multi-mode
-(eval-after-load-compile 'multi-mode-util
+(with-eval-after-load-feature 'multi-mode-util
   (bundle multi-mode+evil))
 
 ;; howm
-(eval-after-load-compile 'howm
+(with-eval-after-load-feature 'howm
   ;; menu
   (evil-make-overriding-map howm-menu-mode-map 'normal)
   (add-hook 'howm-menu-hook
@@ -217,7 +217,7 @@ is a kind of temporary one which is not confirmed yet."
         (forward-line count)
         (evil-open-above 1))
     (evil-open-below count)))
-(eval-after-load-compile 'mew-key
+(with-eval-after-load-feature 'mew-key
   ;; mew-summary-mode key maps
   (evil-make-overriding-map mew-summary-mode-map 'normal)
   (evil-add-hjkl-bindings mew-summary-mode-map 'normal
@@ -238,6 +238,6 @@ is a kind of temporary one which is not confirmed yet."
 
 ;; hatena-diary
 (push 'hatena:d:list-mode evil-motion-state-modes)
-(eval-after-load-compile 'hatena-diary
+(with-eval-after-load-feature 'hatena-diary
   (evil-make-overriding-map hatena:d:list-mode-map)
   (evil-add-hjkl-bindings hatena:d:list-mode-map 'motion))

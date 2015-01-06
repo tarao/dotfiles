@@ -2,7 +2,7 @@
 (bundle go-autocomplete)
 (bundle go-eldoc)
 (bundle go-mode
-  (eval-after-load-compile 'go-mode
+  (with-eval-after-load-feature 'go-mode
     (require 'go-autocomplete)
     (setq gofmt-command "goimports")
     (add-hook 'go-mode-hook #'go-eldoc-setup)

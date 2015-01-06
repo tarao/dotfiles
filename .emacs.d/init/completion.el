@@ -39,10 +39,10 @@
                   ,@tarao/anything-other-sources)
                 anything-complete-sort-candidates t)
   (global-set-key (kbd "C-x b") #'anything-for-files)
-  (eval-after-load-compile 'anything
+  (with-eval-after-load-feature 'anything
     (define-key anything-map (kbd "M-n") #'anything-next-source)
     (define-key anything-map (kbd "M-p") #'anything-previous-source))
-  (eval-after-load-compile 'anything-config
+  (with-eval-after-load-feature 'anything-config
     (dolist (src tarao/anything-other-sources)
       (add-to-list src '(delayed))))
   (global-set-key [remap execute-extended-command]

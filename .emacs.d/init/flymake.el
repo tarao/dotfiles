@@ -7,7 +7,7 @@
   (before flymake-force-check-was-interrupted activate)
   (setq flymake-check-was-interrupted t))
 
-(eval-after-load-compile 'flymake
+(with-eval-after-load-feature 'flymake
   ;; show errors on minibuffer
   (require 'flymake-minibuffer)
 

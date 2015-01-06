@@ -1,7 +1,7 @@
 (bundle term+)
 (bundle term+mux)
 
-(eval-after-load-compile 'term+
+(with-eval-after-load-feature 'term+
   (require 'xterm-256color)
   (let ((vec [unspecified
               "black"   "#aa0000" "#00aa00" "#aa5500"
@@ -16,13 +16,13 @@
       (setq ansi-term-color-vector vec)))
   (bundle! term+key-intercept)
   (bundle! term+mode)
-  (eval-after-load-compile 'evil (bundle! term+evil))
-  (eval-after-load-compile 'anything
+  (with-eval-after-load-feature 'evil (bundle! term+evil))
+  (with-eval-after-load-feature 'anything
     (define-key term+char-map (kbd "M-;") #'anything-for-files)
     (define-key term+line-map (kbd "M-;") #'anything-for-files))
   (bundle! term+anything-shell-history))
 
-(eval-after-load-compile 'term+mux
+(with-eval-after-load-feature 'term+mux
   (define-key term+char-map (kbd "C-z") term+mux-map)
   (setq term+mux-session-host-color-alist
         '(("io"     . "#8fb28f")

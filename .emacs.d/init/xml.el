@@ -29,7 +29,7 @@
                 zencoding-insert-flash-time 0.2)
   (add-hook 'nxml-mode-hook #'zencoding-mode)
 
-  (eval-after-load-compile 'zencoding-mode
+  (with-eval-after-load-feature 'zencoding-mode
     (define-key zencoding-mode-keymap (kbd "C-j")
       #'zencoding-expand-line)
     (define-key zencoding-preview-keymap (kbd "RET")

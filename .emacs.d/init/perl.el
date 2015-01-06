@@ -194,7 +194,7 @@ invoking the process."
                       (file-name-directory buffer-file-name))))
     (list (perl:executable) (list "-wc" local-file))))
 
-(eval-after-load-compile 'flymake
+(with-eval-after-load-feature 'flymake
   (setq flymake-allowed-file-name-masks
         (append flymake-allowed-file-name-masks
                 flymake-allowed-perl-file-name-masks)))

@@ -3,24 +3,20 @@
   (setq user-emacs-directory (file-name-directory load-file-name)))
 (add-to-list 'load-path user-emacs-directory)
 
-;; el-get
-(add-to-list 'load-path (locate-user-emacs-file "el-get/el-get"))
+;; bundle (an El-Get wrapper)
 (setq-default el-get-dir (locate-user-emacs-file "el-get")
               el-get-emacswiki-base-url
               "http://raw.github.com/emacsmirror/emacswiki.org/master/")
-(unless (require 'el-get nil 'noerror)
+(add-to-list 'load-path (locate-user-emacs-file "el-get/bundle"))
+(unless (require 'bundle nil 'noerror)
   (with-current-buffer
       (url-retrieve-synchronously
-       "http://raw.github.com/dimitri/el-get/master/el-get-install.el")
-    (let (el-get-master-branch)
-      (goto-char (point-max))
-      (eval-print-last-sexp))))
+       "http://raw.github.com/tarao/bundle-el/master/bundle-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
 (add-to-list 'el-get-recipe-path (locate-user-emacs-file "recipes"))
 
-;; bundle - an el-get wrapper
-(add-to-list 'el-get-sources
-             '(:name bundle :type github :pkgname "tarao/bundle-el"))
-(el-get 'sync 'bundle)
+(bundle with-eval-after-load-feature)
 
 ;; load init files
 (bundle! emacs-jp/init-loader
