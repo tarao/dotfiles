@@ -1,4 +1,6 @@
-(eval-when-compile
+(eval-when-compile (require 'cl))
+
+(eval-when (compile)
   (unless (require 'mew nil t)
     ;; suppress compiler warnings
     (defvar mew-summary-mode-map nil)

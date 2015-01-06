@@ -1,7 +1,5 @@
 (bundle term+)
-(bundle term+mux)
-
-(with-eval-after-load-feature 'term+
+(with-eval-after-load-feature (term term+)
   (require 'xterm-256color)
   (let ((vec [unspecified
               "black"   "#aa0000" "#00aa00" "#aa5500"
@@ -16,19 +14,22 @@
       (setq ansi-term-color-vector vec)))
   (bundle! term+key-intercept)
   (bundle! term+mode)
-  (with-eval-after-load-feature 'evil (bundle! term+evil))
-  (with-eval-after-load-feature 'anything
-    (define-key term+char-map (kbd "M-;") #'anything-for-files)
-    (define-key term+line-map (kbd "M-;") #'anything-for-files))
-  (bundle! term+anything-shell-history))
+  (bundle! term+anything-shell-history)
+  (with-eval-after-load-feature 'evil (bundle! term+evil)))
 
-(with-eval-after-load-feature 'term+mux
-  (define-key term+char-map (kbd "C-z") term+mux-map)
-  (setq term+mux-session-host-color-alist
-        '(("io"     . "#8fb28f")
-          ("argo"   . "#8fb28f")
-          ("phecda" . "#8fb28f")
-          ("luxaky" . "#8c8ce8")
-          ("nino"   . "#8c8ce8")))
-  (run-hook-with-args 'term+mux-new-session-hook
-                      term+mux-default-session t))
+(bundle anything
+  (with-eval-after-load-feature 'term+
+    (define-key term+char-map (kbd "M-;") #'anything-for-files)
+    (define-key term+line-map (kbd "M-;") #'anything-for-files)))
+
+(bundle term+mux
+  (with-eval-after-load-feature 'term+mux
+    (define-key term+char-map (kbd "C-z") term+mux-map)
+    (setq term+mux-session-host-color-alist
+          '(("io"     . "#8fb28f")
+            ("argo"   . "#8fb28f")
+            ("phecda" . "#8fb28f")
+            ("luxaky" . "#8c8ce8")
+            ("nino"   . "#8c8ce8")))
+    (run-hook-with-args 'term+mux-new-session-hook
+                        term+mux-default-session t)))

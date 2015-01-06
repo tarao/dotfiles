@@ -138,11 +138,12 @@ to next line."
 
   ;; key bindings
 
-  (evil-define-keys
-   (outer "f" evil-a-between)
-   (inner "f" evil-inner-between)
-   ((ex search) "C-r" evil-ex-paste-from-register)
-   ) ;; evil-define-keys
+  (with-eval-after-load-feature 'evil
+    (evil-define-keys
+     (outer "f" evil-a-between)
+     (inner "f" evil-inner-between)
+     ((ex search) "C-r" evil-ex-paste-from-register)
+     )) ;; evil-define-keys
 
   ;; others
 
@@ -154,90 +155,94 @@ to next line."
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; patches
 
-;; yaicomplete
-(with-eval-after-load-feature 'yaicomplete
-  ;; inhibit yaicomplete in ex-mode minibuffer
-  (add-to-list 'yaicomplete-exclude 'evil-ex-current-buffer))
+(bundle evil
+  ;; yaicomplete
+  (with-eval-after-load-feature 'yaicomplete
+    ;; inhibit yaicomplete in ex-mode minibuffer
+    (add-to-list 'yaicomplete-exclude 'evil-ex-current-buffer))
 
-;; skk
-(defadvice update-buffer-local-cursor-color
-  (around evil-update-buffer-local-cursor-color-in-insert-state activate)
-  "Allow ccc to update cursor color only when we are in insert
-state and in `skk-j-mode'."
-  (when (and (eq evil-state 'insert) (boundp 'skk-j-mode) skk-j-mode)
-    ad-do-it))
-(defadvice evil-refresh-cursor
-  (around evil-refresh-cursor-unless-skk-mode activate)
-  "Allow ccc to update cursor color only when we are in insert
-state and in `skk-j-mode'."
-  (unless (and (eq evil-state 'insert) (boundp 'skk-j-mode) skk-j-mode)
-    ad-do-it))
-(defadvice evil-ex-search-update-pattern
-  (around evil-inhibit-ex-search-update-pattern-in-skk-henkan activate)
-  "Inhibit search pattern update during `skk-henkan-mode'.
-This is reasonable since inserted text during `skk-henkan-mode'
-is a kind of temporary one which is not confirmed yet."
-  (unless (and (boundp 'skk-henkan-mode) skk-henkan-mode)
-    ad-do-it))
+  ;; skk
+  (defadvice update-buffer-local-cursor-color
+    (around evil-update-buffer-local-cursor-color-in-insert-state activate)
+    "Allow ccc to update cursor color only when we are in insert
+  state and in `skk-j-mode'."
+    (when (and (eq evil-state 'insert) (boundp 'skk-j-mode) skk-j-mode)
+      ad-do-it))
+  (defadvice evil-refresh-cursor
+    (around evil-refresh-cursor-unless-skk-mode activate)
+    "Allow ccc to update cursor color only when we are in insert
+  state and in `skk-j-mode'."
+    (unless (and (eq evil-state 'insert) (boundp 'skk-j-mode) skk-j-mode)
+      ad-do-it))
+  (defadvice evil-ex-search-update-pattern
+    (around evil-inhibit-ex-search-update-pattern-in-skk-henkan activate)
+    "Inhibit search pattern update during `skk-henkan-mode'.
+  This is reasonable since inserted text during `skk-henkan-mode'
+  is a kind of temporary one which is not confirmed yet."
+    (unless (and (boundp 'skk-henkan-mode) skk-henkan-mode)
+      ad-do-it))
 
-;; view mode
-(add-hook 'view-mode-hook #'evil-initialize-state)
-(with-eval-after-load-feature 'view
-  (evil-define-key 'motion view-mode-map (kbd "v")
-    #'(lambda () (interactive) (view-mode 0))))
+  ;; view mode
+  (add-hook 'view-mode-hook #'evil-initialize-state)
+  (with-eval-after-load-feature (evil view)
+    (evil-define-key 'motion view-mode-map (kbd "v")
+      #'(lambda () (interactive) (view-mode 0))))
 
-;; dired mode
-(with-eval-after-load-feature 'dired
-  (evil-define-key 'normal dired-mode-map "c" #'dired-do-copy))
+  ;; dired mode
+  (with-eval-after-load-feature (evil dired)
+    (evil-define-key 'normal dired-mode-map "c" #'dired-do-copy))
 
-;; multi-mode
-(with-eval-after-load-feature 'multi-mode-util
-  (bundle multi-mode+evil))
+  ;; multi-mode
+  (with-eval-after-load-feature 'multi-mode-util
+    (bundle multi-mode+evil))
 
-;; howm
-(with-eval-after-load-feature 'howm
-  ;; menu
-  (evil-make-overriding-map howm-menu-mode-map 'normal)
-  (add-hook 'howm-menu-hook
-            #'(lambda () (define-key howm-menu-mode-local-map ":" nil)))
+  ;; howm
+  (with-eval-after-load-feature (evil howm)
+    ;; menu
+    (evil-make-overriding-map howm-menu-mode-map 'normal)
+    (add-hook 'howm-menu-hook
+              #'(lambda () (define-key howm-menu-mode-local-map ":" nil)))
 
-  ;; list
-  (evil-make-overriding-map howm-view-summary-mode-map 'normal)
-  (evil-define-key 'normal howm-view-summary-mode-map
-    "j" (lookup-key evil-motion-state-map "j")
-    "k" (lookup-key evil-motion-state-map "k")
-    "J" 'evil-scroll-down
-    "K" 'evil-scroll-up))
+    ;; list
+    (evil-make-overriding-map howm-view-summary-mode-map 'normal)
+    (evil-define-key 'normal howm-view-summary-mode-map
+      "j" (lookup-key evil-motion-state-map "j")
+      "k" (lookup-key evil-motion-state-map "k")
+      "J" 'evil-scroll-down
+      "K" 'evil-scroll-up))
 
-;; mew
-(defun mew-draft-evil-open-below (count)
-  (interactive "p")
-  (if (get-text-property (point) 'read-only)
-      (progn
-        (forward-line count)
-        (evil-open-above 1))
-    (evil-open-below count)))
-(with-eval-after-load-feature 'mew-key
-  ;; mew-summary-mode key maps
-  (evil-make-overriding-map mew-summary-mode-map 'normal)
-  (evil-add-hjkl-bindings mew-summary-mode-map 'normal
-    "h" (lookup-key mew-summary-mode-map "h")
-    "l" (lookup-key mew-summary-mode-map "l")
-    "G" (lookup-key evil-motion-state-map "G")
-    "J" (lookup-key evil-motion-state-map "J")
-    "K" (lookup-key evil-motion-state-map "K")
-    ";" (lookup-key evil-motion-state-map ";"))
-  ;; mew-message-mode key maps
-  (evil-make-overriding-map mew-message-mode-map 'normal)
-  (evil-add-hjkl-bindings mew-message-mode-map 'normal)
-  ;; mew-draft-mode key maps
-  (dolist (map (list mew-draft-header-map mew-draft-body-map))
-    (evil-define-key 'normal map
-      "o" #'mew-draft-evil-open-below
-      "q" #'mew-draft-kill)))
+  ;; mew
+  (defun mew-draft-evil-open-below (count)
+    (interactive "p")
+    (if (get-text-property (point) 'read-only)
+        (progn
+          (forward-line count)
+          (evil-open-above 1))
+      (evil-open-below count)))
+  (with-eval-after-load-feature 'mew-key
+    ;; mew-summary-mode key maps
+    (evil-make-overriding-map mew-summary-mode-map 'normal)
+    (evil-add-hjkl-bindings mew-summary-mode-map 'normal
+      "h" (lookup-key mew-summary-mode-map "h")
+      "l" (lookup-key mew-summary-mode-map "l")
+      "G" (lookup-key evil-motion-state-map "G")
+      "J" (lookup-key evil-motion-state-map "J")
+      "K" (lookup-key evil-motion-state-map "K")
+      ";" (lookup-key evil-motion-state-map ";"))
+    ;; mew-message-mode key maps
+    (evil-make-overriding-map mew-message-mode-map 'normal)
+    (evil-add-hjkl-bindings mew-message-mode-map 'normal)
+    ;; mew-draft-mode key maps
+    (dolist (map (list mew-draft-header-map mew-draft-body-map))
+      (evil-define-key 'normal map
+        "o" #'mew-draft-evil-open-below
+        "q" #'mew-draft-kill)))
+)
 
 ;; hatena-diary
-(push 'hatena:d:list-mode evil-motion-state-modes)
-(with-eval-after-load-feature 'hatena-diary
-  (evil-make-overriding-map hatena:d:list-mode-map)
-  (evil-add-hjkl-bindings hatena:d:list-mode-map 'motion))
+(bundle evil
+  (with-eval-after-load-feature 'evil
+    (push 'hatena:d:list-mode evil-motion-state-modes))
+  (with-eval-after-load-feature (evil hatena-diary)
+    (evil-make-overriding-map hatena:d:list-mode-map)
+    (evil-add-hjkl-bindings hatena:d:list-mode-map 'motion)))
