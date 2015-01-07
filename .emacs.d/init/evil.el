@@ -60,7 +60,7 @@ TYPE is either a state or one of `inner', `outer', `window',
 (bundle goto-chg)
 (bundle tarao-elisp)
 
-(bundle evil
+(bundle! evil
   (evil-mode 1)
 
   (evil-define-keys
@@ -116,6 +116,13 @@ to next line."
 
   ) ;; bundle evil
 
+;; After this, inside `bundle', we can assume that Evil is installed
+;; and loaded.  It is not the case outside `bundle' since `(bundle
+;; evil ...)'  installs Evil but this is not evaluated at compile
+;; time.  Initialization code in `bundle' is evaluated when `(bundle
+;; ...)' is evaluated, so that the initialization code runs after
+;; preceding `(bundle ...)' calls.
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; plugins
 
@@ -138,12 +145,11 @@ to next line."
 
   ;; key bindings
 
-  (with-eval-after-load-feature 'evil
-    (evil-define-keys
-     (outer "f" evil-a-between)
-     (inner "f" evil-inner-between)
-     ((ex search) "C-r" evil-ex-paste-from-register)
-     )) ;; evil-define-keys
+  (evil-define-keys
+   (outer "f" evil-a-between)
+   (inner "f" evil-inner-between)
+   ((ex search) "C-r" evil-ex-paste-from-register)
+   ) ;; evil-define-keys
 
   ;; others
 
@@ -153,7 +159,7 @@ to next line."
         evil-cjk-word-combining-categories word-combining-categories))
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; patches
+;; integration
 
 (bundle evil
   ;; yaicomplete
@@ -184,12 +190,12 @@ to next line."
 
   ;; view mode
   (add-hook 'view-mode-hook #'evil-initialize-state)
-  (with-eval-after-load-feature (evil view)
+  (with-eval-after-load-feature (view)
     (evil-define-key 'motion view-mode-map (kbd "v")
       #'(lambda () (interactive) (view-mode 0))))
 
   ;; dired mode
-  (with-eval-after-load-feature (evil dired)
+  (with-eval-after-load-feature (dired)
     (evil-define-key 'normal dired-mode-map "c" #'dired-do-copy))
 
   ;; multi-mode
@@ -197,7 +203,7 @@ to next line."
     (bundle multi-mode+evil))
 
   ;; howm
-  (with-eval-after-load-feature (evil howm)
+  (with-eval-after-load-feature (howm)
     ;; menu
     (evil-make-overriding-map howm-menu-mode-map 'normal)
     (add-hook 'howm-menu-hook
@@ -237,12 +243,10 @@ to next line."
       (evil-define-key 'normal map
         "o" #'mew-draft-evil-open-below
         "q" #'mew-draft-kill)))
-)
 
-;; hatena-diary
-(bundle evil
-  (with-eval-after-load-feature 'evil
-    (push 'hatena:d:list-mode evil-motion-state-modes))
+  ;; hatena-diary
+  (push 'hatena:d:list-mode evil-motion-state-modes)
   (with-eval-after-load-feature (evil hatena-diary)
     (evil-make-overriding-map hatena:d:list-mode-map)
-    (evil-add-hjkl-bindings hatena:d:list-mode-map 'motion)))
+    (evil-add-hjkl-bindings hatena:d:list-mode-map 'motion))
+  )
