@@ -75,7 +75,7 @@
 (bundle fic-mode
   (add-hook 'prog-mode-hook #'fic-mode) ;; Emacs 24
   (add-hook 'cperl-mode-hook #'fic-mode)
-  (eval-after-load-compile 'fic-mode
+  (with-eval-after-load-feature 'fic-mode
     (push "XXX" fic-highlighted-words)
     (dolist (face '(fic-face fic-author-face))
       (set-face-foreground face "#d0bf8f")
@@ -104,7 +104,7 @@
                         (make-glyph-code #xbb 'wrap-face))
 
 ;; visualize whitespace
-(eval-after-load-compile 'whitespace
+(with-eval-after-load-feature 'whitespace
   (setq whitespace-global-modes '(not)
         whitespace-style '(face tabs tab-mark fw-space-mark lines-tail))
   ;; tab

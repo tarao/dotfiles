@@ -35,7 +35,7 @@
         (setq args (list* "--config" config args))))
     (list flymake-jshint-command args)))
 
-(eval-after-load-compile 'flymake
+(with-eval-after-load-feature 'flymake
   (setq flymake-allowed-file-name-masks
         (append flymake-allowed-file-name-masks
                 flymake-allowed-js-file-name-masks)))

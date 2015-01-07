@@ -4,7 +4,7 @@
 (bundle hatena-diary
   (setq-default hatena:d:major-mode 'hatena:markup-mode
                 hatena:username "tarao"))
-(eval-after-load-compile 'hatena-markup-mode
+(with-eval-after-load-feature 'hatena-markup-mode
   (add-hook 'hatena:markup-mode-hook #'hatena:multi-mode)
   (add-hook 'hatena:markup-mode-hook
             #'(lambda ()

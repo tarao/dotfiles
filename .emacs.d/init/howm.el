@@ -7,5 +7,5 @@
   (setq auto-mode-alist (append '(("\\.howm$" . rdoc-mode)) auto-mode-alist))
   (global-set-key (kbd "C-c , ,") #'howm-menu)
 
-  (eval-after-load-compile 'howm-vars
+  (with-eval-after-load-feature 'howm-vars
     (set-face-background 'howm-view-name-face "DimGray")))

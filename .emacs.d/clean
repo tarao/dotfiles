@@ -8,4 +8,4 @@ elif [ "x$1" != 'x-i' ]; then
     rm -f el-get/.*elc
 fi
 rm  -f dot/*.elc
-rm -rf bundle/init
+rm -rf el-get/bundle-init

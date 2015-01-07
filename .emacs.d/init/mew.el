@@ -1,4 +1,6 @@
-(eval-when-compile
+(eval-when-compile (require 'cl))
+
+(eval-when (compile)
   (unless (require 'mew nil t)
     ;; suppress compiler warnings
     (defvar mew-summary-mode-map nil)
@@ -58,13 +60,14 @@
 
   ;; mew-message-mode key maps
   (define-key mew-message-mode-map (kbd "q") #'mew-message-close))
-(eval-after-load 'mew-key '(mew-install-user-map))
+(with-eval-after-load-feature 'mew-key
+  (mew-install-user-map))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; patches
 
 ;; summary fix
-(eval-after-load-compile 'whitespace
+(with-eval-after-load-feature 'whitespace
   (when (eq whitespace-global-modes t)
     (setq whitespace-global-modes '(not)))
   (when (and (listp whitespace-global-modes)
@@ -74,7 +77,7 @@
 (add-hook
  'mew-summary-mode-hook
  #'(lambda () (setq show-trailing-whitespace nil)))
-(eval-after-load-compile 'end-mark
+(with-eval-after-load-feature 'end-mark
   (add-to-list 'end-mark-exclude-modes 'mew-summary-mode))
 
 (defadvice mew-draft-mode (before major-mode-convention activate)
