@@ -1,3 +1,0 @@
-(:name key-intercept
-       :type github
-       :pkgname "tarao/key-intercept-el")
