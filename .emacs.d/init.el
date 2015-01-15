@@ -16,6 +16,10 @@
     (eval-print-last-sexp)))
 (add-to-list 'el-get-recipe-path (locate-user-emacs-file "recipes"))
 
+;; lock the pacakge versions
+(bundle tarao/el-get-lock
+  (el-get-lock))
+
 (bundle with-eval-after-load-feature)
 
 ;; load init files
