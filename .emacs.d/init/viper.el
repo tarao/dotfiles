@@ -1,1 +1,1 @@
-(setq viper-custom-file-name (locate-library "dot/.viper"))
+(setq viper-custom-file-name (locate-library "init/.viper"))

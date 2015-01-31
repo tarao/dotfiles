@@ -27,7 +27,7 @@
   ;; load
   (setq-default init-loader-show-log-after-init nil
                 init-loader-byte-compile t)
-  (init-loader-load (locate-user-emacs-file "dot"))
+  (init-loader-load (locate-user-emacs-file "init-loader"))
 
   ;; hide compilation results
   (let ((win (get-buffer-window "*Compile-Log*")))

@@ -7,5 +7,5 @@ elif [ "x$1" != 'x-i' ]; then
     rm -f el-get/.*el
     rm -f el-get/.*elc
 fi
-rm  -f dot/*.elc
+rm  -f init-loader/*.elc
 rm -rf el-get/bundle-init

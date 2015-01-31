@@ -7,7 +7,7 @@
                 mew-mbox-command-arg
                 (concat "-u -d /home/users/" (user-login-name) "/Maildir"))
   ;; emacs-w3m - a text browser
-  (setq-default w3m-init-file "dot/.emacs-w3m")
+  (setq-default w3m-init-file "init/.emacs-w3m")
   (add-hook 'w3m-mode-hook #'(lambda () (setq show-trailing-whitespace nil)))
   ;; lookup - search dictionary
   (autoload 'lookup "lookup" nil t)

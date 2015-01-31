@@ -22,8 +22,8 @@ local.install.yml
 .emacs.d/bmk
 .emacs.d/recentf
 .emacs.d/tramp
-.emacs.d/dot/.*
-.emacs.d/dot/99_local.el
+.emacs.d/init/.*
+.emacs.d/init-loader/99_local.el
 .emacs.d/site-lisp
 .emacs.d/bundle/init
 .emacs.d/el-get/*

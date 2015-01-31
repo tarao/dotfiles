@@ -1,4 +1,4 @@
-(setq-default skk-init-file "dot/.skk"
+(setq-default skk-init-file "init/.skk"
               skk-user-directory "~/.ddskk")
 (bundle ddskk
   (global-set-key (kbd "C-x C-j") 'skk-mode))

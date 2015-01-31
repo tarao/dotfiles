@@ -6,7 +6,7 @@
     .jshintrc: .jshintrc
     .vimperator: .vimperator
     .vimperatorrc: .vimperatorrc
-.emacs.d/dot:
+.emacs.d/init-loader:
   99_local.el: ../init/tarao.luxaky.el
 .vim:
   local.vim: tarao.vim
