@@ -15,7 +15,7 @@
 .config:
   <src>/.config/:
     fontconfig: fontconfig
-.emacs.d/dot:
+.emacs.d/init-loader:
   .emacs-w3m.el: ../init/local/emacs-w3m.el
   .skk.el: ../init/local/skk.el
   99_local.el: ../init/local.dummy.el
