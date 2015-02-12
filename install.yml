@@ -16,9 +16,10 @@
   <src>/.config/:
     fontconfig: fontconfig
 .emacs.d/init-loader:
+  99_local.el: ../init/local.dummy.el
+.emacs.d/init:
   .emacs-w3m.el: ../init/local/emacs-w3m.el
   .skk.el: ../init/local/skk.el
-  99_local.el: ../init/local.dummy.el
 .screen:
   local.screenrc: luxaky.screenrc
 .vim:
