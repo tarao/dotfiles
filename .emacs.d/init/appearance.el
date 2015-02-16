@@ -20,6 +20,7 @@
       (dolist (elt user-face-alist)
         (let ((name (car elt)) (attrs (cdr elt)))
           (apply #'set-face-attribute `(,name nil ,@attrs)))))
+  (el-get-lock-unlock 'zenburn-theme)
   (bundle zenburn-theme
     :url "http://raw.github.com/bbatsov/zenburn-emacs/master/zenburn-theme.el"
     (load-theme 'zenburn t)
