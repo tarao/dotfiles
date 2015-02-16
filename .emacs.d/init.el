@@ -3,7 +3,7 @@
   (setq user-emacs-directory (file-name-directory load-file-name)))
 (add-to-list 'load-path user-emacs-directory)
 
-(let ((versioned-dir (locate-user-emacs-file emacs-version)))
+(let ((versioned-dir (locate-user-emacs-file (format "v%s" emacs-version))))
   (setq-default el-get-dir (expand-file-name "el-get" versioned-dir)
                 package-user-dir (expand-file-name "elpa" versioned-dir)))
 
