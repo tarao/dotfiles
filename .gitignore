@@ -22,14 +22,10 @@ local.install.yml
 .emacs.d/bmk
 .emacs.d/recentf
 .emacs.d/tramp
+.emacs.d/v*
 .emacs.d/init/.*
 .emacs.d/init-loader/99_local.el
 .emacs.d/site-lisp
-.emacs.d/bundle/init
-.emacs.d/el-get/*
-.emacs.d/elpa/*
-.emacs.d/packages/*
-.emacs.d/themes/*
 .emacs.d/url
 .screen/exchange
 .screen/local.screenrc
