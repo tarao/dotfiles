@@ -78,7 +78,6 @@ liberator.globalVariables.plugin_loader_plugins = [
     "caret-hint",
     "commandline-status",
     "imekeys",
-    "statusline-toolbar",
     "switch_language",
 ];
 EOM
