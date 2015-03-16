@@ -1,0 +1,1 @@
+(bundle scala-mode2)
