@@ -249,4 +249,57 @@ to next line."
   (with-eval-after-load-feature (evil hatena-diary)
     (evil-make-overriding-map hatena:d:list-mode-map)
     (evil-add-hjkl-bindings hatena:d:list-mode-map 'motion))
+
+  ;; scala
+
+  (with-eval-after-load-feature 'scala-mode2
+    (defun tarao/scala-join-line ()
+      "Adapt `scala-indent:join-line' to behave more like evil's
+  line join. `scala-indent:join-line' acts like the vanilla
+  `join-line', joining the current line with the previous
+  one. The vimmy way is to join the current line with the next.
+  Try to move to the subsequent line and then join. Then manually
+  move point to the position of the join."
+      (interactive)
+      (let (join-pos)
+        (save-excursion
+          (goto-char (line-end-position))
+          (unless (eobp)
+            (forward-line)
+            (call-interactively #'scala-indent:join-line)
+            (setq join-pos (point))))
+        (when join-pos
+          (goto-char join-pos))))
+    (evil-define-key 'normal scala-mode-map (kbd "C-j") #'tarao/scala-join-line)
+    )
+
+  (with-eval-after-load-feature 'ensime
+    (evil-define-key 'insert ensime-mode-map
+      (kbd ".") #'scala/completing-dot
+      (kbd "M-.") #'ensime-edit-definition
+      (kbd "M-,") #'ensime-pop-find-definition-stack)
+
+    (evil-define-key 'normal ensime-mode-map
+      (kbd "M-.") #'ensime-edit-definition
+      (kbd "M-,") #'ensime-pop-find-definition-stack)
+
+    (evil-define-key 'normal ensime-popup-buffer-map
+      (kbd "q") #'ensime-popup-buffer-quit-function)
+
+    (evil-define-key 'normal ensime-inspector-mode-map
+      (kbd "q") #'ensime-popup-buffer-quit-function)
+
+    (evil-make-overriding-map ensime-refactor-info-map 'normal)
+    (evil-define-key 'normal ensime-refactor-info-map
+      (kbd "RET") (lookup-key ensime-refactor-info-map (kbd "c")))
+
+      (evil-define-key 'normal ensime-compile-result-map
+        (kbd "g") #'ensime-show-all-errors-and-warnings
+        (kbd "TAB") #'forward-button
+        (kbd "<backtab>") #'backward-button
+        (kbd "M-n") #'forward-button
+        (kbd "M-p") #'backward-button
+        (kbd "n") #'forward-button
+        (kbd "N") #'backward-button)
+      )
   )

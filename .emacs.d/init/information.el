@@ -21,8 +21,9 @@
 (bundle git-messenger)
 
 ;; eldoc
-(setq-default eldoc-idle-delay 0
-              eldoc-echo-area-use-multiline-p t)
+(setq-default eldoc-idle-delay 0.1
+              eldoc-echo-area-use-multiline-p t
+              flycheck-display-errors-delay 0.2)
 (dolist (hook '(emacs-lisp-mode-hook
                 lisp-interaction-mode-hook
                 ielm-mode-hook))
