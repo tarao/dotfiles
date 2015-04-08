@@ -85,6 +85,32 @@
           ((eq ensime-completion-style 'auto-complete)
            (scala/completing-dot-ac))))
 
+  (defmacro scala/with-project-sbt (&rest form)
+    (eval-and-compile (require 'projectile))
+    (eval-and-compile (require 'sbt-mode))
+    `(let* ((file (or (buffer-file-name) (error "Visiting no file")))
+            (dir (file-name-directory file))
+            (dir (let ((default-directory dir)) (projectile-project-p))))
+       (when dir
+         (setq sbt:buffer-project-root dir)
+         (condition-case err
+             (progn ,@form)
+           (error (error err))))))
+
+  (defun scala/repl ()
+    "Start REPL for the project"
+    (interactive)
+    (eval-and-compile (require 'sbt-mode))
+    (scala/with-project-sbt
+     (prog1 (sbt-start)
+       (sbt-command "console"))))
+
+  (defun sbt:send-buffer ()
+    "Send buffer content to shell."
+    (interactive)
+    (eval-and-compile (require 'sbt-mode))
+    (sbt:send-region (point-min) (point-max)))
+
   (defun ensime-gen-and-restart()
     "Regenerate `.ensime' file and restart the ensime server."
     (interactive)

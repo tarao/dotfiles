@@ -256,6 +256,8 @@ to next line."
 
   ;; scala
 
+  (add-to-list 'evil-insert-state-modes 'sbt-mode)
+
   (with-eval-after-load-feature 'scala-mode2
     (defun tarao/scala-join-line ()
       "Adapt `scala-indent:join-line' to behave more like evil's
@@ -282,6 +284,24 @@ to next line."
        ,@form
        (ensime-inf-switch)
        (evil-insert-state)))
+
+  (defmacro with-sbt-switch (&rest form)
+    (eval-and-compile
+      (require 'sbt-mode)
+      (defvar sbt:submode))
+    `(scala/with-project-sbt
+      (let ((buf (sbt:buffer-name))
+            (display-buffer-fallback-action '(display-buffer-same-window)))
+        (unless (comint-check-proc buf) (sbt-start))
+        (let ((submode (buffer-local-value 'sbt:submode (get-buffer buf))))
+          (unless (or (eq submode 'console)
+                      (eq submode 'paste-mode))
+            (sbt-command "console")
+            (with-current-buffer buf
+              (setq sbt:submode 'console))))
+        ,@form
+        (switch-to-buffer buf)
+        (evil-insert-state))))
 
   (with-eval-after-load-feature (ensime evil-leader)
     (evil-define-key 'insert ensime-mode-map
@@ -316,6 +336,16 @@ to next line."
       "Send region content to shell and switch to it in insert mode."
       :motion evil-line
       (with-ensime-inf-switch (ensime-inf-eval-region beg end)))
+
+    (defun sbt:send-buffer-switch ()
+      "Send buffer content to shell and switch to it in insert mode."
+      (interactive)
+      (with-sbt-switch (sbt:send-buffer)))
+
+    (evil-define-operator sbt:send-region-switch (beg end)
+      "Send region content to shell and switch to it in insert mode."
+      :motion evil-line
+      (with-sbt-switch (sbt:send-region beg end)))
 
     (evil-leader/set-key-for-mode 'scala-mode
       "m/"  'ensime-search
