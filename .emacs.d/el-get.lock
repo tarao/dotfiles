@@ -1,5 +1,6 @@
 (setq el-get-lock-package-versions
-      '((sbt-mode :checksum "6beeb01e20b3af5bd1b751c26cb2c6f0d7e5d5e1")
+      '((evil-leader :checksum "39f7014bcf8b36463e0c7512c638bda4bac6c2cf")
+        (sbt-mode :checksum "6beeb01e20b3af5bd1b751c26cb2c6f0d7e5d5e1")
         (noflet :checksum "7ae84dc3257637af7334101456dafe1759c6b68a")
         (yasnippet :checksum "23133da7d9a2cc2b0d63ced8b37741c2cee95aa3")
         (company-mode :checksum "5fc4a9a0b0c75f4f128ad01ca8befd1928399c86")

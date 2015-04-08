@@ -85,6 +85,14 @@
           ((eq ensime-completion-style 'auto-complete)
            (scala/completing-dot-ac))))
 
+  (defun ensime-gen-and-restart()
+    "Regenerate `.ensime' file and restart the ensime server."
+    (interactive)
+    (progn
+      (sbt-command "gen-ensime")
+      (ensime-shutdown)
+      (ensime)))
+
   ;; Initialization
 
   (defun tarao/configure-scala ()

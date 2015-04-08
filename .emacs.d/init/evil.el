@@ -129,6 +129,10 @@ to next line."
 (bundle evil-surround ;; surround operator
   (global-evil-surround-mode 1))
 
+(bundle evil-leader
+  (evil-leader/set-leader ",")
+  (global-evil-leader-mode))
+
 (bundle color-moccur)
 (bundle tarao-evil-plugins
   :features (evil-mode-line evil-relative-linum
@@ -273,7 +277,13 @@ to next line."
     (evil-define-key 'normal scala-mode-map (kbd "C-j") #'tarao/scala-join-line)
     )
 
-  (with-eval-after-load-feature 'ensime
+  (defmacro with-ensime-inf-switch (&rest form)
+    `(progn
+       ,@form
+       (ensime-inf-switch)
+       (evil-insert-state)))
+
+  (with-eval-after-load-feature (ensime evil-leader)
     (evil-define-key 'insert ensime-mode-map
       (kbd ".") #'scala/completing-dot
       (kbd "M-.") #'ensime-edit-definition
@@ -283,8 +293,7 @@ to next line."
       (kbd "M-.") #'ensime-edit-definition
       (kbd "M-,") #'ensime-pop-find-definition-stack)
 
-    (evil-define-key 'normal ensime-popup-buffer-map
-      (kbd "q") #'ensime-popup-buffer-quit-function)
+    (evil-make-overriding-map ensime-popup-buffer-map 'normal)
 
     (evil-define-key 'normal ensime-inspector-mode-map
       (kbd "q") #'ensime-popup-buffer-quit-function)
@@ -293,13 +302,89 @@ to next line."
     (evil-define-key 'normal ensime-refactor-info-map
       (kbd "RET") (lookup-key ensime-refactor-info-map (kbd "c")))
 
-      (evil-define-key 'normal ensime-compile-result-map
-        (kbd "g") #'ensime-show-all-errors-and-warnings
-        (kbd "TAB") #'forward-button
-        (kbd "<backtab>") #'backward-button
-        (kbd "M-n") #'forward-button
-        (kbd "M-p") #'backward-button
-        (kbd "n") #'forward-button
-        (kbd "N") #'backward-button)
+    (evil-make-overriding-map ensime-compile-result-map 'normal)
+    (evil-define-key 'normal ensime-compile-result-map
+      (kbd "n") #'forward-button
+      (kbd "N") #'backward-button)
+
+    (defun ensime-inf-eval-buffer-switch ()
+      "Send buffer content to shell and switch to it in insert mode."
+      (interactive)
+      (with-ensime-inf-switch (ensime-inf-eval-buffer)))
+
+    (evil-define-operator ensime-inf-eval-region-switch (beg end)
+      "Send region content to shell and switch to it in insert mode."
+      :motion evil-line
+      (with-ensime-inf-switch (ensime-inf-eval-region beg end)))
+
+    (evil-leader/set-key-for-mode 'scala-mode
+      "m/"  'ensime-search
+      "m?"  'ensime-scalex
+
+      "mbc" 'ensime-sbt-do-compile
+      "mbC" 'ensime-sbt-do-clean
+      "mbi" 'ensime-sbt-switch
+      "mbp" 'ensime-sbt-do-package
+      "mbr" 'ensime-sbt-do-run
+
+      "mct" 'ensime-typecheck-current-file
+      "mcT" 'ensime-typecheck-all
+
+      "mdb" 'ensime-db-set-break
+      "mdB" 'ensime-db-clear-break
+      "mdC" 'ensime-db-clear-all-breaks
+      "mdc" 'ensime-db-continue
+      "mdd" 'ensime-db-start
+      "mdi" 'ensime-db-inspect-value-at-point
+      "mdl" 'ensime-db-list-locals
+      "mdn" 'ensime-db-next
+      "mdo" 'ensime-db-step-out
+      "mdq" 'ensime-db-quit
+      "mdr" 'ensime-db-run
+      "mds" 'ensime-db-step
+      "mdt" 'ensime-db-backtrace
+
+      "mee" 'ensime-print-errors-at-point
+      "mel" 'ensime-show-all-errors-and-warnings
+      "mes" 'ensime-stacktrace-switch
+
+      "mgg" 'ensime-edit-definition
+      "mgi" 'ensime-goto-impl
+      "mgt" 'ensime-goto-test
+
+      "mhh" 'ensime-show-doc-for-symbol-at-point
+      "mhu" 'ensime-show-uses-of-symbol-at-point
+      "mht" 'ensime-print-type-at-point
+
+      "mii" 'ensime-inspect-type-at-point
+      "miI" 'ensime-inspect-type-at-point-other-frame
+      "mip" 'ensime-inspect-project-package
+
+      "mnF" 'ensime-reload-open-files
+      "mns" 'ensime
+      "mnS" 'ensime-gen-and-restart
+
+      "mrd" 'ensime-refactor-inline-local
+      "mrD" 'ensime-undo-peek
+      "mrf" 'ensime-format-source
+      "mri" 'ensime-refactor-organize-imports
+      "mrm" 'ensime-refactor-extract-method
+      "mrr" 'ensime-refactor-rename
+      "mrt" 'ensime-import-type-at-point
+      "mrv" 'ensime-refactor-extract-local
+
+      "mta" 'ensime-sbt-do-test
+      "mtr" 'ensime-sbt-do-test-quick
+      "mtt" 'ensime-sbt-do-test-only
+
+      "msa" 'ensime-inf-load-file
+      "msb" 'ensime-inf-eval-buffer
+      "msB" 'ensime-inf-eval-buffer-switch
+      "msi" 'ensime-inf-switch
+      "msr" 'ensime-inf-eval-region
+      "msR" 'ensime-inf-eval-region-switch
+
+      "mz"  'ensime-expand-selection-command
       )
+    )
   )
