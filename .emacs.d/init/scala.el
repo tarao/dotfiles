@@ -89,10 +89,13 @@
 
   (defun tarao/configure-scala ()
     (eval-and-compile (require 'ensime))
-    (cond ((ensime-config-find-file (buffer-file-name))
-           (scala/configure-ensime)
-           (scala/maybe-start-ensime))
-          (t (flycheck-mode))))
+    (scala/configure-ensime)
+    (scala/maybe-start-ensime)
+    (unless (ensime-config-find-file (buffer-file-name))
+      (flycheck-mode +1)))
+
+  (defadvice ensime (after ensime-disable-flycheck activate)
+    (flycheck-mode -1))
 
   (add-hook 'ensime-mode-hook #'scala/enable-eldoc)
   (add-hook 'scala-mode-hook #'tarao/configure-scala)
