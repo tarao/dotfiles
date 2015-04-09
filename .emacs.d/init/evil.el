@@ -327,6 +327,12 @@ to next line."
       (kbd "n") #'forward-button
       (kbd "N") #'backward-button)
 
+    (evil-make-overriding-map sbt:mode-map 'insert)
+    (evil-define-key 'insert sbt:mode-map
+      (kbd "C-p") #'comint-previous-input
+      (kbd "C-n") #'comint-next-input
+      (kbd "C-u") #'comint-kill-input)
+
     (defun ensime-inf-eval-buffer-switch ()
       "Send buffer content to shell and switch to it in insert mode."
       (interactive)
