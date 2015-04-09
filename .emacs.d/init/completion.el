@@ -46,7 +46,19 @@
     (dolist (src tarao/anything-other-sources)
       (add-to-list src '(delayed))))
   (global-set-key [remap execute-extended-command]
-                  #'anything-execute-extended-command))
+                  #'anything-execute-extended-command)
+  ;; patch
+  (defadvice alcs-make-candidates (around alcs-save-excursion activate)
+    "`alcs-make-candidates' uses `set-buffer' and doesn't restore
+the current buffer."
+    (save-excursion ad-do-it))
+  (defadvice anything-c-locate-init
+    (after no-anything-update-move-first-line activate)
+    "Prevent `anything-c-locate-init' from calling
+`anything-update-move-first-line', which accidentally resets the
+selection of candidates on finishing an asynchronous locate
+process."
+    (set-process-sentinel (get-process "locate-process") nil)))
 (bundle descbinds-anything)
 (bundle anything-git-files
   (defun tarao/anything-for-files ()
