@@ -10,7 +10,8 @@
               evil-want-C-i-jump nil
               evil-want-fine-undo t
               evil-search-module 'evil-search
-              evil-ex-search-vim-style-regexp t)
+              evil-ex-search-vim-style-regexp nil ; we use PCRE
+              )
 
 (defconst evil-misc-map-alist
   '((inner  . evil-inner-text-objects-map)
@@ -59,6 +60,7 @@ TYPE is either a state or one of `inner', `outer', `window',
 (bundle anything)
 (bundle goto-chg)
 (bundle tarao-elisp)
+(bundle pcre2el)
 
 (bundle! evil
   (evil-mode 1)
@@ -110,6 +112,13 @@ to next line."
       (error (if (eq this-command 'evil-paste-pop-next)
                  (call-interactively 'next-line)
                (signal (car err) (cdr err))))))
+
+  ;; A better regexp
+  (defadvice evil-ex-make-pattern
+    (before transform-pcre (regexp case whole-line) activate)
+    "Transform PCRE into Elisp regexp."
+    (let ((re (ignore-errors (rxt-pcre-to-elisp regexp))))
+      (when re (setq regexp re))))
 
   ;; use raw key bindings in moccur
   (push 'moccur-grep-mode evil-emacs-state-modes)
