@@ -20,6 +20,9 @@
 .emacs.d/init:
   .emacs-w3m.el: ../init/local/emacs-w3m.el
   .skk.el: ../init/local/skk.el
+.sbt/0.13/plugins:
+  <src>/.sbt/0.13/plugins:
+    plugins.sbt: plugins.sbt
 .screen:
   local.screenrc: luxaky.screenrc
 .vim:

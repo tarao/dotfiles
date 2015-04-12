@@ -137,6 +137,8 @@
 
 ;; show trailing whitespace
 (setq-default show-trailing-whitespace t)
+(add-hook 'comint-mode-hook #'(lambda() (setq show-trailing-whitespace nil)))
+
 
 ;; parenthesis
 (show-paren-mode t)
