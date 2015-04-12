@@ -13,7 +13,7 @@
         (init-loader :checksum "128ee76adbf431f0b8c30a3a29cb20c9c5100cde")
         (tarao-evil-plugins :checksum "732885472f9f5f4168c6cb10492247911020bbc7")
         (evil-surround :checksum "28466957f91c8e494c93caa08122510b3f8288a0")
-        (evil :checksum "2748228bb54bf9131dc3e5593a8f9042d2727954")
+        (evil :checksum "ee9053dbc63617aacf6bb7afff44e3a6e5717ecb")
         (goto-chg :checksum "50e58f9e6bb0b8b8e3a24ed817ff78512a770448")
         (yaml-mode :checksum "210b0759deec33605248af9b315c0e9af4a5c0bc")
         (zencoding-mode :checksum "58e42af182c98cb9941d27cd042d227fbf4e146c")
