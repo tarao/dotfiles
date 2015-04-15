@@ -24,23 +24,29 @@
       (let ((ensime-buffer (scala/ensime-buffer-for-file (buffer-file-name)))
             (file (ensime-config-find-file (buffer-file-name))))
         ;; ignore if there is no .ensime for the project
-        (when (and file (null ensime-buffer))
+        (when (null ensime-buffer)
           (noflet ((ensime-config-find (&rest _) file))
             (save-window-excursion
               (ensime)))))))
 
+  (defun scala/ensime-project-name-from-config (file)
+    (eval-and-compile (require 'ensime))
+    (let ((config (ensime-config-load file)))
+      (plist-get config :name)))
+
   (defun scala/ensime-buffer-for-file (file)
     "Find the Ensime server buffer corresponding to FILE."
+    (eval-and-compile (require 'ensime))
     (eval-and-compile (require 'dash))
     (eval-and-compile (require 's))
-    (eval-and-compile (require 'projectile))
-    (let ((default-directory (file-name-directory file)))
-      (-when-let (project-name (projectile-project-p))
+    (let* ((config-file (ensime-config-find-file file))
+           (name (and config-file
+                      (scala/ensime-project-name-from-config config-file)))
+           (default-directory (file-name-directory file)))
+      (when name
         (--first (-when-let (bufname (buffer-name it))
                    (and (s-contains? "inferior-ensime-server" bufname)
-                        (s-contains? (file-name-nondirectory
-                                      (directory-file-name project-name))
-                                     bufname)))
+                        (s-contains? name bufname)))
                  (buffer-list)))))
 
   (defun scala/enable-eldoc ()
