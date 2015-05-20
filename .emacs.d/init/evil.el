@@ -404,9 +404,7 @@ to next line."
       "hu" 'ensime-show-uses-of-symbol-at-point
       "ht" 'ensime-print-type-at-point
 
-      "ii" 'ensime-inspect-type-at-point
-      "iI" 'ensime-inspect-type-at-point-other-frame
-      "ip" 'ensime-inspect-project-package
+      "i" 'ensime-inspect-type-at-point
 
       "nF" 'ensime-reload-open-files
       "ns" 'ensime
