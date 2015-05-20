@@ -325,6 +325,9 @@ to next line."
     (evil-make-overriding-map ensime-popup-buffer-map 'normal)
 
     (evil-define-key 'normal ensime-inspector-mode-map
+      (kbd "H") #'ensime-inspector-backward-page
+      (kbd "L") #'ensime-inspector-forward-page
+      (kbd "d") #'ensime-inspector-browse-doc
       (kbd "q") #'ensime-popup-buffer-quit-function)
 
     (evil-make-overriding-map ensime-refactor-info-map 'normal)
