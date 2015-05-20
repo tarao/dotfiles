@@ -74,6 +74,24 @@
     (insert ".")
     (ac-trigger-key-command t))
 
+  (defmacro scala/with-project-sbt (&rest form)
+    `(progn
+       (eval-and-compile (require 'projectile))
+       (eval-and-compile (require 'sbt-mode))
+       (let* ((file (or (buffer-file-name) (error "Visiting no file")))
+              (dir (file-name-directory file))
+              (dir (let ((default-directory dir)) (projectile-project-p))))
+         (when dir
+           (setq sbt:buffer-project-root dir)
+           (condition-case err
+               (progn ,@form)
+             (error (error err)))))))
+
+  (defun scala/call-sbt-command (command &rest args)
+    (scala/with-project-sbt
+     (let (buf (get-buffer-create (sbt:buffer-name)))
+       (apply 'call-process sbt:program-name nil buf t args))))
+
   ;; Interactive commands
 
   (defun scala/completing-dot ()
@@ -91,18 +109,6 @@
           ((eq ensime-completion-style 'auto-complete)
            (scala/completing-dot-ac))))
 
-  (defmacro scala/with-project-sbt (&rest form)
-    (eval-and-compile (require 'projectile))
-    (eval-and-compile (require 'sbt-mode))
-    `(let* ((file (or (buffer-file-name) (error "Visiting no file")))
-            (dir (file-name-directory file))
-            (dir (let ((default-directory dir)) (projectile-project-p))))
-       (when dir
-         (setq sbt:buffer-project-root dir)
-         (condition-case err
-             (progn ,@form)
-           (error (error err))))))
-
   (defun scala/repl ()
     "Start REPL for the project"
     (interactive)
@@ -117,13 +123,27 @@
     (eval-and-compile (require 'sbt-mode))
     (sbt:send-region (point-min) (point-max)))
 
-  (defun ensime-gen-and-restart()
+  (defun ensime-cleanup ()
+    "Shutdown and destroy connection buffer."
+    (interactive)
+    (ensime-shutdown)
+    (let* ((buf (buffer-file-name))
+           (ensime-buffer (scala/ensime-buffer-for-file buf)))
+      (when ensime-buffer (kill-buffer ensime-buffer))))
+
+  (defun ensime-restart ()
+    "Restart the ensime server."
+    (interactive)
+    (ensime-cleanup)
+    (scala/maybe-start-ensime))
+
+  (defun ensime-gen-and-restart ()
     "Regenerate `.ensime' file and restart the ensime server."
     (interactive)
     (progn
-      (sbt-command "gen-ensime")
-      (ensime-shutdown)
-      (ensime)))
+      (message "Regenerating .ensime ...")
+      (when (= 0 (scala/call-sbt-command "gen-ensime"))
+        (ensime-restart))))
 
   ;; Initialization
 
