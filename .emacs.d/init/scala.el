@@ -55,8 +55,10 @@
     (setq-local eldoc-documentation-function
                 #'(lambda ()
                     (when (ensime-connected-p)
-                      (let ((err (ensime-print-errors-at-point)))
-                        (or (and err (not (string= err "")) err)
+                      (let ((err (mapconcat 'identity
+                                            (ensime-errors-at (point))
+                                            "\n")))
+                        (or (and err (not (string= err "")) (message err))
                             (ensime-print-type-at-point))))))
     (eldoc-mode +1))
 
