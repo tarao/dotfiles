@@ -147,6 +147,12 @@
       (when (= 0 (scala/call-sbt-command "gen-ensime"))
         (ensime-restart))))
 
+  ;; Configuration
+
+  (defadvice ensime-search-mode (after ignore-trailing-whitespace activate)
+    (with-current-buffer ensime-search-target-buffer-name
+      (setq show-trailing-whitespace nil)))
+
   ;; Initialization
 
   (defun tarao/configure-scala ()

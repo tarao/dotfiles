@@ -266,6 +266,8 @@ to next line."
   ;; scala
 
   (add-to-list 'evil-insert-state-modes 'sbt-mode)
+  (defadvice ensime-search-mode (after insert-state activate)
+    (evil-insert-state))
 
   (with-eval-after-load-feature 'scala-mode2
     (defun tarao/scala-join-line ()
