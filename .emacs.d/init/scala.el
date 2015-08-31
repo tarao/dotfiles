@@ -184,6 +184,10 @@
 
   ;; Initialization
 
+  (defun tarao/enable-eldoc ()
+    (set (make-local-variable 'eldoc-idle-delay) 0.5)
+    (scala/enable-eldoc))
+
   (defun tarao/configure-scala ()
     (eval-and-compile (require 'ensime))
     (eval-and-compile (require 'auto-complete))
@@ -197,6 +201,6 @@
   (defadvice ensime (after ensime-disable-flycheck activate)
     (flycheck-mode -1))
 
-  (add-hook 'ensime-mode-hook #'scala/enable-eldoc)
+  (add-hook 'ensime-mode-hook #'tarao/enable-eldoc)
   (add-hook 'scala-mode-hook #'tarao/configure-scala)
   )
