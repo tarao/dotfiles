@@ -1,4 +1,6 @@
-(setq-default ensime-completion-style 'auto-complete)
+(setq-default
+ ensime-completion-style 'auto-complete
+ ensime-ac-override-settings nil)
 
 (bundle flycheck)
 (bundle scala-mode2)
@@ -70,6 +72,32 @@
           (t
            (insert ".")
            (company-complete))))
+
+  (defun scala/do-complete-ac ()
+    (let ((ensime-ac-override-settings t)
+          ac-sources ac-use-comphist ac-auto-show-menu ac-candidates-cache
+          ac-auto-start ac-expand-on-auto-complete ac-use-fuzzy
+          ac-dwim ac-use-quick-help ac-delete-dups ac-ignore-case
+          ac-trigger-key)
+      (ensime-ac-enable)
+      (ac-trigger-key-command t)))
+
+  (defun scala/ac-trigger-key-command (orig-fun &rest args)
+    (if ensime-mode
+        (let ((ac-sources '(ac-source-ensime-completions))
+              (ac-use-comphist nil)
+              (ac-auto-show-menu 0.5)
+              (ac-candidates-cache nil)
+              (ac-auto-start nil)
+              (ac-expand-on-auto-complete t)
+              (ac-use-fuzzy nil)
+              (ac-dwim nil)
+              (ac-use-quick-help t)
+              (ac-delete-dups nil)
+              (ac-ignore-case t))
+          (apply orig-fun args))
+      (apply orig-fun args)))
+  (advice-add 'ac-trigger-key-command :around #'scala/ac-trigger-key-command)
 
   (defun scala/completing-dot-ac ()
     (eval-and-compile (require 'auto-complete))
@@ -157,8 +185,11 @@
 
   (defun tarao/configure-scala ()
     (eval-and-compile (require 'ensime))
+    (eval-and-compile (require 'auto-complete))
     (scala/configure-ensime)
     (scala/maybe-start-ensime)
+    (make-local-variable 'ac-trigger-key)
+    (ac-set-trigger-key "TAB")
     (unless (ensime-config-find-file (buffer-file-name))
       (flycheck-mode +1)))
 
