@@ -176,6 +176,19 @@
          ("]" nil "」")
          )
        my-skk-rom-kana-rule-list-base))
+(defvar my-skk-rom-kana-rule-list-Ja
+      (append
+       '(
+         ("." nil "。")
+         ("," nil "，")
+         ("!" nil "！")
+         ("?" nil "？")
+         ("-" nil "ー")
+         ("@" nil "＠")
+         ("[" nil "「")
+         ("]" nil "」")
+         )
+       my-skk-rom-kana-rule-list-base))
 (defun skk-reconstruct-rule-tree ()
   (setq skk-rule-tree (skk-compile-rule-list
                        skk-rom-kana-base-rule-list
@@ -191,6 +204,10 @@
 (defun skk-use-JA-signs ()
   (interactive)
   (setq skk-rom-kana-rule-list my-skk-rom-kana-rule-list-JA)
+  (skk-reconstruct-rule-tree))
+(defun skk-use-Ja-signs ()
+  (interactive)
+  (setq skk-rom-kana-rule-list my-skk-rom-kana-rule-list-Ja)
   (skk-reconstruct-rule-tree))
 
 (skk-use-en-signs)
