@@ -74,15 +74,6 @@
            (insert ".")
            (company-complete))))
 
-  (defun scala/do-complete-ac ()
-    (let ((ensime-ac-override-settings t)
-          ac-sources ac-use-comphist ac-auto-show-menu ac-candidates-cache
-          ac-auto-start ac-expand-on-auto-complete ac-use-fuzzy
-          ac-dwim ac-use-quick-help ac-delete-dups ac-ignore-case
-          ac-trigger-key)
-      (ensime-ac-enable)
-      (ac-trigger-key-command t)))
-
   (defun scala/ac-trigger-key-command (orig-fun &rest args)
     (if ensime-mode
         (let ((ac-sources '(ac-source-ensime-completions))
