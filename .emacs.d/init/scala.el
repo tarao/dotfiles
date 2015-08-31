@@ -1,5 +1,6 @@
 (setq-default
  ensime-completion-style 'auto-complete
+ ensime-ac-enable-argument-placeholders nil
  ensime-ac-override-settings nil)
 
 (bundle flycheck)
