@@ -1,5 +1,6 @@
 (setq el-get-lock-package-versions
-      '((graphviz-dot-mode :checksum "d11f15b490be23eaabd65ee791c8810f4cf3ebec")
+      '((web-mode :checksum "867ea7c5d7f3d9bb41127dac364c0fb009adc7bf")
+        (graphviz-dot-mode :checksum "d11f15b490be23eaabd65ee791c8810f4cf3ebec")
         (typescript :checksum "2c628a884602aeb6d7120bea3453f3d3d2d48a53")
         (pcre2el :checksum "75db0d537ab2b7f27bc7d4ff01141843a85fa3c9")
         (evil-leader :checksum "39f7014bcf8b36463e0c7512c638bda4bac6c2cf")
