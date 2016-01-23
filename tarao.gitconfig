@@ -22,5 +22,7 @@
     email = tarao.gnn@gmail.com
 [push]
     default = upstream
+[rebase]
+    autostash = true
 [include]
     path = ~/.gitconfig.local
