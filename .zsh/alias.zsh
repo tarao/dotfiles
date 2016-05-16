@@ -10,7 +10,7 @@ function ls () {
 
 whence xdg-open > /dev/null && {
     function xdg_open () {
-        command xdg-open "$@" >/dev/null
+        command xdg-open "$@" >/dev/null 2>/dev/null
     }
     alias ii='xdg_open'
 }
