@@ -22,6 +22,8 @@
     email = tarao.gnn@gmail.com
 [push]
     default = upstream
+[pull]
+    rebase = true
 [rebase]
     autostash = true
 [include]
