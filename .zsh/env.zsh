@@ -20,6 +20,7 @@ function _set_path_env() {
         $(whence plenv>/dev/null && plenv root)/shims(N-/) # perl
         ~/.gem/ruby/*/bin(N-/) # ruby
         ~/.local/node-current/bin(N-/) # js
+        ~/go/bin # golang
         {,/usr/local,/usr}/bin(N-/)
         {/usr,/usr/local}/games(N-/)
     )

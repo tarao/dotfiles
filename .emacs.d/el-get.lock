@@ -44,7 +44,7 @@
         (epl :checksum "63c78c08e345455f3d4daa844fdc551a2c18024e")
         (let-alist :checksum "19818235b901c4414e9cd70782a3200af645d122")
         (dash :checksum "26c1bbe371db3cff89d4915488a55e381ee51fe5")
-        (go-mode :checksum "59d1e827147bca990c500b783f27bda1ad2873ae")
+        (go-mode :checksum "7041a203c64c1319a61eadc45dd41e40ccda3e78")
         (less-css-mode :checksum "e64a4fe2ba685fa4a5fb6641f9118da1f54d99e0")
         (csharp-mode :checksum "c2188b12bfa7622f31c5ef57002d71fbe0244c21")
         (switch-window :checksum "cd4b06121aa5bac4c4b13b63526a99008def5f2b")
