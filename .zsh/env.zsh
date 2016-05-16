@@ -16,9 +16,10 @@ function _set_path_env() {
     )
     local user_path; user_path=(
         ~/bin
+        ~/bin/tools
         $(whence plenv>/dev/null && plenv root)/shims(N-/) # perl
         ~/.gem/ruby/*/bin(N-/) # ruby
-        ~/node_modules/.bin(N-/) # js
+        ~/.local/node-current/bin(N-/) # js
         {,/usr/local,/usr}/bin(N-/)
         {/usr,/usr/local}/games(N-/)
     )
