@@ -23,7 +23,7 @@ defbce on
 term xterm-256color
 termcapinfo xterm* 'Co#256:pa#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm:'
 attrcolor b ".I"
-shell zsh
+shell eval "exec which zsh"
 
 # J/K for half page donw/up
 markkeys ^D=J:^U=K
