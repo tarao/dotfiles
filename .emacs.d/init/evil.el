@@ -398,6 +398,8 @@ to next line."
       "el" 'ensime-show-all-errors-and-warnings
       "es" 'ensime-stacktrace-switch
 
+      "fu" 'ensime-show-uses-of-symbol-at-point
+
       "gg" 'ensime-edit-definition
       "gi" 'ensime-goto-impl
       "gt" 'ensime-goto-test
@@ -419,6 +421,7 @@ to next line."
       "rm" 'ensime-refactor-extract-method
       "rr" 'ensime-refactor-rename
       "rt" 'ensime-import-type-at-point
+      "ru" 'ensime-undo-peek
       "rv" 'ensime-refactor-extract-local
 
       "ta" 'ensime-sbt-do-test
