@@ -1,0 +1,3 @@
+(:name csharp-mode
+       :type github
+       :pkgname "josteink/csharp-mode")
