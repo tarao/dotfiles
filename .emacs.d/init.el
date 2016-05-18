@@ -1,7 +1,6 @@
 ;; emacs directory
 (when load-file-name
   (setq user-emacs-directory (file-name-directory load-file-name)))
-(add-to-list 'load-path user-emacs-directory)
 
 (let ((versioned-dir (locate-user-emacs-file (format "v%s" emacs-version))))
   (setq-default el-get-dir (expand-file-name "el-get" versioned-dir)
