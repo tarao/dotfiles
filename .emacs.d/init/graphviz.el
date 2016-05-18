@@ -3,7 +3,7 @@
   (defun graphviz-dot/preview-after-compilation (buffer desc)
     (eval-and-compile (require 'graphviz-dot-mode))
     (when (string-prefix-p "finished" desc)
-      (with-current-buffer (compilation-original-buffer)
+      (with-current-buffer compilation-original-buffer
         (graphviz-dot-preview))))
   (add-hook 'graphviz-dot-mode-hook
             #'(lambda ()
