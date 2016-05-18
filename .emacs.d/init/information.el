@@ -27,7 +27,7 @@
 (dolist (hook '(emacs-lisp-mode-hook
                 lisp-interaction-mode-hook
                 ielm-mode-hook))
-  (add-hook hook #'turn-on-eldoc-mode))
+  (add-hook hook #'eldoc-mode))
 (bundle c-eldoc
   (dolist (hook '(c-mode-hook c++-mode-hook))
     (add-hook hook #'(lambda ()
