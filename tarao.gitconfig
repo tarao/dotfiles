@@ -15,8 +15,6 @@
     diff = type diff-highlight >/dev/null && (diff-highlight|less) || less
     show = type diff-highlight >/dev/null && (diff-highlight|less) || less
     log = type diff-highlight >/dev/null && (diff-highlight|less) || less
-[tig]
-    line-graphics = ascii
 [user]
     name = tarao
     email = tarao.gnn@gmail.com
@@ -26,5 +24,10 @@
     rebase = true
 [rebase]
     autostash = true
+[tig]
+    line-graphics = ascii
+[ghq]
+    root = ~/.ghq
+    root = ~/go/src
 [include]
     path = ~/.gitconfig.local
