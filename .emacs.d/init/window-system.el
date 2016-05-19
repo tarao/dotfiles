@@ -24,6 +24,37 @@
   (setq-default initial-frame-alist (append frame-alist initial-frame-alist)
                 default-frame-alist (append frame-alist default-frame-alist)))
 
+;; creating new frames
+(defun clone-frame-1 (direction)
+  (let* ((frame (selected-frame))
+         (left (frame-parameter frame 'left))
+         (top (frame-parameter frame 'top))
+         (width (frame-width frame))
+         (height (frame-height frame))
+         (pixel-width (frame-pixel-width frame))
+         (display-width (x-display-pixel-width)))
+    (with-selected-frame (make-frame)
+      (set-frame-position (selected-frame)
+                          (min (- display-width pixel-width)
+                               (max 0 (+ left (* direction pixel-width))))
+                          top)
+      (set-frame-width (selected-frame) width)
+      (set-frame-height (selected-frame) height))))
+(defun clone-frame-to-left ()
+  "Create a new frame in the same size as the current frame and
+place the new frame at the left side of the current frame."
+  (interactive)
+  (if (display-graphic-p)
+      (clone-frame-1 -1)
+    (select-frame (make-frame))))
+(defun clone-frame-to-right ()
+  "Create a new frame in the same size as the current frame and
+place the new frame at the right side of the current frame."
+  (interactive)
+  (if (display-graphic-p)
+      (clone-frame-1 1)
+    (select-frame (make-frame))))
+
 ;; font settings
 (defconst default-fontset-name "menloja")
 (defconst default-base-font-name "Menlo")

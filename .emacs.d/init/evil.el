@@ -89,6 +89,13 @@ TYPE is either a state or one of `inner', `outer', `window',
    ;; `evil-window-map' in visual state does not make sense
    (visual "C-w" evil-delete)
 
+   ;; frame commands
+   (window "f h" clone-frame-to-left)
+   (window "f <" clone-frame-to-left)
+   (window "f l" clone-frame-to-right)
+   (window "f >" clone-frame-to-right)
+   (window "f d" delete-frame)
+
    ;; use default emacs key bindings
    (delete insert "C-e" "C-y" "C-k" "C-n" "C-p" "C-t" "C-d")
    (delete ex     "C-a" "C-b")
