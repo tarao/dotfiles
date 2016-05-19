@@ -70,7 +70,7 @@ emacsd status >/dev/null || {
     echo > "$EMACS_DAEMON_LOG" # clear
 }
 emacsd_progress_start "$N"
-emacs --eval \
+emacs -n --eval \
 "(let ((left $left) (right $right) (top $top) (bottom $bottom)             \
        (width $width) (height $height)                                     \
        (offset-left $offset_left) (offset-top $offset_top))                \
