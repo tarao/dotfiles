@@ -1,4 +1,5 @@
 EMACS_CLIENT_CMD=(command emacsclient)
+EMACS_CLIENT_APP='emacs-client'
 EMACS_STANDALONE_CMD=(command emacs)
 EMACS_DAEMON_LOG="$HOME/.emacs.d/daemon.log"
 function emacsclient () {
@@ -6,6 +7,9 @@ function emacsclient () {
 }
 function emacsc () {
     emacsclient -nw "$@"
+}
+function emacsclient_desktop () {
+    gtk-launch "$EMACS_CLIENT_APP" >/dev/null 2>&1
 }
 function emacs-standalone () {
     $EMACS_STANDALONE_CMD "$@"
@@ -81,9 +85,9 @@ function emacsd () {
         fi
         ;;
     stop)
-        $0 status >/dev/null &&
         cmd=($EMACS_CLIENT_CMD)
-        $cmd -e '(progn (defun yes-or-no-p (p) t) (kill-emacs))'
+        $0 status >/dev/null &&
+            $cmd -e '(progn (defun yes-or-no-p (p) t) (kill-emacs))'
         ;;
     restart)
         $0 stop
@@ -106,6 +110,16 @@ function emacsd () {
             $0 setenv "$1" "${(P)1}" >/dev/null; shift
         done
         ;;
+    wait)
+        local w=0.3
+        local trial=200
+        local i=0
+        for (( i=0; $i < $trial; i++ )); do
+            $0 echo 'ping' && return 0
+            sleep $w
+        done
+        return 1 # timedout
+        ;;
     *)
         echo "Usage: $0 status|start|stop|restart|setenv|update-env"
         ;;
@@ -121,7 +135,7 @@ function _emacs_get_comm () {
 
 function emacs () {
     if [[ -z "$EMACS_USE_DAEMON" ]] || [[ `id -ur` = 0 ]]; then
-        emacs-standalone $@
+        emacs-standalone "$@"
     else
         emacsd status >/dev/null || emacsd start
         [[ -n "$STY" ]] && {
@@ -141,6 +155,20 @@ function emacs () {
             screen_add_attach_hook "$STY" "SCREEN_EMACSD_ENV$num" "$hook"
         }
         DISPLAY="$DISPLAY" emacsc "$@"
+    fi
+}
+
+function emacs_edit () {
+    if [[ -z "$EMACS_USE_DAEMON" ]] || [[ `id -ur` = 0 ]]; then
+        emacs-standalone "$@"
+    else
+        emacsd status >/dev/null || {
+            emacsclient_desktop
+            emacsd wait
+        }
+        local frames=$(emacsclient -e '(length (visible-frame-list))')
+        (( $frames > 1 )) || emacsclient_desktop
+        emacsclient -n "$@" </dev/null >/dev/null
     fi
 }
 
