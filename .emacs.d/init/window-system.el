@@ -33,13 +33,12 @@
          (height (frame-height frame))
          (pixel-width (frame-pixel-width frame))
          (display-width (x-display-pixel-width)))
-    (with-selected-frame (make-frame)
-      (set-frame-position (selected-frame)
-                          (min (- display-width pixel-width)
-                               (max 0 (+ left (* direction pixel-width))))
-                          top)
-      (set-frame-width (selected-frame) width)
-      (set-frame-height (selected-frame) height))))
+    (make-frame
+     `((left . ,(min (- display-width pixel-width)
+                     (max 0 (+ left (* direction pixel-width)))))
+       (top . ,top)
+       (width . ,width)
+       (height . ,height)))))
 (defun clone-frame-to-left ()
   "Create a new frame in the same size as the current frame and
 place the new frame at the left side of the current frame."
