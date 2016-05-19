@@ -41,7 +41,6 @@ function largest_display_rect () {
     local -a rect
     display_rects | while read -A rect; do
         rect[7]=$(( $rect[5] * $rect[6] ))
-        echo $rect
         (( $rect[7] > ${largest[7]:-0} )) && {
             largest=($rect[@])
         }
