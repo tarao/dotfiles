@@ -62,6 +62,12 @@ function emacsd () {
         echo 'emacs daemon is not running'
         return 1
         ;;
+    echo)
+        cmd=($EMACS_CLIENT_CMD)
+        $0 status >/dev/null &&
+            $cmd --eval "(message \"$1\")" >/dev/null 2>&1 && return 0
+        return 1
+        ;;
     start)
         $0 status >/dev/null && {
             echo 'emacs daemon is already running'

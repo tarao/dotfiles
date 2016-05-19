@@ -28,7 +28,6 @@ height="${EMACS_HEIGHT:-nil}"
 
 EMACS_USE_DAEMON=1
 function emacsc(){ emacsclient -c "$@" }
-function emacsc_msg(){ emacsclient --eval "(message \"$1\")" >/dev/null 2>&1 }
 
 function emacsd_progress_start () { # show progress dialog
     local w=0.3
@@ -49,7 +48,7 @@ function emacsd_progress_start () { # show progress dialog
 
     function emacsd_progress () {
         while (( i < 100 )); do
-            emacsc_msg 'ping' && echo 100 && return # the server is responding
+            emacsd echo 'ping' && echo 100 && return # the server is responding
             echo $i
             sleep $w
             emacsd_progress_next
@@ -60,7 +59,7 @@ function emacsd_progress_start () { # show progress dialog
         ( emacsd status >/dev/null || {
                 emacsd_progress | zenity --progress --auto-close \
                     --text "Running Emacs daemon..."
-        }; emacsd update-env $SCREEN_EXPORT_ENV; emacsc_msg 'ready' ) &
+        }; emacsd update-env $SCREEN_EXPORT_ENV; emacsd echo 'ready' ) &
     }
 }
 
