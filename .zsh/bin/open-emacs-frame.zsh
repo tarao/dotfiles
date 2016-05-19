@@ -40,9 +40,10 @@ function emacsd_progress_start () { # show progress dialog
     [ -n "$1" ] && [ $1 -gt 0 ] && {
         # approximation by the number of lines in the startup message
         w=0.05
+        local len="$1"
         function emacsd_progress_next () {
             i=`wc -l "$EMACS_DAEMON_LOG" | cut -f 1 -d ' '`
-            (( i=$i*100/$1 ))
+            (( i = $i * 100 / $len ))
         }
     }
 
