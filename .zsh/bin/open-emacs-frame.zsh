@@ -1,5 +1,7 @@
 #! /usr/bin/env zsh
 
+source ~/.zsh/screen.zsh
+source ~/.zsh/screen-attach.zsh
 source ~/.zsh/emacs.zsh
 source ~/.zsh/local.zsh
 
