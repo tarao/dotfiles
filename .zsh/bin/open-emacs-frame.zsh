@@ -5,14 +5,6 @@ source ~/.zsh/screen-attach.zsh
 source ~/.zsh/emacs.zsh
 source ~/.zsh/local.zsh
 
-left="${EMACS_LEFT:-nil}"
-right="${EMACS_RIGHT:-nil}"
-top="${EMACS_TOP:-nil}"
-bottom="${EMACS_BOTTOM:-nil}"
-width="${EMACS_WIDTH:-80}"
-offset_left="${EMACS_OFFSET_LEFT:-0}"
-offset_top="${EMACS_OFFSET_TOP:-0}"
-height="${EMACS_HEIGHT:-nil}"
 [[ -z "$SCREEN_EXPORT_ENV" ]] && SCREEN_EXPORT_ENV=(
     DISPLAY XAUTHORITY
     SSH_CONNECTION SSH_CLIENT SSH_TTY SSH_AUTH_SOCK SSH_AGENT_PID
@@ -69,20 +61,4 @@ emacsd status >/dev/null || {
     echo > "$EMACS_DAEMON_LOG" # clear
 }
 emacsd_progress_start "$N"
-emacs -n --eval \
-"(let ((left $left) (right $right) (top $top) (bottom $bottom)             \
-       (width $width) (height $height)                                     \
-       (offset-left $offset_left) (offset-top $offset_top))                \
-   (set-frame-position (selected-frame) offset-left offset-top)            \
-   (set-frame-width (selected-frame) width)                                \
-   (unless height                                                          \
-     (setq height (/ (- (x-display-pixel-height) offset-top)               \
-                     (frame-char-height))))                                \
-   (set-frame-height (selected-frame) height)                              \
-   (when (and (not left) right)                                            \
-     (setq left (- (x-display-pixel-width) (frame-pixel-width) right)))    \
-   (when (and (not top) bottom)                                            \
-     (setq top (- (x-display-pixel-height) (frame-pixel-height) bottom)))  \
-   (setq left (or left (frame-parameter (selected-frame) 'left))           \
-         top (or top (frame-parameter (selected-frame) 'top)))             \
-   (set-frame-position (selected-frame) left top))" "$@"
+emacs -n --eval '(fit-largest-display-right)' "$@"

@@ -56,6 +56,69 @@ place the new frame at the right side of the current frame."
       (clone-frame-1 1)
     (select-frame (make-frame))))
 
+;; adjusting frame position
+(defcustom desktop-offset-left 0
+  "Left offst of the desktop in pixels"
+  :type 'number
+  :group 'frames)
+(defcustom desktop-offset-top 0
+  "Top offst of the desktop in pixels"
+  :type 'number
+  :group 'frames)
+(defcustom desktop-offset-right 0
+  "Right offst of the desktop in pixels"
+  :type 'number
+  :group 'frames)
+(defcustom desktop-offset-bottom 0
+  "Bottom offst of the desktop in pixels"
+  :type 'number
+  :group 'frames)
+(defun screen-size ()
+  (let ((screen-width 0) (screen-height 0))
+    (dolist (attrs (display-monitor-attributes-list))
+      (let* ((geometry (cdr (assq 'geometry attrs)))
+             (right (+ (nth 0 geometry) (nth 2 geometry)))
+             (bottom (+ (nth 1 geometry) (nth 3 geometry))))
+        (when (> right screen-width) (setq screen-width right))
+        (when (> bottom screen-height) (setq screen-height bottom))))
+    (list screen-width screen-height)))
+(defun fit-largest-display (position)
+  (let ((frame (selected-frame))
+        (largest-area 0) (screen (screen-size)) dimensions)
+    (dolist (attrs (display-monitor-attributes-list))
+      (let* ((geometry (cdr (assq 'geometry attrs)))
+             (left (nth 0 geometry))
+             (top (nth 1 geometry))
+             (width (nth 2 geometry))
+             (height (nth 3 geometry))
+             (area (* width height))
+             (right (+ left width))
+             (bottom (+ top height)))
+        (when (> area largest-area)
+          (setq dimensions (list left top right bottom width height)
+                largest-area area))))
+    (when dimensions
+      (let* ((frame-width (frame-pixel-width frame))
+             (left (if (eq position 'left)
+                       (max desktop-offset-left
+                            (nth 0 dimensions))
+                     (min (- (nth 0 screen) desktop-offset-right frame-width)
+                          (- (nth 2 dimensions) frame-width))))
+             (top (max desktop-offset-top (nth 1 dimensions)))
+             (height (/ (- (nth 5 dimensions)
+                           desktop-offset-top desktop-offset-bottom)
+                        (frame-char-height frame))))
+        (set-frame-position frame left top)
+        (set-frame-height frame height)))))
+(defun fit-largest-display-left ()
+  "Fit the current frame to the left end of the largest display."
+  (interactive)
+  (fit-largest-display 'left))
+(defun fit-largest-display-right ()
+  "Fit the current frame to the left end of the largest display."
+  (interactive)
+  (fit-largest-display 'right))
+
 ;; font settings
 (defconst default-fontset-name "menloja")
 (defconst default-base-font-name "Menlo")
