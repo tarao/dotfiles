@@ -32,11 +32,13 @@
          (width (frame-width frame))
          (height (frame-height frame))
          (pixel-width (frame-pixel-width frame))
-         (display-width (x-display-pixel-width)))
+         (display-width (x-display-pixel-width))
+         (x-offset 10) (y-offset 10))
     (make-frame
-     `((left . ,(min (- display-width pixel-width)
-                     (max 0 (+ left (* direction pixel-width)))))
-       (top . ,top)
+     `((left . ,(+ x-offset
+                   (min (- display-width pixel-width)
+                        (max 0 (+ left (* direction pixel-width))))))
+       (top . ,(+ y-offset top))
        (width . ,width)
        (height . ,height)))))
 (defun clone-frame-to-left ()
