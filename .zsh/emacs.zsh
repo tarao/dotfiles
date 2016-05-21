@@ -158,9 +158,14 @@ function emacs () {
     fi
 }
 
-function emacs_edit () {
+function emacs-edit () {
     if [[ -z "$EMACS_USE_DAEMON" ]] || [[ `id -ur` = 0 ]]; then
-        emacs-standalone "$@"
+        if [[ "$1" = '-n' ]]; then
+            shift
+            emacs-standalone "$@" &
+        else
+            emacs-standalone "$@"
+        fi
     else
         emacsd status >/dev/null || {
             emacsclient_desktop
@@ -168,6 +173,6 @@ function emacs_edit () {
         }
         local frames=$(emacsclient -e '(length (visible-frame-list))')
         (( $frames > 1 )) || emacsclient_desktop
-        emacsclient -n "$@" </dev/null >/dev/null
+        emacsclient "$@" </dev/null >/dev/null
     fi
 }

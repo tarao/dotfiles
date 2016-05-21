@@ -39,7 +39,7 @@ alias xsel='xsel -b'
 alias ce='carton exec --'
 alias be='bundle exec --'
 
-alias e='emacs_edit'
+alias e='emacs-edit -n'
 
 function ssh () {
     local cmd; cmd=(command ssh)
