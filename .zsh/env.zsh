@@ -9,6 +9,8 @@ whence xsel >/dev/null && {
     }
 }
 
+export GOPATH="$HOME/go"
+
 # PATH
 function _set_path_env() {
     local su_path; su_path=(
@@ -20,7 +22,7 @@ function _set_path_env() {
         $(whence plenv>/dev/null && plenv root)/shims(N-/) # perl
         ~/.gem/ruby/*/bin(N-/) # ruby
         ~/.local/node-current/bin(N-/) # js
-        ~/go/bin # golang
+        "$GOPATH/bin" # golang
         {,/usr/local,/usr}/bin(N-/)
         {/usr,/usr/local}/games(N-/)
     )
