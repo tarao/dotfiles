@@ -1,5 +1,6 @@
 [[ -d ~/.fzf ]] && {
     bindkey '^R' fzf-history-widget
+    bindkey '^S' fzf-find-file-widget
     bindkey '^Q' fzf-ghq-widget
 }
 
