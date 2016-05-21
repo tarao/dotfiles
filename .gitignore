@@ -16,6 +16,7 @@ Thumbs.db
 .svn
 CVS
 local.install.yml
+*.local.install.yml
 .emacs.d/daemon.log
 .emacs.d/anything-c-adaptive-history
 .emacs.d/ac-comphist.dat
@@ -25,6 +26,7 @@ local.install.yml
 .emacs.d/tramp
 .emacs.d/v*
 .emacs.d/init/.*
+.emacs.d/init/*.local.el
 .emacs.d/init-loader/99_local.el
 .emacs.d/site-lisp
 .emacs.d/url
@@ -32,10 +34,12 @@ local.install.yml
 .screen/local.screenrc
 .vim/info
 .vim/local.vim
+.vim/.netrwhist
 .vimperator/info
 .vimperator/plugin/plugin_loader.js
 .vimperator/plugin-available
 .zsh/.zcompdump
 .zsh/local.zsh
+.zsh/*.local.zsh
 .zsh/cdd_pwd_list*
 .zsh/history
