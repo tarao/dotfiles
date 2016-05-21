@@ -4,9 +4,13 @@
 
     export FZF_DEFAULT_OPTS="--reverse --inline-info"
 
+    function _fzf_history_filter () {
+        perl -pnle '$_ =~ s/^( *[0-9*]+)( +)(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})(.*)$/\1\2[1;30m\3 \4[m\5/'
+    }
+
     function fzf-history-widget () {
         local selected num
-        selected=($(fc -lid 1 | fzf +s --tac +m --with-nth=2.. --tiebreak=index --toggle-sort=ctrl-r ${=FZF_CTRL_R_OPTS} -q "${LBUFFER//$/\\$}"))
+        selected=($(fc -lid 1 | _fzf_history_filter | fzf +s --ansi --tac +m --with-nth=2.. --tiebreak=index --toggle-sort=ctrl-r ${=FZF_CTRL_R_OPTS} -q "${LBUFFER//$/\\$}"))
         if [ -n "$selected" ]; then
             num=$selected[1]
             if [ -n "$num" ]; then
