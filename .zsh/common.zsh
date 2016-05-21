@@ -3,6 +3,7 @@ bindkey -e
 
 # suppress suspend by C-s
 stty stop undef
+stty start undef # C-q
 
 # remove duplicated path
 typeset -gxU PATH=$PATH
