@@ -9,12 +9,15 @@
     }
 
     function fzf-history-widget () {
-        local selected num
-        selected=($(fc -lid 1 | _fzf_history_filter | fzf +s --ansi --tac +m --with-nth=2.. --tiebreak=index --toggle-sort=ctrl-r ${=FZF_CTRL_R_OPTS} -q "${LBUFFER//$/\\$}"))
+        local output selected num
+        output=$(fc -lid 1 | _fzf_history_filter | fzf +s --ansi --tac +m --with-nth=2.. --tiebreak=index --toggle-sort=ctrl-r ${=FZF_CTRL_R_OPTS} --expect=ctrl-e -q "${LBUFFER//$/\\$}")
+        key=$(head -1 <<< "$output")
+        selected=($(head -2 <<< "$output" | tail -1))
         if [ -n "$selected" ]; then
             num=$selected[1]
             if [ -n "$num" ]; then
                 zle vi-fetch-history -n $num
+                [[ "$key" = 'ctrl-e' ]] || zle accept-line
             fi
         fi
         zle redisplay
