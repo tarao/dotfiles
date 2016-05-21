@@ -37,13 +37,12 @@
     }
 
     function fzf-ghq-widget () {
-        local -a repository=($(ghq list -p 2>/dev/null | _fzf_ghq_filter | fzf +s --ansi --with-nth=3..))
-        zle -I
-        zle -R -c
+        local -a repository=($(ghq list -p 2>/dev/null | _fzf_ghq_filter | fzf +s --ansi --with-nth=3.. -q "${BUFFER//$/\\$}"))
         [[ -n "$repository" ]] && {
             BUFFER="cd ${(j::)repository[1,2]}"
             zle accept-line
         }
+        zle redisplay
     }
     zle -N fzf-ghq-widget
 }
