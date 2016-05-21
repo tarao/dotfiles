@@ -6,6 +6,7 @@ stty stop undef
 
 # remove duplicated path
 typeset -gxU PATH=$PATH
+typeset -gxU MANPATH=$MANPATH
 
 # history
 HISTFILE=~/.zsh/history
@@ -51,6 +52,7 @@ source ~/.zsh/shell-env.zsh
 source ~/.zsh/alias.zsh
 source ~/.zsh/completion.zsh
 source ~/.zsh/zle.zsh
+source ~/.zsh/fzf.zsh
 source ~/.zsh/function.zsh
 source ~/.zsh/emacs.zsh
 source ~/.zsh/term.compat.zsh
