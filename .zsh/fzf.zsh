@@ -6,28 +6,12 @@
     typeset -a FZF_FIND_FILES_EXCLUDES
     FZF_FIND_FILES_EXCLUDES=('.git' '.svn' '.hg' '.#*' '#*#' '*~')
 
-    function _fzf_git_ls_files () {
-        git rev-parse HEAD >/dev/null || return 1
-        git ls-files
-    }
-    function _fzf_find_files_excludes () {
+    function _fzf_files_excludes () {
         echo "${(F)FZF_FIND_FILES_EXCLUDES}"
         local root=$(git rev-parse --show-toplevel 2>/dev/null)
         [[ -z "$root" ]] && return
         [[ -r "$root/.gitignore" ]] || return
         cat "$root/.gitignore"
-    }
-    function _fzf_find_files () {
-        local option="-ifC --noreport --charset=C"
-        [[ "$1" = 'all' ]] && option="$option -a"
-        local excludes=($(_fzf_find_files_excludes))
-        (( $#excludes > 0 )) && option="$option -I '${(j:|:)excludes}'"
-        eval "command tree $option | tail -n +2 | perl -pnle 's!^([\\[0-9;m]+)?[.]/!\1!'"
-    }
-    function _fzf_files_default_type () {
-        local t='file'
-        git rev-parse HEAD >/dev/null 2>&1 && t='git'
-        echo "$t"
     }
     function _fzf_files_handle () {
         local key item
@@ -45,25 +29,22 @@
         case "$key" in
         alt-f) _fzf_files file ;;
         alt-a) _fzf_files all ;;
-        alt-g) _fzf_files git ;;
         ctrl-s)
             case "$1" in
             file) _fzf_files all ;;
-            all)  _fzf_files git ;;
-            git)  _fzf_files file ;;
+            all) _fzf_files file ;;
             esac
             ;;
         esac
     }
     function _fzf_files () {
-        local t="${1:-$(_fzf_files_default_type)}"
-        local cmd
-        case "$t" in
-        file) cmd='_fzf_find_files file' ;;
-        all)  cmd='_fzf_find_files all' ;;
-        git)  cmd='_fzf_git_ls_files' ;;
-        esac
-        eval "$cmd" | fzf --ansi -m --expect=alt-f,alt-a,alt-r,ctrl-s | \
+        local t="${1:-file}"
+        local option="-ifC --noreport --charset=C"
+        [[ "$t" = 'all' ]] && option="$option -a"
+        local excludes=($(_fzf_files_excludes))
+        (( $#excludes > 0 )) && option="$option -I '${(j:|:)excludes}'"
+        eval "command tree $option | tail -n +2 | perl -pnle 's!^([\\[0-9;m]+)?[.]/!\1!'" | \
+            fzf --ansi -m --expect=alt-f,alt-a,ctrl-s | \
             _fzf_files_handle "$t"
     }
     function fzf-find-file-widget () {
