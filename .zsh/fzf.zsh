@@ -111,4 +111,101 @@
         zle redisplay
     }
     zle -N fzf-ghq-widget
+
+    function _fzf_git_branch_local () {
+        git for-each-ref --sort=-committerdate refs/heads --format='%(color:dim yellow)%(objectname:short)%(color:reset) %(refname:short) %(color:dim cyan)(%(authorname))%(color:reset) %(color:dim white)%(contents:subject)%(color:reset)%09%(color:dim cyan)%(committerdate:short)%(color:reset)'
+    }
+    function _fzf_git_branch_remote () {
+        git for-each-ref --sort=-committerdate refs/remotes --format='%(color:dim yellow)%(objectname:short)%(color:reset) %(refname:short) %(color:dim cyan)(%(authorname))%(color:reset) %(color:dim white)%(contents:subject)%(color:reset)%09%(color:dim cyan)%(committerdate:short)%(color:reset)'
+    }
+    function _fzf_git_branch_handle () {
+        local key cmd
+        local -a item
+        read key
+
+        [[ -z "$key" ]] && {
+            item=($(tail -1))
+            local option
+            [[ "$1" == 'remote' ]] && option=' -t'
+            echo "git checkout$option -- $item[2]"
+            return
+        }
+
+        [[ "$key" = 'ctrl-c' ]] && {
+            case "$1" in
+            remote)
+                local -a remotes
+                remotes=($(git remote))
+                echo "git remote prune -- $remotes"
+                ;;
+            local)
+                # remove local branches without upstream or with
+                # invalid upstreams
+                local -a branches
+                local branch
+                git for-each-ref --format='%(refname:short) %(upstream)' refs/heads | while read -A item; do
+                    [[ -n "$item[2]" ]] && git rev-parse "$item[2]" >/dev/null 2>&1 && continue
+                    branch="$item[1]"
+                    branches=($branches ${(q)branch})
+                done
+                (( $#branches > 0 )) && echo "git branch -d $branches"
+                ;;
+            esac
+            return
+        }
+
+        [[ "$key" = 'ctrl-x' ]] && {
+            local -a refs
+            while read -A item; do
+                refs=($refs $item[2])
+            done
+
+            case "$1" in
+            remote)
+                local -A remotes
+                local ref remote branch
+                for ref in "$refs[@]"; do
+                    remote="${ref%%/*}"
+                    branch="${ref#*/}"
+                    remotes[$remote]="$remotes[$remote] ${(q)branch}"
+                done
+                read -q \?"${(F)refs}
+
+Are you sure to remove these remote branches and their tracking branches? (y/n) " || return
+                for remote in "${(@k)remotes}"; do
+                    echo -n "git push ${(q)remote} --delete $remotes[$remote]; "
+                done
+                ;;
+            local)
+                echo "git branch -d $refs"
+                ;;
+            esac
+            return
+        }
+
+        # switch
+        case "$key" in
+        ctrl-l) _fzf_git_branch local ;;
+        ctrl-r) _fzf_git_branch remote ;;
+        esac
+    }
+    function _fzf_git_branch () {
+        local t="${1:-local}"
+        local cmd
+        case "$t" in
+        local)  cmd='_fzf_git_branch_local' ;;
+        remote) cmd='_fzf_git_branch_remote' ;;
+        esac
+        eval "$cmd" | fzf +s --ansi -m --expect=ctrl-l,ctrl-r,ctrl-x,ctrl-c | \
+            _fzf_git_branch_handle "$t"
+    }
+    function fzf-git-branch-widget () {
+        local cmd=$(_fzf_git_branch)
+        [[ -n "$cmd" ]] && {
+            BUFFER="$cmd"
+            zle accept-line
+        }
+        zle redisplay
+    }
+    zle -N fzf-git-branch-widget
 }
