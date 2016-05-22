@@ -33,10 +33,6 @@
         }
 
         # switch
-
-        while read item; do
-            ; # discard all
-        done
         case "$key" in
         alt-f) _fzf_files file ;;
         alt-a) _fzf_files all ;;
@@ -58,7 +54,6 @@
         all)  cmd='_fzf_find_files all' ;;
         git)  cmd='_fzf_git_ls_files' ;;
         esac
-        local item
         eval "$cmd" | fzf -m --expect=alt-f,alt-a,alt-r,ctrl-s | \
             _fzf_files_handle "$t"
     }
@@ -96,7 +91,7 @@
         local repository r components
         while read repository; do
             repository="$(print -nD "$repository")"
-            for r in $roots; do
+            for r in "$roots[@]"; do
                 r="${r%/}/"
                 components=(${(s:/:)repository#$r})
                 [[ "$repository" = "$r"* ]] && {
