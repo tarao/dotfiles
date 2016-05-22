@@ -91,7 +91,6 @@
             done
         done
     }
-
     function fzf-ghq-widget () {
         local -a repository=($(ghq list -p 2>/dev/null | _fzf_ghq_filter | fzf +s --ansi --with-nth=3.. -q "${BUFFER//$/\\$}"))
         [[ -n "$repository" ]] && {
