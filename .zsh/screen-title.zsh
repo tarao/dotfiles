@@ -50,16 +50,16 @@ function _screen_title_install_preexec { # use command name as a title
     function preexec_screen_window_title () {
         local -a cmd; cmd=(${(z)2}) # command in a single line
         if [[ "$SCREEN_TITLE" = 'auto' ]]; then
-            case $cmd[1] in
+            case "$cmd[1]" in
                 fg)
                     if (( $#cmd == 1 )); then
                         cmd=(builtin jobs -l %+)
                     else
-                        cmd=(builtin jobs -l $cmd[2])
+                        cmd=(builtin jobs -l "$cmd[2]")
                     fi
                     ;;
                 %*)
-                    cmd=(builtin jobs -l $cmd[1])
+                    cmd=(builtin jobs -l "$cmd[1]")
                     ;;
                 *)
                     _screen_set_cmd_title "$cmd"
