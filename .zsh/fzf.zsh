@@ -3,19 +3,26 @@
     export MANPATH="$MANPAH:$HOME/.fzf/man"
 
     export FZF_DEFAULT_OPTS="--reverse --inline-info"
+    typeset -a FZF_FIND_FILES_EXCLUDES
+    FZF_FIND_FILES_EXCLUDES=('.git' '.svn' '.hg' '.#*' '#*#' '*~')
 
     function _fzf_git_ls_files () {
         git rev-parse HEAD >/dev/null || return 1
         git ls-files
     }
+    function _fzf_find_files_excludes () {
+        echo "${(F)FZF_FIND_FILES_EXCLUDES}"
+        local root=$(git rev-parse --show-toplevel 2>/dev/null)
+        [[ -z "$root" ]] && return
+        [[ -r "$root/.gitignore" ]] || return
+        cat "$root/.gitignore"
+    }
     function _fzf_find_files () {
-        local option="-path '*/*~' -o -path '*/#*#' -o "
-        [[ "$1" != 'all' ]] && option="$option -path '*/\\.*' -o "
-        eval "command find -L . \
-                \\( ${option}-fstype 'dev' -o -fstype 'proc' \\) -prune \
-                -o -type f -print \
-                -o -type d -print \
-                -o -type l -print 2> /dev/null | sed 1d | cut -b3-"
+        local option="-ifC --noreport --charset=C"
+        [[ "$1" = 'all' ]] && option="$option -a"
+        local excludes=($(_fzf_find_files_excludes))
+        (( $#excludes > 0 )) && option="$option -I '${(j:|:)excludes}'"
+        eval "command tree $option | tail -n +2 | perl -pnle 's!^([\\[0-9;m]+)?[.]/!\1!'"
     }
     function _fzf_files_default_type () {
         local t='file'
@@ -27,6 +34,8 @@
         read key
         [[ -z "$key" ]] && { # Enter
             while read item; do
+                local nolink="${item% -> *}"
+                [[ -h "$nolink" ]] && item="$nolink"
                 echo -n "${(q)item} "
             done
             return
@@ -54,7 +63,7 @@
         all)  cmd='_fzf_find_files all' ;;
         git)  cmd='_fzf_git_ls_files' ;;
         esac
-        eval "$cmd" | fzf -m --expect=alt-f,alt-a,alt-r,ctrl-s | \
+        eval "$cmd" | fzf --ansi -m --expect=alt-f,alt-a,alt-r,ctrl-s | \
             _fzf_files_handle "$t"
     }
     function fzf-find-file-widget () {
@@ -64,7 +73,7 @@
     zle -N fzf-find-file-widget
 
     function _fzf_history_filter () {
-        perl -pnle '$_ =~ s/^( *[0-9*]+)( +)(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})(.*)$/\1\2[1;30m\3 \4[m\5/'
+        perl -pnle 's/^( *[0-9*]+)( +)(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})(.*)$/\1\2[1;30m\3 \4[m\5/'
     }
 
     function fzf-history-widget () {
