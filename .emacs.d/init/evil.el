@@ -73,6 +73,7 @@ TYPE is either a state or one of `inner', `outer', `window',
 
    (motion ":"   tarao/anything-for-files
            "M-;" tarao/anything-for-files
+           "C-q" anything-ghq
            "gw"  what-cursor-position
            "gW"  describe-char
            "gA"  describe-char)
