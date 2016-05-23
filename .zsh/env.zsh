@@ -9,7 +9,7 @@ whence xsel >/dev/null && {
     }
 }
 
-export GOPATH="$HOME/go"
+export GOPATH="$HOME/.go"
 
 # PATH
 function _set_path_env() {
