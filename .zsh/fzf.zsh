@@ -115,8 +115,8 @@
         [[ -z "$key" ]] && {
             item=($(tail -1))
             local option
-            [[ "$1" == 'remote' ]] && option=' -t'
-            echo "git checkout$option -- $item[2]"
+            [[ "$1" == 'remote' ]] && option=" -b ${item[2]#*/} -t"
+            echo "git checkout$option $item[2]"
             return
         }
 
