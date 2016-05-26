@@ -86,6 +86,7 @@ class Linker
 
     def make
       t = Linker.info.test?
+      Dir.mkdir(@dir) unless File.exist?(@dir)
       return unless File.directory?(@dir)
       return unless target
       Dir.chdir(@dir) do
