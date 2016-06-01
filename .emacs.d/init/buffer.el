@@ -18,6 +18,13 @@
   (set (make-local-variable 'make-backup-files) nil)
   (auto-save-mode 0))
 
+;; automatically make directory
+(add-hook 'find-file-not-found-functions
+          #'(lambda ()
+              (let ((dir (file-name-directory (buffer-file-name))))
+                (make-directory dir t)
+                nil)))
+
 ;; use directory name instead of <num>
 (require 'uniquify nil 'noerror)
 (setq uniquify-buffer-name-style 'forward)
