@@ -195,4 +195,8 @@
 
   (add-hook 'ensime-mode-hook #'tarao/enable-eldoc)
   (add-hook 'scala-mode-hook #'tarao/configure-scala)
+
+  (with-eval-after-load-feature 'ensime
+    (set-face-attribute 'ensime-implicit-highlight nil
+                        :underline '(:style wave :color "#7F9F7F")))
   )
