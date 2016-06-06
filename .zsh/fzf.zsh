@@ -3,10 +3,10 @@
     export MANPATH="$MANPAH:$HOME/.fzf/man"
 
     export FZF_DEFAULT_OPTS="--reverse --inline-info"
+
     typeset -a FZF_FIND_FILES_EXCLUDES
     FZF_FIND_FILES_EXCLUDES=('.git' '.svn' '.hg' '.#*' '#*#' '*~')
     FZF_FIND_FILES_TOGGLE_KEY='ctrl-s'
-
     function _fzf_files_excludes () {
         echo "${(F)FZF_FIND_FILES_EXCLUDES}"
         local root=$(git rev-parse --show-toplevel 2>/dev/null)
@@ -15,7 +15,8 @@
         cat "$root/.gitignore"
     }
     function _fzf_files_handle () {
-        local key item
+        local query key item
+        read query
         read key
         [[ -z "$key" ]] && { # Enter
             while read item; do
@@ -28,24 +29,25 @@
 
         # switch
         case "$key" in
-        alt-f) _fzf_files file ;;
-        alt-a) _fzf_files all ;;
+        alt-f) _fzf_files file "$query" ;;
+        alt-a) _fzf_files all "$query" ;;
         "$FZF_FIND_FILES_TOGGLE_KEY")
             case "$1" in
-            file) _fzf_files all ;;
-            all) _fzf_files file ;;
+            file) _fzf_files all "$query" ;;
+            all) _fzf_files file "$query" ;;
             esac
             ;;
         esac
     }
     function _fzf_files () {
+        local query="$2"
         local t="${1:-file}"
         local option="-ifC --noreport --charset=C"
         [[ "$t" = 'all' ]] && option="$option -a"
         local excludes=($(_fzf_files_excludes))
         (( $#excludes > 0 )) && option="$option -I '${(j:|:)excludes}'"
         eval "command tree $option | tail -n +2 | perl -pnle 's!^([\\[0-9;m]+)?[.]/!\1!'" | \
-            fzf --ansi -m --expect=alt-f,alt-a,"$FZF_FIND_FILES_TOGGLE_KEY" | \
+            fzf --ansi -m --expect=alt-f,alt-a,"$FZF_FIND_FILES_TOGGLE_KEY" --print-query -q "$query" | \
             _fzf_files_handle "$t"
     }
     function fzf-find-file-widget () {
@@ -55,11 +57,9 @@
     zle -N fzf-find-file-widget
 
     FZF_HISTORY_TOGGLE_KEY='ctrl-r'
-
     function _fzf_history_filter () {
         perl -pnle 's/^( *[0-9*]+)( +)(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})(.*)$/\1\2[1;30m\3 \4[m\5/'
     }
-
     function fzf-history-widget () {
         local output selected num
         output=$(fc -lid 1 | _fzf_history_filter | fzf +s --ansi --tac +m --with-nth=2.. --tiebreak=index --toggle-sort="$FZF_HISTORY_TOGGLE_KEY" ${=FZF_CTRL_R_OPTS} --expect=ctrl-e -q "${LBUFFER//$/\\$}")
@@ -111,8 +111,9 @@
         git for-each-ref --sort=-committerdate refs/remotes --format='%(color:dim yellow)%(objectname:short)%(color:reset) %(refname:short) %(color:dim cyan)(%(authorname))%(color:reset) %(color:dim white)%(contents:subject)%(color:reset)%09%(color:dim cyan)%(committerdate:short)%(color:reset)'
     }
     function _fzf_git_branch_handle () {
-        local key cmd
+        local query key cmd
         local -a item
+        read query
         read key
 
         [[ -z "$key" ]] && {
@@ -177,18 +178,19 @@ Are you sure to remove these remote branches and their tracking branches? (y/n) 
 
         # switch
         case "$key" in
-        ctrl-l) _fzf_git_branch local ;;
-        ctrl-r) _fzf_git_branch remote ;;
+        ctrl-l) _fzf_git_branch local "$query" ;;
+        ctrl-r) _fzf_git_branch remote "$query" ;;
         esac
     }
     function _fzf_git_branch () {
+        local query="$2"
         local t="${1:-local}"
         local cmd
         case "$t" in
         local)  cmd='_fzf_git_branch_local' ;;
         remote) cmd='_fzf_git_branch_remote' ;;
         esac
-        eval "$cmd" | fzf +s --ansi -m --expect=ctrl-l,ctrl-r,ctrl-x,ctrl-c | \
+        eval "$cmd" | fzf +s --ansi -m --expect=ctrl-l,ctrl-r,ctrl-x,ctrl-c --print-query -q "$query" | \
             _fzf_git_branch_handle "$t"
     }
     function fzf-git-branch-widget () {
