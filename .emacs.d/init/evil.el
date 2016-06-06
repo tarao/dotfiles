@@ -148,6 +148,8 @@ to next line."
 
 (bundle evil-leader
   (evil-leader/set-leader ",")
+  (evil-leader/set-key
+    "gh" 'open-github-from-file)
   (global-evil-leader-mode))
 
 (bundle color-moccur)
