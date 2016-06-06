@@ -147,7 +147,7 @@ to next line."
   (global-evil-surround-mode 1))
 
 (bundle evil-leader
-  (evil-leader/set-leader ",")
+  (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
     "gh" 'open-github-from-file)
   (global-evil-leader-mode))
