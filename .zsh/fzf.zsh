@@ -5,6 +5,7 @@
     export FZF_DEFAULT_OPTS="--reverse --inline-info"
     typeset -a FZF_FIND_FILES_EXCLUDES
     FZF_FIND_FILES_EXCLUDES=('.git' '.svn' '.hg' '.#*' '#*#' '*~')
+    FZF_FIND_FILES_TOGGLE_KEY='ctrl-s'
 
     function _fzf_files_excludes () {
         echo "${(F)FZF_FIND_FILES_EXCLUDES}"
@@ -29,7 +30,7 @@
         case "$key" in
         alt-f) _fzf_files file ;;
         alt-a) _fzf_files all ;;
-        ctrl-s)
+        "$FZF_FIND_FILES_TOGGLE_KEY")
             case "$1" in
             file) _fzf_files all ;;
             all) _fzf_files file ;;
@@ -44,7 +45,7 @@
         local excludes=($(_fzf_files_excludes))
         (( $#excludes > 0 )) && option="$option -I '${(j:|:)excludes}'"
         eval "command tree $option | tail -n +2 | perl -pnle 's!^([\\[0-9;m]+)?[.]/!\1!'" | \
-            fzf --ansi -m --expect=alt-f,alt-a,ctrl-s | \
+            fzf --ansi -m --expect=alt-f,alt-a,"$FZF_FIND_FILES_TOGGLE_KEY" | \
             _fzf_files_handle "$t"
     }
     function fzf-find-file-widget () {
@@ -53,13 +54,15 @@
     }
     zle -N fzf-find-file-widget
 
+    FZF_HISTORY_TOGGLE_KEY='ctrl-r'
+
     function _fzf_history_filter () {
         perl -pnle 's/^( *[0-9*]+)( +)(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})(.*)$/\1\2[1;30m\3 \4[m\5/'
     }
 
     function fzf-history-widget () {
         local output selected num
-        output=$(fc -lid 1 | _fzf_history_filter | fzf +s --ansi --tac +m --with-nth=2.. --tiebreak=index --toggle-sort=ctrl-r ${=FZF_CTRL_R_OPTS} --expect=ctrl-e -q "${LBUFFER//$/\\$}")
+        output=$(fc -lid 1 | _fzf_history_filter | fzf +s --ansi --tac +m --with-nth=2.. --tiebreak=index --toggle-sort="$FZF_HISTORY_TOGGLE_KEY" ${=FZF_CTRL_R_OPTS} --expect=ctrl-e -q "${LBUFFER//$/\\$}")
         key=$(head -1 <<< "$output")
         selected=($(head -2 <<< "$output" | tail -1))
         if [ -n "$selected" ]; then
