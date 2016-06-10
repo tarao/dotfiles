@@ -1,5 +1,6 @@
 (setq el-get-lock-package-versions
-      '((yasnippet :checksum "0d79e6988ec371279fc1c23733c7371bd21927ee")
+      '((scala-mode :checksum "c90bbde5ff29c23b1545c7b29edba453fc33f393")
+        (yasnippet :checksum "0d79e6988ec371279fc1c23733c7371bd21927ee")
         (csharp-mode :checksum "a631944161af0de659695dcfad19940f65716175")
         (word-count :checksum "6267c98e0d9a3951e667da9bace5aaf5033f4906")
         (seq :checksum "0bfd9873323910170c6754e7e8a2e59ef0b0579d")
@@ -8,12 +9,12 @@
         (typescript :checksum "2c628a884602aeb6d7120bea3453f3d3d2d48a53")
         (pcre2el :checksum "75db0d537ab2b7f27bc7d4ff01141843a85fa3c9")
         (evil-leader :checksum "39f7014bcf8b36463e0c7512c638bda4bac6c2cf")
-        (sbt-mode :checksum "6beeb01e20b3af5bd1b751c26cb2c6f0d7e5d5e1")
+        (sbt-mode :checksum "f1514212d86643c4bf1657ff6682b66472a69362")
         (noflet :checksum "7ae84dc3257637af7334101456dafe1759c6b68a")
         (company-mode :checksum "5fc4a9a0b0c75f4f128ad01ca8befd1928399c86")
         (projectile :checksum "4c2b610b327a1c21e8a06143477bc5e7a49862b7")
         (f :checksum "05410117f2c150e5976e945abd63bce4937c12e8")
-        (ensime :checksum "dc203a1fd52e05dee4462eb7b9cfb2ea28b833ca")
+        (ensime :checksum "fddb0f3574cd9870d8774c143a42a93e1b219121")
         (s :checksum "e59915ec6fc35983fa4a164ff2a3f73df135ca88")
         (scala-mode2 :checksum "c5ab65732c000baf08b50da96a839e7aa6620084")
         (multi-mode+evil :checksum "62ed0b30685dbe5d9b10be918c56e255a7189177")
@@ -72,4 +73,4 @@
         (el-get-lock :checksum "046ffb568c6964ea30813338234aea2d60a5c632")))
 (setq el-get-lock-locked-packages 'nil)
 (setq el-get-lock-unlocked-packages
-      '(inf-ruby zenburn-theme))
+      '(inf-ruby zenburn-theme el-get))

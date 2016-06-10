@@ -20,7 +20,8 @@
 
 ;; lock the pacakge versions
 (bundle tarao/el-get-lock
-  (el-get-lock))
+  (el-get-lock)
+  (el-get-lock-unlock 'el-get))
 
 (bundle with-eval-after-load-feature)
 

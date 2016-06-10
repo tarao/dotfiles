@@ -4,7 +4,7 @@
  ensime-ac-override-settings nil)
 
 (bundle flycheck)
-(bundle scala-mode2)
+(bundle scala-mode)
 (bundle sbt-mode)
 (bundle projectile)
 (bundle noflet)

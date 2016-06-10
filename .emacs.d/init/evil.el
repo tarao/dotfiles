@@ -246,7 +246,7 @@ to next line."
   (defadvice ensime-search-mode (after insert-state activate)
     (evil-insert-state))
 
-  (with-eval-after-load-feature 'scala-mode2
+  (with-eval-after-load-feature 'scala-mode
     (defun tarao/scala-join-line ()
       "Adapt `scala-indent:join-line' to behave more like evil's
   line join. `scala-indent:join-line' acts like the vanilla

@@ -1,0 +1,4 @@
+(:name scala-mode
+       :description "Major mode for editing Scala code."
+       :type github
+       :pkgname "ensime/emacs-scala-mode")
