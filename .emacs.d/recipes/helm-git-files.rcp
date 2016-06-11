@@ -1,0 +1,4 @@
+(:name helm-git-files
+       :type github
+       :pkgname "tarao/helm-git-files-el"
+       :depends helm)

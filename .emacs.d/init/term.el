@@ -14,13 +14,7 @@
       (setq ansi-term-color-vector vec)))
   (bundle! term+key-intercept)
   (bundle! term+mode)
-  (bundle! term+anything-shell-history)
   (with-eval-after-load-feature 'evil (bundle! term+evil)))
-
-(bundle anything
-  (with-eval-after-load-feature 'term+
-    (define-key term+char-map (kbd "M-;") #'anything-for-files)
-    (define-key term+line-map (kbd "M-;") #'anything-for-files)))
 
 (bundle term+mux
   (with-eval-after-load-feature 'term+mux

@@ -1,7 +1,0 @@
-(:name descbinds-anything
-       :description "Yet Another describe-bindings with anything"
-       :type emacswiki
-       :depends anything
-       :prepare
-       (autoload 'descbinds-anything "descbinds-anything"
-         "Yet Another `describe-bindings' with `anything'." t))

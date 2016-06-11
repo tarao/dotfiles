@@ -57,7 +57,6 @@ TYPE is either a state or one of `inner', `outer', `window',
                                     do (define-key map key def))))))
 
 ;; dependencies
-(bundle anything)
 (bundle goto-chg)
 (bundle tarao-elisp)
 (bundle pcre2el)
@@ -71,9 +70,9 @@ TYPE is either a state or one of `inner', `outer', `window',
    ;; in Vim
    (motion ";"   evil-ex)
 
-   (motion ":"   tarao/anything-for-files
-           "M-;" tarao/anything-for-files
-           "C-q" anything-ghq
+   (motion ":"   tarao/helm-for-files
+           "M-;" tarao/helm-for-files
+           "C-q" helm-ghq
            "gw"  what-cursor-position
            "gW"  describe-char
            "gA"  describe-char)
@@ -163,8 +162,8 @@ to next line."
 
   (global-evil-operator-moccur-mode 1)
   (with-eval-after-load-feature 'color-moccur
-    (define-key moccur-mode-map (kbd ":") #'tarao/anything-for-files)
-    (define-key moccur-mode-map (kbd "M-;") #'tarao/anything-for-files))
+    (define-key moccur-mode-map (kbd ":") #'tarao/helm-for-files)
+    (define-key moccur-mode-map (kbd "M-;") #'tarao/helm-for-files))
 
   ;; key bindings
 

@@ -2,14 +2,20 @@
 (setq frame-title-format
       '("" invocation-name "-" emacs-version "@" short-hostname ": %b"))
 
+(defconst user-default-fg "#aaaaaa")
+(defconst user-default-bg "#1f1f1f")
 (defconst user-face-alist
-  `((default   :foreground "#aaaaaa" :background "#1f1f1f")
+  `((default   :foreground ,user-default-fg
+               :background ,user-default-bg)
     (region                          :background "#8c8ce8")
     (mode-line :foreground "#8fb28f" :background "#3f3f3f" :box nil)
     (mode-line-inactive              :background "#5f5f5f" :box nil)
     (header-line                     :background "#3f3f3f" :box nil))
   "User defined face attributes to override default faces or theme faces.")
 
+(defvar zenburn-override-colors-alist
+  `(("zenburn-fg" . ,user-default-fg)
+    ("zenburn-bg" . ,user-default-bg)))
 ;; theme
 (setq frame-background-mode 'dark)
 (if (not (and (>= emacs-major-version 24) (>= emacs-minor-version 1)))
