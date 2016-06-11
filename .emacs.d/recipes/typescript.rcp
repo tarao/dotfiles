@@ -1,5 +1,0 @@
-(:name typescript
-       :website "https://msopentech.com/blog/2012/10/01/sublime-text-vi-emacs-typescript-enabled/"
-       :description "Major mode for editing typescript"
-       :type http-zip
-       :url "http://www.interoperabilitybridges.com/media/155449/typescript_support_for_emacs.zip")
