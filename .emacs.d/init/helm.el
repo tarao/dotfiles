@@ -28,60 +28,52 @@
   ;; ghq
 
   (defvar helm-ghq:action-function 'helm-ghq:find-files-from-directory)
-
-  (defvar helm-source-ghq
-    (helm-build-in-buffer-source "Repositories"
-      :init #'helm-ghq:init
-      :filtered-candidate-transformer #'helm-ghq:transform-candidates
-      :action 'helm-ghq:action-function))
-
-  (defun helm-ghq:root-path (roots path)
-    (let ((roots (mapcar
-                  #'(lambda (r)
-                      (abbreviate-file-name
-                       (file-name-as-directory r)))
-                  roots))
+  (defun helm-ghq:rel-path (root path)
+    (let ((root (abbreviate-file-name root))
           (path (abbreviate-file-name path)))
-      (loop for r in roots
-            until (string-prefix-p r path)
-            finally return (cons r (substring path (length r))))))
-  (defun helm-ghq:format (path roots)
-    (let* ((root-path (helm-ghq:root-path roots path))
-           (root (car root-path))
-           (components (split-string (cdr root-path) "/"))
+      (substring path (length root))))
+  (defun helm-ghq:format (path root)
+    (let* ((components (split-string (helm-ghq:rel-path root path) "/"))
            (origin (car components))
            (repository (mapconcat #'identity (cdr components) "/")))
       (propertize
        (concat repository
-               (propertize " " 'display '(space :align-to 45))
+               (propertize " " 'display '(space :align-to 60))
                "  "
-               (propertize origin 'face 'font-lock-type-face)
-               (propertize " " 'display '(space :align-to 58))
-               "  "
-               (propertize (format "[%s]" root)
-                           'face 'font-lock-comment-face))
+               (propertize origin 'face 'font-lock-type-face))
        'helm-realvalue (file-name-as-directory path))))
   (defun helm-ghq:transform-candidates (candidates _source)
-    (let ((roots (helm-attr 'helm-ghq:roots)))
+    (let ((root (helm-attr 'helm-ghq:root)))
       (loop for c in candidates
-            collect (helm-ghq:format c roots))))
-  (defun helm-ghq:init ()
-    (let ((roots (split-string
-                  (shell-command-to-string "git config --get-all ghq.root")
-                  "[\r\n]+")))
-      (helm-attrset 'helm-ghq:roots roots)
-      (with-current-buffer (helm-candidate-buffer 'global)
-        (call-process-shell-command
-         "ghq list -p 2>/dev/null" nil (current-buffer)))))
-
+            collect (helm-ghq:format c root))))
+  (defun helm-ghq:roots ()
+    (let ((output (shell-command-to-string "git config --get-all ghq.root")))
+      (mapcar #'(lambda (r) (expand-file-name (file-name-as-directory r)))
+              (split-string output "[\r\n]+" t))))
+  (defun helm-ghq:init-fun (root)
+    `(lambda ()
+       (let* ((root  ,root))
+         (helm-attrset 'helm-ghq:root root)
+         (with-current-buffer (helm-candidate-buffer 'global)
+           (let ((process-environment (cons (format "GHQ_ROOT=%s" root)
+                                            process-environment)))
+             (call-process-shell-command
+              "ghq list -p 2>/dev/null" nil (current-buffer)))))))
+  (defun helm-ghq:source (root)
+    (let ((source-name (abbreviate-file-name (directory-file-name root))))
+      (helm-build-in-buffer-source (format "Repositories in %s" source-name)
+        :init (helm-ghq:init-fun root)
+        :filtered-candidate-transformer #'helm-ghq:transform-candidates
+        :persistent-action 'ignore
+        :action 'helm-ghq:action-function)))
   (defun helm-ghq:find-files-from-directory (dir)
     (let ((default-directory dir))
       (helm-find-files-1 dir)))
-
   (defun helm-ghq ()
     (interactive)
-    (helm :sources (list helm-source-ghq)
-          :buffer "*ghq*")))
+    (let ((roots (helm-ghq:roots)))
+      (helm :sources (mapcar #'helm-ghq:source roots)
+            :buffer "*ghq*"))))
 
 (bundle helm-git-files
   (defun tarao/helm-for-files ()
