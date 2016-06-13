@@ -66,6 +66,7 @@
       (helm-build-in-buffer-source (format "Repositories in %s" source-name)
         :init (helm-ghq:init-fun root)
         :filtered-candidate-transformer #'helm-ghq:transform-candidates
+        :fuzzy-match t
         :persistent-action 'ignore
         :action 'helm-ghq:action-function)))
   (defun helm-ghq:find-files-from-directory (dir)
