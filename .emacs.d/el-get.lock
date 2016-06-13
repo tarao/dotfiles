@@ -1,5 +1,6 @@
 (setq el-get-lock-package-versions
-      '((helm-descbinds :checksum "b4ad76372a1b9f4415322d210b3888423247693d")
+      '((helm-git-grep :checksum "cc032974118f8d633db5a1233657651afc318ba9")
+        (helm-descbinds :checksum "b4ad76372a1b9f4415322d210b3888423247693d")
         (helm-git-files :checksum "10066a1092f60703e3860842e423dbeaaf28a21a")
         (helm :checksum "e45c9e7d027ef51c5e70979ebf429abaf295b84a")
         (typescript-mode :checksum "d81cc7278276b8d3a163e14fe5396126eff0475d")

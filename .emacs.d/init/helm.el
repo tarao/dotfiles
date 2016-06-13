@@ -109,3 +109,5 @@
 
 (bundle helm-descbinds
   (helm-descbinds-mode))
+
+(bundle helm-git-grep)

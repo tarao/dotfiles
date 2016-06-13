@@ -148,7 +148,9 @@ to next line."
 (bundle evil-leader
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
-    "gh" 'open-github-from-file)
+    "gh" 'open-github-from-file
+    "gg" 'helm-git-grep
+    "gp" 'helm-git-grep-at-point)
   (global-evil-leader-mode))
 
 (bundle color-moccur)
@@ -376,7 +378,7 @@ to next line."
 
       "fu" 'ensime-show-uses-of-symbol-at-point
 
-      "gg" 'ensime-edit-definition
+      "g." 'ensime-edit-definition
       "gi" 'ensime-goto-impl
       "gt" 'ensime-goto-test
 
