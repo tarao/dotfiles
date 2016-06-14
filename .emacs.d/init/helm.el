@@ -111,3 +111,12 @@
   (helm-descbinds-mode))
 
 (bundle helm-git-grep)
+
+(bundle helm-ls-git
+  (defvar helm-source-git-status
+    (helm-make-source "Git status" 'helm-ls-git-status-source))
+  (defun helm-git-status ()
+    (interactive)
+    (require 'helm-ls-git)
+    (helm :sources '(helm-source-git-status)
+          :buffer "*git status*")))

@@ -150,7 +150,9 @@ to next line."
   (evil-leader/set-key
     "gh" 'open-github-from-file
     "gg" 'helm-git-grep
-    "gp" 'helm-git-grep-at-point)
+    "gp" 'helm-git-grep-at-point
+    "gs" 'helm-git-status
+    "gi" 'helm-git-status)
   (global-evil-leader-mode))
 
 (bundle color-moccur)
