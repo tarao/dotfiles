@@ -199,4 +199,6 @@
   (with-eval-after-load-feature 'ensime
     (set-face-attribute 'ensime-implicit-highlight nil
                         :underline '(:style wave :color "#7F9F7F")))
+
+  (autoload 'ensime-helm-search "ensime-helm" nil t)
   )

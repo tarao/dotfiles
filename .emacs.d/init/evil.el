@@ -346,7 +346,7 @@ to next line."
       (with-sbt-switch (sbt:send-region beg end)))
 
     (evil-leader/set-key-for-mode 'scala-mode
-      "/"  'ensime-search
+      "/"  'ensime-helm-search
       "?"  'ensime-scalex
 
       "bc" 'ensime-sbt-do-compile
