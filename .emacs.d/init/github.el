@@ -33,7 +33,7 @@
     (open-github--command-one-line "rev-parse" remote-branch)))
 
 (defun open-github--highlight-marker (start end)
-  (cond ((and start end) (format "#L%s..L%s" start end))
+  (cond ((and start end (< start end)) (format "#L%s..L%s" start end))
         (start (format "#L%s" start))
         (t "")))
 
@@ -58,8 +58,8 @@
   (let* ((root (open-github--root))
          (file (file-truename (expand-file-name file)))
          (path (file-relative-name file root))
-         (start-line (line-number-at-pos start))
-         (end-line (1- (line-number-at-pos end))))
+         (start-line (and start (line-number-at-pos start)))
+         (end-line (and end (1- (line-number-at-pos end)))))
     (open-github--from-file path start-line end-line)))
 
 (defun open-github-from-file ()
