@@ -114,7 +114,7 @@
 
 (bundle helm-ls-git
   (defvar helm-source-git-status
-    (helm-make-source "Git status" 'helm-ls-git-status-source))
+    (helm-make-source "Git status" 'helm-ls-git-status-source :follow 1))
   (defun helm-git-status ()
     (interactive)
     (require 'helm-ls-git)
