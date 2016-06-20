@@ -14,8 +14,11 @@
       (error "Error: here is not Git repository"))
     (file-name-as-directory root)))
 
-(defun open-github--host ()
+(defun open-github--host (&optional remote-url)
   (or (open-github--command-one-line "config" "--get" "hub.host")
+      (and remote-url
+           (string-match "^[^:]+://\\(?:[^/]+@\\)?\\([^/]+\\)/" remote-url)
+           (match-string 1 remote-url))
       "github.com"))
 
 (defun open-github--remote-url ()
@@ -48,10 +51,10 @@
             host (car user-repo) (cdr user-repo) sha1 file marker)))
 
 (defun open-github--from-file (file &optional start end)
-  (let ((host (open-github--host))
-        (remote-url (open-github--remote-url))
-        (sha1 (open-github--sha1))
-        (marker (open-github--highlight-marker start end)))
+  (let* ((remote-url (open-github--remote-url))
+         (host (open-github--host remote-url))
+         (sha1 (open-github--sha1))
+         (marker (open-github--highlight-marker start end)))
     (browse-url (open-github--file-url host remote-url sha1 file marker))))
 
 (defun open-github--from-file-direct (file start end)
