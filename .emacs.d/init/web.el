@@ -1,5 +1,5 @@
 (defconst web-mode-files
-  '("/templates/.*\\.html$" "\\.tt$" "\\.mustache$"))
+  '("\\.html$" "\\.tt$" "\\.mustache$"))
 (bundle web-mode
   (setq-default web-mode-markup-indent-offset 2
                 web-mode-css-indent-offset 2
