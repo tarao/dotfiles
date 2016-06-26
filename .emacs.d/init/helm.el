@@ -30,6 +30,8 @@
   ;; ghq
 
   (defvar helm-ghq:action-function 'helm-ghq:find-files-from-directory)
+  (defvar helm-ghq:additional-roots
+    (list (file-name-directory (directory-file-name el-get-dir))))
   (defun helm-ghq:rel-path (root path)
     (let ((root (abbreviate-file-name root))
           (path (abbreviate-file-name path)))
@@ -48,10 +50,13 @@
     (let ((root (helm-attr 'helm-ghq:root)))
       (loop for c in candidates
             collect (helm-ghq:format c root))))
+  (defun helm-ghq:canonical-dir (dir)
+    (file-truename (expand-file-name (file-name-as-directory dir))))
   (defun helm-ghq:roots ()
     (let ((output (shell-command-to-string "git config --get-all ghq.root")))
-      (mapcar #'(lambda (r) (expand-file-name (file-name-as-directory r)))
-              (split-string output "[\r\n]+" t))))
+      (mapcar #'helm-ghq:canonical-dir
+              (append (split-string output "[\r\n]+" t)
+                      helm-ghq:additional-roots))))
   (defun helm-ghq:init-fun (root)
     `(lambda ()
        (let* ((root  ,root))
