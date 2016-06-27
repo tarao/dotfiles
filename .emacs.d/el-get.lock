@@ -1,5 +1,6 @@
 (setq el-get-lock-package-versions
-      '((magit :checksum "6514e3f0d81b8c97e7a5d84b355fe022f7412914")
+      '((ediff-side-by-side :checksum "7de50ad95d5ff6ad2cf624578214eac16e96095f")
+        (magit :checksum "6514e3f0d81b8c97e7a5d84b355fe022f7412914")
         (with-editor :checksum "d28d07497f67fea4c62fe7a2d3201fd86fb64fe2")
         (emacs-async :checksum "0e327f72bdffc5bc4a1fbc34a8da1b7066e819b3")
         (helm-git-grep :checksum "cc032974118f8d633db5a1233657651afc318ba9")

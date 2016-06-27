@@ -1,0 +1,3 @@
+(:name ediff-side-by-side
+       :type github
+       :pkgname "tarao/ediff-side-by-side-el")
