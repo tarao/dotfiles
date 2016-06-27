@@ -105,10 +105,10 @@
     zle -N fzf-ghq-widget
 
     function _fzf_git_branch_local () {
-        git for-each-ref --sort=-committerdate refs/heads --format='%(color:dim yellow)%(objectname:short)%(color:reset) %(refname:short) %(color:dim cyan)(%(authorname))%(color:reset) %(color:dim white)%(contents:subject)%(color:reset)%09%(color:dim cyan)%(committerdate:short)%(color:reset)'
+        git for-each-ref --sort=-authordate refs/heads --format='%(color:dim yellow)%(objectname:short)%(color:reset) %(refname:short) %(color:dim cyan)(%(authorname))%(color:reset) %(color:dim white)%(contents:subject)%(color:reset)%09%(color:dim cyan)%(authordate:short)%(color:reset)'
     }
     function _fzf_git_branch_remote () {
-        git for-each-ref --sort=-committerdate refs/remotes --format='%(color:dim yellow)%(objectname:short)%(color:reset) %(refname:short) %(color:dim cyan)(%(authorname))%(color:reset) %(color:dim white)%(contents:subject)%(color:reset)%09%(color:dim cyan)%(committerdate:short)%(color:reset)'
+        git for-each-ref --sort=-authordate refs/remotes --format='%(color:dim yellow)%(objectname:short)%(color:reset) %(refname:short) %(color:dim cyan)(%(authorname))%(color:reset) %(color:dim white)%(contents:subject)%(color:reset)%09%(color:dim cyan)%(authordate:short)%(color:reset)'
     }
     function _fzf_git_branch_handle () {
         local query key cmd
