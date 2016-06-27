@@ -151,8 +151,8 @@ to next line."
     "gh" 'open-github-from-file
     "gg" 'helm-git-grep
     "gp" 'helm-git-grep-at-point
-    "gs" 'helm-git-status
-    "gi" 'helm-git-status)
+    "gs" 'magit-status
+    "gi" 'magit-status)
   (global-evil-leader-mode))
 
 (bundle color-moccur)
@@ -223,6 +223,28 @@ to next line."
   ;; dired mode
   (with-eval-after-load-feature (dired)
     (evil-define-key 'normal dired-mode-map "c" #'dired-do-copy))
+
+  ;; magit
+  (with-eval-after-load-feature (magit-mode)
+    (let ((map magit-mode-map))
+      (define-key map "J" 'magit-section-forward-sibling)
+      (define-key map "K" 'magit-section-backward-sibling)
+      (define-key map "j" 'evil-next-line)
+      (define-key map "k" 'evil-previous-line)
+      (define-key map ":" #'tarao/helm-for-files)
+      (define-key map (kbd "C-y") 'evil-scroll-line-up)
+      (define-key map (kbd "C-e") 'evil-scroll-line-down)
+      (define-key map (kbd "C-u") 'evil-scroll-up)
+      (define-key map (kbd "C-d") 'evil-scroll-down)
+      (define-key map (kbd "C-w") 'evil-window-map)))
+  (with-eval-after-load-feature 'magit-diff
+    (let ((map magit-diff-mode-map))
+      (define-key map "j" 'evil-next-line)
+      (define-key map "k" 'evil-previous-line))
+    (define-key magit-file-section-map "K" 'magit-section-backward-sibling))
+  (with-eval-after-load-feature 'magit
+    (let ((map magit-status-mode-map))
+      (define-key map "j" 'evil-next-line)))
 
   ;; multi-mode
   (with-eval-after-load-feature 'multi-mode-util

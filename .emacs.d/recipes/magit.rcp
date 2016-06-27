@@ -1,0 +1,13 @@
+(:name magit
+       :website "https://github.com/magit/magit#readme"
+       :description "It's Magit! An Emacs mode for Git."
+       :type github
+       :pkgname "magit/magit"
+       :branch "master"
+       :minimum-emacs-version "24.4"
+       :depends (dash with-editor emacs-async)
+       :load-path "lisp/"
+       :compile "lisp/"
+       ;; Create an empty autoloads file because magit.el explicitly
+       ;; checks for a file of that name.
+       :build `(("touch" "lisp/magit-autoloads.el")))
