@@ -152,7 +152,9 @@ to next line."
     "gg" 'helm-git-grep
     "gp" 'helm-git-grep-at-point
     "gs" 'magit-status
-    "gi" 'magit-status)
+    "gi" 'magit-status
+    "gc" 'helm-magit:checkout
+    "gd" 'helm-magit:diff)
   (global-evil-leader-mode))
 
 (bundle color-moccur)

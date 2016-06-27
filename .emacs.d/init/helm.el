@@ -19,6 +19,10 @@
                   ,@tarao/helm-for-files-other-sources))
   (global-set-key (kbd "C-x b") #'helm-for-files)
   (global-set-key [remap execute-extended-command] #'helm-M-x)
+  (add-hook 'helm-after-initialize-hook
+            #'(lambda ()
+                (with-current-buffer helm-buffer
+                  (setq show-trailing-whitespace nil))))
 
   (with-eval-after-load-feature 'helm-mode
     (define-key helm-map (kbd "M-n") #'helm-next-source)
