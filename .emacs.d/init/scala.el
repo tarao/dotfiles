@@ -180,7 +180,6 @@
     (scala/enable-eldoc))
 
   (defun tarao/configure-scala ()
-    (eval-and-compile (require 'ensime))
     (eval-and-compile (require 'auto-complete))
     (make-local-variable 'ac-trigger-key)
     (ac-set-trigger-key "TAB")
@@ -195,6 +194,11 @@
 
   (add-hook 'ensime-mode-hook #'tarao/enable-eldoc)
   (add-hook 'scala-mode-hook #'tarao/configure-scala)
+
+  (with-eval-after-load-feature 'ensime-mode
+    ;; Prevent the default behavior; `ensime-mode' is invoked via
+    ;; `tarao/configure-scala'.
+    (remove-hook 'scala-mode-hook 'ensime-mode))
 
   (with-eval-after-load-feature 'ensime
     (set-face-attribute 'ensime-implicit-highlight nil
