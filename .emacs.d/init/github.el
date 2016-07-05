@@ -21,17 +21,24 @@
            (match-string 1 remote-url))
       "github.com"))
 
-(defun open-github--remote-url ()
-  (or (open-github--command-one-line "config" "--get" "remote.origin.url")
-      (error "Failed to get remote.origin URL")))
+(defun open-github--current-branch ()
+  (open-github--command-one-line "symbolic-ref" "--short" "HEAD"))
 
-(defun open-github--sha1 ()
-  (let* ((branch (or (open-github--command-one-line "symbolic-ref" "HEAD") ""))
-         (branch (replace-regexp-in-string "\\`refs/heads/" "" branch))
-         (remote (open-github--command-one-line
-                  "config" "--get" (format "branch.%s.remote" branch)))
+(defun open-github--remote (&optional branch)
+  (let ((branch (or branch (open-github--current-branch))))
+    (open-github--command-one-line
+     "config" (format "branch.%s.remote" branch))))
+
+(defun open-github--remote-url (remote)
+  (let ((key (format "remote.%s.url" remote)))
+    (or (open-github--command-one-line "config" "--get" key)
+        (error "Failed to get %s" key))))
+
+(defun open-github--sha1 (&optional remote branch)
+  (let* ((branch (or branch (open-github--current-branch)))
+         (remote (or remote (open-github--remote branch)))
          (remote-branch (format "%s/%s" remote branch)))
-    (unless remote
+    (unless remote-branch
       (error "Failed to get remote SHA1"))
     (open-github--command-one-line "rev-parse" remote-branch)))
 
@@ -40,20 +47,22 @@
         (start (format "#L%s" start))
         (t "")))
 
-(defun open-github--extract-user-host (remote-url)
+(defun open-github--extract-user-repo (remote-url)
   (if (string-match "[:/]\\([^/]+\\)/\\([^/]+?\\)\\(?:\\.git\\)?\\'" remote-url)
       (cons (match-string 1 remote-url) (match-string 2 remote-url))
     (error "Failed: match %s" remote-url)))
 
 (defun open-github--file-url (host remote sha1 file marker)
-  (let ((user-repo (open-github--extract-user-host remote)))
+  (let ((user-repo (open-github--extract-user-repo remote)))
     (format "https://%s/%s/%s/blob/%s/%s%s"
             host (car user-repo) (cdr user-repo) sha1 file marker)))
 
 (defun open-github--from-file (file &optional start end)
-  (let* ((remote-url (open-github--remote-url))
+  (let* ((branch (open-github--current-branch))
+         (remote (open-github--remote branch))
+         (remote-url (open-github--remote-url remote))
          (host (open-github--host remote-url))
-         (sha1 (open-github--sha1))
+         (sha1 (open-github--sha1 remote branch))
          (marker (open-github--highlight-marker start end)))
     (browse-url (open-github--file-url host remote-url sha1 file marker))))
 
