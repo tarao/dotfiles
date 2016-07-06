@@ -81,6 +81,7 @@
   (defun helm-magit:log-transform-candidates (candidates _source)
     (eval-and-compile (require 'magit-section))
     (loop for c in candidates
+          unless (string= c "(empty)")
           collect (let* ((section (get-text-property 0 'magit-section c))
                          (commit (magit-section-value section)))
                     (propertize c 'helm-realvalue commit))))
