@@ -17,6 +17,7 @@ Thumbs.db
 CVS
 local.install.yml
 *.local.install.yml
+.bundle/cache
 .emacs.d/daemon.log
 .emacs.d/anything-c-adaptive-history
 .emacs.d/ac-comphist.dat
