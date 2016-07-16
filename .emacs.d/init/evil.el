@@ -154,7 +154,7 @@ to next line."
     "gp" 'helm-git-grep-at-point
     "gs" 'magit-status
     "gi" 'magit-status
-    "gc" 'helm-magit:checkout
+    "gco" 'helm-magit:checkout
     "gd" 'helm-magit:diff)
   (global-evil-leader-mode))
 
