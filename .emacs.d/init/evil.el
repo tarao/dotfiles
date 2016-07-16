@@ -149,6 +149,7 @@ to next line."
   (evil-leader/set-leader "<SPC>")
   (evil-leader/set-key
     "gh" 'open-github-from-file
+    "gb" 'git-messenger:popup-message
     "gg" 'helm-git-grep
     "gp" 'helm-git-grep-at-point
     "gs" 'magit-status
@@ -225,6 +226,34 @@ to next line."
   ;; dired mode
   (with-eval-after-load-feature (dired)
     (evil-define-key 'normal dired-mode-map "c" #'dired-do-copy))
+
+  ;; git-messenger
+  (defmacro with-passing-through-git-messenger-popup (command)
+    (let ((post-command
+           `(lambda ()
+              (call-interactively #',command)
+              (git-messenger:popup-message))))
+      `(progn
+         (run-with-timer 0 nil ',post-command)
+         (git-messenger:popup-close))))
+  (defmacro pass-through-git-messenger-key (state key)
+    (let* ((map (symbol-value (evil-state-property state :keymap)))
+           (command (lookup-key map key)))
+      `(progn
+         (define-key git-messenger-map (kbd ,key)
+           #'(lambda ()
+               (interactive)
+               (with-passing-through-git-messenger-popup ,command))))))
+  (with-eval-after-load-feature (git-messenger)
+    (pass-through-git-messenger-key motion "j")
+    (pass-through-git-messenger-key motion "k")
+    (pass-through-git-messenger-key motion "J")
+    (pass-through-git-messenger-key motion "K")
+    (let ((map git-messenger-map))
+      (define-key map (kbd "C-y") 'evil-scroll-line-up)
+      (define-key map (kbd "C-e") 'evil-scroll-line-down)
+      (define-key map (kbd "C-u") 'evil-scroll-up)
+      (define-key map (kbd "C-d") 'evil-scroll-down)))
 
   ;; magit
   (with-eval-after-load-feature (magit-mode)

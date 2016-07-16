@@ -61,7 +61,7 @@
         (color-moccur :checksum "f834f30dfffebf82543a73a4c2bf2e61d9f0d5c6")
         (eldoc-extension :checksum "a74cfbe05115afb18b671588b7f63d37d6b2b895")
         (c-eldoc :checksum "633a55c449db41ed450e5797feafa55d67e833d7")
-        (git-messenger :checksum "ff954c176dd33efd53025a9ada8b037cc5e1a60e")
+        (git-messenger :checksum "e53e1f1c3d8a8de0f0d1deb9a07f340e4bb13021")
         (git-gutter-fringe :checksum "c12179ece35538c94d7928572f523a7145f1fb49")
         (fringe-helper :checksum "ef4a9c023bae18ec1ddd7265f1f2d6d2e775efdd")
         (git-gutter :checksum "6dfd5f5a40f21d7bb774331631b226fd372e5e7d")
