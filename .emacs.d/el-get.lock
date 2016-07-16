@@ -75,7 +75,7 @@
         (fic-mode :checksum "bf3f9c373fdcf24b7f47f54dcfc111c0e4eaf6b2")
         (tarao-elisp :checksum "b9f6a7c1002248ce0f6a56bc720dafb5b77437be")
         (with-eval-after-load-feature :checksum "0b38651a5f0dafdfe04bd0032eb5ff803e99460b")
-        (el-get-lock :checksum "5a6c7d4eddaaf1402e9344e30628a3e57affeb54")))
+        (el-get-lock :checksum "df8cfe55441695865a64b97946750b6413a40425")))
 (setq el-get-lock-locked-packages 'nil)
 (setq el-get-lock-unlocked-packages
       '(inf-ruby zenburn-theme el-get))
