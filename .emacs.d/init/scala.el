@@ -196,6 +196,7 @@
 
   (add-hook 'ensime-mode-hook #'tarao/enable-eldoc)
   (add-hook 'scala-mode-hook #'tarao/configure-scala)
+  (add-hook 'java-mode-hook 'ensime-mode)
 
   (with-eval-after-load-feature 'ensime-mode
     ;; Prevent the default behavior; `ensime-mode' is invoked via
