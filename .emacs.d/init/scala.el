@@ -1,5 +1,6 @@
+(defvar tarao/ensime-completion-style 'company)
 (setq-default
- ensime-completion-style 'auto-complete
+ ensime-completion-style tarao/ensime-completion-style
  ensime-ac-enable-argument-placeholders nil
  ensime-ac-override-settings nil)
 
@@ -180,9 +181,10 @@
     (scala/enable-eldoc))
 
   (defun tarao/configure-scala ()
-    (eval-and-compile (require 'auto-complete))
-    (make-local-variable 'ac-trigger-key)
-    (ac-set-trigger-key "TAB")
+    (when (eq ensime-completion-style 'auto-complete)
+      (eval-and-compile (require 'auto-complete))
+      (make-local-variable 'ac-trigger-key)
+      (ac-set-trigger-key "TAB"))
     (unless (string-match "\\.sbt$" (or (buffer-file-name) ""))
       (scala/configure-ensime)
       (scala/maybe-start-ensime)
@@ -199,6 +201,10 @@
     ;; Prevent the default behavior; `ensime-mode' is invoked via
     ;; `tarao/configure-scala'.
     (remove-hook 'scala-mode-hook 'ensime-mode))
+
+  (unless (eq tarao/ensime-completion-style 'auto-complete)
+    (with-eval-after-load-feature 'auto-complete
+      (setq ac-modes (remove 'scala-mode ac-modes))))
 
   (with-eval-after-load-feature 'ensime
     (set-face-attribute 'ensime-implicit-highlight nil
