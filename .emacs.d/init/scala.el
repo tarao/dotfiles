@@ -132,14 +132,6 @@
           ((eq ensime-completion-style 'auto-complete)
            (scala/completing-dot-ac))))
 
-  (defun scala/repl ()
-    "Start REPL for the project"
-    (interactive)
-    (eval-and-compile (require 'sbt-mode))
-    (scala/with-project-sbt
-     (prog1 (sbt-start)
-       (sbt-command "console"))))
-
   (defun sbt:send-buffer ()
     "Send buffer content to shell."
     (interactive)

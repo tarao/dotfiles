@@ -299,6 +299,8 @@ to next line."
   ;; scala
 
   (add-to-list 'evil-insert-state-modes 'sbt-mode)
+  (add-to-list 'evil-insert-state-modes 'ensime-inf-mode)
+
   (defadvice ensime-search-mode (after insert-state activate)
     (evil-insert-state))
 
