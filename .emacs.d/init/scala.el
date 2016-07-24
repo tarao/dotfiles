@@ -157,7 +157,7 @@
     (interactive)
     (progn
       (message "Regenerating .ensime ...")
-      (when (= 0 (scala/call-sbt-command "gen-ensime"))
+      (when (= 0 (scala/call-sbt-command "ensimeCofig"))
         (ensime-restart))))
 
   ;; Configuration

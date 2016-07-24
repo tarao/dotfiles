@@ -450,6 +450,7 @@ to next line."
              "nF" ensime-reload-open-files
              "ns" ensime
              "nS" ensime-gen-and-restart
+             "nr" ensime-restart
 
              "rd" ensime-refactor-inline-local
              "rD" ensime-undo-peek
