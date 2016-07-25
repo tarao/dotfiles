@@ -1,4 +1,4 @@
-(setq-default skk-init-file "init/.skk"
+(setq-default skk-init-file (expand-file-name "init/.skk" user-emacs-directory)
               skk-user-directory "~/.ddskk")
 (bundle ddskk
   (global-set-key (kbd "C-x C-j") 'skk-mode))
