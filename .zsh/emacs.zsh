@@ -3,7 +3,7 @@ EMACS_CLIENT_APP='emacs-client'
 EMACS_STANDALONE_CMD=(command emacs)
 EMACS_DAEMON_LOG="$HOME/.emacs.d/daemon.log"
 function emacsclient () {
-    $EMACS_CLIENT_CMD "$@"
+    XMODIFIERS='@im=none' $EMACS_CLIENT_CMD "$@"
 }
 function emacsc () {
     emacsclient -nw "$@"
@@ -12,7 +12,7 @@ function emacsclient_desktop () {
     gtk-launch "$EMACS_CLIENT_APP" >/dev/null 2>&1
 }
 function emacs-standalone () {
-    $EMACS_STANDALONE_CMD "$@"
+    XMODIFIERS='@im=none' $EMACS_STANDALONE_CMD "$@"
 }
 
 function emacsb () {
