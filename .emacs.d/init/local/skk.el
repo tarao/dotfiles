@@ -5,7 +5,7 @@
 (setq-default skk-egg-like-newline t
               skk-henkan-strict-okuri-precedence t
               skk-show-annotation t
-              skk-dcomp-activate t
+              skk-dcomp-activate 'eolp
               ;; skk-dcomp-multiple-activate t
               skk-kutouten-type 'en)
 
