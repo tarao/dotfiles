@@ -161,12 +161,6 @@
       (when (= 0 (scala/call-sbt-command "ensimeCofig"))
         (ensime-restart))))
 
-  ;; Configuration
-
-  (defadvice ensime-search-mode (after ignore-trailing-whitespace activate)
-    (with-current-buffer ensime-search-target-buffer-name
-      (setq show-trailing-whitespace nil)))
-
   ;; Initialization
 
   (defun tarao/enable-eldoc ()
@@ -184,8 +178,9 @@
       (unless (ensime-config-find-file (buffer-file-name))
         (flycheck-mode +1))))
 
-  (defadvice ensime (after ensime-disable-flycheck activate)
+  (defun tarao/ensime-disable-flycheck (&rest args)
     (flycheck-mode -1))
+  (advice-add 'ensime :after #'tarao/ensime-disable-flycheck)
 
   (add-hook 'ensime-mode-hook #'tarao/enable-eldoc)
   (add-hook 'scala-mode-hook #'tarao/configure-scala)
@@ -199,6 +194,13 @@
   (unless (eq tarao/ensime-completion-style 'auto-complete)
     (with-eval-after-load-feature 'auto-complete
       (setq ac-modes (remove 'scala-mode ac-modes))))
+
+  ;; Configuration
+
+  (defun tarao/ensime-search-mode (&rest args)
+    (with-current-buffer ensime-search-target-buffer-name
+      (setq show-trailing-whitespace nil)))
+  (advice-add 'ensime-search-mode :after #'tarao/ensime-search-mode)
 
   (with-eval-after-load-feature 'ensime
     (set-face-attribute 'ensime-implicit-highlight nil
