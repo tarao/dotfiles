@@ -350,11 +350,6 @@ to next line."
         (evil-insert-state))))
 
   (with-eval-after-load-feature (ensime evil-leader)
-    (evil-define-key 'insert ensime-mode-map
-      (kbd ".") #'scala/completing-dot
-      (kbd "M-.") #'ensime-edit-definition
-      (kbd "M-,") #'ensime-pop-find-definition-stack)
-
     (evil-define-key 'normal ensime-mode-map
       (kbd "M-.") #'ensime-edit-definition
       (kbd "M-,") #'ensime-pop-find-definition-stack)
