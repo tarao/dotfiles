@@ -1,5 +1,6 @@
 (defvar tarao/ensime-completion-style 'company)
 (setq-default
+ ensime-use-helm t
  ensime-completion-style tarao/ensime-completion-style
  ensime-ac-enable-argument-placeholders nil
  ensime-ac-override-settings nil)

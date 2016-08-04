@@ -400,7 +400,7 @@ to next line."
     ;; (evil-leader/set-key-for-mode 'scala-mode
 
     (let ((bindings
-           '("/"  ensime-helm-search
+           '("/"  ensime-search
              "?"  ensime-scalex
 
              "bc" ensime-sbt-do-compile
