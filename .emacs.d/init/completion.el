@@ -41,7 +41,7 @@
         (call-interactively 'company-complete-common-or-cycle))))
 
   (with-eval-after-load-feature 'company
-    (let ((map company-mode-map))
+    (let ((map company-active-map))
       (define-key map (kbd "C-n") 'company-select-next)
       (define-key map (kbd "C-p") 'company-select-previous)
       (define-key map (kbd "C-m") 'company-complete-selection))
