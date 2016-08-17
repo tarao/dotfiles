@@ -25,16 +25,17 @@
   (defun scala/maybe-start-ensime ()
     (eval-and-compile (require 'ensime))
     (eval-and-compile (require 'noflet))
-    (when (buffer-file-name)
-      (let* ((ensime-buffer (ignore-errors (scala/ensime-buffer)))
-             (ensime-buffer (and (buffer-live-p ensime-buffer) ensime-buffer))
-             (config-file (ensime-config-find-file (buffer-file-name))))
-        ;; ignore if there is no .ensime for the project
-        (when (and (null ensime-buffer) config-file)
-          (noflet ((ensime-config-find (&rest _) config-file))
-            (save-window-excursion
-              (ensime)))
-          t))))
+    (and (buffer-file-name)
+         (let* ((ensime-buffer (ignore-errors (scala/ensime-buffer)))
+                (ensime-buffer (and (buffer-live-p ensime-buffer)
+                                    ensime-buffer))
+                (config-file (ensime-config-find-file (buffer-file-name))))
+           (and config-file ; ignore if there is no .ensime for the project
+                (prog1 t
+                  (unless ensime-buffer
+                    (noflet ((ensime-config-find (&rest _) config-file))
+                      (save-window-excursion
+                        (ensime)))))))))
 
   (defun scala/ensime-buffer ()
     "Find the Ensime server buffer corresponding to FILE."
@@ -43,6 +44,10 @@
            (server-process (and config (ensime-process-for-config config))))
       (when server-process
         (process-buffer server-process))))
+
+  (defun scala/start-ensime-or-enable-flycheck ()
+    (unless (scala/maybe-start-ensime)
+      (flycheck-mode +1)))
 
   (defun scala/enable-eldoc ()
     "Show error message or type name at point by Eldoc."
@@ -161,14 +166,13 @@
       (make-local-variable 'ac-trigger-key)
       (ac-set-trigger-key "TAB"))
     (unless (string-match "\\.sbt$" (or (buffer-file-name) ""))
-      (scala/configure-ensime)
-      (unless (scala/maybe-start-ensime)
-        (flycheck-mode +1))))
+      (scala/configure-ensime)))
 
   (defun tarao/ensime-disable-flycheck (&rest args)
     (flycheck-mode -1))
   (advice-add 'ensime :after #'tarao/ensime-disable-flycheck)
 
+  (add-hook 'ensime-mode-hook #'scala/start-ensime-or-enable-flycheck)
   (add-hook 'ensime-mode-hook #'tarao/enable-eldoc)
   (add-hook 'scala-mode-hook #'tarao/configure-scala)
   (add-hook 'java-mode-hook 'ensime-mode)
