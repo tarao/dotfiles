@@ -26,33 +26,23 @@
     (eval-and-compile (require 'ensime))
     (eval-and-compile (require 'noflet))
     (when (buffer-file-name)
-      (let ((ensime-buffer (scala/ensime-buffer-for-file (buffer-file-name)))
-            (file (ensime-config-find-file (buffer-file-name))))
+      (let* ((ensime-buffer (ignore-errors (scala/ensime-buffer)))
+             (ensime-buffer (and (buffer-live-p ensime-buffer) ensime-buffer))
+             (config-file (ensime-config-find-file (buffer-file-name))))
         ;; ignore if there is no .ensime for the project
-        (when (null ensime-buffer)
-          (noflet ((ensime-config-find (&rest _) file))
+        (when (and (null ensime-buffer) config-file)
+          (noflet ((ensime-config-find (&rest _) config-file))
             (save-window-excursion
-              (ensime)))))))
+              (ensime)))
+          t))))
 
-  (defun scala/ensime-project-name-from-config (file)
-    (eval-and-compile (require 'ensime))
-    (let ((config (ensime-config-load file)))
-      (plist-get config :name)))
-
-  (defun scala/ensime-buffer-for-file (file)
+  (defun scala/ensime-buffer ()
     "Find the Ensime server buffer corresponding to FILE."
     (eval-and-compile (require 'ensime))
-    (eval-and-compile (require 'dash))
-    (eval-and-compile (require 's))
-    (let* ((config-file (ensime-config-find-file file))
-           (name (and config-file
-                      (scala/ensime-project-name-from-config config-file)))
-           (default-directory (file-name-directory file)))
-      (when name
-        (--first (-when-let (bufname (buffer-name it))
-                   (and (s-contains? "inferior-ensime-server" bufname)
-                        (s-contains? name bufname)))
-                 (buffer-list)))))
+    (let* ((config (ensime-config-for-buffer))
+           (server-process (and config (ensime-process-for-config config))))
+      (when server-process
+        (process-buffer server-process))))
 
   (defun scala/enable-eldoc ()
     "Show error message or type name at point by Eldoc."
@@ -143,9 +133,7 @@
     "Shutdown and destroy connection buffer."
     (interactive)
     (ensime-shutdown)
-    (let* ((buf (buffer-file-name))
-           (ensime-buffer (scala/ensime-buffer-for-file buf)))
-      (when ensime-buffer (kill-buffer ensime-buffer))))
+    (ensime-sem-high-clear-buffer))
 
   (defun ensime-restart ()
     "Restart the ensime server."
@@ -174,8 +162,7 @@
       (ac-set-trigger-key "TAB"))
     (unless (string-match "\\.sbt$" (or (buffer-file-name) ""))
       (scala/configure-ensime)
-      (scala/maybe-start-ensime)
-      (unless (ensime-config-find-file (buffer-file-name))
+      (unless (scala/maybe-start-ensime)
         (flycheck-mode +1))))
 
   (defun tarao/ensime-disable-flycheck (&rest args)
