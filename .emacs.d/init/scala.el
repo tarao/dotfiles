@@ -65,7 +65,7 @@
   (defun scala/completing-dot-company ()
     (eval-and-compile (require 'company))
     (cond (company-backend
-           (company-complete-selection)
+           (company-abort)
            (scala/completing-dot))
           (t
            (insert ".")
