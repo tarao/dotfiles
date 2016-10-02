@@ -111,6 +111,14 @@
      (let (buf (get-buffer-create (sbt:buffer-name)))
        (apply 'call-process sbt:program-name nil buf t args))))
 
+  ;; Overrides
+
+  (defun scala/ensime-scala-new-import-grouped-package
+      (orig-fun base-package grouped-classes)
+    (format "import %s.{%s}" base-package grouped-classes))
+  (advice-add 'ensime-scala-new-import-grouped-package
+              :around #'scala/ensime-scala-new-import-grouped-package)
+
   ;; Interactive commands
 
   (defun scala/completing-dot ()
