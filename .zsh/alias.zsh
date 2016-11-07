@@ -25,7 +25,6 @@ alias -- -='popd'
 alias fwd='ssh -N -F ~/.ssh/fwd_config -N'
 alias proxy='ssh -F ~/.ssh/proxy_config -N'
 
-alias man='LANG=C command man'
 alias od='od -A x -t xCz'
 alias apt='LANG=C aptitude'
 alias sapt='LANG=C sudo aptitude'
@@ -64,6 +63,14 @@ function last () {
     [ -n "$PAGER" ] && {
         command last "$@" | ${=PAGER}
     } || command last "$@"
+}
+function man () {
+    local which=$(which "$1")
+    if echo "$which" | grep "$1: shell built-in command" >/dev/null 2>&1; then
+        LANG=C command man -P "less -p'^       $1 '" zshbuiltins
+    else
+        LANG=C command man "$@"
+    fi
 }
 
 function { # local scope
