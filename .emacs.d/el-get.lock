@@ -1,5 +1,6 @@
 (setq el-get-lock-package-versions
-      '((ediff-side-by-side :checksum "7de50ad95d5ff6ad2cf624578214eac16e96095f")
+      '((auctex :checksum "c073d3e3e04832a2c178ef5f5b52f0d4935a5ea2")
+        (ediff-side-by-side :checksum "7de50ad95d5ff6ad2cf624578214eac16e96095f")
         (magit :checksum "6514e3f0d81b8c97e7a5d84b355fe022f7412914")
         (with-editor :checksum "d28d07497f67fea4c62fe7a2d3201fd86fb64fe2")
         (emacs-async :checksum "0e327f72bdffc5bc4a1fbc34a8da1b7066e819b3")
@@ -34,7 +35,6 @@
         (yaml-mode :checksum "210b0759deec33605248af9b315c0e9af4a5c0bc")
         (zencoding-mode :checksum "58e42af182c98cb9941d27cd042d227fbf4e146c")
         (textarea :checksum "c6e92c29063b56dc0067e40c215bd3fe4fe6a327")
-        (auctex :checksum "61fbbce678e4ad570672b50712f951dc1e6aa02d")
         (term+mux :checksum "81b60e80cf008472bfd7fad9233af2ef722c208a")
         (tab-group :checksum "5a290ec2608e4100fb188fd60ecb77affcc3465b")
         (term+ :checksum "090807985673755720c5533b2fc684f88a3554ad")
