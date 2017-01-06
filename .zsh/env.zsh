@@ -38,7 +38,7 @@ function _set_perl_env() {
         eval "$(plenv init -)"
         local global_version=$(plenv global)
         [[ -n "$global_version" ]] || return
-        PERL5LIB=$(PERL_VERSION="$global_version" perl -e'print join ";",@INC')
+        PERL5LIB=$(PLENV_VERSION="$global_version" perl -e'print join ";",@INC')
         export PERL5LIB
     }
 }
