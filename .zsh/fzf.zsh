@@ -81,14 +81,25 @@
         roots=($(git config --get-all ghq.root))
         (( $#roots < 1 )) && roots[1]='~/.ghq'
 
-        local repository r components
+        local cols=$(tput cols)
+        local r root_length=0
+        for r in "$roots[@]"; do
+            (( $root_length < $#r )) && root_length=$#r
+        done
+
+        local repository components sep1 sep2
         while read repository; do
             repository="$(print -nD "$repository")"
             for r in "$roots[@]"; do
                 r="${r%/}/"
                 components=(${(s:/:)repository#$r})
+                sep1="${(j:/:)components[2,-1]}"
+                sep1=$(( $cols - $root_length - 6 - $#components[1] - $#sep1 ))
+                sep1=$(printf ' '%.0s {1..$sep1})
+                sep2=$(( $root_length + 1 - ($#r - 1) ))
+                sep2=$(printf ' '%.0s {1..$sep2})
                 [[ "$repository" = "$r"* ]] && {
-                    echo "$r ${repository#$r} ${(j:[34m/[m:)components[2,-1]}	[36m$components[1][m	[1;30m[${r%/}][m"
+                    echo "$r ${repository#$r} ${(j:[34m/[m:)components[2,-1]}$sep1[36m$components[1][m$sep2[1;30m[${r%/}][m"
                     break
                 }
             done
