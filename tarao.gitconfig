@@ -29,5 +29,6 @@
 [ghq]
     root = ~/.ghq
     root = ~/.go/src
+    root = ~/work
 [include]
     path = ~/.gitconfig.local
