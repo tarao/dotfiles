@@ -1,3 +1,5 @@
+(eval-when-compile (require 'cl))
+
 (defun open-github--command-to-string (args)
   (with-output-to-string
     (with-current-buffer standard-output
@@ -7,6 +9,10 @@
   (let* ((output (open-github--command-to-string args))
          (output (replace-regexp-in-string "[\r\n]+$" "" output)))
     (and (> (length output) 0) output)))
+
+(defun open-github--command-lines (&rest args)
+  (let* ((output (open-github--command-to-string args)))
+    (split-string (open-github--command-to-string args) "[\r\n]+")))
 
 (defun open-github--root ()
   (let ((root (open-github--command-one-line "rev-parse" "--show-toplevel")))
@@ -34,6 +40,28 @@
     (or (open-github--command-one-line "config" "--get" key)
         (error "Failed to get %s" key))))
 
+(defun open-github--find-remote-branch-from-sha1 (sha1)
+  (let ((branches (open-github--command-lines "branch" "--contains" sha1)))
+    (loop for branch in branches
+          when (> (length branch) 2)
+          for branch = (substring branch 2)
+          for remote = (open-github--remote branch)
+          when (not (null remote))
+          return (cons remote branch))))
+
+(defun open-github--find-remote-branch-from-commits (commits)
+  (loop for sha1 in commits
+        for r = (open-github--find-remote-branch-from-sha1 sha1)
+        when (not (null r))
+        return r))
+
+(defun open-github--find-remote-branch ()
+  (let* ((branch (open-github--current-branch))
+         (remote (open-github--remote branch)))
+    (if remote (cons remote branch)
+      (open-github--find-remote-branch-from-commits
+       (open-github--command-lines "log" "--pretty=format:%H")))))
+
 (defun open-github--sha1 (&optional remote branch)
   (let* ((branch (or branch (open-github--current-branch)))
          (remote (or remote (open-github--remote branch)))
@@ -58,8 +86,10 @@
             host (car user-repo) (cdr user-repo) sha1 file marker)))
 
 (defun open-github--from-file (file &optional start end)
-  (let* ((branch (open-github--current-branch))
-         (remote (open-github--remote branch))
+  (let* ((remote-branch (or (open-github--find-remote-branch)
+                            (error "Failed to find remote branch")))
+         (remote (car remote-branch))
+         (branch (cdr remote-branch))
          (remote-url (open-github--remote-url remote))
          (host (open-github--host remote-url))
          (sha1 (open-github--sha1 remote branch))
