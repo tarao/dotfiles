@@ -36,9 +36,8 @@
      "config" (format "branch.%s.remote" branch))))
 
 (defun open-github--remote-url (remote)
-  (let ((key (format "remote.%s.url" remote)))
-    (or (open-github--command-one-line "config" "--get" key)
-        (error "Failed to get %s" key))))
+  (or (open-github--command-one-line "remote" "get-url" remote)
+      (error "Failed to get %s" key)))
 
 (defun open-github--find-remote-branch-from-sha1 (sha1)
   (let ((branches (open-github--command-lines "branch" "--contains" sha1)))
