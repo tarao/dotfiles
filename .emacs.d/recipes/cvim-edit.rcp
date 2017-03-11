@@ -1,0 +1,6 @@
+(:name cvim-edit
+       :website "https://github.com/tarao/cvim-edit-el"
+       :description "cVim Edit Server on Emacs."
+       :type github
+       :pkgname "tarao/cvim-edit-el"
+       :depends elnode)

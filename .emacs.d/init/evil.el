@@ -296,6 +296,9 @@ to next line."
       "J" 'evil-scroll-down
       "K" 'evil-scroll-up))
 
+  ;; cvim
+  (add-hook 'cvim-edit:local-mode-hook #'(lambda () (evil-append-line 1)))
+
   ;; scala
 
   (add-to-list 'evil-insert-state-modes 'sbt-mode)
