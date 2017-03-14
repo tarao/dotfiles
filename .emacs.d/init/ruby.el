@@ -1,7 +1,6 @@
 (bundle rdoc-mode)
-(el-get-lock-unlock 'inf-ruby)
 (bundle inf-ruby
-  (add-hook 'ruby-mode-hook #'inf-ruby-keys))
+  (add-hook 'ruby-mode-hook #'inf-ruby-minor-mode))
 
 (setq auto-mode-alist
       (append '(("\\.rb$" . ruby-mode)

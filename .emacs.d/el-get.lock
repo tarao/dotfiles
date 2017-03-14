@@ -1,5 +1,6 @@
 (setq el-get-lock-package-versions
-      '((cvim-edit :checksum "03f1e3c02a742e15d8b79f59d8ef7395d1d0d534")
+      '((inf-ruby :checksum "af4f238ef4555521d13c5eb2fb8e818acf59d70a")
+        (cvim-edit :checksum "03f1e3c02a742e15d8b79f59d8ef7395d1d0d534")
         (elnode :checksum "a2aaba9558af7daec720409bd064e22707e34a22")
         (db :checksum "b3a423fb8e72f9013009cbe033d654df2ce31438")
         (kv :checksum "721148475bce38a70e0b678ba8aa923652e8900e")
@@ -84,4 +85,4 @@
         (el-get-lock :checksum "df8cfe55441695865a64b97946750b6413a40425")))
 (setq el-get-lock-locked-packages 'nil)
 (setq el-get-lock-unlocked-packages
-      '(inf-ruby zenburn-theme el-get))
+      '(zenburn-theme el-get))
