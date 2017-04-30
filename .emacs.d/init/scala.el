@@ -19,8 +19,10 @@
     "Ensure the file exists before starting `ensime-mode'."
     (eval-and-compile (require 'ensime))
     (if (file-exists-p (buffer-file-name))
-        (ensime-mode +1)
-      (add-hook 'after-save-hook #'(lambda () (ensime-mode +1)) nil t)))
+        (scala/start-ensime-or-enable-flycheck)
+      (add-hook 'after-save-hook
+                #'(lambda ()
+                    (scala/start-ensime-or-enable-flycheck)) nil t)))
 
   (defun scala/maybe-start-ensime ()
     (eval-and-compile (require 'ensime))
@@ -180,7 +182,6 @@
     (flycheck-mode -1))
   (advice-add 'ensime :after #'tarao/ensime-disable-flycheck)
 
-  (add-hook 'ensime-mode-hook #'scala/start-ensime-or-enable-flycheck)
   (add-hook 'ensime-mode-hook #'tarao/enable-eldoc)
   (add-hook 'scala-mode-hook #'tarao/configure-scala)
   (add-hook 'java-mode-hook 'ensime-mode)
