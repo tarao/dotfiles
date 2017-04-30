@@ -154,6 +154,7 @@
     "Restart the ensime server."
     (interactive)
     (ensime-cleanup)
+    (sit-for 1)
     (scala/maybe-start-ensime))
 
   (defun ensime-gen-and-restart ()
