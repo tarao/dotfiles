@@ -30,7 +30,7 @@
         (company-mode :checksum "1fe263493fc3cb3551c55bb3441fd9d7eb0c0a96")
         (projectile :checksum "4c2b610b327a1c21e8a06143477bc5e7a49862b7")
         (f :checksum "05410117f2c150e5976e945abd63bce4937c12e8")
-        (ensime :checksum "bb5f1766768a9a343f31ba49641db60c5b1c7765")
+        (ensime :checksum "8117122e36a77f9e5616c4260680a07317aebe80")
         (s :checksum "e61dee51474e61b777575b474459c582f3084f64")
         (scala-mode2 :checksum "c5ab65732c000baf08b50da96a839e7aa6620084")
         (multi-mode+evil :checksum "62ed0b30685dbe5d9b10be918c56e255a7189177")
