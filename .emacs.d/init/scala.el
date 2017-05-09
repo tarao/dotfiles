@@ -1,6 +1,7 @@
 (defvar tarao/ensime-completion-style 'company)
 (setq-default
- ensime-use-helm t
+ ensime-search-interface 'helm
+ ensime-eldoc-hints 'all
  ensime-completion-style tarao/ensime-completion-style
  ensime-ac-enable-argument-placeholders nil
  ensime-ac-override-settings nil)
@@ -52,16 +53,6 @@
       (flycheck-mode +1)))
 
   (defun scala/enable-eldoc ()
-    "Show error message or type name at point by Eldoc."
-    (eval-and-compile (require 'ensime))
-    (setq-local eldoc-documentation-function
-                #'(lambda ()
-                    (when (ensime-connected-p)
-                      (let ((err (mapconcat 'identity
-                                            (ensime-errors-at (point))
-                                            "\n")))
-                        (or (and err (not (string= err "")) (message err))
-                            (ensime-print-type-at-point))))))
     (eldoc-mode +1))
 
   (defun scala/completing-dot-company ()
