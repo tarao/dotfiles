@@ -112,6 +112,10 @@
   (advice-add 'ensime-scala-new-import-grouped-package
               :around #'scala/ensime-scala-new-import-grouped-package)
 
+  (defun scala/ensime-cleanup ()
+    (ensime-sem-high-clear-buffer))
+  (advice-add 'ensime-shutdown :after #'scala/ensime-cleanup)
+
   ;; Interactive commands
 
   (defun scala/completing-dot ()
@@ -135,16 +139,10 @@
     (eval-and-compile (require 'sbt-mode))
     (sbt:send-region (point-min) (point-max)))
 
-  (defun ensime-cleanup ()
-    "Shutdown and destroy connection buffer."
-    (interactive)
-    (ensime-shutdown)
-    (ensime-sem-high-clear-buffer))
-
   (defun ensime-restart ()
     "Restart the ensime server."
     (interactive)
-    (ensime-cleanup)
+    (ensime-shutdown)
     (sit-for 1)
     (scala/maybe-start-ensime))
 

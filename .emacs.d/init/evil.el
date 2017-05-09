@@ -419,6 +419,7 @@ to next line."
              "ns" ensime
              "nS" ensime-gen-and-restart
              "nr" ensime-restart
+             "nz" ensime-shutdown
 
              "rd" ensime-refactor-inline-local
              "rD" ensime-undo-peek
