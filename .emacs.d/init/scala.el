@@ -1,5 +1,7 @@
 (defvar tarao/ensime-completion-style 'company)
 (setq-default
+ ensime-startup-notification nil
+ ensime-startup-snapshot-notification nil
  ensime-search-interface 'helm
  ensime-eldoc-hints 'all
  ensime-completion-style tarao/ensime-completion-style
