@@ -432,8 +432,8 @@ to next line."
              "rv" ensime-refactor-extract-local
 
              "ta" ensime-sbt-do-test
-             "tr" ensime-sbt-do-test-quick
-             "tt" ensime-sbt-do-test-only
+             "tq" ensime-sbt-do-test-quick-dwim
+             "to" ensime-sbt-do-test-only-dwim
 
              "sa" ensime-inf-load-file
              "sb" ensime-inf-eval-buffer
