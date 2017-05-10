@@ -415,10 +415,10 @@ to next line."
 
              "i"  ensime-inspect-type-at-point
 
-             "nF" ensime-reload-open-files
              "ns" ensime
              "nS" ensime-gen-and-restart
-             "nr" ensime-restart
+             "nr" ensime-reload-open-files
+             "nR" ensime-restart
              "nz" ensime-shutdown
 
              "rd" ensime-refactor-inline-local
