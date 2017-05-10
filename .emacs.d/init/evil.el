@@ -334,7 +334,7 @@ to next line."
        (ensime-inf-switch)
        (evil-insert-state)))
 
-  (with-eval-after-load-feature (ensime evil-leader)
+  (with-eval-after-load-feature 'ensime
     (evil-define-key 'normal ensime-mode-map
       (kbd "M-.") #'ensime-edit-definition
       (kbd "M-,") #'ensime-pop-find-definition-stack)
@@ -371,7 +371,9 @@ to next line."
       "Send region content to shell and switch to it in insert mode."
       :motion evil-line
       (with-ensime-inf-switch (ensime-inf-eval-region beg end)))
+    )
 
+  (with-eval-after-load-feature 'evil-leader
     (let ((bindings
            '("/"  ensime-search
              "?"  ensime-scalex
@@ -444,6 +446,5 @@ to next line."
 
              "z"  ensime-expand-selection-command)))
       (apply 'evil-leader/set-key-for-mode 'scala-mode bindings)
-      (apply 'evil-leader/set-key-for-mode 'java-mode bindings))
-    )
+      (apply 'evil-leader/set-key-for-mode 'java-mode bindings)))
   )
