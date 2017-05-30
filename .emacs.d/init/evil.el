@@ -362,6 +362,12 @@ to next line."
       (kbd "C-n") #'comint-next-input
       (kbd "C-u") #'comint-kill-input)
 
+    (evil-make-overriding-map ensime-inf-mode-map 'insert)
+    (evil-define-key 'insert ensime-inf-mode-map
+      (kbd "C-p") #'comint-previous-input
+      (kbd "C-n") #'comint-next-input
+      (kbd "C-u") #'comint-kill-input)
+
     (defun ensime-inf-eval-buffer-switch ()
       "Send buffer content to shell and switch to it in insert mode."
       (interactive)
@@ -423,6 +429,7 @@ to next line."
              "nR" ensime-restart
              "nz" ensime-shutdown
 
+             "repl" ensime-inf-run-scala
              "rd" ensime-refactor-inline-local
              "rD" ensime-undo-peek
              "rf" ensime-format-source
@@ -437,6 +444,7 @@ to next line."
              "tq" ensime-sbt-do-test-quick-dwim
              "to" ensime-sbt-do-test-only-dwim
 
+             "scala" ensime-inf-run-scala
              "sa" ensime-inf-load-file
              "sb" ensime-inf-eval-buffer
              "sB" ensime-inf-eval-buffer-switch

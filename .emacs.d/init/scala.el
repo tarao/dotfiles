@@ -6,7 +6,8 @@
  ensime-eldoc-hints 'all
  ensime-completion-style tarao/ensime-completion-style
  ensime-ac-enable-argument-placeholders nil
- ensime-ac-override-settings nil)
+ ensime-ac-override-settings nil
+ sbt:ansi-support t)
 
 (bundle flycheck)
 (bundle scala-mode)
