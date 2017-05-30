@@ -146,7 +146,7 @@
     "Restart the ensime server."
     (interactive)
     (ensime-shutdown)
-    (sit-for 1)
+    (sit-for 2)
     (scala/maybe-start-ensime))
 
   (defun ensime-gen-and-restart ()
