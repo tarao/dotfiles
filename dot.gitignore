@@ -3,6 +3,7 @@
 *.pyc
 *.elc
 .ensime*
+ensime.sbt
 \#*#
 .*.rej
 *.rej
