@@ -96,8 +96,9 @@
     (browse-url (open-github--file-url host remote-url sha1 file marker))))
 
 (defun open-github--from-file-direct (file start end)
-  (let* ((root (open-github--root))
-         (file (file-truename (expand-file-name file)))
+  (let* ((file (file-truename (expand-file-name file)))
+         (default-directory (file-name-directory file))
+         (root (open-github--root))
          (path (file-relative-name file root))
          (start-line (and start (line-number-at-pos start)))
          (end-line (and end (1- (line-number-at-pos end)))))
