@@ -379,80 +379,81 @@ to next line."
       (with-ensime-inf-switch (ensime-inf-eval-region beg end)))
     )
 
-  (with-eval-after-load-feature 'evil-leader
-    (let ((bindings
-           '("/"  ensime-search
-             "?"  ensime-scalex
+  (let ((bindings
+         '("/"  ensime-search
+           "?"  ensime-scalex
 
-             "bc" ensime-sbt-do-compile
-             "bC" ensime-sbt-do-clean
-             "bi" ensime-sbt-switch
-             "bp" ensime-sbt-do-package
-             "br" ensime-sbt-do-run
+           "bc" ensime-sbt-do-compile
+           "bC" ensime-sbt-do-clean
+           "bi" ensime-sbt-switch
+           "bp" ensime-sbt-do-package
+           "br" ensime-sbt-do-run
 
-             "ct" ensime-typecheck-current-file
-             "cT" ensime-typecheck-all
+           "ct" ensime-typecheck-current-file
+           "cT" ensime-typecheck-all
 
-             "db" ensime-db-set-break
-             "dB" ensime-db-clear-break
-             "dC" ensime-db-clear-all-breaks
-             "dc" ensime-db-continue
-             "dd" ensime-db-start
-             "di" ensime-db-inspect-value-at-point
-             "dl" ensime-db-list-locals
-             "dn" ensime-db-next
-             "do" ensime-db-step-out
-             "dq" ensime-db-quit
-             "dr" ensime-db-run
-             "ds" ensime-db-step
-             "dt" ensime-db-backtrace
+           "db" ensime-db-set-break
+           "dB" ensime-db-clear-break
+           "dC" ensime-db-clear-all-breaks
+           "dc" ensime-db-continue
+           "dd" ensime-db-start
+           "di" ensime-db-inspect-value-at-point
+           "dl" ensime-db-list-locals
+           "dn" ensime-db-next
+           "do" ensime-db-step-out
+           "dq" ensime-db-quit
+           "dr" ensime-db-run
+           "ds" ensime-db-step
+           "dt" ensime-db-backtrace
 
-             "ee" ensime-print-errors-at-point
-             "el" ensime-show-all-errors-and-warnings
-             "es" ensime-stacktrace-switch
+           "ee" ensime-print-errors-at-point
+           "el" ensime-show-all-errors-and-warnings
+           "es" ensime-stacktrace-switch
 
-             "fu" ensime-show-uses-of-symbol-at-point
+           "fu" ensime-show-uses-of-symbol-at-point
 
-             "g." ensime-edit-definition
-             "gi" ensime-goto-impl
-             "gt" ensime-goto-test
+           "g." ensime-edit-definition
+           "gi" ensime-goto-impl
+           "gt" ensime-goto-test
 
-             "hh" ensime-show-doc-for-symbol-at-point
-             "hu" ensime-show-uses-of-symbol-at-point
-             "ht" ensime-print-type-at-point
+           "hh" ensime-show-doc-for-symbol-at-point
+           "hu" ensime-show-uses-of-symbol-at-point
+           "ht" ensime-print-type-at-point
 
-             "i"  ensime-inspect-type-at-point
+           "i"  ensime-inspect-type-at-point
 
-             "ns" ensime
-             "nS" ensime-gen-and-restart
-             "nr" ensime-reload-open-files
-             "nR" ensime-restart
-             "nz" ensime-shutdown
+           "ns" ensime
+           "nS" ensime-gen-and-restart
+           "nr" ensime-reload-open-files
+           "nR" ensime-restart
+           "nz" ensime-shutdown
 
-             "repl" ensime-inf-run-scala
-             "rd" ensime-refactor-inline-local
-             "rD" ensime-undo-peek
-             "rf" ensime-format-source
-             "ri" ensime-refactor-organize-imports
-             "rm" ensime-refactor-extract-method
-             "rr" ensime-refactor-rename
-             "rt" ensime-import-type-at-point
-             "ru" ensime-undo-peek
-             "rv" ensime-refactor-extract-local
+           "repl" ensime-inf-run-scala
+           "rd" ensime-refactor-inline-local
+           "rD" ensime-undo-peek
+           "rf" ensime-format-source
+           "ri" ensime-refactor-organize-imports
+           "rm" ensime-refactor-extract-method
+           "rr" ensime-refactor-rename
+           "rt" ensime-import-type-at-point
+           "ru" ensime-undo-peek
+           "rv" ensime-refactor-extract-local
 
-             "ta" ensime-sbt-do-test
-             "tq" ensime-sbt-do-test-quick-dwim
-             "to" ensime-sbt-do-test-only-dwim
+           "ta" ensime-sbt-do-test
+           "tq" ensime-sbt-do-test-quick-dwim
+           "to" ensime-sbt-do-test-only-dwim
 
-             "scala" ensime-inf-run-scala
-             "sa" ensime-inf-load-file
-             "sb" ensime-inf-eval-buffer
-             "sB" ensime-inf-eval-buffer-switch
-             "si" ensime-inf-switch
-             "sr" ensime-inf-eval-region
-             "sR" ensime-inf-eval-region-switch
+           "scala" ensime-inf-run-scala
+           "sbt" ensime-sbt
+           "sa" ensime-inf-load-file
+           "sb" ensime-inf-eval-buffer
+           "sB" ensime-inf-eval-buffer-switch
+           "si" ensime-inf-switch
+           "sr" ensime-inf-eval-region
+           "sR" ensime-inf-eval-region-switch
 
-             "z"  ensime-expand-selection-command)))
-      (apply 'evil-leader/set-key-for-mode 'scala-mode bindings)
-      (apply 'evil-leader/set-key-for-mode 'java-mode bindings)))
+           "z"  ensime-expand-selection-command
+           )))
+    (apply 'evil-leader/set-key-for-mode 'scala-mode bindings)
+    (apply 'evil-leader/set-key-for-mode 'java-mode bindings))
   )
