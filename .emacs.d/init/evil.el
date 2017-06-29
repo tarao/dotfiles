@@ -299,6 +299,16 @@ to next line."
   ;; cvim
   (add-hook 'cvim-edit:local-mode-hook #'(lambda () (evil-append-line 1)))
 
+  ;; golang
+  (with-eval-after-load-feature 'go-mode
+    (evil-define-key 'normal go-mode-map
+      (kbd "M-.") #'godef-jump)
+    )
+  (let ((bindings
+         '("i" godoc-at-point
+           )))
+    (apply 'evil-leader/set-key-for-mode 'go-mode bindings))
+
   ;; scala
 
   (add-to-list 'evil-insert-state-modes 'sbt-mode)
