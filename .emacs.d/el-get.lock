@@ -1,5 +1,6 @@
 (setq el-get-lock-package-versions
-      '((inf-ruby :checksum "af4f238ef4555521d13c5eb2fb8e818acf59d70a")
+      '((popwin :checksum "95dea14c60019d6cccf9a3b33e0dec4e1f22c304")
+        (inf-ruby :checksum "af4f238ef4555521d13c5eb2fb8e818acf59d70a")
         (cvim-edit :checksum "03f1e3c02a742e15d8b79f59d8ef7395d1d0d534")
         (elnode :checksum "a2aaba9558af7daec720409bd064e22707e34a22")
         (db :checksum "b3a423fb8e72f9013009cbe033d654df2ce31438")
