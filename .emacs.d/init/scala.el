@@ -4,7 +4,7 @@
  ensime-startup-notification nil
  ensime-startup-snapshot-notification nil
  ensime-search-interface 'helm
- ensime-eldoc-hints 'all
+ ;; ensime-eldoc-hints 'all
  ensime-completion-style tarao/ensime-completion-style
  ensime-ac-enable-argument-placeholders nil
  ensime-ac-override-settings nil
