@@ -193,7 +193,7 @@
   ;; Configuration
 
   (defun tarao/ensime-search-mode (&rest args)
-    (with-current-buffer ensime-search-target-buffer-name
+    (with-current-buffer ensime-search-buffer-name
       (setq show-trailing-whitespace nil)))
   (advice-add 'ensime-search-mode :after #'tarao/ensime-search-mode)
 

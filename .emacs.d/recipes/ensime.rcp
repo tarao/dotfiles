@@ -2,6 +2,7 @@
        :description "ENhanced Scala Interaction Mode for Emacs"
        :type github
        :pkgname "ensime/ensime-emacs"
+       :branch "2.0"
        :depends (s dash popup scala-mode company-mode sbt-mode yasnippet)
        :prepare (progn
                   (autoload 'ensime-config-find-file "ensime-config")

@@ -22,6 +22,11 @@
   .skk.el: ../init/local/skk.el
 .sbt/0.13/plugins:
   <src>/.sbt/0.13/plugins:
+    build.sbt: build.sbt
+    plugins.sbt: plugins.sbt
+.sbt/1.0/plugins:
+  <src>/.sbt/1.0/plugins:
+    build.sbt: build.sbt
     plugins.sbt: plugins.sbt
 .screen:
   local.screenrc: luxaky.screenrc
