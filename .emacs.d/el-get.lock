@@ -21,7 +21,6 @@
         (yasnippet :checksum "8797a31337895fe5fb29727c5ef289168a856a1b")
         (csharp-mode :checksum "a631944161af0de659695dcfad19940f65716175")
         (word-count :checksum "6267c98e0d9a3951e667da9bace5aaf5033f4906")
-        (seq :checksum "0bfd9873323910170c6754e7e8a2e59ef0b0579d")
         (web-mode :checksum "e4304bcfa0c5121522ba2a5db75af8a2e4e81246")
         (graphviz-dot-mode :checksum "d11f15b490be23eaabd65ee791c8810f4cf3ebec")
         (pcre2el :checksum "75db0d537ab2b7f27bc7d4ff01141843a85fa3c9")
@@ -86,4 +85,4 @@
         (el-get-lock :checksum "df8cfe55441695865a64b97946750b6413a40425")))
 (setq el-get-lock-locked-packages 'nil)
 (setq el-get-lock-unlocked-packages
-      '(zenburn-theme el-get))
+      '(zenburn-theme seq el-get))
