@@ -5,8 +5,7 @@
 (defvar tarao/helm-for-files-other-sources
   '(helm-source-recentf
     helm-source-bookmarks
-    helm-source-file-cache
-    helm-source-locate))
+    helm-source-file-cache))
 
 (bundle helm
   (setq-default helm-truncate-lines t
