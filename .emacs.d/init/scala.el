@@ -1,3 +1,4 @@
+(require 'cl-lib)
 (defvar tarao/ensime-completion-style 'company)
 (setq-default
  ensime-startup-notification nil
@@ -39,6 +40,7 @@
            (and config-file ; ignore if there is no .ensime for the project
                 (prog1 t
                   (unless ensime-buffer
+                    (require 'imenu)
                     (noflet ((ensime-config-find (&rest _) config-file))
                       (save-window-excursion
                         (ensime)))))))))

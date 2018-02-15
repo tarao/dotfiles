@@ -393,6 +393,7 @@ to next line."
          '("/"  ensime-search
            "?"  ensime-scalex
 
+           "bt" ensime-sbt
            "bc" ensime-sbt-do-compile
            "bC" ensime-sbt-do-clean
            "bi" ensime-sbt-switch
@@ -430,7 +431,7 @@ to next line."
            "hu" ensime-show-uses-of-symbol-at-point
            "ht" ensime-print-type-at-point
 
-           "i"  ensime-inspect-type-at-point
+           "i"  ensime-show-doc-for-symbol-at-point
 
            "ns" ensime
            "nS" ensime-gen-and-restart
@@ -454,7 +455,6 @@ to next line."
            "to" ensime-sbt-do-test-only-dwim
 
            "scala" ensime-inf-run-scala
-           "sbt" ensime-sbt
            "sa" ensime-inf-load-file
            "sb" ensime-inf-eval-buffer
            "sB" ensime-inf-eval-buffer-switch
