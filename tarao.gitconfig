@@ -8,7 +8,7 @@
     co = checkout
     ci = commit
     br = branch
-    wdiff = diff --color-words
+    wdiff = diff --word-diff-regex=$'[^\\x80-\\xbf][\\x80-\\xbf]*' --color-words
 [color]
     ui = auto
 [pager]
