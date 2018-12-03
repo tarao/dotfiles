@@ -4,6 +4,7 @@
     .gitignore: dot.gitignore
     .irbrc: .irbrc
     .lesskey: .lesskey
+    .my.cnf: .my.cnf
     .screen: .screen
     .screenrc: .screenrc
     .vim: .vim
