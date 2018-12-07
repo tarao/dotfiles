@@ -1,7 +1,7 @@
 (:name rdoc-mode
        :type http
        :description "Major mode for RDoc editing."
-       :url "http://gist.github.com/raw/4400273/rdoc-mode.el"
+       :url "https://gist.github.com/raw/4400273/rdoc-mode.el"
        :prepare
        (autoload 'rdoc-mode "rdoc-mode"
          "Mode for editing rdoc files" t))
