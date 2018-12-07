@@ -61,4 +61,4 @@ emacsd status >/dev/null || {
     echo > "$EMACS_DAEMON_LOG" # clear
 }
 emacsd_progress_start "$N"
-emacs -n --eval '(fit-largest-display-right)' "$@"
+emacs -n --eval '(progn (sit-for 0.3) (fit-largest-display-right))' "$@"

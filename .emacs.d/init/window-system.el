@@ -33,7 +33,7 @@
          (height (frame-height frame))
          (pixel-width (frame-pixel-width frame))
          (display-width (x-display-pixel-width))
-         (x-offset 10) (y-offset 10))
+         (x-offset 10) (y-offset 8))
     (make-frame
      `((left . ,(+ x-offset
                    (min (- display-width pixel-width)
