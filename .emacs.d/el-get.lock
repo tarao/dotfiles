@@ -1,5 +1,6 @@
 (setq el-get-lock-package-versions
-      '((evil :checksum "2992858748e6fe8ae706d182b86b684e7b9be8b9")
+      '((color-moccur :checksum "4f1c59ffd1ccc2ab1a171cd6b721e8cb9e002fb7")
+        (evil :checksum "2992858748e6fe8ae706d182b86b684e7b9be8b9")
         (goto-chg :checksum "e5b38e4e1378f6ea48fa9e8439f49c2998654aa4")
         (popwin :checksum "95dea14c60019d6cccf9a3b33e0dec4e1f22c304")
         (inf-ruby :checksum "af4f238ef4555521d13c5eb2fb8e818acf59d70a")
@@ -65,7 +66,6 @@
         (go-mode :checksum "7041a203c64c1319a61eadc45dd41e40ccda3e78")
         (less-css-mode :checksum "e64a4fe2ba685fa4a5fb6641f9118da1f54d99e0")
         (switch-window :checksum "cd4b06121aa5bac4c4b13b63526a99008def5f2b")
-        (color-moccur :checksum "f834f30dfffebf82543a73a4c2bf2e61d9f0d5c6")
         (eldoc-extension :checksum "a74cfbe05115afb18b671588b7f63d37d6b2b895")
         (c-eldoc :checksum "633a55c449db41ed450e5797feafa55d67e833d7")
         (git-messenger :checksum "e53e1f1c3d8a8de0f0d1deb9a07f340e4bb13021")
