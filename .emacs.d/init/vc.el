@@ -1,2 +1,2 @@
-(setq vc-follow-symlinks nil
-      vc-stay-local t)
+(setq-default vc-follow-symlinks nil
+              vc-cvs-stay-local t)

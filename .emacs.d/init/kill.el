@@ -44,8 +44,8 @@
 
 ;; Some applications recognize only PRIMARY section
 ;; See http://garin.jp/doc/Linux/xwindow_clipboard for details
-(setq x-select-enable-primary t
-      x-select-enable-clipboard t)
+(setq select-enable-primary t
+      select-enable-clipboard t)
 
 ;; kill to X clipboard even if we are in terminal mode Emacs
 (defadvice x-select-text (around ad-x-select-text (text &rest args) activate)
