@@ -51,7 +51,6 @@
         (cperl-mode :checksum "06f5668653a114991836139344dbe8f0674577af")
         (markdown-mode :checksum "0d12efd2939b0735c8b730041f168132d6df96ab")
         (browse-kill-ring :checksum "f81ca5f14479fa9e938f89bf8f6baa3c4bdfb755")
-        (howm :checksum "72a3d4b3f7bbbd2bb44303816837b036c5f7c767")
         (hatena-diary :checksum "a6a27a7906cd0b86b74f074c3134001c3be6faf3")
         (hatena-multi-mode :checksum "0377e1b80a0db136faedc986867e625f9c731b15")
         (multi-mode-util :checksum "69938795eb55f62e19142c4ce88750988c8e6a16")

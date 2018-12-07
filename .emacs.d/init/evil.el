@@ -281,21 +281,6 @@ to next line."
   (with-eval-after-load-feature 'multi-mode-util
     (bundle multi-mode+evil))
 
-  ;; howm
-  (with-eval-after-load-feature (howm)
-    ;; menu
-    (evil-make-overriding-map howm-menu-mode-map 'normal)
-    (add-hook 'howm-menu-hook
-              #'(lambda () (define-key howm-menu-mode-local-map ":" nil)))
-
-    ;; list
-    (evil-make-overriding-map howm-view-summary-mode-map 'normal)
-    (evil-define-key 'normal howm-view-summary-mode-map
-      "j" (lookup-key evil-motion-state-map "j")
-      "k" (lookup-key evil-motion-state-map "k")
-      "J" 'evil-scroll-down
-      "K" 'evil-scroll-up))
-
   ;; cvim
   (add-hook 'cvim-edit:local-mode-hook #'(lambda () (evil-append-line 1)))
 
