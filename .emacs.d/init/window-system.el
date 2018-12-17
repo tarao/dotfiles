@@ -189,3 +189,8 @@ removed from them after the first call."
 ;; close frame display when the frame is deleted (we need this to
 ;; ensure that an emacs daemon without X window has no X connection)
 (add-hook 'delete-frame-functions #'close-frame-display)
+
+(defun iconify-all-frames ()
+  (dolist (frame (visible-frame-list))
+    (iconify-frame frame)))
+(add-hook 'kill-emacs-hook #'iconify-all-frames)
