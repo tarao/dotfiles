@@ -70,7 +70,7 @@
     (open-github--command-one-line "rev-parse" remote-branch)))
 
 (defun open-github--highlight-marker (start end)
-  (cond ((and start end (< start end)) (format "#L%s..L%s" start end))
+  (cond ((and start end (< start end)) (format "#L%s-L%s" start end))
         (start (format "#L%s" start))
         (t "")))
 
