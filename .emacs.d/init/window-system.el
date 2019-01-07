@@ -108,6 +108,8 @@ place the new frame at the right side of the current frame."
              (height (/ (- (nth 5 dimensions)
                            desktop-offset-top desktop-offset-bottom)
                         (frame-char-height frame))))
+        (let ((pos (frame-position frame)))
+          (set-frame-position frame (car pos) (cdr pos)))
         (set-frame-position frame left top)
         (set-frame-height frame height)))))
 (defun fit-largest-display-left ()
@@ -189,8 +191,3 @@ removed from them after the first call."
 ;; close frame display when the frame is deleted (we need this to
 ;; ensure that an emacs daemon without X window has no X connection)
 (add-hook 'delete-frame-functions #'close-frame-display)
-
-(defun iconify-all-frames ()
-  (dolist (frame (visible-frame-list))
-    (iconify-frame frame)))
-(add-hook 'kill-emacs-hook #'iconify-all-frames)
