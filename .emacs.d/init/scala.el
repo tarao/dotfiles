@@ -202,4 +202,11 @@
                         :underline '(:style wave :color "#7F9F7F"))
     (let ((map ensime-mode-map))
       (define-key map (kbd ".") #'scala/completing-dot)))
+
+  (defun tarao/ensime-sbt-ansi-color-workaround (&rest args)
+    "https://github.com/ensime/emacs-sbt-mode/issues/150"
+    (with-current-buffer (sbt:buffer-name)
+      (remove-hook 'comint-output-filter-functions 'ensime-inf-postoutput-filter)
+      (add-hook 'comint-output-filter-functions 'ensime-inf-postoutput-filter t)))
+  (advice-add 'ensime-sbt :after #'tarao/ensime-sbt-ansi-color-workaround)
   )
