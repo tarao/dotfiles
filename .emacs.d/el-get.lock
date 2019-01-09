@@ -73,7 +73,7 @@
         (fringe-helper :checksum "ef4a9c023bae18ec1ddd7265f1f2d6d2e775efdd")
         (git-gutter :checksum "6dfd5f5a40f21d7bb774331631b226fd372e5e7d")
         (shell-history :checksum "237bc8e1f528c35f415e471cb2918b6b792081b8")
-        (auto-complete :checksum "8978bd77257a3fe4a166cd335cc217f9fac521ea")
+        (auto-complete :checksum "2e83566ddfa758c69afe50b8a1c62a66f47471e3")
         (fuzzy :checksum "b430d88acae151af542df2449fb7551b621840a1")
         (popup :checksum "80829dd46381754639fb764da11c67235fe63282")
         (zlc :checksum "224790312447a66782b0b4569597b4db0377b9ee")
