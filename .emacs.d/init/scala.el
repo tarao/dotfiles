@@ -28,7 +28,10 @@
 (bundle company-mode)
 (bundle company-lsp)
 (bundle helm-lsp)
-(bundle lsp-ui)
+(bundle lsp-ui
+  (with-eval-after-load-feature 'lsp-ui
+    (set-face-background 'lsp-ui-sideline-global "#444444")
+    ))
 (bundle lsp-mode
   (defun scala/init-coursier ()
     (unless (executable-find "coursier")
