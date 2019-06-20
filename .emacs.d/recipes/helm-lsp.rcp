@@ -1,0 +1,4 @@
+(:name helm-lsp
+       :type github
+       :pkgname "emacs-lsp/helm-lsp"
+       :depends (helm dash lsp-mode))

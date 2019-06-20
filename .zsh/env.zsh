@@ -10,6 +10,9 @@ whence xsel >/dev/null && {
 }
 
 export GOPATH="$HOME/.go"
+whence javac >/dev/null && {
+    export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))
+}
 
 # PATH
 function _set_path_env() {

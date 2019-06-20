@@ -1,6 +1,11 @@
 ;; emacs directory
 (when load-file-name
   (setq user-emacs-directory (file-name-directory load-file-name)))
+(defconst user-emacs-bin-directory
+  (expand-file-name "bin" user-emacs-directory))
+(make-directory user-emacs-bin-directory t)
+(add-to-list 'exec-path user-emacs-bin-directory)
+(setenv "PATH" (concat (getenv "PATH") ":" user-emacs-bin-directory))
 
 (let ((versioned-dir (locate-user-emacs-file (format "v%s" emacs-version))))
   (setq-default el-get-dir (expand-file-name "el-get" versioned-dir)

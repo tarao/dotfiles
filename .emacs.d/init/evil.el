@@ -297,10 +297,6 @@ to next line."
   ;; scala
 
   (add-to-list 'evil-insert-state-modes 'sbt-mode)
-  (add-to-list 'evil-insert-state-modes 'ensime-inf-mode)
-
-  (defadvice ensime-search-mode (after insert-state activate)
-    (evil-insert-state))
 
   (with-eval-after-load-feature 'scala-mode
     (defun tarao/scala-join-line ()
@@ -320,135 +316,35 @@ to next line."
             (setq join-pos (point))))
         (when join-pos
           (goto-char join-pos))))
-    (evil-define-key 'normal scala-mode-map (kbd "C-j") #'tarao/scala-join-line)
-    )
+    (evil-define-key 'normal scala-mode-map
+      (kbd "C-j") #'tarao/scala-join-line
+      ))
 
-  (defmacro with-ensime-inf-switch (&rest form)
-    `(progn
-       ,@form
-       (ensime-inf-switch)
-       (evil-insert-state)))
-
-  (with-eval-after-load-feature 'ensime
-    (evil-define-key 'normal ensime-mode-map
-      (kbd "M-.") #'ensime-edit-definition
-      (kbd "M-,") #'ensime-pop-find-definition-stack)
-
-    (evil-make-overriding-map ensime-popup-buffer-map 'normal)
-
-    (evil-define-key 'normal ensime-inspector-mode-map
-      (kbd "H") #'ensime-inspector-backward-page
-      (kbd "L") #'ensime-inspector-forward-page
-      (kbd "d") #'ensime-inspector-browse-doc
-      (kbd "q") #'ensime-popup-buffer-quit-function)
-
-    (evil-make-overriding-map ensime-refactor-info-map 'normal)
-    (evil-define-key 'normal ensime-refactor-info-map
-      (kbd "RET") (lookup-key ensime-refactor-info-map (kbd "c")))
-
-    (evil-make-overriding-map ensime-compile-result-map 'normal)
-    (evil-define-key 'normal ensime-compile-result-map
-      (kbd "n") #'forward-button
-      (kbd "N") #'backward-button)
-
-    (evil-make-overriding-map sbt:mode-map 'insert)
-    (evil-define-key 'insert sbt:mode-map
-      (kbd "C-p") #'comint-previous-input
-      (kbd "C-n") #'comint-next-input
-      (kbd "C-u") #'comint-kill-input)
-
-    (evil-make-overriding-map ensime-inf-mode-map 'insert)
-    (evil-define-key 'insert ensime-inf-mode-map
-      (kbd "C-p") #'comint-previous-input
-      (kbd "C-n") #'comint-next-input
-      (kbd "C-u") #'comint-kill-input)
-
-    (defun ensime-inf-eval-buffer-switch ()
-      "Send buffer content to shell and switch to it in insert mode."
-      (interactive)
-      (with-ensime-inf-switch (ensime-inf-eval-buffer)))
-
-    (evil-define-operator ensime-inf-eval-region-switch (beg end)
-      "Send region content to shell and switch to it in insert mode."
-      :motion evil-line
-      (with-ensime-inf-switch (ensime-inf-eval-region beg end)))
-    )
+  (with-eval-after-load-feature 'lsp-mode
+    (evil-define-key 'normal lsp-mode-map
+      (kbd "M-.") #'lsp-find-definition
+      ))
 
   (let ((bindings
-         '("/"  ensime-search
-           "?"  ensime-scalex
+         '(
+           "/" helm-lsp-workspace-symbol
 
-           "bt" ensime-sbt
-           "bc" ensime-sbt-do-compile
-           "bC" ensime-sbt-do-clean
-           "bi" ensime-sbt-switch
-           "bp" ensime-sbt-do-package
-           "br" ensime-sbt-do-run
+           "mi" lsp-metals-build-import
+           "md" lsp-metals-doctor-run
 
-           "ct" ensime-typecheck-current-file
-           "cT" ensime-typecheck-all
+           "fr" lsp-find-references
+           "fd" lsp-find-declaration
+           "fi" lsp-find-implementation
+           "ft" lsp-find-type-definition
 
-           "db" ensime-db-set-break
-           "dB" ensime-db-clear-break
-           "dC" ensime-db-clear-all-breaks
-           "dc" ensime-db-continue
-           "dd" ensime-db-start
-           "di" ensime-db-inspect-value-at-point
-           "dl" ensime-db-list-locals
-           "dn" ensime-db-next
-           "do" ensime-db-step-out
-           "dq" ensime-db-quit
-           "dr" ensime-db-run
-           "ds" ensime-db-step
-           "dt" ensime-db-backtrace
+           "rr" lsp-rename
+           "ri" lsp-organize-imports
 
-           "ee" ensime-print-errors-at-point
-           "el" ensime-show-all-errors-and-warnings
-           "es" ensime-stacktrace-switch
+           "bt" sbt-start
+           "bc" scala/sbt-do-compile
+           "bC" scala/sbt-do-clean
 
-           "fu" ensime-show-uses-of-symbol-at-point
-
-           "g." ensime-edit-definition
-           "gi" ensime-goto-impl
-           "gt" ensime-goto-test
-
-           "hh" ensime-show-doc-for-symbol-at-point
-           "hu" ensime-show-uses-of-symbol-at-point
-           "ht" ensime-print-type-at-point
-
-           "i"  ensime-show-doc-for-symbol-at-point
-
-           "ns" ensime
-           "nS" ensime-gen-and-restart
-           "nr" ensime-reload-open-files
-           "nR" ensime-restart
-           "nz" ensime-shutdown
-
-           "repl" ensime-inf-run-scala
-           "rd" ensime-refactor-inline-local
-           "rD" ensime-undo-peek
-           "rf" ensime-format-source
-           "ri" ensime-refactor-organize-imports
-           "rm" ensime-refactor-extract-method
-           "rr" ensime-refactor-rename
-           "rt" ensime-import-type-at-point
-           "ru" ensime-undo-peek
-           "rv" ensime-refactor-extract-local
-
-           "ta" ensime-sbt-do-test
-           "tq" ensime-sbt-do-test-quick-dwim
-           "to" ensime-sbt-do-test-only-dwim
-
-           "scala" ensime-inf-run-scala
-           "sa" ensime-inf-load-file
-           "sb" ensime-inf-eval-buffer
-           "sB" ensime-inf-eval-buffer-switch
-           "si" ensime-inf-switch
-           "sr" ensime-inf-eval-region
-           "sR" ensime-inf-eval-region-switch
-
-           "z"  ensime-expand-selection-command
+           "repl" scala/sbt-do-console
            )))
-    (apply 'evil-leader/set-key-for-mode 'scala-mode bindings)
-    (apply 'evil-leader/set-key-for-mode 'java-mode bindings))
+    (apply 'evil-leader/set-key-for-mode 'scala-mode bindings))
   )

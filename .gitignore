@@ -19,9 +19,11 @@ local.install.yml
 *.local.install.yml
 .bundle/cache
 .emacs.d/.cvim-edit
+.emacs.d/.lsp-session-*
 .emacs.d/daemon.log
 .emacs.d/anything-c-adaptive-history
 .emacs.d/ac-comphist.dat
+.emacs.d/bin/
 .emacs.d/bmk
 .emacs.d/ensime/
 .emacs.d/recentf
