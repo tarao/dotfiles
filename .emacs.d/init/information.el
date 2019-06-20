@@ -15,7 +15,8 @@
 
 ;; git-gutter
 (bundle! git-gutter-fringe
-  (global-git-gutter-mode t))
+  (global-git-gutter-mode t)
+  (setq git-gutter:lighter " GG"))
 
 ;; git-messenger
 (bundle noflet)

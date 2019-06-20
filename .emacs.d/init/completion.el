@@ -27,6 +27,7 @@
     (define-key map (kbd "TAB") nil)))
 
 ;; company
+(setq-default company-lighter-base "comp")
 (bundle company-mode
   ;; permanently replace `company-complete-common' with
   ;; `company-complete-common-or-cycle'.
