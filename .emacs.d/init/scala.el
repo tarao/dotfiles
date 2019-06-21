@@ -3,7 +3,7 @@
  lsp-prefer-flymake nil
  )
 (defconst metals-scala-version "2.12")
-(defconst metals-version "0.6.1")
+(defconst metals-artifact-template "org.scalameta%smetals_%s")
 
 (bundle flycheck)
 (bundle scala-mode)
@@ -41,26 +41,51 @@
         (shell-command (format "chmod a+x %s"
                                (shell-quote-argument output))))))
 
+  (defun scala/metals-latest-version ()
+    (let* ((q (format metals-artifact-template "+" metals-scala-version))
+           (search-url "https://search.maven.org/solrsearch/select")
+           (cmds (list
+                  (format "curl -s '%s?q=%s&rows=20&wt=json'" search-url q)
+                  "jq -r '.response.docs[]|.g+\":\"+.a+\":\"+.latestVersion'"))
+           (cmd (mapconcat #'identity cmds " | "))
+           (results (split-string (shell-command-to-string cmd) "\n" t))
+           (pattern (format metals-artifact-template ":" "[0-9.\\]+")))
+      (car-safe
+       (reverse
+        (seq-sort
+         #'string<
+         (seq-filter (lambda (s) (string-match-p pattern s)) results))))))
+
+  (defun scala/metals-binary ()
+    (expand-file-name "metals-emacs" user-emacs-bin-directory))
+
   (defun scala/init-metals ()
     (unless (executable-find "metals-emacs")
-      (let ((output (expand-file-name "metals-emacs" user-emacs-bin-directory))
-            (archive (format "org.scalameta:metals_%s:%s"
-                             metals-scala-version
-                             metals-version))
+      (let ((output (scala/metals-binary))
+            (artifact (scala/metals-latest-version))
             (java-opts (list "--java-opt" "-Xss4m"
                              "--java-opt" "-Xms100m"
                              "--java-opt" "-Dmetals.client=emacs"))
             (repos (list "-r" "bintray:scalacenter/releases"
                          "-r" "sonatype:snapshots"))
             (buf "*scala/init-metals*"))
-        (save-window-excursion
-          (switch-to-buffer buf)
-          (call-process-shell-command
-           (format "coursier bootstrap %s %s %s -o %s -f"
-                   (mapconcat #'shell-quote-argument java-opts " ")
-                   archive
-                   (mapconcat #'shell-quote-argument repos " ")
-                   output) nil buf t)))))
+        (when artifact
+          (message "Install %s to %s" artifact output)
+          (save-window-excursion
+            (switch-to-buffer buf)
+            (call-process-shell-command
+             (format "coursier bootstrap %s %s %s -o %s -f"
+                     (mapconcat #'shell-quote-argument java-opts " ")
+                     artifact
+                     (mapconcat #'shell-quote-argument repos " ")
+                     output) nil buf t))))))
+
+  (defun scala/reinstall-metals ()
+    (interactive)
+    (shell-command (format "rm -f %s"
+                           (shell-quote-argument (scala/metals-binary))))
+    (scala/init-metals))
+
   (add-hook 'scala-mode-hook
             #'(lambda ()
                 (scala/init-coursier)
