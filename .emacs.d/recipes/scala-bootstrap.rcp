@@ -1,0 +1,3 @@
+(:name scala-bootstrap
+       :type github
+       :pkgname "tarao/scala-bootstrap-el")
