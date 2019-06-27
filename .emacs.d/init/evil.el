@@ -218,14 +218,23 @@ to next line."
       ad-do-it))
 
   ;; view mode
-  (add-hook 'view-mode-hook #'evil-initialize-state)
   (with-eval-after-load-feature (view)
-    (evil-define-key 'motion view-mode-map (kbd "v")
-      #'(lambda () (interactive) (view-mode 0))))
+    (add-hook 'view-mode-hook
+              #'(lambda ()
+                  (evil-initialize-state)
+                  (evil-make-overriding-map view-mode-map 'normal)))
+    (evil-define-key 'motion view-mode-map
+      (kbd "v") #'(lambda () (interactive) (view-mode 0))))
 
   ;; dired mode
   (with-eval-after-load-feature (dired)
     (evil-define-key 'normal dired-mode-map "c" #'dired-do-copy))
+
+  ;; comint
+  (evil-define-key 'insert comint-mode-map
+    (kbd "C-p") #'comint-previous-input
+    (kbd "C-n") #'comint-next-input
+    (kbd "C-u") #'comint-kill-input)
 
   ;; compilation
   (evil-add-hjkl-bindings compilation-mode-map 'motion
@@ -333,6 +342,8 @@ to next line."
   (let ((bindings
          '(
            "/" helm-lsp-workspace-symbol
+
+           "i" lsp-describe-thing-at-point
 
            "mi" lsp-metals-build-import
            "md" lsp-metals-doctor-run
