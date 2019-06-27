@@ -1,5 +1,4 @@
 (setq-default
- sbt:ansi-support t
  lsp-prefer-flymake nil
  )
 
