@@ -226,6 +226,9 @@ to next line."
     (evil-define-key 'motion view-mode-map
       (kbd "v") #'(lambda () (interactive) (view-mode 0))))
 
+  ;; xref
+  (evil-make-overriding-map xref--xref-buffer-mode-map 'normal)
+
   ;; dired mode
   (with-eval-after-load-feature (dired)
     (evil-define-key 'normal dired-mode-map "c" #'dired-do-copy))
