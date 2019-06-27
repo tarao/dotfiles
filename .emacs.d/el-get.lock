@@ -1,5 +1,6 @@
 (setq el-get-lock-package-versions
-      '((scala-bootstrap :checksum "0cd1f15e9ea2ee29b77a79960f946c5a6bf5f4d8")
+      '((bloop :checksum "586af1a8fbd43f5716428ea9a59715c7ca88c6ac")
+        (scala-bootstrap :checksum "0cd1f15e9ea2ee29b77a79960f946c5a6bf5f4d8")
         (lsp-mode :checksum "66539cfaf5962f7a5f535ce099a0129ededa0e30")
         (f :checksum "8191672377816a1975414cc1f116fd3b94b30bd0")
         (helm-lsp :checksum "3a58ca4cfd94b9ab1e15e819d3b16ef568e8889b")

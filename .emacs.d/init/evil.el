@@ -340,11 +340,12 @@ to next line."
            "rr" lsp-rename
            "ri" lsp-organize-imports
 
-           "bt" sbt-start
-           "bc" scala/sbt-do-compile
-           "bC" scala/sbt-do-clean
+           "bc" bloop-compile
+           "bC" bloop-clean
+           "ta" bloop-test
+           "to" bloop-test-only
 
-           "repl" scala/sbt-do-console
+           "repl" bloop-console
            )))
     (apply 'evil-leader/set-key-for-mode 'scala-mode bindings))
   )

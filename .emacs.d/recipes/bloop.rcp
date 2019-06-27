@@ -1,0 +1,3 @@
+(:name bloop
+       :type github
+       :pkgname "tarao/emacs-bloop")

@@ -5,22 +5,7 @@
 
 (bundle scala-mode)
 (bundle scala-bootstrap)
-(bundle sbt-mode
-  (defun scala/sbt-do-test ()
-    (interactive)
-    (sbt-command "test"))
-
-  (defun scala/sbt-do-compile ()
-    (interactive)
-    (sbt-command "test:compile"))
-
-  (defun scala/sbt-do-clean ()
-    (interactive)
-    (sbt-command "clean"))
-
-  (defun scala/sbt-do-console ()
-    (interactive)
-    (sbt-command "consoleQuick")))
+(bundle bloop)
 (bundle lsp-mode)
 (bundle lsp-ui
   (with-eval-after-load-feature 'lsp-ui
