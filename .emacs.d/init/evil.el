@@ -227,6 +227,11 @@ to next line."
   (with-eval-after-load-feature (dired)
     (evil-define-key 'normal dired-mode-map "c" #'dired-do-copy))
 
+  ;; compilation
+  (evil-add-hjkl-bindings compilation-mode-map 'motion
+    (kbd "n") #'compilation-next-error
+    (kbd "N") #'compilation-previous-error)
+
   ;; git-messenger
   (defmacro with-passing-through-git-messenger-popup (command)
     (let ((post-command
