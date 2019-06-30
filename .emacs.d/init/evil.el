@@ -336,10 +336,6 @@ to next line."
           (goto-char join-pos))))
     (evil-define-key 'normal scala-mode-map
       (kbd "C-j") #'tarao/scala-join-line
-      ))
-
-  (with-eval-after-load-feature 'lsp-mode
-    (evil-define-key 'normal lsp-mode-map
       (kbd "M-.") #'lsp-find-definition
       ))
 
