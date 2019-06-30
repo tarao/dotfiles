@@ -227,7 +227,8 @@ to next line."
       (kbd "v") #'(lambda () (interactive) (view-mode 0))))
 
   ;; xref
-  (evil-make-overriding-map xref--xref-buffer-mode-map 'normal)
+  (with-eval-after-load-feature (xref)
+    (evil-make-overriding-map xref--xref-buffer-mode-map 'normal))
 
   ;; dired mode
   (with-eval-after-load-feature (dired)
