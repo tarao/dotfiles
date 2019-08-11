@@ -22,13 +22,15 @@
 
 (defun compilation/hide-successful-compilation-result (buf msg)
   (with-current-buffer buf
-  (when (and (string-match "^finished\\b" msg)
-             (not (string-match "\\btest\\b" (buffer-name buf)))
-             (not (compilation/has-message)))
     (let ((window (get-buffer-window buf)))
-      (when window
-        (delete-window window)))
-    (message "Compilation finished successfully"))))
+      (if (or (not (string-match "^finished\\b" msg))
+              (string-match "\\btest\\b" (buffer-name buf))
+              (compilation/has-message))
+          (when window
+            (select-window window))
+        (when window
+          (delete-window window))
+        (message "Compilation finished successfully")))))
 
 (add-hook 'compilation-filter-hook #'compilation/colorize)
 (add-hook 'compilation-start-hook #'compilation/maximize-test-window)
