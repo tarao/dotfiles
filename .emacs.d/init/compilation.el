@@ -17,5 +17,20 @@
     (with-current-buffer (buffer-name)
       (delete-other-windows (get-buffer-window (buffer-name))))))
 
+(defun compilation/has-message ()
+  (compilation-next-single-property-change (point-min) 'compilation-message))
+
+(defun compilation/hide-successful-compilation-result (buf msg)
+  (with-current-buffer buf
+  (when (and (string-match "^finished\\b" msg)
+             (not (string-match "\\btest\\b" (buffer-name buf)))
+             (not (compilation/has-message)))
+    (let ((window (get-buffer-window buf)))
+      (when window
+        (delete-window window)))
+    (message "Compilation finished successfully"))))
+
 (add-hook 'compilation-filter-hook #'compilation/colorize)
 (add-hook 'compilation-start-hook #'compilation/maximize-test-window)
+(add-hook 'compilation-finish-functions
+          #'compilation/hide-successful-compilation-result)
