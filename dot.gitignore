@@ -4,6 +4,8 @@
 *.elc
 .ensime*
 ensime.sbt
+.bloop
+.metals
 \#*#
 .*.rej
 *.rej
