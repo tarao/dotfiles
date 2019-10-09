@@ -48,3 +48,23 @@ function _set_perl_env() {
     }
 }
 _set_perl_env
+
+# python
+function _set_python_env() {
+    test -d ~/.poetry/bin/ && {
+        path=(
+            ~/.poetry/bin
+            $path
+        )
+        typeset -gxU path
+    }
+}
+_set_python_env
+
+function venv_activate() {
+    test -f .python-version && test -d venv && test -f venv/bin/activate && {
+        . venv/bin/activate
+    }
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook chpwd venv_activate
