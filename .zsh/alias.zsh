@@ -1,5 +1,5 @@
 function ls () {
-    if env test -t 1; then
+    if test -t 1; then
         # stdout is a terminal
         command ls -F $=LS_OPTIONS $@
     else
