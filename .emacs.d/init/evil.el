@@ -242,8 +242,18 @@ to next line."
 
   ;; compilation
   (evil-add-hjkl-bindings compilation-mode-map 'motion
-    (kbd "n") #'compilation-next-error
-    (kbd "N") #'compilation-previous-error)
+    (kbd "gg") #'evil-goto-first-line
+    (kbd "n") #'(lambda ()
+                  (interactive)
+                  (if (null evil-ex-active-highlights-alist)
+                      (call-interactively 'compilation-next-error)
+                    (call-interactively 'evil-ex-search-next)))
+    (kbd "N") #'(lambda ()
+                  (interactive)
+                  (if (null evil-ex-active-highlights-alist)
+                      (call-interactively 'compilation-previous-error)
+                    (call-interactively 'evil-ex-search-previous))))
+  (evil-add-hjkl-bindings compilation-mode-map 'visual)
 
   ;; git-messenger
   (defmacro with-passing-through-git-messenger-popup (command)
