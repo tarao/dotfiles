@@ -27,8 +27,8 @@
 [tig]
     line-graphics = ascii
 [ghq]
-    root = ~/.ghq
-    root = ~/.go/src
     root = ~/work
+    root = ~/.go/src
+    root = ~/.ghq
 [include]
     path = ~/.gitconfig.local
