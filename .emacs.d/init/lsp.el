@@ -2,6 +2,7 @@
  lsp-prefer-flymake nil
  lsp-ui-sideline-show-hover t
  lsp-ui-sideline-update-mode 'line
+ lsp-file-watch-threshold nil
  )
 
 (bundle lsp-mode)
