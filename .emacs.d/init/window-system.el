@@ -27,8 +27,8 @@
 ;; creating new frames
 (defun clone-frame-1 (direction)
   (let* ((frame (selected-frame))
-         (left (frame-parameter frame 'left))
-         (top (frame-parameter frame 'top))
+         (left (eval (frame-parameter frame 'left)))
+         (top (eval (frame-parameter frame 'top)))
          (width (frame-width frame))
          (height (frame-height frame))
          (pixel-width (frame-pixel-width frame))
