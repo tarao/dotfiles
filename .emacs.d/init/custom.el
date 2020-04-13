@@ -10,4 +10,5 @@
  '(blink-matching-paren t)
  '(inhibit-startup-message t)
  '(inhibit-startup-screen t)
- '(initial-scratch-message nil))
+ '(initial-scratch-message nil)
+ '(ring-bell-function 'ignore))
