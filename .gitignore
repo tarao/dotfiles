@@ -28,6 +28,7 @@ local.install.yml
 .emacs.d/ensime/
 .emacs.d/recentf
 .emacs.d/tramp
+.emacs.d/transient
 .emacs.d/v*
 .emacs.d/init/.*
 .emacs.d/init/*.local.el

@@ -7,7 +7,7 @@
 
 ;; auto-insert
 (require 'autoinsert nil t)
-(add-hook 'find-file-not-found-hooks #'auto-insert)
+(add-hook 'find-file-not-found-functions #'auto-insert)
 (setq auto-insert-directory "~/.emacs.d/insert/"
       auto-insert-query nil
       auto-insert-alist nil)

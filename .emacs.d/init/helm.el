@@ -89,6 +89,7 @@
 (bundle helm-git-files
   (defun tarao/helm-for-files ()
     (interactive)
+    (require 'helm-for-files)
     (require 'helm-git-files)
     (unless helm-source-buffers-list
       (setq helm-source-buffers-list

@@ -10,7 +10,13 @@
     (region                          :background "#8c8ce8")
     (mode-line :foreground "#8fb28f" :background "#3f3f3f" :box nil)
     (mode-line-inactive              :background "#5f5f5f" :box nil)
-    (header-line                     :background "#3f3f3f" :box nil))
+    (header-line                     :background "#3f3f3f" :box nil)
+    (magit-diff-added             :foreground "#335533" :background "#7F9F7F")
+    (magit-diff-removed           :foreground "#553333" :background "#AC7373")
+    (magit-diff-added-highlight   :foreground "#335533" :background "#7F9F7F")
+    (magit-diff-removed-highlight :foreground "#553333" :background "#AC7373")
+    (diff-refine-added            :foreground "#338833" :background "#BFEBBF")
+    (diff-refine-removed          :foreground "#883333" :background "#CC9393"))
   "User defined face attributes to override default faces or theme faces.")
 
 (defvar zenburn-override-colors-alist

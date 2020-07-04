@@ -185,9 +185,9 @@ invoking the process."
   (mapcar #'(lambda (x) (list x 'flymake-perl-init))
           flymake-allowed-perl-files))
 
-(autoload 'flymake-init-create-temp-buffer-copy "flymake")
+(autoload 'flymake-proc-init-create-temp-buffer-copy "flymake")
 (defadvice flymake-perl-init (around run-local-perl-binary activate)
-  (let* ((temp-file (flymake-init-create-temp-buffer-copy
+  (let* ((temp-file (flymake-proc-init-create-temp-buffer-copy
                      'flymake-create-temp-inplace))
          (local-file (file-relative-name
                       temp-file
@@ -195,8 +195,8 @@ invoking the process."
     (list (perl:executable) (list "-wc" local-file))))
 
 (with-eval-after-load-feature 'flymake
-  (setq flymake-allowed-file-name-masks
-        (append flymake-allowed-file-name-masks
+  (setq flymake-proc-allowed-file-name-masks
+        (append flymake-proc-allowed-file-name-masks
                 flymake-allowed-perl-file-name-masks)))
 
 (add-hook 'cperl-mode-hook

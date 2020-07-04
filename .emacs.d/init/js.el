@@ -22,9 +22,9 @@
 (defconst flymake-allowed-js-file-name-masks
   (mapcar #'(lambda (x) (list x 'flymake-js-init)) js-mode-files))
 
-(autoload 'flymake-init-create-temp-buffer-copy "flymake")
+(autoload 'flymake-proc-init-create-temp-buffer-copy "flymake")
 (defun flymake-js-init ()
-  (let* ((temp-file (flymake-init-create-temp-buffer-copy
+  (let* ((temp-file (flymake-proc-init-create-temp-buffer-copy
                      'flymake-create-temp-inplace))
          (local-file (file-relative-name
                       temp-file
@@ -36,8 +36,8 @@
     (list flymake-jshint-command args)))
 
 (with-eval-after-load-feature 'flymake
-  (setq flymake-allowed-file-name-masks
-        (append flymake-allowed-file-name-masks
+  (setq flymake-proc-allowed-file-name-masks
+        (append flymake-proc-allowed-file-name-masks
                 flymake-allowed-js-file-name-masks)))
 
 (add-hook 'js-mode-hook

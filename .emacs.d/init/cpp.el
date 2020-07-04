@@ -23,13 +23,13 @@
                     (set (make-local-variable 'flymake-cc-command-args)
                          (append includes flymake-cc-command-args))))))))))
 
-(autoload 'flymake-init-create-temp-buffer-copy "flymake")
+(autoload 'flymake-proc-init-create-temp-buffer-copy "flymake")
 (defun flymake-cc-init ()
   (let ((cmd (cond
               ((eq major-mode 'c-mode) flymake-c-command)
               ((eq major-mode 'c++-mode) flymake-cc-command)
               (t nil))))
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
+    (let* ((temp-file (flymake-proc-init-create-temp-buffer-copy
                        'flymake-create-temp-inplace))
            (local-file (file-relative-name
                         temp-file
@@ -37,8 +37,8 @@
       (list cmd (append flymake-cc-command-args (list local-file))))))
 
 (with-eval-after-load-feature 'flymake
-  (push '("\\.c$" flymake-cc-init) flymake-allowed-file-name-masks)
-  (push '("\\.cpp$" flymake-cc-init) flymake-allowed-file-name-masks))
+  (push '("\\.c$" flymake-cc-init) flymake-proc-allowed-file-name-masks)
+  (push '("\\.cpp$" flymake-cc-init) flymake-proc-allowed-file-name-masks))
 
 ;; C
 (autoload 'c-mode "cc-mode")

@@ -1,6 +1,6 @@
-EMACS_CLIENT_CMD=(command emacsclient)
+EMACS_CLIENT_CMD=(command emacsclient-snapshot)
 EMACS_CLIENT_APP='emacs-client'
-EMACS_STANDALONE_CMD=(command emacs)
+EMACS_STANDALONE_CMD=(command emacs-snapshot)
 EMACS_DAEMON_LOG="$HOME/.emacs.d/daemon.log"
 function emacsclient () {
     XMODIFIERS='@im=none' $EMACS_CLIENT_CMD "$@"
