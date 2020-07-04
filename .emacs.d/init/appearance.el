@@ -18,7 +18,7 @@
     ("zenburn-bg" . ,user-default-bg)))
 ;; theme
 (setq frame-background-mode 'dark)
-(if (not (and (>= emacs-major-version 24) (>= emacs-minor-version 1)))
+(if (not (version<= "24.1" emacs-version))
     (bundle color-theme
       (color-theme-initialize)
       (color-theme-dark-laptop)
