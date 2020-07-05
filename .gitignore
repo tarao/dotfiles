@@ -18,6 +18,7 @@ CVS
 local.install.yml
 *.local.install.yml
 .bundle/cache
+.emacs.d/.cache
 .emacs.d/.cvim-edit
 .emacs.d/.lsp-session-*
 .emacs.d/daemon.log

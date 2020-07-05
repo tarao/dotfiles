@@ -1,0 +1,4 @@
+(:name lsp-metals
+       :type github
+       :pkgname "emacs-lsp/lsp-metals"
+       :depends (lsp-mode dap-mode dash f ht treemacs))

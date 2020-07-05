@@ -4,6 +4,10 @@
 
 (bundle lsp-mode)
 (bundle lsp-ui)
+(bundle lsp-treemacs)
+
+(bundle lsp-metals)
+
 (bundle flycheck)
 (bundle yasnippet)
 

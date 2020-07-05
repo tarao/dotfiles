@@ -375,3 +375,5 @@ to next line."
            )))
     (apply 'evil-leader/set-key-for-mode 'scala-mode bindings))
   )
+
+(bundle treemacs-evil)

@@ -1,0 +1,4 @@
+(:name lsp-treemacs
+       :type github
+       :pkgname "emacs-lsp/lsp-treemacs"
+       :depends (dash f ht treemacs lsp-mode))
