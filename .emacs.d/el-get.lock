@@ -12,7 +12,7 @@
         (transient :checksum "73694be44a802cac89bfe0798e2a4aeb79e39ead")
         (hydra :checksum "16fa8d109ec5799931a793b2e866ea9d593bee84")
         (bloop :checksum "53a178009eff4c4acb22d9749cd1dc44006afab4")
-        (scala-bootstrap :checksum "b1935ecaa629286c1017cb4d0f4cfd06a273acaf")
+        (scala-bootstrap :checksum "a355bb88d7fd1948a438e7d0d4c27e5a3effb380")
         (lsp-mode :checksum "7ce0d789a313b84ef7c1b00b63a3db4cc0959fbe")
         (f :checksum "1814209e2ff43cf2e6d38c4cd476218915f550fb")
         (helm-lsp :checksum "5c960e7800dc8f4432f3a1466a637d484b87dc35")
