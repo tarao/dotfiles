@@ -18,7 +18,7 @@
        `((cursor-color . ,default-cursor-color)
          (mouse-color . ,default-cursor-color)
          (vertical-scroll-bars . nil)
-         (width . 80)
+         (width . ,line-column)
          (foreground-color . ,(face-foreground 'default))
          (background-color . ,(face-background 'default)))))
   (setq-default initial-frame-alist (append frame-alist initial-frame-alist)
@@ -162,6 +162,7 @@ removed from them after the first call."
                       default-frame-alist (append elt default-frame-alist))
         ;; current frame
         (set-frame-parameter (selected-frame) 'font fsn)
+        (set-frame-width (selected-frame) (cdr (assq 'width default-frame-alist)))
         ;; call once
         (remove-hook 'after-init-hook #'setup-window-system-configuration)
         (remove-hook 'after-make-frame-functions

@@ -1,3 +1,6 @@
+(defvar line-column 100)
+(defvar sidebar-width 35)
+
 ;; frame title
 (setq frame-title-format
       '("" invocation-name "-" emacs-version "@" short-hostname ": %b"))
@@ -119,7 +122,8 @@
 ;; visualize whitespace
 (with-eval-after-load-feature 'whitespace
   (setq whitespace-global-modes '(not)
-        whitespace-style '(face tabs tab-mark fw-space-mark lines-tail))
+        whitespace-style '(face tabs tab-mark fw-space-mark lines-tail)
+        whitespace-line-column line-column)
   ;; tab
   (setcar (nthcdr 2 (assq 'tab-mark whitespace-display-mappings)) [?> ?\t])
   (let ((face  'whitespace-tab))

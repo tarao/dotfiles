@@ -1,6 +1,7 @@
 ;; tabbing
 (setq-default tab-width 4
-              indent-tabs-mode nil)
+              indent-tabs-mode nil
+              fill-column (- line-column 10))
 
 ;; align
 (require 'align nil t)
