@@ -56,7 +56,64 @@ place the new frame at the right side of the current frame."
       (clone-frame-1 1)
     (select-frame (make-frame))))
 
+;; frame-position workaround
+
+(defvar my:frame-offset-left 0)
+(defvar my:frame-offset-top 0)
+
+(defun my:set-frame-position (frame x y)
+  "Set position of FRAME to (X, Y) as a reverse function of `frame-position'.
+
+In other words,
+
+ (let ((pos (frame-position)))
+   (my:set-frame-position nil (car pos) (cdr pos)))
+
+doesn't move the frame position.
+
+On the contrary, the original `set-frame-position' moves the
+position when you specify the value returned from
+`frame-position'.  See
+
+https://debbugs.gnu.org/cgi/bugreport.cgi?bug=38452
+
+for the detail."
+  (set-frame-position frame
+                      (if (< x 0) x (+ x my:frame-offset-left))
+                      (if (< y 0) y (+ y my:frame-offset-top))))
+
+(defun my:adjust-frame-offset (frame &optional callback)
+  ;; move to top left and calculate frame position offset
+  (let* ((workarea (cdr (assq 'workarea (car (display-monitor-attributes-list)))))
+         (left (nth 0 workarea))
+         (top (nth 1 workarea)))
+    (set-frame-position frame left top)
+    (sit-for 0.1)
+    (setq my:frame-offset-left (- left (eval (frame-parameter frame 'left)))
+          my:frame-offset-top (- top (eval (frame-parameter frame 'top))))
+    (when callback (funcall callback))))
+
 ;; adjusting frame position
+(defcustom initial-frame-position-left nil
+  "Left position of the initial frame"
+  :type 'number
+  :group 'frames)
+
+(defcustom initial-frame-position-top nil
+  "Top position of the initial frame"
+  :type 'number
+  :group 'frames)
+
+(defcustom initial-frame-height nil
+  "Height of the initial frame"
+  :type 'number
+  :group 'frames)
+
+(defun set-initial-frame-position (pos)
+  (setq initial-frame-position-left (nth 0 pos)
+        initial-frame-position-top (nth 1 pos)
+        initial-frame-height (nth 2 pos)))
+
 (defcustom desktop-offset-left 0
   "Left offst of the desktop in pixels"
   :type 'number
@@ -82,7 +139,7 @@ place the new frame at the right side of the current frame."
         (when (> right screen-width) (setq screen-width right))
         (when (> bottom screen-height) (setq screen-height bottom))))
     (list screen-width screen-height)))
-(defun fit-largest-display (position)
+(defun largest-display-frame-position (position)
   (let ((frame (selected-frame))
         (largest-display-size 0) (screen (screen-size)) dimensions)
     (dolist (attrs (display-monitor-attributes-list))
@@ -109,10 +166,13 @@ place the new frame at the right side of the current frame."
              (height (/ (- (nth 5 dimensions)
                            desktop-offset-top desktop-offset-bottom)
                         (frame-char-height frame))))
-        (let ((pos (frame-position frame)))
-          (set-frame-position frame (car pos) (cdr pos)))
-        (set-frame-position frame left top)
-        (set-frame-height frame height)))))
+        (list left top height)))))
+(defun fit-largest-display (position)
+  (let ((pos (largest-display-frame-position position))
+        (frame (selected-frame)))
+    (my:set-frame-position frame (nth 0 pos) (nth 1 pos))
+    (set-frame-height frame (nth 2 pos))
+    pos))
 (defun fit-largest-display-left ()
   "Fit the current frame to the left end of the largest display."
   (interactive)
@@ -163,6 +223,15 @@ removed from them after the first call."
         ;; current frame
         (set-frame-parameter (selected-frame) 'font fsn)
         (set-frame-width (selected-frame) (cdr (assq 'width default-frame-alist)))
+        (run-with-idle-timer 0.5 nil 'my:adjust-frame-offset (selected-frame)
+                             '(lambda ()
+                                (when (and initial-frame-position-left
+                                           initial-frame-position-top
+                                           initial-frame-height)
+                                  (my:set-frame-position (selected-frame)
+                                                         initial-frame-position-left
+                                                         initial-frame-position-top)
+                                  (set-frame-height (selected-frame) initial-frame-height))))
         ;; call once
         (remove-hook 'after-init-hook #'setup-window-system-configuration)
         (remove-hook 'after-make-frame-functions
