@@ -47,3 +47,8 @@
       (define-key map (kbd "C-p") 'company-select-previous)
       (define-key map (kbd "C-m") 'company-complete-selection))
     (set-face-background 'company-tooltip-selection "#4C7073")))
+(bundle company-box
+  (add-hook 'company-mode-hook #'company-box-mode)
+  (with-eval-after-load-feature 'company-box
+    (let ((m (assq 'company-box-mode minor-mode-alist)))
+      (when m (setcdr m '(""))))))

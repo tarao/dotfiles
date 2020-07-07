@@ -12,11 +12,12 @@
     (set-face-background 'lsp-ui-sideline-global "#444444")
     ))
 (bundle dap-mode
-  (add-hook 'lsp-mode #'dap-mode)
-  (add-hook 'lsp-mode #'dap-ui-mode))
+  (add-hook 'lsp-mode-hook #'dap-mode)
+  (add-hook 'lsp-mode-hook #'dap-ui-mode))
 (bundle posframe)
 (bundle flycheck)
-(bundle yasnippet)
-(bundle company-mode)
-(bundle company-lsp)
+(bundle yasnippet
+  (add-hook 'lsp-mode-hook #'yas-minor-mode))
+(bundle company-mode
+  (add-hook 'lsp-mode-hook #'company-mode))
 (bundle helm-lsp)

@@ -20,6 +20,7 @@ local.install.yml
 .bundle/cache
 .emacs.d/.cache
 .emacs.d/.cvim-edit
+.emacs.d/.dap-*
 .emacs.d/.lsp-session-*
 .emacs.d/daemon.log
 .emacs.d/anything-c-adaptive-history

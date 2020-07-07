@@ -1,0 +1,4 @@
+(:name company-box
+       :type github
+       :pkgname "sebastiencs/company-box"
+       :depends (dash company-mode))
