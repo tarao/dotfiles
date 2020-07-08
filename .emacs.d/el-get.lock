@@ -69,7 +69,7 @@
         (term+ :checksum "090807985673755720c5533b2fc684f88a3554ad")
         (ddskk :checksum "e5ea22aab666da31594d8ef26d3acf11e07f3c74")
         (rdoc-mode :checksum "039d90ba8486eb51dce77a9fb2a3c1f07725b6a8")
-        (cperl-mode :checksum "06f5668653a114991836139344dbe8f0674577af")
+        (cperl-mode :checksum "c536c5fa0d03aabc059950f823ca04de9ca700e7")
         (markdown-mode :checksum "e9dff50d572caa96b68a7466c18c97a8d6ed651c")
         (browse-kill-ring :checksum "f81ca5f14479fa9e938f89bf8f6baa3c4bdfb755")
         (hatena-diary :checksum "a6a27a7906cd0b86b74f074c3134001c3be6faf3")
