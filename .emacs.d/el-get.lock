@@ -23,7 +23,7 @@
         (spinner :checksum "d15e7a7b6395be69acda9d6464acc81d3e2ad07d")
         (color-moccur :checksum "4f1c59ffd1ccc2ab1a171cd6b721e8cb9e002fb7")
         (undo-tree :checksum "e9a9102f515acd7523158f20e83f300600374989")
-        (evil :checksum "2992858748e6fe8ae706d182b86b684e7b9be8b9")
+        (evil :checksum "25fc5c6647979357cf3e39f0667a9b7ae5266af9")
         (goto-chg :checksum "e5b38e4e1378f6ea48fa9e8439f49c2998654aa4")
         (popwin :checksum "95dea14c60019d6cccf9a3b33e0dec4e1f22c304")
         (inf-ruby :checksum "af4f238ef4555521d13c5eb2fb8e818acf59d70a")
