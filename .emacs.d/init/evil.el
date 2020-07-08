@@ -234,6 +234,10 @@ to next line."
   (with-eval-after-load-feature (dired)
     (evil-define-key 'normal dired-mode-map "c" #'dired-do-copy))
 
+  ;; treemacs
+  (with-eval-after-load-feature (treemacs)
+    (evil-make-overriding-map treemacs-mode-map 'normal))
+
   ;; comint
   (evil-define-key 'insert comint-mode-map
     (kbd "C-p") #'comint-previous-input
@@ -322,8 +326,51 @@ to next line."
            )))
     (apply 'evil-leader/set-key-for-mode 'go-mode bindings))
 
+  ;; LSP
+
+  (defmacro install-lsp-bindings (lang)
+    (let ((mode (intern (format "%s-mode" lang)))
+          (map (intern (format "%s-mode-map" lang))))
+      `(progn
+         (with-eval-after-load-feature ',mode
+           (evil-define-key 'normal ,map
+             (kbd "M-.") #'lsp-find-definition
+             ))
+         (let ((bindings
+                '(
+                  "/" helm-lsp-workspace-symbol
+
+                  "i" lsp-describe-thing-at-point
+
+                  "fr" lsp-find-references
+                  "fd" lsp-find-declaration
+                  "fi" lsp-find-implementation
+                  "ft" lsp-find-type-definition
+
+                  "pr" lsp-ui-peek-find-references
+                  "pd" lsp-ui-peek-find-definitions
+                  "pi" lsp-ui-peek-find-implementation
+                  "ps" lsp-ui-peek-find-workspace-symbol
+
+                  "lc" lsp-ui-flycheck-list
+                  "li" lsp-ui-imenu
+                  "ls" lsp-treemacs-symbols
+
+                  "rr" lsp-rename
+                  "ri" lsp-organize-imports
+
+                  "ax" lsp-execute-code-action
+                  "ah" helm-lsp-code-actions
+                  )))
+           (apply 'evil-leader/set-key-for-mode ',mode bindings)))))
+
+  ;; imenu
+  (with-eval-after-load-feature (lsp-ui-imenu)
+    (evil-make-overriding-map lsp-ui-imenu-mode-map 'normal))
+
   ;; scala
 
+  (install-lsp-bindings scala)
   (add-to-list 'evil-insert-state-modes 'sbt-mode)
 
   (with-eval-after-load-feature 'scala-mode
@@ -346,25 +393,11 @@ to next line."
           (goto-char join-pos))))
     (evil-define-key 'normal scala-mode-map
       (kbd "C-j") #'tarao/scala-join-line
-      (kbd "M-.") #'lsp-find-definition
       ))
-
   (let ((bindings
          '(
-           "/" helm-lsp-workspace-symbol
-
-           "i" lsp-describe-thing-at-point
-
            "mi" lsp-metals-build-import
            "md" lsp-metals-doctor-run
-
-           "fr" lsp-find-references
-           "fd" lsp-find-declaration
-           "fi" lsp-find-implementation
-           "ft" lsp-find-type-definition
-
-           "rr" lsp-rename
-           "ri" lsp-organize-imports
 
            "bc" bloop-compile
            "bC" bloop-clean

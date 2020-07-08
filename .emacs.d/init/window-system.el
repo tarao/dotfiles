@@ -58,8 +58,10 @@ place the new frame at the right side of the current frame."
 
 ;; side window
 
+(defvar inhibit-frame-expansion nil)
+
 (defun enlarge-frame (direction width)
-  (when window-system
+  (when (and window-system (not inhibit-frame-expansion))
     (let* ((frame (selected-frame))
            (history (frame-parameter frame 'enlarged))
            (last (cdr (assq direction history))))
@@ -81,7 +83,7 @@ place the new frame at the right side of the current frame."
             (my:set-frame-position frame (max 0 (- left diff)) top)))))))
 
 (defun shrink-frame (direction)
-  (when window-system
+  (when (and window-system (not inhibit-frame-expansion))
     (let* ((frame (selected-frame))
            (frame-width (frame-width frame))
            (other-width (/ (+ (apply '+ (mapcar '(lambda (x) (or x 0)) (window-fringes)))
