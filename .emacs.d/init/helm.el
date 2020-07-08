@@ -68,8 +68,23 @@
          (with-current-buffer (helm-candidate-buffer 'global)
            (let ((process-environment (cons (format "GHQ_ROOT=%s" root)
                                             process-environment)))
-             (call-process-shell-command
-              "ghq list -p 2>/dev/null" nil (current-buffer)))))))
+             (make-process
+              :name (format "ghq (%s)" root)
+              :buffer (current-buffer)
+              :command (list shell-file-name shell-command-switch "ghq list -p 2>/dev/null")
+              :sentinel '(lambda (process signal)
+                           (when (and (helm-window) (buffer-live-p (get-buffer helm-buffer)))
+                             (with-helm-window
+                               (with-current-buffer helm-buffer
+                                 (let ((line (line-number-at-pos)))
+                                   (helm-update)
+                                   (goto-char (point-min))
+                                   (forward-line (1- line))
+                                   (helm-skip-noncandidate-line 'next)
+                                   (helm-mark-current-line)
+                                   (helm-display-mode-line (helm-get-current-source))))))
+                           (when (memq (process-status process) '(exit signal))
+                             (shell-command-set-point-after-cmd (process-buffer process))))))))))
   (defun helm-ghq:source (root)
     (let ((source-name (abbreviate-file-name (directory-file-name root))))
       (helm-build-in-buffer-source (format "Repositories in %s" source-name)
