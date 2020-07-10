@@ -354,9 +354,11 @@ to next line."
                   )))
            (apply 'evil-leader/set-key-for-mode ',mode bindings)))))
 
-  ;; imenu
   (with-eval-after-load-feature (lsp-ui-imenu)
     (evil-make-overriding-map lsp-ui-imenu-mode-map 'normal))
+
+  (with-eval-after-load-feature (lsp-ui-flycheck)
+    (evil-make-overriding-map lsp-ui-flycheck-list-mode-map 'normal))
 
   ;; scala
 
