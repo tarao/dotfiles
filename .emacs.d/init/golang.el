@@ -1,10 +1,13 @@
 (bundle flycheck)
-(bundle go-autocomplete)
-(bundle go-eldoc)
-(bundle go-mode
-  (with-eval-after-load-feature 'go-mode
-    (require 'go-autocomplete)
-    (setq gofmt-command "goimports")
-    (add-hook 'go-mode-hook #'go-eldoc-setup)
-    (add-hook 'go-mode-hook #'flycheck-mode)
-    (add-hook 'before-save-hook #'gofmt-before-save)))
+(bundle go-mode)
+
+(bundle lsp-mode)
+(bundle lsp-ui)
+
+(add-hook 'go-mode-hook
+          '(lambda ()
+             (unless (executable-find "gopls")
+               (call-process-shell-command "go get golang.org/x/tools/gopls@latest"))
+             (add-hook 'before-save-hook 'lsp-format-buffer t t)
+             (add-hook 'before-save-hook 'lsp-organize-imports t t)
+             (lsp)))

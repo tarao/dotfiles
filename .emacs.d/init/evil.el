@@ -316,16 +316,6 @@ to next line."
   ;; cvim
   (add-hook 'cvim-edit:local-mode-hook #'(lambda () (evil-append-line 1)))
 
-  ;; golang
-  (with-eval-after-load-feature 'go-mode
-    (evil-define-key 'normal go-mode-map
-      (kbd "M-.") #'godef-jump)
-    )
-  (let ((bindings
-         '("i" godoc-at-point
-           )))
-    (apply 'evil-leader/set-key-for-mode 'go-mode bindings))
-
   ;; LSP
 
   (defmacro install-lsp-bindings (lang)
@@ -407,6 +397,11 @@ to next line."
            "repl" bloop-console
            )))
     (apply 'evil-leader/set-key-for-mode 'scala-mode bindings))
+
+  ;; golang
+
+  (install-lsp-bindings go)
+
   )
 
 (bundle treemacs-evil)
