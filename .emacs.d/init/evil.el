@@ -405,6 +405,10 @@ to next line."
 
   (install-lsp-bindings go)
 
+  ;; typescript
+
+  (install-lsp-bindings typescript)
+
   )
 
 (bundle treemacs-evil)

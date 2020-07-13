@@ -4,7 +4,4 @@
   (setq auto-mode-alist
         (append (mapcar #'(lambda (x) (cons x 'typescript-mode)) ts-mode-files)
                 auto-mode-alist))
-  (add-hook 'typescript-mode-hook
-            #'(lambda ()
-                (hs-enable)
-                (auto-complete-mode))))
+  (add-hook 'typescript-mode-hook 'lsp))
