@@ -70,6 +70,7 @@ TYPE is either a state or one of `inner', `outer', `window',
    ;; in Vim
    (motion ";"   evil-ex)
 
+   (normal "M-." evil-goto-definition)
    (motion ":"   tarao/helm-for-files
            "M-;" tarao/helm-for-files
            "C-q" helm-ghq
