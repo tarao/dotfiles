@@ -37,3 +37,11 @@
       (set-window-dedicated-p win t)
       (window-resize win (- lsp-ui-imenu-window-width (window-width win)) t))))
 (advice-add 'lsp-ui-imenu :around #'adjust-lsp-ui-imenu-window)
+
+(defun adjust-lsp-treemacs-symbols-window ()
+  (let* ((buf (get-buffer "*LSP Symbols List*"))
+         (win (get-buffer-window buf))
+         (width (window-width win))
+         (window-size-fixed))
+    (window-resize win (- sidebar-width width) t)))
+(advice-add 'lsp-treemacs-symbols :after #'adjust-lsp-treemacs-symbols-window)
