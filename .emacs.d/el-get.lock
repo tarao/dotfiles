@@ -1,7 +1,7 @@
 (setq el-get-lock-package-versions
-      '((treemacs-evil :checksum "1ce0bd487f0b9178744e19bbc48b6692c55c590c")
+      '((treemacs-evil :checksum "644e9402f74dc6100a60fc2b54a2f94ba9bc52e0")
         (lsp-metals :checksum "2d7e06ae5fff226f8674d798b32a9ec84517698a")
-        (treemacs :checksum "1ce0bd487f0b9178744e19bbc48b6692c55c590c")
+        (treemacs :checksum "644e9402f74dc6100a60fc2b54a2f94ba9bc52e0")
         (ace-window :checksum "c7cb315c14e36fded5ac4096e158497ae974bec9")
         (avy :checksum "bbf1e7339eba06784dfe86643bb0fbddf5bb0342")
         (pfuture :checksum "d7926de3ba0105a36cfd00811fd6278aea903eef")
