@@ -30,7 +30,17 @@
 (bundle lsp-treemacs)
 (bundle dap-mode
   (add-hook 'lsp-mode-hook #'dap-mode)
-  (add-hook 'lsp-mode-hook #'dap-ui-mode))
+  (add-hook 'lsp-mode-hook #'dap-ui-mode)
+  (with-eval-after-load-feature 'dap-ui
+    (setcdr (assoc "*dap-ui-breakpoints*" dap-ui-buffer-configurations)
+            `((side . left) (slot . 2) (window-width . ,sidebar-width)))
+    (setcdr (assoc "*dap-ui-sessions*" dap-ui-buffer-configurations)
+            `((side . left) (slot . 3) (window-width . ,sidebar-width)))
+    (setcdr (assoc "*dap-ui-locals*" dap-ui-buffer-configurations)
+            `((side . left) (slot . 4) (window-width . ,sidebar-width)))
+    (setcdr (assoc "*dap-ui-expressions*" dap-ui-buffer-configurations)
+            `((side . bottom) (slot . 4) (window-width . ,(+ 2 sidebar-width))))
+    ))
 (bundle posframe)
 (bundle flycheck)
 (bundle yasnippet

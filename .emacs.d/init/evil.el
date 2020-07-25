@@ -353,6 +353,20 @@ to next line."
 
                   "ax" lsp-execute-code-action
                   "ah" helm-lsp-code-actions
+
+                  "ds" dap-debug
+                  "dS" dap-disconnect
+                  "di" dap-step-in
+                  "do" dap-step-out
+                  "dn" dap-next
+                  "dc" dap-continue
+                  "db" dap-breakpoint-toggle
+                  "de" dap-ui-expressions-add
+                  "dE" dap-ui-expressions-remove
+                  "dwb" dap-ui-breakpoints
+                  "dws" dap-ui-sessions
+                  "dwe" dap-ui-expressions
+                  "dwl" dap-ui-locals
                   )))
            (apply 'evil-leader/set-key-for-mode ',mode bindings)))))
 
