@@ -347,6 +347,7 @@ to next line."
                   "lc" lsp-ui-flycheck-list
                   "li" lsp-ui-imenu
                   "ls" lsp-treemacs-symbols
+                  "ll" lsp-avy-lens
 
                   "rr" lsp-rename
                   "ri" lsp-organize-imports
