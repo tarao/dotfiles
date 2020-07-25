@@ -12,7 +12,21 @@
 (bundle lsp-ui
   (with-eval-after-load-feature 'lsp-ui
     (set-face-background 'lsp-ui-sideline-global "#444444")
-    ))
+    )
+  (with-eval-after-load-feature 'lsp-ui-imenu
+    (defun adjust-lsp-ui-imenu-window (orig-fun &rest args)
+      (eval-and-compile (require 'lsp-ui-imenu))
+      (save-window-excursion
+        (let ((inhibit-frame-expansion t))
+          (apply orig-fun args)))
+      (let ((buf (get-buffer "*lsp-ui-imenu*")))
+        (display-buffer-in-side-window buf `((side . left)
+                                             (window-size . ,lsp-ui-imenu-window-width)))
+        (let ((win (get-buffer-window buf)))
+          (select-window win)
+          (set-window-dedicated-p win t)
+          (window-resize win (- lsp-ui-imenu-window-width (window-width win)) t))))
+    (advice-add 'lsp-ui-imenu :around 'adjust-lsp-ui-imenu-window)))
 (bundle dap-mode
   (add-hook 'lsp-mode-hook #'dap-mode)
   (add-hook 'lsp-mode-hook #'dap-ui-mode))
@@ -23,20 +37,6 @@
 (bundle company-mode
   (add-hook 'lsp-mode-hook #'company-mode))
 (bundle helm-lsp)
-
-(defun adjust-lsp-ui-imenu-window (orig-fun &rest args)
-  (save-window-excursion
-    (let ((inhibit-frame-expansion t))
-      (apply orig-fun args)))
-  (let ((buf (get-buffer "*lsp-ui-imenu*")))
-    (display-buffer-in-side-window buf `((side . left)
-                                         (window-size . ,lsp-ui-imenu-window-width)))
-    (let ((win (get-buffer-window buf)))
-      (select-window win)
-      (lsp-ui-imenu--move-to-name-beginning)
-      (set-window-dedicated-p win t)
-      (window-resize win (- lsp-ui-imenu-window-width (window-width win)) t))))
-(advice-add 'lsp-ui-imenu :around #'adjust-lsp-ui-imenu-window)
 
 (defun adjust-lsp-treemacs-symbols-window ()
   (let* ((buf (get-buffer "*LSP Symbols List*"))
