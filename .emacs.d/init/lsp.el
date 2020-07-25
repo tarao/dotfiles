@@ -27,6 +27,7 @@
           (set-window-dedicated-p win t)
           (window-resize win (- lsp-ui-imenu-window-width (window-width win)) t))))
     (advice-add 'lsp-ui-imenu :around 'adjust-lsp-ui-imenu-window)))
+(bundle lsp-treemacs)
 (bundle dap-mode
   (add-hook 'lsp-mode-hook #'dap-mode)
   (add-hook 'lsp-mode-hook #'dap-ui-mode))
