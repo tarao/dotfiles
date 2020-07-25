@@ -237,7 +237,8 @@ to next line."
 
   ;; treemacs
   (with-eval-after-load-feature (treemacs)
-    (evil-make-overriding-map treemacs-mode-map 'normal))
+    (evil-make-overriding-map treemacs-mode-map 'normal)
+    (evil-add-hjkl-bindings treemacs-mode-map 'normal))
 
   ;; comint
   (evil-define-key 'insert comint-mode-map
