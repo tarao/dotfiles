@@ -1,5 +1,4 @@
 (defvar line-column 100)
-(defvar sidebar-width 35)
 
 ;; frame title
 (setq frame-title-format
