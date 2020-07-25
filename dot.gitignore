@@ -6,6 +6,8 @@
 ensime.sbt
 .bloop
 .metals
+.log
+.parcel-cache
 \#*#
 .*.rej
 *.rej
