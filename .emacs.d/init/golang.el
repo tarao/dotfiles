@@ -21,8 +21,16 @@
                        (with-current-buffer ,buf
                          ,@body)))))))
 
+(defun go/dap-initialize ()
+  (require 'dap-go)
+  (let ((fun 'dap-go-setup))
+    (funcall fun))
+  (unless (executable-find "dlv")
+    (call-process-shell-command "go get github.com/go-delve/delve/cmd/dlv")))
+
 (add-hook 'go-mode-hook '(lambda ()
                            (with-gopls-installed
                             (add-hook 'before-save-hook 'lsp-format-buffer t t)
                             (add-hook 'before-save-hook 'lsp-organize-imports t t)
+                            (go/dap-initialize)
                             (lsp))))
