@@ -41,7 +41,7 @@
         (helm-git-grep :checksum "744cea07dba6e6a5effbdba83f1b786c78fd86d3")
         (helm-descbinds :checksum "b4ad76372a1b9f4415322d210b3888423247693d")
         (helm-git-files :checksum "043c6c1b38f33c0ef6534350c355299014fb8d3d")
-        (helm :checksum "cd485aa60edbd4d669442e7ea729802a480da674")
+        (helm :checksum "3ebf9f25f326df2c05b2c4630b1d2b7462f33e02")
         (typescript-mode :checksum "0fc729787007b5111f3584034af0f3ef2389098f")
         (scala-mode :checksum "54fa36f69fb0e683b48f02d29581cfca66f64445")
         (yasnippet :checksum "d3d6d70b1cd4818d271752468e0fdb0788db750d")
