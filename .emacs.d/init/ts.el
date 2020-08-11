@@ -1,3 +1,5 @@
+(setq-default typescript-indent-level 2)
+
 (defconst ts-mode-files '("\\.ts$"))
 
 (bundle typescript-mode
