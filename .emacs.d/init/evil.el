@@ -227,6 +227,9 @@ to next line."
     (evil-define-key 'motion view-mode-map
       (kbd "v") #'(lambda () (interactive) (view-mode 0))))
 
+  ;; special-mode
+  (evil-define-key 'normal special-mode-map "q" #'quit-window)
+
   ;; xref
   (with-eval-after-load-feature (xref)
     (evil-make-overriding-map xref--xref-buffer-mode-map 'normal))
