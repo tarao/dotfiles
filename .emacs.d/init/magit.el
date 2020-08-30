@@ -37,7 +37,7 @@
         (format "%s \nAuthor : %s\nDate   : %s \n%s"
                 (git-messenger-inherit-face-foreground
                  (substring commit-id 0 8) 'magit-hash)
-                (git-messenger-inherit-face-foreground author 'magit-popup-key)
+                (git-messenger-inherit-face-foreground author 'transient-key)
                 (git-messenger-inherit-face-foreground date 'magit-log-date)
                 message))))
   (advice-add 'git-messenger:format-detail
