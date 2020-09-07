@@ -14,8 +14,12 @@
       auto-insert-alist nil)
 
 ;; automatically make script executable
+(defun tarao/executable-make-buffer-file-executable-if-script-p ()
+  ;; Never make TS file executable
+  (unless (string-suffix-p ".ts" (buffer-file-name))
+    (executable-make-buffer-file-executable-if-script-p)))
 (add-hook 'after-save-hook
-          #'executable-make-buffer-file-executable-if-script-p)
+          #'tarao/executable-make-buffer-file-executable-if-script-p)
 
 ;; undo/redo
 (bundle undo-tree
