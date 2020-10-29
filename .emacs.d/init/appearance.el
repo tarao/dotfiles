@@ -54,7 +54,7 @@
   :features (mode-line-color)
   ;; mode line color
   (mode-line-color-mode)
-  (setq mode-line-color-original (face-background 'mode-line))
+  (setq mode-line-color-original (plist-get (cdr (assq 'mode-line user-face-alist)) :background))
   (defvar skk-j-mode-line-color "IndianRed4")
   (defsubst skk-j-mode-line-color-p ()
     (cond
