@@ -1,3 +1,5 @@
+(eval-when-compile (require 'cl-lib))
+
 (defvar tarao/helm-for-files-basic-sources
   '(helm-source-buffers-list))
 (defvar tarao/helm-for-files-dir-sources
@@ -52,8 +54,8 @@
        'helm-realvalue (file-name-as-directory path))))
   (defun helm-ghq:transform-candidates (candidates _source)
     (let ((root (helm-attr 'helm-ghq:root)))
-      (loop for c in candidates
-            collect (helm-ghq:format c root))))
+      (cl-loop for c in candidates
+               collect (helm-ghq:format c root))))
   (defun helm-ghq:canonical-dir (dir)
     (file-truename (expand-file-name (file-name-as-directory dir))))
   (defun helm-ghq:roots ()

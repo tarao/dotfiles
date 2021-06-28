@@ -1,4 +1,4 @@
-(eval-when-compile (require 'cl))
+(eval-when-compile (require 'cl-lib))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; load
@@ -35,27 +35,27 @@ DEFINITION is a list whose element has one of the following forms:
 
 TYPE is either a state or one of `inner', `outer', `window',
 `ex', `search' or `read'."
-  `(loop for spec in ',definition
-         for swap = (eq (nth 0 spec) 'swap)
-         for del = (eq (nth 0 spec) 'delete)
-         when (or swap del) do (pop spec) end
-         for type = (nth 0 spec)
-         do (loop for type in (or (and (listp type) type) (list type))
-                  for map = (symbol-value
-                             (or (cdr (assq type evil-misc-map-alist))
-                                 (evil-state-property type :keymap)))
-                  do (loop for (key def) on (cdr spec) by (if del #'cdr #'cddr)
-                           when del do (setq def nil) end
-                           for elt = (cons (read-kbd-macro key) def)
-                           collect elt into defs
-                           when swap
-                           do (let ((key2 (read-kbd-macro def)))
-                                (setcdr elt (lookup-key map def))
-                                (push (cons key2 (lookup-key map key)) defs))
-                           end
-                           finally
-                           do (loop for (key . def) in defs
-                                    do (define-key map key def))))))
+  `(cl-loop for spec in ',definition
+            for swap = (eq (nth 0 spec) 'swap)
+            for del = (eq (nth 0 spec) 'delete)
+            when (or swap del) do (pop spec) end
+            for type = (nth 0 spec)
+            do (cl-loop for type in (or (and (listp type) type) (list type))
+                        for map = (symbol-value
+                                   (or (cdr (assq type evil-misc-map-alist))
+                                       (evil-state-property type :keymap)))
+                        do (cl-loop for (key def) on (cdr spec) by (if del #'cdr #'cddr)
+                                    when del do (setq def nil) end
+                                    for elt = (cons (read-kbd-macro key) def)
+                                    collect elt into defs
+                                    when swap
+                                    do (let ((key2 (read-kbd-macro def)))
+                                         (setcdr elt (lookup-key map def))
+                                         (push (cons key2 (lookup-key map key)) defs))
+                                    end
+                                    finally
+                                    do (cl-loop for (key . def) in defs
+                                                do (define-key map key def))))))
 
 ;; dependencies
 (bundle goto-chg)

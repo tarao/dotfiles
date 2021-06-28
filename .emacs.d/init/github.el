@@ -1,4 +1,4 @@
-(eval-when-compile (require 'cl))
+(eval-when-compile (require 'cl-lib))
 
 (defun open-github--command-to-string (args)
   (with-output-to-string
@@ -41,18 +41,18 @@
 
 (defun open-github--find-remote-branch-from-sha1 (sha1)
   (let ((branches (open-github--command-lines "branch" "--contains" sha1)))
-    (loop for branch in branches
-          when (> (length branch) 2)
-          for branch = (substring branch 2)
-          for remote = (open-github--remote branch)
-          when (not (null remote))
-          return (cons remote branch))))
+    (cl-loop for branch in branches
+             when (> (length branch) 2)
+             for branch = (substring branch 2)
+             for remote = (open-github--remote branch)
+             when (not (null remote))
+             return (cons remote branch))))
 
 (defun open-github--find-remote-branch-from-commits (commits)
-  (loop for sha1 in commits
-        for r = (open-github--find-remote-branch-from-sha1 sha1)
-        when (not (null r))
-        return r))
+  (cl-loop for sha1 in commits
+           for r = (open-github--find-remote-branch-from-sha1 sha1)
+           when (not (null r))
+           return r))
 
 (defun open-github--find-remote-branch ()
   (let* ((branch (open-github--current-branch))

@@ -1,3 +1,5 @@
+(eval-when-compile (require 'cl-lib))
+
 (bundle helm)
 (bundle magit
   (autoload 'magit-log-mode "magit-log")
@@ -80,11 +82,11 @@
 
   (defun helm-magit:log-transform-candidates (candidates _source)
     (eval-and-compile (require 'magit-section))
-    (loop for c in candidates
-          unless (string= c "(empty)")
-          collect (let* ((section (get-text-property 0 'magit-section c))
-                         (commit (magit-section-value section)))
-                    (propertize c 'helm-realvalue commit))))
+    (cl-loop for c in candidates
+             unless (string= c "(empty)")
+             collect (let* ((section (get-text-property 0 'magit-section c))
+                            (commit (magit-section-value section)))
+                       (propertize c 'helm-realvalue commit))))
 
   (defun helm-magit:commit-shortname (commit)
     (eval-and-compile (require 'magit-git))

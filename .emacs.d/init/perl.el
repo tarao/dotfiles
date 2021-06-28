@@ -1,4 +1,4 @@
-(eval-when-compile (require 'cl))
+(eval-when-compile (require 'cl-lib))
 
 (defconst perl-mode-files '("\\.pl$" "\\.pm$" "\\.t$"))
 
@@ -94,16 +94,16 @@ process's current directory."
 (defun perl:git-submodules-by-foreach (&optional root)
   (let ((default-directory root)
         (args '("submodule" "--quiet" "foreach" "echo $path")))
-    (loop for module in
-          (split-string
-           (replace-regexp-in-string
-            "[\r\n]+$" ""
-            (with-output-to-string
-              (with-current-buffer standard-output
-                (apply 'vc-git-command (current-buffer) 0 nil args))))
-           "[\r\n]+")
-          if (> (length module) 0)
-          collect (file-name-as-directory module))))
+    (cl-loop for module in
+             (split-string
+              (replace-regexp-in-string
+               "[\r\n]+$" ""
+               (with-output-to-string
+                 (with-current-buffer standard-output
+                   (apply 'vc-git-command (current-buffer) 0 nil args))))
+              "[\r\n]+")
+             if (> (length module) 0)
+             collect (file-name-as-directory module))))
 
 (defun perl:git-submodule-dirs (&optional root)
   "List submodule directories of a git repository ROOT.
@@ -125,11 +125,11 @@ is non-nil."
          (root (file-name-as-directory (perl:git-root path)))
          (libs (perl:findlib lib root root)))
     (when libs (setq libs (list libs)))
-    (loop for dir in (and (not nosubmodule) (perl:git-submodule-dirs root))
-          for dir = (file-name-as-directory (expand-file-name dir root))
-          for sublib = (perl:findlib lib dir dir)
-          when sublib collect sublib into sublibs
-          finally return (append libs sublibs))))
+    (cl-loop for dir in (and (not nosubmodule) (perl:git-submodule-dirs root))
+             for dir = (file-name-as-directory (expand-file-name dir root))
+             for sublib = (perl:findlib lib dir dir)
+             when sublib collect sublib into sublibs
+             finally return (append libs sublibs))))
 
 (defun perl:executable (&optional root)
   (let ((local (expand-file-name "perl" (or root (perl:git-root)))))

@@ -1,5 +1,5 @@
 (eval-when-compile
-  (require 'cl)
+  (require 'cl-lib)
   (unless (fboundp 'cl-flet) (defalias 'cl-flet 'flet))
   (unless (fboundp 'cl-letf) (defalias 'cl-letf 'letf)))
 

@@ -1,5 +1,3 @@
-(eval-when-compile (require 'cl))
-
 (defconst js-mode-files '("\\.js$" "\\.json$"))
 
 ;; auto-mode
