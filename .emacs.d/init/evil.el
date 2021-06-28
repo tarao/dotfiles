@@ -11,6 +11,7 @@
               evil-want-fine-undo t
               evil-search-module 'evil-search
               evil-ex-search-vim-style-regexp nil ; we use PCRE
+              evil-undo-system 'undo-tree
               )
 
 (defconst evil-misc-map-alist
