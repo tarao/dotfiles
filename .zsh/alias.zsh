@@ -40,6 +40,8 @@ alias be='bundle exec --'
 
 alias e='emacs-edit -n'
 
+alias aws='docker run --rm -it -v ~/.aws:/root/.aws -v $(pwd):/aws amazon/aws-cli'
+
 function ssh () {
     local cmd; cmd=(command ssh)
     whence zssh >/dev/null && cmd=(zssh -z \^\] --)
