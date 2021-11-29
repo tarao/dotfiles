@@ -1,0 +1,10 @@
+.:
+  <src>:
+    .gitconfig: tarao.gitconfig
+    .jshintrc: .jshintrc
+.emacs.d/init-loader:
+  99_local.el: ../init/tarao.kafka.local.el
+.zsh:
+  local.zsh: tarao.kafka.local.zsh
+bin:
+  open-emacs-frame.zsh: ../.zsh/bin/open-emacs-frame.zsh
