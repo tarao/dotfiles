@@ -27,7 +27,7 @@ function _set_path_env() {
         {/usr,/usr/local}/games(N-/)
         $path
     )
-    eval "$(anyenv init -)"
+    whence anyenv >/dev/null && eval "$(anyenv init -)"
     path=(
         ~/bin
         ~/bin/tools
