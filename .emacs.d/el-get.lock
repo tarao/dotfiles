@@ -1,5 +1,6 @@
 (setq el-get-lock-package-versions
-      '((treemacs-evil :checksum "c1326ae424c1558f2319916a92206d174e13e65e")
+      '((ddskk :checksum "251df5b02c91311140d2375b019c1de836655fd0")
+        (treemacs-evil :checksum "c1326ae424c1558f2319916a92206d174e13e65e")
         (lsp-metals :checksum "9f82ebee48d32cd7bbc3e64b84d1ef5b0926195b")
         (treemacs :checksum "c1326ae424c1558f2319916a92206d174e13e65e")
         (ace-window :checksum "c7cb315c14e36fded5ac4096e158497ae974bec9")
@@ -67,7 +68,6 @@
         (term+mux :checksum "81b60e80cf008472bfd7fad9233af2ef722c208a")
         (tab-group :checksum "5a290ec2608e4100fb188fd60ecb77affcc3465b")
         (term+ :checksum "090807985673755720c5533b2fc684f88a3554ad")
-        (ddskk :checksum "e5ea22aab666da31594d8ef26d3acf11e07f3c74")
         (rdoc-mode :checksum "039d90ba8486eb51dce77a9fb2a3c1f07725b6a8")
         (cperl-mode :checksum "abef6e28d8e8ad6c844b93b6aabd0ebf6bc3875b")
         (markdown-mode :checksum "e9dff50d572caa96b68a7466c18c97a8d6ed651c")
