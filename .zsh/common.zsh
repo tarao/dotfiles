@@ -10,7 +10,7 @@ typeset -gxU PATH=$PATH
 typeset -gxU MANPATH=$MANPATH
 
 # history
-HISTFILE=~/.zsh/history
+HISTFILE=~/.config/zsh_history
 HISTSIZE=10000000
 SAVEHIST=$HISTSIZE
 setopt   extended_history share_history inc_append_history
