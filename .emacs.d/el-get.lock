@@ -1,5 +1,6 @@
 (setq el-get-lock-package-versions
       '((ddskk :checksum "251df5b02c91311140d2375b019c1de836655fd0")
+        (helm :checksum "a246a9b278fb973d38d13ade7417f55e0a57eae4")
         (treemacs-evil :checksum "c1326ae424c1558f2319916a92206d174e13e65e")
         (lsp-metals :checksum "9f82ebee48d32cd7bbc3e64b84d1ef5b0926195b")
         (treemacs :checksum "c1326ae424c1558f2319916a92206d174e13e65e")
@@ -42,7 +43,6 @@
         (helm-git-grep :checksum "744cea07dba6e6a5effbdba83f1b786c78fd86d3")
         (helm-descbinds :checksum "b4ad76372a1b9f4415322d210b3888423247693d")
         (helm-git-files :checksum "043c6c1b38f33c0ef6534350c355299014fb8d3d")
-        (helm :checksum "cf5155f76471b4b7d5dc1c705e01a02046de7bad")
         (typescript-mode :checksum "0fc729787007b5111f3584034af0f3ef2389098f")
         (scala-mode :checksum "54fa36f69fb0e683b48f02d29581cfca66f64445")
         (yasnippet :checksum "d3d6d70b1cd4818d271752468e0fdb0788db750d")
