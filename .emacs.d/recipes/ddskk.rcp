@@ -4,7 +4,7 @@
        :type github
        :pkgname "skk-dev/ddskk"
        :autoloads nil
-       :features ("skk-setup")
+       :features ("skk-setup" "skk-autoloads")
        ;; The "correct" way would be actually installing ddskk into some subdirectory.
        ;; But it needs significant work due to the limitation of the Makefile
        ;; thus here we are trying to emulate the Makefile behaviour.
