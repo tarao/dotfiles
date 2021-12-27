@@ -1,5 +1,7 @@
 (setq el-get-lock-package-versions
-      '((ddskk :checksum "251df5b02c91311140d2375b019c1de836655fd0")
+      '((magit :checksum "03f495f351d6e622143e4628681019df1313a5f2")
+        (with-editor :checksum "87f8cbf5400bc9b6561f61970576831170362cb9")
+        (ddskk :checksum "251df5b02c91311140d2375b019c1de836655fd0")
         (helm :checksum "a246a9b278fb973d38d13ade7417f55e0a57eae4")
         (treemacs-evil :checksum "c1326ae424c1558f2319916a92206d174e13e65e")
         (lsp-metals :checksum "9f82ebee48d32cd7bbc3e64b84d1ef5b0926195b")
@@ -37,8 +39,6 @@
         (fakir :checksum "1fca406ad7de80fece6319ff75d4230b648534b0")
         (auctex :checksum "1b71eb6142fe5dad11f2b59d7cc7daa020bc0e1c")
         (ediff-side-by-side :checksum "7de50ad95d5ff6ad2cf624578214eac16e96095f")
-        (magit :checksum "485ee181564655d21c0770a4e021f7b805f4d643")
-        (with-editor :checksum "7c512887c6d69864fb600d32fb92857c51babcff")
         (emacs-async :checksum "0e327f72bdffc5bc4a1fbc34a8da1b7066e819b3")
         (helm-git-grep :checksum "744cea07dba6e6a5effbdba83f1b786c78fd86d3")
         (helm-descbinds :checksum "b4ad76372a1b9f4415322d210b3888423247693d")
