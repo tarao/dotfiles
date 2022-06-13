@@ -24,6 +24,10 @@
   (setq-default initial-frame-alist (append frame-alist initial-frame-alist)
                 default-frame-alist (append frame-alist default-frame-alist)))
 
+;; utility
+(defun after-frame-update (function &rest args)
+  (apply 'run-with-idle-timer 0 nil function args))
+
 ;; creating new frames
 (defun clone-frame-1 (direction)
   (let* ((frame (selected-frame))
@@ -33,7 +37,7 @@
          (height (frame-height frame))
          (pixel-width (frame-pixel-width frame))
          (display-width (x-display-pixel-width))
-         (x-offset 10) (y-offset 8))
+         (x-offset 0) (y-offset 0))
     (make-frame
      `((left . ,(+ x-offset
                    (min (- display-width pixel-width)
@@ -79,8 +83,7 @@ place the new frame at the right side of the current frame."
         (unless (= delta 0)
           (set-frame-width frame (+ delta frame-width))
           (when (eq direction 'left)
-            (run-with-idle-timer ; wait for frame width update
-             0 nil
+            (after-frame-update
              '(lambda (frame pixel-width left top)
                 (let* ((new-pixel-width (frame-outer-width frame))
                        (pixel-delta (- new-pixel-width pixel-width)))
@@ -179,27 +182,6 @@ for the detail."
     (setq my:frame-offset-left (- left (eval (frame-parameter frame 'left)))
           my:frame-offset-top (- top (eval (frame-parameter frame 'top))))
     (when callback (funcall callback))))
-
-;; adjusting frame position
-(defcustom initial-frame-position-left nil
-  "Left position of the initial frame"
-  :type 'number
-  :group 'frames)
-
-(defcustom initial-frame-position-top nil
-  "Top position of the initial frame"
-  :type 'number
-  :group 'frames)
-
-(defcustom initial-frame-height nil
-  "Height of the initial frame"
-  :type 'number
-  :group 'frames)
-
-(defun set-initial-frame-position (pos)
-  (setq initial-frame-position-left (nth 0 pos)
-        initial-frame-position-top (nth 1 pos)
-        initial-frame-height (nth 2 pos)))
 
 (defcustom desktop-offset-left 0
   "Left offst of the desktop in pixels"
@@ -319,16 +301,6 @@ removed from them after the first call."
                       default-frame-alist (append elt default-frame-alist))
         ;; current frame
         (set-frame-parameter (selected-frame) 'font fsn)
-        (set-frame-width (selected-frame) (cdr (assq 'width default-frame-alist)))
-        (run-with-idle-timer 0.5 nil 'my:adjust-frame-offset (selected-frame)
-                             '(lambda ()
-                                (when (and initial-frame-position-left
-                                           initial-frame-position-top
-                                           initial-frame-height)
-                                  (my:set-frame-position (selected-frame)
-                                                         initial-frame-position-left
-                                                         initial-frame-position-top)
-                                  (set-frame-height (selected-frame) initial-frame-height))))
         ;; call once
         (remove-hook 'after-init-hook #'setup-window-system-configuration)
         (remove-hook 'after-make-frame-functions
