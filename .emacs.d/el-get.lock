@@ -94,7 +94,7 @@
         (fuzzy :checksum "b430d88acae151af542df2449fb7551b621840a1")
         (popup :checksum "80829dd46381754639fb764da11c67235fe63282")
         (zlc :checksum "224790312447a66782b0b4569597b4db0377b9ee")
-        (yascroll :checksum "9e828920d1931da66a473a66019922b9c3b729f5")
+        (yascroll :checksum "48cad7618fece0d86023d0b1e0f1f0e37f63d2f5")
         (fic-mode :checksum "bf3f9c373fdcf24b7f47f54dcfc111c0e4eaf6b2")
         (tarao-elisp :checksum "b9f6a7c1002248ce0f6a56bc720dafb5b77437be")
         (with-eval-after-load-feature :checksum "0b38651a5f0dafdfe04bd0032eb5ff803e99460b")
