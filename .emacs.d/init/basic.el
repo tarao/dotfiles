@@ -9,8 +9,8 @@
       shell-command-switch "-c"
       max-lisp-eval-depth 50000
       max-specpdl-size 5000
-      read-process-output-max (* 1024 1024)    ; bytes
-      setq gc-cons-threshold (* 100 1024 1024) ; bytes
+      read-process-output-max (* 1024 1024) ; bytes
+      gc-cons-threshold (* 100 1024 1024)   ; bytes
       )
 
 ;; interactive
