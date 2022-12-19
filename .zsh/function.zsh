@@ -96,6 +96,15 @@ function git() {
             command git grep --line-number --heading --break "$@"
         fi
 
+    # always --force-with-lease if -f
+    elif [[ "$1" = 'push' ]]; then
+        shift
+        if (( $@[(I)-f] )); then
+            command git push --force-with-lease "$@"
+        else
+            command git push "$@"
+        fi
+
     else
         command git $@
     fi
