@@ -20,6 +20,7 @@ function _set_path_env() {
         {,/usr/local,/usr}/sbin(N-/)
     )
     path=(
+        ~/.local/bin
         ~/.anyenv/bin
         /usr/local/go/bin(N-/) # golang
         "$GOPATH/bin"          # golang

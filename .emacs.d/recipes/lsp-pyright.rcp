@@ -1,0 +1,4 @@
+(:name lsp-pyright
+       :description "lsp-mode ❤️ pyright"
+       :type github
+       :pkgname "emacs-lsp/lsp-pyright")

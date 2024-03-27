@@ -1,0 +1,4 @@
+(:name lsp-docker
+       :type github
+       :pkgname "emacs-lsp/lsp-docker"
+       :depends (lsp-mode dash f s yaml ht))
