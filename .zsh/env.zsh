@@ -14,6 +14,10 @@ whence javac >/dev/null && {
     export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))
 }
 
+[ -r "$HOME/.asdf/asdf.sh" ] && {
+    . "$HOME/.asdf/asdf.sh"
+}
+
 # PATH
 function _set_path_env() {
     local su_path; su_path=(
