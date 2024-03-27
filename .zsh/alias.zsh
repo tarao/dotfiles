@@ -39,7 +39,14 @@ alias ce='carton exec --'
 alias be='bundle exec --'
 
 alias e='emacs-edit -n'
-
+alias scala="docker run --rm -it \
+  -v /etc/passwd:/etc/passwd:ro \
+  -v /etc/group:/etc/group:ro \
+  -v $HOME:/home/`id -u -n` \
+  -v .:/app \
+  -w /app \
+  -u `id -u`:`id -g` \
+  virtuslab/scala-cli --server=false"
 alias aws='docker run --rm -it -v ~/.aws:/root/.aws -v $(pwd):/aws amazon/aws-cli'
 
 function ssh () {
