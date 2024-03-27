@@ -88,7 +88,7 @@
 
 ;; highlight specific keywords in comments
 (bundle fic-mode
-  (add-hook 'prog-mode-hook #'fic-mode) ;; Emacs 24
+  (add-hook 'prog-mode-hook #'(lambda () (run-with-idle-timer 0 nil 'fic-mode))) ;; Emacs 24
   (add-hook 'cperl-mode-hook #'fic-mode)
   (with-eval-after-load-feature 'fic-mode
     (push "XXX" fic-highlighted-words)
