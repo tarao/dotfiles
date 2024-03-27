@@ -36,3 +36,9 @@
       (forward-char)
       (when (= (point) pt) (call-interactively 'move-beginning-of-line))
       (kill-region (point) pt))))
+
+;; backup files
+(setq backup-directory-alist `(("." . ,(expand-file-name ".backup" user-emacs-directory)))
+      auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
+      undo-tree-history-directory-alist `(("." . ,(expand-file-name ".undo" user-emacs-directory))))
+
