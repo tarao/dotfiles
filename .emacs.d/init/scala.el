@@ -1,6 +1,4 @@
 (bundle scala-mode)
-(bundle scala-bootstrap)
-(bundle bloop)
 
 (bundle lsp-mode)
 (bundle lsp-ui)
@@ -11,10 +9,8 @@
 
 (add-hook 'scala-mode-hook
           '(lambda ()
-             (scala-bootstrap:with-metals-installed
-              (scala-bootstrap:with-bloop-server-started
-               (flycheck-mode)
-               (auto-complete-mode -1)
-               (require 'lsp-ui)
-               (set (make-local-variable 'lsp-enable-indentation) nil)
-               (lsp)))))
+             (flycheck-mode)
+             (auto-complete-mode -1)
+             (require 'lsp-ui)
+             (set (make-local-variable 'lsp-enable-indentation) nil)
+             (lsp)))
