@@ -338,6 +338,8 @@ to next line."
 
                   "i" lsp-describe-thing-at-point
 
+                  "=" lsp-format-buffer
+
                   "fr" lsp-find-references
                   "fd" lsp-find-declaration
                   "fi" lsp-find-implementation
@@ -428,6 +430,10 @@ to next line."
   ;; typescript
 
   (install-lsp-bindings typescript)
+
+  ;; python
+
+  (install-lsp-bindings python)
 
   )
 
