@@ -7,6 +7,8 @@
 
 (bundle flycheck)
 
+(add-to-list 'auto-mode-alist '("\\.sc$" . scala-mode))
+
 (add-hook 'scala-mode-hook
           '(lambda ()
              (flycheck-mode)
