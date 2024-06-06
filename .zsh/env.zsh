@@ -69,9 +69,12 @@ function _set_python_env() {
 _set_python_env
 
 function venv_activate() {
-    test -f .python-version && test -d venv && test -f venv/bin/activate && {
-        . venv/bin/activate
-    }
+    for dir in venv .venv; do
+        test -d "$dir" && test -f "$dir"/bin/activate && {
+            . "$dir"/bin/activate
+            break
+        }
+    done
 }
 autoload -Uz add-zsh-hook
 add-zsh-hook chpwd venv_activate
