@@ -2,7 +2,7 @@
     export PATH="$PATH:$HOME/.fzf/bin"
     export MANPATH="$MANPAH:$HOME/.fzf/man"
 
-    export FZF_DEFAULT_OPTS="--reverse --inline-info"
+    export FZF_DEFAULT_OPTS="--reverse --info=inline-right"
 
     typeset -a FZF_FIND_FILES_EXCLUDES
     FZF_FIND_FILES_EXCLUDES=('.git' '.svn' '.hg' '.#*' '#*#' '*~')
