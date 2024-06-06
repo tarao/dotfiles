@@ -14,10 +14,6 @@ whence javac >/dev/null && {
     export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))
 }
 
-[ -r "$HOME/.asdf/asdf.sh" ] && {
-    . "$HOME/.asdf/asdf.sh"
-}
-
 # PATH
 function _set_path_env() {
     local su_path; su_path=(
@@ -33,6 +29,9 @@ function _set_path_env() {
         $path
     )
     whence anyenv >/dev/null && eval "$(anyenv init -)"
+    [ -r "$HOME/.asdf/asdf.sh" ] && {
+        . "$HOME/.asdf/asdf.sh"
+    }
     path=(
         ~/bin
         ~/bin/tools
