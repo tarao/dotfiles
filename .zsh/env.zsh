@@ -28,6 +28,9 @@ function _set_path_env() {
         {/usr,/usr/local}/games(N-/)
         $path
     )
+    [ -r "$HOME/.sdkman/bin/sdkman-init.sh" ] && {
+        . "$HOME/.sdkman/bin/sdkman-init.sh"
+    }
     whence anyenv >/dev/null && eval "$(anyenv init -)"
     [ -r "$HOME/.asdf/asdf.sh" ] && {
         . "$HOME/.asdf/asdf.sh"
