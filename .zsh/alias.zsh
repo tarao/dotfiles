@@ -8,12 +8,19 @@ function ls () {
     fi
 }
 
-whence xdg-open > /dev/null && {
-    function xdg_open () {
-        command xdg-open "$@" >/dev/null 2>/dev/null
+[ -n "$WSL_DISTRO_NAME" ] && {
+    function ii() {
+        explorer.exe $(wslpath -w "$@")
     }
-    alias ii='xdg_open'
+} || {
+    whence xdg-open > /dev/null && {
+        function xdg_open () {
+            command xdg-open "$@" >/dev/null 2>/dev/null
+        }
+        alias ii='xdg_open'
+    }
 }
+
 alias dir='ls -l'
 alias la='ls -la'
 alias ll='ls -alF'
