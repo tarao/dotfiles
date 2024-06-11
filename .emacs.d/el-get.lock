@@ -1,5 +1,8 @@
 (setq el-get-lock-package-versions
-      '((helm :checksum "aa51c1a8d6ff4e1e88e61e989f41ac3aa808a592")
+      '((cargo :checksum "7f8466063381eed05d4e222ce822b1dd44e3bf17")
+        (rust-mode :checksum
+                   "d00d83d3a207a5b7c2994392b2781f627e3159ce")
+        (helm :checksum "aa51c1a8d6ff4e1e88e61e989f41ac3aa808a592")
         (shell-history :checksum
                        "237bc8e1f528c35f415e471cb2918b6b792081b8")
         (auctex :checksum "d7f1d28159869fde495960e437a9363c979f06f8")

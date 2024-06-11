@@ -24,6 +24,7 @@ function _set_path_env() {
         ~/.anyenv/bin
         /usr/local/go/bin(N-/) # golang
         "$GOPATH/bin"          # golang
+        ~/.cargo/bin           # rust
         {,/usr/local,/usr}/bin(N-/)
         {/usr,/usr/local}/games(N-/)
         $path
