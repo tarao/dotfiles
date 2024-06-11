@@ -14,6 +14,7 @@
                 helm-completion-mode-string ""
                 helm-buffer-skip-remote-checking t
                 helm-buffer-details-flag nil
+                helm-move-to-line-cycle-in-source nil
                 helm-for-files-preferred-list
                 `(,@tarao/helm-for-files-basic-sources
                   ,@tarao/helm-for-files-dir-sources
