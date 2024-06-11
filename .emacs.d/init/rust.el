@@ -7,7 +7,5 @@
 
 (add-hook 'rust-mode-hook
           '(lambda ()
-             (auto-complete-mode -1)
              (cargo-minor-mode)
-             (require 'lsp-ui)
              (lsp)))

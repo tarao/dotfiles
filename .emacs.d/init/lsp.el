@@ -27,7 +27,8 @@
           (select-window win)
           (set-window-dedicated-p win t)
           (window-resize win (- lsp-ui-imenu-window-width (window-width win)) t))))
-    (advice-add 'lsp-ui-imenu :around 'adjust-lsp-ui-imenu-window)))
+    (advice-add 'lsp-ui-imenu :around 'adjust-lsp-ui-imenu-window))
+  (add-hook 'lsp-mode-hook '(lambda () (require 'lsp-ui))))
 (bundle lsp-treemacs)
 (bundle dap-mode
   (add-hook 'lsp-mode-hook #'dap-mode)
@@ -47,7 +48,11 @@
 (bundle yasnippet
   (add-hook 'lsp-mode-hook #'yas-minor-mode))
 (bundle company-mode
-  (add-hook 'lsp-mode-hook #'company-mode))
+  (add-hook 'lsp-mode-hook
+            '(lambda ()
+               (when (and (boundp 'auto-complete-mode) auto-complete-mode)
+                 (auto-complete-mode -1))
+               (company-mode))))
 (bundle helm-lsp)
 
 (defun adjust-lsp-treemacs-symbols-window ()
