@@ -4,6 +4,10 @@ whence v >/dev/null && export PAGER=`whence v`
 export EDITOR='vi'
 export TIME_STYLE=long-iso
 
+[ -n "$WSL_DISTRO_NAME" ] && whence wsl-open >/dev/null && {
+    export BROWSER=wsl-open
+}
+
 # ls
 if test -x /usr/bin/dircolors ; then
     if test -f $HOME/.dir_colors ; then
