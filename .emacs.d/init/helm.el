@@ -11,6 +11,7 @@
 
 (bundle helm
   (setq-default helm-truncate-lines t
+                helm-allow-mouse nil
                 helm-completion-mode-string ""
                 helm-buffer-skip-remote-checking t
                 helm-buffer-details-flag nil
