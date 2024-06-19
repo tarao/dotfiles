@@ -423,6 +423,9 @@ to next line."
            )))
     (apply 'evil-leader/set-key-for-mode 'scala-mode bindings))
 
+  ;; rust
+  (install-lsp-bindings rust)
+
   ;; golang
 
   (install-lsp-bindings go)
