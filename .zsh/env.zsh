@@ -21,12 +21,11 @@ function _set_path_env() {
     )
     path=(
         ~/.local/bin
-        ~/.anyenv/bin
         /usr/local/go/bin(N-/) # golang
         "$GOPATH/bin"          # golang
         ~/.cargo/bin           # rust
-        {,/usr/local,/usr}/bin(N-/)
-        {/usr,/usr/local}/games(N-/)
+        ~/.volta/bin           # node
+        ~/.anyenv/bin
         $path
     )
     [ -r "$HOME/.sdkman/bin/sdkman-init.sh" ] && {
