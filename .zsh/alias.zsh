@@ -101,3 +101,7 @@ function { # local scope
 whence rlwrap >/dev/null && {
     alias tinyrepl="rlwrap tinyrepl"
 }
+
+! whence kubectl >/dev/null && whence minikube >/dev/null && {
+    alias kubectl="minikube kubectl --"
+}
