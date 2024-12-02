@@ -1,7 +1,7 @@
 (eval-when-compile (require 'cl-lib))
 
 (defconst web-mode-files
-  '("\\.html$" "\\.tt$" "\\.mustache$" "\\.jsx?$" "\\.tsx?$"))
+  '("\\.html$" "\\.tt$" "\\.mustache$" "\\.jsx?$" "\\.tsx?$" "\\.vue$"))
 (bundle web-mode
   (setq-default web-mode-markup-indent-offset 2
                 web-mode-css-indent-offset 2
