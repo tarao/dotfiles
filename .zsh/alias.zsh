@@ -54,7 +54,13 @@ alias scala="docker run --rm -it \
   -w /app \
   -u `id -u`:`id -g` \
   virtuslab/scala-cli --server=false"
-alias aws='docker run --rm -it -v ~/.aws:/root/.aws -v $(pwd):/aws amazon/aws-cli'
+alias aws="mkdir -p ~/.aws && docker run --rm -it \
+  -e AWS_CONFIG_FILE=/tmp/.aws/config \
+  -e AWS_SHARED_CREDENTIALS_FILE=/tmp/.aws/credentials \
+  -v $HOME/.aws:/tmp/.aws:rw \
+  -v $HOME:/aws \
+  -u `id -u`:`id -g` \
+  amazon/aws-cli"
 
 function ssh () {
     local cmd; cmd=(command ssh)
