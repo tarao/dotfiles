@@ -224,7 +224,11 @@ to next line."
     (add-hook 'view-mode-hook
               #'(lambda ()
                   (evil-initialize-state)
-                  (evil-make-overriding-map view-mode-map 'normal)))
+                  (evil-make-overriding-map view-mode-map 'normal)
+                  (evil-add-hjkl-bindings view-mode-map 'normal
+                    "/" (lookup-key evil-motion-state-map "/")
+                    "n" (lookup-key evil-motion-state-map "n")
+                    "N" (lookup-key evil-motion-state-map "N"))))
     (evil-define-key 'motion view-mode-map
       (kbd "v") #'(lambda () (interactive) (view-mode 0))))
 
