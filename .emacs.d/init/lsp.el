@@ -1,5 +1,6 @@
 (setq-default
  lsp-prefer-flymake nil
+ lsp-ui-doc-show-with-mouse nil
  lsp-ui-sideline-show-hover t
  lsp-ui-sideline-update-mode 'line
  lsp-ui-imenu-window-width sidebar-width
