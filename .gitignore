@@ -23,6 +23,7 @@ local.install.yml
 .emacs.d/.dap-*
 .emacs.d/.extension
 .emacs.d/.lsp-session-*
+.emacs.d/abbrev_defs
 .emacs.d/daemon.log
 .emacs.d/anything-c-adaptive-history
 .emacs.d/ac-comphist.dat
