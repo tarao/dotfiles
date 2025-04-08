@@ -1,0 +1,4 @@
+(:name outline-indent
+       :type github
+       :pkgname "jamescherti/outline-indent.el"
+       :load-path ("."))

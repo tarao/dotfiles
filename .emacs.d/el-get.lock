@@ -1,5 +1,7 @@
 (setq el-get-lock-package-versions
-      '((cargo :checksum "7f8466063381eed05d4e222ce822b1dd44e3bf17")
+      '((outline-indent :checksum
+                        "b46ca7089af40ee968ee769c7a38a8526e9140a2")
+        (cargo :checksum "7f8466063381eed05d4e222ce822b1dd44e3bf17")
         (rust-mode :checksum
                    "d00d83d3a207a5b7c2994392b2781f627e3159ce")
         (helm :checksum "00faa55a8fddb7649a969120eb38a23c1bc8f739")
