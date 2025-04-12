@@ -436,7 +436,7 @@ to next line."
 
   ;; typescript
 
-  (install-lsp-bindings typescript)
+  (install-lsp-bindings web)
 
   ;; python
 
