@@ -194,10 +194,10 @@ invoking the process."
                       (file-name-directory buffer-file-name))))
     (list (perl:executable) (list "-wc" local-file))))
 
-(with-eval-after-load-feature 'flymake
-  (setq flymake-proc-allowed-file-name-masks
-        (append flymake-proc-allowed-file-name-masks
-                flymake-allowed-perl-file-name-masks)))
+;;(with-eval-after-load-feature 'flymake
+;;  (setq flymake-proc-allowed-file-name-masks
+;;        (append flymake-proc-allowed-file-name-masks
+;;                flymake-allowed-perl-file-name-masks)))
 
 (add-hook 'cperl-mode-hook
           #'(lambda ()
