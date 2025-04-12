@@ -12,3 +12,4 @@
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
  '(ring-bell-function 'ignore))
+(put 'narrow-to-region 'disabled nil)
