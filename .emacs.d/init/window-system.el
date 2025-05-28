@@ -208,10 +208,9 @@ for the detail."
         (when (> right screen-width) (setq screen-width right))
         (when (> bottom screen-height) (setq screen-height bottom))))
     (list screen-width screen-height)))
-(defun display-frame-position (selector direction)
+(defun display-dimensions (selector)
   (eval-and-compile (require 'cl-lib))
-  (let ((frame (selected-frame))
-        (largest-display-size 0) (screen (screen-size)) dimensions)
+  (let ((largest-display-size 0) dimensions)
     (cl-loop for attrs in (display-monitor-attributes-list)
              for geometry = (cdr (assq 'geometry attrs))
              for workarea = (cdr (assq 'workarea attrs))
@@ -226,6 +225,11 @@ for the detail."
              do (setq dimensions (list left top right bottom width height)
                       largest-display-size display-size)
              until (eq selector 'first))
+    dimensions))
+(defun display-frame-position (selector direction)
+  (let ((frame (selected-frame))
+        (dimensions (display-dimensions selector))
+        (screen (screen-size)))
     (when dimensions
       (let* ((frame-width (frame-pixel-width frame))
              (left (if (eq direction 'left)
@@ -260,6 +264,27 @@ for the detail."
   "Fit the current frame to the right end of the first display."
   (interactive)
   (fit-frame-to-display 'first 'right))
+
+(defun tile-frame-horizontally (splits index)
+  "Place the current frame at INDEX in horizontal SPLITS of screen"
+  (let* ((frame (selected-frame))
+         (dimensions (display-dimensions 'first))
+         (width (floor (/ (nth 4 dimensions) splits)))
+         (height (/ (- (nth 5 dimensions)
+                       desktop-offset-top desktop-offset-bottom)
+                    (frame-char-height frame)))
+         (left (+ (nth 0 dimensions) (* width (1- index))))
+         (top (max desktop-offset-top (nth 1 dimensions))))
+    (my:set-frame-position frame left top)
+    (set-frame-width frame width)
+    (set-frame-height frame height)))
+
+(defun tile-windows-horizontally (n)
+  "Maximize current frame and split window horizontally"
+  (interactive "P")
+  (set-frame-parameter nil 'fullscreen 'maximized)
+  (delete-other-windows (selected-window))
+  (call-interactively 'split-window-horizontally-n))
 
 ;; font settings
 (defconst default-fontset-name "menloja")

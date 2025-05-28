@@ -13,6 +13,21 @@
   (setq popwin:reuse-window t)
   (popwin-mode 1))
 
+(defun split-window-horizontally-n (n)
+  "Split window horizontally by N"
+  (interactive "P")
+  (unless (integerp n)
+    (setq n (read-number "Splits: ")))
+  (unless (and (integerp n) (> n 1))
+    (error "Splits must be greater than 1"))
+  (let ((width (floor (/ (window-width) n)))
+        (window (selected-window))
+        (i 1))
+    (while (< i n)
+      (setq window (split-window window width t)
+            i (1+ i)))
+    (balance-windows)))
+
 ;; sidebar
 (defvar sidebar-width 35)
 (defun adjust-side-window-width (orig-fun buffer alist)
