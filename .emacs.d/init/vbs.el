@@ -7,5 +7,6 @@
             #'(lambda ()
                 (auto-complete-mode 1)
                 (undo-tree-mode 1)
+                (whitespace-mode 1)
                 (outline-indent-minor-mode 1)
                )))
