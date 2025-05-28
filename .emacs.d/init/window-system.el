@@ -272,6 +272,40 @@ for the detail."
   (interactive)
   (fit-frame-to-display 'first 'right))
 
+(defun wayland-p ()
+  (string= (getenv "XDG_SESSION_TYPE") "wayland"))
+
+(defun gnome-p ()
+  (string-match-p "\\bgnome\\b" (downcase (or (getenv "XDG_CURRENT_DESKTOP") ""))))
+
+(defconst window-commander-command-prefix
+  '("gdbus" "call" "--session" "--dest" "org.gnome.Shell"
+    "--object-path" "/org/gnome/Shell/Extensions/WindowCommander"
+    "--method"))
+
+(defun call-window-commander (method &rest args)
+  (let* ((command (mapconcat (lambda (s) (format "%s" s))
+                             (append window-commander-command-prefix
+                                     (cons (concat "org.gnome.Shell.Extensions.WindowCommander." method) args))
+                             " "))
+         (result (shell-command-to-string command)))
+    (and result
+         (string-trim-right (string-trim-left result "('") "',)\n"))))
+
+(defun set-frame-position-size-wayland-gnome (left top width height)
+  (eval-and-compile (require 'cl-lib))
+  (unless (and (executable-find "gnome-extensions")
+               (= 0 (call-process-shell-command "gnome-extensions info window-commander@gnikolaos.gr"))
+               (executable-find "gdbus"))
+    (error "You need to have gnome-extension and gdbus commands and window-commander \
+extension installed to move frame under Wayland GNOME environment"))
+  (let* ((windows (json-parse-string (call-window-commander "List") :object-type 'plist :array-type 'list :false-object nil))
+         (window-id (cl-loop for window in windows
+                             when (and (plist-get window :in_current_workspace)
+                                       (plist-get window :focus))
+                             return (plist-get window :id))))
+    (call-window-commander "Place" window-id left top width height)))
+
 (defun tile-frame-horizontally (splits index)
   "Place the current frame at INDEX in horizontal SPLITS of screen"
   (let* ((frame (selected-frame))
@@ -285,11 +319,13 @@ for the detail."
          (top (max desktop-offset-top screen-top))
          (width (- width desktop-offset-left desktop-offset-right))
          (height (- screen-height desktop-offset-top desktop-offset-bottom)))
-    (when (or (> width screen-width) (> height screen-height))
-      (set-frame-size frame (min width screen-width) (min height screen-height) t))
-    (my:set-frame-position frame screen-left screen-top)
-    (set-frame-size frame width height t)
-    (my:set-frame-position frame left top)))
+    (if (and (wayland-p) (gnome-p))
+        (set-frame-position-size-wayland-gnome left top width height)
+      (when (or (> width screen-width) (> height screen-height))
+        (set-frame-size frame (min width screen-width) (min height screen-height) t))
+      (my:set-frame-position frame screen-left screen-top)
+      (set-frame-size frame width height t)
+      (my:set-frame-position frame left top))))
 
 (defun tile-windows-horizontally (n)
   "Maximize current frame and split window horizontally"
