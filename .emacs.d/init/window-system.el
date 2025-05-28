@@ -270,14 +270,12 @@ for the detail."
   (let* ((frame (selected-frame))
          (dimensions (display-dimensions 'first))
          (width (floor (/ (nth 4 dimensions) splits)))
-         (height (/ (- (nth 5 dimensions)
-                       desktop-offset-top desktop-offset-bottom)
-                    (frame-char-height frame)))
          (left (+ (nth 0 dimensions) (* width (1- index))))
-         (top (max desktop-offset-top (nth 1 dimensions))))
+         (top (max desktop-offset-top (nth 1 dimensions)))
+         (width (- width desktop-offset-left desktop-offset-right))
+         (height (- (nth 5 dimensions) desktop-offset-top desktop-offset-bottom)))
     (my:set-frame-position frame left top)
-    (set-frame-width frame width)
-    (set-frame-height frame height)))
+    (set-frame-size frame width height t)))
 
 (defun tile-windows-horizontally (n)
   "Maximize current frame and split window horizontally"
