@@ -5,7 +5,7 @@ export EDITOR='vi'
 export TIME_STYLE=long-iso
 
 [ -n "$WSL_DISTRO_NAME" ] && whence wsl-open >/dev/null && {
-    export BROWSER=wsl-open
+    export BROWSER=xdg-open
 }
 
 # ls

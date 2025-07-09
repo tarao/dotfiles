@@ -1,5 +1,0 @@
-#!/bin/sh
-path=$(wslpath -w "$1")
-
-cd /mnt/c
-cmd.exe /c start "$path"
