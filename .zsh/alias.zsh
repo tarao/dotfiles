@@ -55,6 +55,7 @@ alias scala="docker run --rm -it \
   -u `id -u`:`id -g` \
   virtuslab/scala-cli --server=false"
 alias aws="mkdir -p ~/.aws && docker run --rm -it \
+  -e HOME=/tmp \
   -e AWS_CONFIG_FILE=/tmp/.aws/config \
   -e AWS_SHARED_CREDENTIALS_FILE=/tmp/.aws/credentials \
   -v $HOME/.aws:/tmp/.aws:rw \
