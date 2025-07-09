@@ -21,6 +21,7 @@ function _set_path_env() {
     )
     path=(
         ~/.local/bin
+        /snap/bin
         /usr/local/go/bin(N-/) # golang
         "$GOPATH/bin"          # golang
         ~/.cargo/bin           # rust
