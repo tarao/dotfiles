@@ -72,6 +72,16 @@ function watchdir () {
     done
 }
 
+whence git-wt >/dev/null && {
+    eval "$(git wt --init zsh)"
+}
+
+if (( $+functions[git] )); then
+    eval "function _git { ${functions[git]} }"
+else
+    function _git { command git "$@" }
+fi
+
 function git() {
     # git-hg compatibility
     if [[ "$vcs" = 'hg' ]]; then
@@ -82,31 +92,31 @@ function git() {
     elif [[ "$1" = 'merge' ]]; then
         shift
         if [[ "$1" = -* ]]; then
-            command git merge "$@"
+            _git merge "$@"
         else
-            command git merge --no-ff "$@"
+            _git merge --no-ff "$@"
         fi
 
     # git grep default option
     elif [[ "$1" = 'grep' ]]; then
         shift
         if [[ "$1" = -* ]]; then
-            command git grep "$@"
+            _git grep "$@"
         else
-            command git grep --line-number --heading --break "$@"
+            _git grep --line-number --heading --break "$@"
         fi
 
     # always --force-with-lease if -f
     elif [[ "$1" = 'push' ]]; then
         shift
         if (( $@[(I)-f] )); then
-            command git push --force-with-lease "$@"
+            _git push --force-with-lease "$@"
         else
-            command git push "$@"
+            _git push "$@"
         fi
 
     else
-        command git $@
+        _git $@
     fi
 }
 

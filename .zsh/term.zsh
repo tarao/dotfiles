@@ -14,7 +14,7 @@ function precmd_vcs_info () {
     else
         vcs=''
     fi
-    [[ -n "$repos" ]] && psvar[2]="$repos"
+    [[ -n "$repos" ]] && psvar[2]="${repos%/.wt/*}"
     [[ -n "$vcs_info_msg_1_" ]] && psvar[3]="$vcs_info_msg_1_"
     [[ -n "$vcs_info_msg_2_" ]] && psvar[1]="$vcs_info_msg_2_"
 }

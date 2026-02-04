@@ -31,5 +31,7 @@
     root = ~/work
     root = ~/.go/src
     root = ~/.ghq
+[wt]
+    basedir = .wt
 [include]
     path = ~/.gitconfig.local
