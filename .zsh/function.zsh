@@ -77,9 +77,9 @@ whence git-wt >/dev/null && {
 }
 
 if (( $+functions[git] )); then
-    eval "function _git { ${functions[git]} }"
+    eval "function __git { ${functions[git]} }"
 else
-    function _git { command git "$@" }
+    function __git { command git "$@" }
 fi
 
 function git() {
@@ -92,31 +92,31 @@ function git() {
     elif [[ "$1" = 'merge' ]]; then
         shift
         if [[ "$1" = -* ]]; then
-            _git merge "$@"
+            __git merge "$@"
         else
-            _git merge --no-ff "$@"
+            __git merge --no-ff "$@"
         fi
 
     # git grep default option
     elif [[ "$1" = 'grep' ]]; then
         shift
         if [[ "$1" = -* ]]; then
-            _git grep "$@"
+            __git grep "$@"
         else
-            _git grep --line-number --heading --break "$@"
+            __git grep --line-number --heading --break "$@"
         fi
 
     # always --force-with-lease if -f
     elif [[ "$1" = 'push' ]]; then
         shift
         if (( $@[(I)-f] )); then
-            _git push --force-with-lease "$@"
+            __git push --force-with-lease "$@"
         else
-            _git push "$@"
+            __git push "$@"
         fi
 
     else
-        _git $@
+        __git $@
     fi
 }
 

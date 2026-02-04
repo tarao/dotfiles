@@ -105,10 +105,72 @@
             done
         done
     }
+    function _fzf_ghq_worktree_list () {
+        local repo_path="$1"
+        (cd "$repo_path" && git-wt 2>/dev/null | tail -n +2 | \
+            awk '{
+                # Skip * marker if present
+                if ($1 == "*") {
+                    # * PATH BRANCH HEAD
+                    printf "%s\t%s\t%s\n", $3, $2, $4
+                } else {
+                    # PATH BRANCH HEAD
+                    printf "%s\t%s\t%s\n", $2, $1, $3
+                }
+            }')
+    }
+    function _fzf_ghq_worktree_handle () {
+        local line
+        line=$(tail -1)
+
+        # Empty selection means user cancelled
+        [[ -z "$line" ]] && return 1
+
+        # Extract branch name (first field before tab)
+        local branch="${line%%$'\t'*}"
+
+        # Generate git-wt command
+        echo "git wt \"$branch\""
+    }
+    function _fzf_ghq_worktree_select () {
+        local repo_path="$1"
+
+        # Condition 1: Check if git-wt is installed
+        whence git-wt >/dev/null || return 1
+
+        # Condition 2: Check if repository has 3+ lines (header + 2+ worktrees)
+        local wt_output
+        wt_output=$(cd "$repo_path" && git-wt 2>/dev/null)
+        [[ $? -ne 0 ]] && return 1
+
+        local line_count=$(wc -l <<< "$wt_output")
+        [[ $line_count -lt 3 ]] && return 1
+
+        # Show worktree selection with branch names only
+        local cmd
+        cmd=$(_fzf_ghq_worktree_list "$repo_path" | \
+            fzf +s --ansi --delimiter=$'\t' --with-nth=1 \
+                --prompt="Worktree> " --height=40% | \
+            _fzf_ghq_worktree_handle)
+
+        [[ -z "$cmd" ]] && return 1
+
+        echo "cd \"$repo_path\" && $cmd"
+    }
     function fzf-ghq-widget () {
         local -a repository=($(ghq list -p 2>/dev/null | _fzf_ghq_filter | fzf +s --ansi --with-nth=3.. -q "${BUFFER//$/\\$}"))
         [[ -n "$repository" ]] && {
-            BUFFER="cd ${(j::)repository[1,2]}"
+            local repo_path="${(j::)repository[1,2]}"
+            # Expand tilde to actual home directory path
+            repo_path="${repo_path/#\~/$HOME}"
+
+            # Try worktree selection first
+            local cmd=$(_fzf_ghq_worktree_select "$repo_path")
+
+            # Fallback to simple cd if not applicable
+            [[ -z "$cmd" ]] && cmd="cd \"$repo_path\""
+
+            BUFFER="$cmd"
             zle accept-line
         }
         zle redisplay
