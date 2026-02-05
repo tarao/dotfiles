@@ -63,5 +63,12 @@ source ~/.zsh/screen-title.zsh
 source ~/.zsh/screen-attach.zsh
 source ~/.zsh/screen-share.zsh
 source ~/.zsh/screen-alias.zsh
+source ~/.zsh/tmux.zsh
+source ~/.zsh/tmux-alias.zsh
+source ~/.zsh/tmux-attach.zsh
+source ~/.zsh/tmux-title.zsh
+source ~/.zsh/mux.zsh
 source ~/.zsh/cdd.zsh
+source ~/.zsh/mux-cdd.zsh
+source ~/.zsh/mux-emacs.zsh
 source ~/.zsh/eterm.zsh

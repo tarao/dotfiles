@@ -7,6 +7,8 @@
     .my.cnf: .my.cnf
     .screen: .screen
     .screenrc: .screenrc
+    .tmux: .tmux
+    .tmux.conf: .tmux.conf
     .vim: .vim
     .vimrc: .vimrc
     .zsh: .zsh
