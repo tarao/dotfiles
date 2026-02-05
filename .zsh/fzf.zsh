@@ -183,51 +183,36 @@
     function _fzf_git_branch_remote () {
         git for-each-ref --sort=-authordate refs/remotes --format='%(color:dim yellow)%(objectname:short)%(color:reset) %(refname:short) %(color:dim cyan)(%(authorname))%(color:reset) %(color:dim white)%(contents:subject)%(color:reset)%09%(color:dim cyan)%(authordate:short)%(color:reset)'
     }
-    function _fzf_git_branch_handle () {
-        local query key cmd
-        local -a item
-        read query
-        read key
 
-        [[ -z "$key" ]] && {
+    # Conditional function definitions based on git-wt availability
+    if whence git-wt >/dev/null; then
+        # git-wt is available - use worktree-based operations
+
+        function _fzf_git_branch_checkout_impl() {
+            local mode="$1"
+            local -a item
             item=($(tail -1))
-            local option
-            [[ "$1" == 'remote' ]] && option=" -b ${item[2]#*/} -t"
-            echo "git checkout$option $item[2]"
-            return
+
+            if [[ "$mode" == 'remote' ]]; then
+                # Remote branch: git wt local-name origin/branch-name
+                local local_name="${item[2]#*/}"
+                echo "git wt ${(q)local_name} ${(q)item[2]}"
+            else
+                # Local branch: git wt branch-name
+                echo "git wt ${(q)item[2]}"
+            fi
         }
 
-        [[ "$key" = 'ctrl-c' ]] && {
-            case "$1" in
-            remote)
-                local -a remotes
-                remotes=($(git remote))
-                echo "git remote prune -- $remotes"
-                ;;
-            local)
-                # remove local branches without upstream or with
-                # invalid upstreams
-                local -a branches
-                local branch
-                git for-each-ref --format='%(refname:short) %(upstream)' refs/heads | while read -A item; do
-                    [[ -n "$item[2]" ]] && git rev-parse "$item[2]" >/dev/null 2>&1 && continue
-                    branch="$item[1]"
-                    branches=($branches ${(q)branch})
-                done
-                (( $#branches > 0 )) && echo "git branch -d $branches"
-                ;;
-            esac
-            return
-        }
-
-        [[ "$key" = 'ctrl-x' ]] && {
+        function _fzf_git_branch_delete_impl() {
+            local mode="$1"
             local -a refs
             while read -A item; do
                 refs=($refs $item[2])
             done
 
-            case "$1" in
+            case "$mode" in
             remote)
+                # Remote deletion unchanged - use git push
                 local -A remotes
                 local ref remote branch
                 for ref in "$refs[@]"; do
@@ -243,13 +228,136 @@ Are you sure to remove these remote branches and their tracking branches? (y/n) 
                 done
                 ;;
             local)
+                # Local deletion with git-wt: deletes worktree if exists, then branch
+                echo "git wt -d $refs"
+                ;;
+            esac
+        }
+
+        function _fzf_git_branch_clean_impl() {
+            local mode="$1"
+
+            case "$mode" in
+            remote)
+                # Remote prune unchanged
+                local -a remotes
+                remotes=($(git remote))
+                echo "git remote prune -- $remotes"
+                ;;
+            local)
+                # Clean orphaned branches with git-wt: removes worktrees and branches
+                local -a branches
+                local branch
+                git for-each-ref --format='%(refname:short) %(upstream)' refs/heads | while read -A item; do
+                    [[ -n "$item[2]" ]] && git rev-parse "$item[2]" >/dev/null 2>&1 && continue
+                    branch="$item[1]"
+                    branches=($branches ${(q)branch})
+                done
+                (( $#branches > 0 )) && echo "git wt -d $branches"
+                ;;
+            esac
+        }
+
+    else
+        # git-wt is not available - use traditional git commands
+
+        function _fzf_git_branch_checkout_impl() {
+            local mode="$1"
+            local -a item
+            item=($(tail -1))
+
+            if [[ "$mode" == 'remote' ]]; then
+                # Remote branch: git checkout -b local-name -t origin/branch-name
+                local local_name="${item[2]#*/}"
+                echo "git checkout -b ${(q)local_name} -t ${(q)item[2]}"
+            else
+                # Local branch: git checkout branch-name
+                echo "git checkout ${(q)item[2]}"
+            fi
+        }
+
+        function _fzf_git_branch_delete_impl() {
+            local mode="$1"
+            local -a refs
+            while read -A item; do
+                refs=($refs $item[2])
+            done
+
+            case "$mode" in
+            remote)
+                # Remote deletion unchanged - use git push
+                local -A remotes
+                local ref remote branch
+                for ref in "$refs[@]"; do
+                    remote="${ref%%/*}"
+                    branch="${ref#*/}"
+                    remotes[$remote]="$remotes[$remote] ${(q)branch}"
+                done
+                read -q \?"${(F)refs}
+
+Are you sure to remove these remote branches and their tracking branches? (y/n) " || return
+                for remote in "${(@k)remotes}"; do
+                    echo -n "git push ${(q)remote} --delete $remotes[$remote]; "
+                done
+                ;;
+            local)
+                # Local deletion with traditional git: only deletes branch
                 echo "git branch -d $refs"
                 ;;
             esac
+        }
+
+        function _fzf_git_branch_clean_impl() {
+            local mode="$1"
+
+            case "$mode" in
+            remote)
+                # Remote prune unchanged
+                local -a remotes
+                remotes=($(git remote))
+                echo "git remote prune -- $remotes"
+                ;;
+            local)
+                # Clean orphaned branches with traditional git: only removes branches
+                local -a branches
+                local branch
+                git for-each-ref --format='%(refname:short) %(upstream)' refs/heads | while read -A item; do
+                    [[ -n "$item[2]" ]] && git rev-parse "$item[2]" >/dev/null 2>&1 && continue
+                    branch="$item[1]"
+                    branches=($branches ${(q)branch})
+                done
+                (( $#branches > 0 )) && echo "git branch -d $branches"
+                ;;
+            esac
+        }
+
+    fi
+
+    function _fzf_git_branch_handle () {
+        local query key cmd
+        local -a item
+        read query
+        read key
+
+        # Branch checkout/switch (Enter key)
+        [[ -z "$key" ]] && {
+            _fzf_git_branch_checkout_impl "$1"
             return
         }
 
-        # switch
+        # Clean/prune branches (Ctrl+C)
+        [[ "$key" = 'ctrl-c' ]] && {
+            _fzf_git_branch_clean_impl "$1"
+            return
+        }
+
+        # Delete branches (Ctrl+X)
+        [[ "$key" = 'ctrl-x' ]] && {
+            _fzf_git_branch_delete_impl "$1"
+            return
+        }
+
+        # Switch between local/remote modes (Ctrl+L/Ctrl+R)
         case "$key" in
         ctrl-l) _fzf_git_branch local "$query" ;;
         ctrl-r) _fzf_git_branch remote "$query" ;;
