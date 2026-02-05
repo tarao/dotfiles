@@ -129,12 +129,66 @@
 
   (setq helm-ghq:action-function
         #'(lambda (dir)
-            (require 'helm-git-files)
-            (require 'helm-files)
-            (let ((default-directory dir))
-              (if (helm-git-files:git-p)
-                  (helm-git-files)
-                (helm-find-files-1 dir))))))
+            (if (helm-ghq-wt:should-show-worktrees-p dir)
+                ;; Show worktree selection
+                (helm-ghq-wt:select-worktree dir #'helm-ghq-wt:default-action)
+              ;; Use default action
+              (helm-ghq-wt:default-action dir)))))
+
+  ;; git-wt worktree selection integration
+
+  (defun helm-ghq-wt:parse-worktree-line (line)
+    "Parse a worktree line and return (display . path) cons cell."
+    (when (string-match "^\\*?[[:space:]]*\\([^[:space:]]+\\)[[:space:]]+\\([^[:space:]]+\\)" line)
+      (let ((path (match-string 1 line))
+            (branch (match-string 2 line)))
+        (cons (concat branch
+                      (propertize " " 'display '(space :align-to 60))
+                      "  "
+                      (propertize path 'face 'font-lock-comment-face))
+              path))))
+
+  (defun helm-ghq-wt:get-worktrees (dir)
+    "Get list of worktrees for DIR as helm candidates."
+    (let* ((default-directory dir)
+           (output (shell-command-to-string "git-wt 2>/dev/null"))
+           (lines (split-string output "[\r\n]+" t)))
+      ;; Remove header line
+      (when (> (length lines) 1)
+        (setq lines (cdr lines)))
+      ;; Parse each line
+      (delq nil (mapcar #'helm-ghq-wt:parse-worktree-line lines))))
+
+  (defun helm-ghq-wt:should-show-worktrees-p (dir)
+    "Return t if DIR has multiple worktrees and git-wt is available."
+    (and (executable-find "git-wt")
+         (let* ((default-directory dir)
+                (output (shell-command-to-string "git-wt 2>/dev/null"))
+                (lines (split-string output "[\r\n]+" t)))
+           ;; Need at least 3 lines: header + 2 worktrees
+           (>= (length lines) 3))))
+
+  (defun helm-ghq-wt:select-worktree (dir action)
+    "Show worktree selection for DIR and call ACTION with selected path."
+    (let ((candidates (helm-ghq-wt:get-worktrees dir)))
+      (if (null candidates)
+          ;; No worktrees, use default action
+          (funcall action dir)
+        ;; Show worktree selection
+        (helm :sources
+              (helm-build-sync-source "Worktrees"
+                :candidates candidates
+                :action action)
+              :buffer "*helm ghq worktrees*"))))
+
+  (defun helm-ghq-wt:default-action (dir)
+    "Default action: open helm-git-files or helm-find-files in DIR."
+    (require 'helm-git-files)
+    (require 'helm-files)
+    (let ((default-directory dir))
+      (if (helm-git-files:git-p)
+          (helm-git-files)
+        (helm-find-files-1 dir)))))
 
 (bundle helm-descbinds
   (helm-descbinds-mode))
