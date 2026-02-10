@@ -18,8 +18,8 @@ function _screen_title_install_precmd () { # use current directory as a title
     }
 }
 _screen_title_install_precmd
-typeset -A SCREEN_TITLE_ARG; SCREEN_TITLE_ARG=()
-typeset -A SCREEN_TITLE_CMD_ARG; SCREEN_TITLE_CMD_ARG=(ssh -1 su -1 man -1)
+typeset -A SCREEN_TITLE_ARG; SCREEN_TITLE_ARG=(pnpx 2)
+typeset -A SCREEN_TITLE_CMD_ARG; SCREEN_TITLE_CMD_ARG=(ssh -1 su -1 man -1 vi 2 vim 2)
 typeset -A SCREEN_TITLE_CMD_IGNORE; SCREEN_TITLE_CMD_IGNORE=()
 function _screen_title_install_preexec { # use command name as a title
     function _screen_set_cmd_title () {
