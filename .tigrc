@@ -1,0 +1,86 @@
+# Zenburn theme colors for tig (256-color)
+# Color codes: 108=green, 174=red, 223=yellow, 73=cyan-blue
+# Additional Zenburn colors: 180=orange, 187=beige, 235-237=dark gray
+
+# General UI
+color default           187     default                     # Beige foreground
+color cursor            default 237     bold                # Dark gray highlight
+color title-focus       108     default bold                # Green for focused title
+color title-blur        235     default                     # Dark gray for blurred title
+color status            108     default                     # Green status line
+color delimiter         235     default                     # Dark gray delimiter
+color header            108     default                     # Green header
+color line-number       180     default                     # Orange line numbers
+color id                108     default                     # Green commit ID
+color overflow          174     default                     # Red overflow indicator
+
+# Search
+color search-result     223     235     bold                # Yellow on dark gray
+
+# Date and author
+color date              223     default                     # Yellow dates
+color author            73      default                     # Cyan author names
+color mode              108     default                     # Green file mode
+
+# Graph and commits
+color graph-commit      108     default                     # Green commit dots
+color main-commit       default default                     # Default commit message
+color main-head         174     default bold                # Red for HEAD
+color main-remote       73      default                     # Cyan for remote branches
+color main-tracked      73      default bold                # Bold cyan for tracked branches
+color main-tag          223     default bold                # Yellow for tags
+color main-local-tag    223     default                     # Yellow for local tags
+color main-ref          108     default                     # Green for other refs
+
+# Palette for branch colors (14 colors for graph)
+color palette-0         108     default                     # Green
+color palette-1         73      default                     # Cyan
+color palette-2         174     default                     # Red
+color palette-3         223     default                     # Yellow
+color palette-4         180     default                     # Orange
+color palette-5         108     default bold                # Bold green
+color palette-6         73      default bold                # Bold cyan
+color palette-7         174     default bold                # Bold red
+color palette-8         223     default bold                # Bold yellow
+color palette-9         187     default                     # Beige
+color palette-10        108     default                     # Green (repeat)
+color palette-11        73      default                     # Cyan (repeat)
+color palette-12        174     default                     # Red (repeat)
+color palette-13        223     default                     # Yellow (repeat)
+
+# Diff colors
+color diff-header       73      default bold                # Cyan diff header
+color diff-chunk        180     default                     # Orange chunk header
+color diff-add          108     default                     # Green for additions
+color diff-add2         108     default bold                # Bold green for additions
+color diff-del          174     default                     # Red for deletions
+color diff-del2         174     default bold                # Bold red for deletions
+color diff-index        73      default                     # Cyan index
+color diff-oldmode      174     default                     # Red old mode
+color diff-newmode      108     default                     # Green new mode
+color "copy from "      223     default                     # Yellow copy from
+color "copy to "        223     default                     # Yellow copy to
+color diff-similarity   73      default                     # Cyan similarity
+color diff-stat         108     default                     # Green stats
+
+# Status view
+color stat-staged       108     default                     # Green staged
+color stat-unstaged     223     default                     # Yellow unstaged
+color stat-untracked    174     default                     # Red untracked
+
+# Tree view
+color tree.directory    73      default bold                # Bold cyan directories
+color tree.file         default default                     # Default file names
+color file              default default                     # Default files
+color file-size         187     default                     # Beige file size
+color directory         73      default bold                # Bold cyan directory
+
+# Help view
+color help-group        73      default bold                # Cyan group names
+color help-action       108     default                     # Green action names
+
+# Commit message highlighting
+color "Commit: "        73      default                     # Cyan
+color "Author: "        73      default                     # Cyan
+color "AuthorDate: "    223     default                     # Yellow
+color "Merge: "         174     default                     # Red
