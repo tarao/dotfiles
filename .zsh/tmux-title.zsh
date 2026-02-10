@@ -1,6 +1,9 @@
-# set window title of tmux
+# set window title and pane title of tmux
 function _tmux_set_title () {
-    [[ -n "$TMUX" ]] && tmux rename-window "$1"
+    if [[ -n "$TMUX" ]]; then
+        tmux rename-window "$1"
+        tmux select-pane -T "$1"
+    fi
 }
 
 function _tmux_title_install_precmd () { # use current directory as a title
