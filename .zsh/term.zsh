@@ -22,7 +22,7 @@ function precmd_vcs_info () {
 precmd_functions+=precmd_vcs_info
 
 # prompt
-PROMPT="%(!.%F{red}.%F{green})%U%n@%6>>%m%>>%u%f:%1(j.%j.)%(!.#.>) "
-local psdirs='[%F{yellow}%3(v|%32<..<%3v%<<|%60<..<%~%<<)%f]'
-local psvcs='%3(v|[%25<\<<%F{yellow}%2v%f@%F{blue}%1v%f%<<]|)'
+PROMPT="%(!.%F{174}.%F{108})%U%n@%6>>%m%>>%u%f:%1(j.%j.)%(!.#.>) "
+local psdirs='[%F{223}%3(v|%32<..<%3v%<<|%60<..<%~%<<)%f]'
+local psvcs='%3(v|[%25<\<<%F{223}%2v%f@%F{73}%1v%f%<<]|)'
 RPROMPT="$psdirs$psvcs"
