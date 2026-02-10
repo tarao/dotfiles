@@ -21,7 +21,7 @@ set encoding=utf-8
 set ambiwidth=double
 set fileencodings=ucs-bom,euc-jp,sjis,cp932,utf-8
 
-if $TERM == 'xterm-256color'
+if $TERM == 'xterm-256color' || $TERM == 'tmux-256color'
     set t_Co=256
     colorscheme railscasts
 endif
