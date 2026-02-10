@@ -11,6 +11,45 @@
     wdiff = diff --word-diff-regex=$'[^\\x80-\\xbf][\\x80-\\xbf]*' --color-words
 [color]
     ui = auto
+
+# Zenburn 256-color theme for git
+# Color codes: 108=green, 174=red, 223=yellow, 73=cyan, 180=orange
+# Matches the color scheme used in .tigrc and .zsh/term.zsh
+
+[color "diff"]
+    # Core diff elements
+    old = 174 bold              # Red for removed lines
+    new = 108 bold              # Green for added lines
+    meta = 73 bold              # Cyan for file metadata (diff --git, index, etc.)
+    frag = 180                  # Orange for hunk headers (@@ ... @@)
+    func = 223                  # Yellow for function names in hunk headers
+    context = normal            # No color for context lines (better readability)
+    commit = 73                 # Cyan for commit headers in git log -p
+    whitespace = 174 reverse    # Red background for whitespace errors
+
+[color "status"]
+    # Status command colors
+    added = 108                 # Green for staged files
+    changed = 223               # Yellow for modified files
+    untracked = 174             # Red for untracked files
+    branch = 108 bold           # Green bold for current branch
+    header = 73                 # Cyan for status section headers
+
+[color "branch"]
+    # Branch list colors
+    current = 108 bold          # Green bold for current branch (with *)
+    local = normal              # Default color for other local branches
+    remote = 73                 # Cyan for remote branches
+    upstream = 73 bold          # Cyan bold for upstream tracking info
+
+[color "decorate"]
+    # Log decoration colors (git log --decorate)
+    HEAD = 174 bold             # Red bold for HEAD pointer
+    branch = 108                # Green for local branch refs
+    remoteBranch = 73           # Cyan for remote branch refs
+    tag = 223 bold              # Yellow bold for tags
+    stash = 180                 # Orange for stash entries
+
 [pager]
     diff = type diff-highlight >/dev/null && (diff-highlight|less) || less
     show = type diff-highlight >/dev/null && (diff-highlight|less) || less
