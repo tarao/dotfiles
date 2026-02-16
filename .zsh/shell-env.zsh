@@ -30,3 +30,15 @@ export LS_OPTIONS
 typeset -xT SUDO_PATH sudo_path
 typeset -U sudo_path
 sudo_path=({/usr/local,/usr,/}/sbin(N-/))
+
+# python
+function venv_activate() {
+    for dir in venv .venv; do
+        test -d "$dir" && test -f "$dir"/bin/activate && {
+            . "$dir"/bin/activate
+            break
+        }
+    done
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook chpwd venv_activate
