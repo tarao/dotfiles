@@ -11,9 +11,9 @@
                        "237bc8e1f528c35f415e471cb2918b6b792081b8")
         (auctex :checksum "d7f1d28159869fde495960e437a9363c979f06f8")
         (lsp-pyright :checksum
-                     "2f2631ae242d5770dbe6cb924e44c1ee5671789d")
+                     "21b8f487855feb08f7df669b8884fbd5861dca25")
         (lsp-docker :checksum
-                    "6b7701917417e4e74961185051c147e1bf003750")
+                    "ff41f4a76b640d39dc238bacba7f654c297827fa")
         (yaml :checksum "ee86566af1ed4975531ab3aa4eb4dba770c227f6")
         (magit :checksum "010fec9cdedb2cbe40fc92b0385823e9a21f9842")
         (with-editor :checksum
@@ -22,7 +22,7 @@
         (treemacs-evil :checksum
                        "c1326ae424c1558f2319916a92206d174e13e65e")
         (lsp-metals :checksum
-                    "811f02e4416d208102350ea48404e0310ffea647")
+                    "e1d9d04f3bab7e6e74916054b36ab1a87e831367")
         (treemacs :checksum "3cd2a0d64b4afc76503706f90567e8914836da18")
         (ace-window :checksum
                     "c7cb315c14e36fded5ac4096e158497ae974bec9")
@@ -30,7 +30,7 @@
         (pfuture :checksum "d7926de3ba0105a36cfd00811fd6278aea903eef")
         (posframe :checksum "f97c4aff2c2c376ca62276d5597aa108546633a9")
         (lsp-treemacs :checksum
-                      "e66ae2196503d4e84334519e56b4388feffa5060")
+                      "49df7292c521b4bac058985ceeaf006607b497dd")
         (dap-mode :checksum "096070aacff875a09c13e596e5d60a55e0f07ab1")
         (bui :checksum "f3a137628e112a91910fd33c0cff0948fa58d470")
         (transient :checksum
@@ -39,12 +39,12 @@
         (bloop :checksum "53a178009eff4c4acb22d9749cd1dc44006afab4")
         (scala-bootstrap :checksum
                          "a355bb88d7fd1948a438e7d0d4c27e5a3effb380")
-        (lsp-mode :checksum "17e583c253e0cba71ee8a0c25743933c478d5c62")
+        (lsp-mode :checksum "0e53347d767b2fa28958328125da82ee3881b0c8")
         (f :checksum "50af874cd19042f17c8686813d52569b1025c76a")
-        (helm-lsp :checksum "c2c6974dadfac459b1a69a1217441283874cea92")
+        (helm-lsp :checksum "027897a957032e8752780600b21d2c0ea0cf3201")
         (company-box :checksum
                      "452f083f6c11793a3723224bce42898a2bedc0e1")
-        (lsp-ui :checksum "0dd39900c8ed8145d207985cb2f65cedd1ffb410")
+        (lsp-ui :checksum "ff349658ed69086bd18c336c8a071ba15f7fd574")
         (dash :checksum "5df7605da5a080df769d4f260034fb0e5e86a7a4")
         (ht :checksum "c4c1be487d6ecb353d07881526db05d7fc90ea87")
         (spinner :checksum "d15e7a7b6395be69acda9d6464acc81d3e2ad07d")
