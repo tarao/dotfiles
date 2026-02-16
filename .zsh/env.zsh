@@ -38,10 +38,8 @@ function _set_path_env() {
         "$GOPATH/bin"          # golang
         ~/.cargo/bin           # rust
         ~/.volta/bin           # node
-        ~/.anyenv/bin
         $path
     )
-    whence anyenv >/dev/null && eval "$(anyenv init -)"
     [ "`id -u`" -eq 0 ] && path=($su_path $path)
     typeset -gxU path
 }
