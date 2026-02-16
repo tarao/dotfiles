@@ -4,19 +4,23 @@ set -euo pipefail
 
 function main {
     which git >/dev/null || {
-        echo 'command not found: git' >&2
+        echo 'Command not found: git' >&2
         exit 1
     }
     git rev-parse --is-inside-work-tree >/dev/null 2>&1 || {
-        echo 'not in git work tree' >&2
+        echo 'Not in git work tree' >&2
         exit 2
     }
 
     parent="$(find_parent_worktree)"
     child=`git rev-parse --show-toplevel`
+    [[ -z "$parent" ]] && {
+        echo 'No worktree parent found' >&2
+        exit
+    }
     [[ "$parent" == "$child" ]] && {
-        echo 'this is the root worktree' >&2
-        exit 3
+        echo 'This is the root worktree' >&2
+        exit
     }
 
     cd "$parent"
@@ -80,8 +84,6 @@ function find_parent_worktree {
         printf "%s\n" "$best_path"
         return
     fi
-
-    exit 1
 }
 
 main
