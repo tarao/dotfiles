@@ -7,4 +7,5 @@
 .zsh:
   local.zsh: tarao.kafka.local.zsh
 bin:
-  open-emacs-frame.zsh: ../.zsh/bin/open-emacs-frame.zsh
+  <src>/bin:
+    open-emacs-frame.zsh: open-emacs-frame.zsh
