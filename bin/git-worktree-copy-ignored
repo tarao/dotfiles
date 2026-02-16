@@ -1,0 +1,87 @@
+#!/bin/bash
+
+set -euo pipefail
+
+function main {
+    which git >/dev/null || {
+        echo 'command not found: git' >&2
+        exit 1
+    }
+    git rev-parse --is-inside-work-tree >/dev/null 2>&1 || {
+        echo 'not in git work tree' >&2
+        exit 2
+    }
+
+    parent="$(find_parent_worktree)"
+    child=`git rev-parse --show-toplevel`
+    [[ "$parent" == "$child" ]] && {
+        echo 'this is the root worktree' >&2
+        exit 3
+    }
+
+    cd "$parent"
+    for item in $(ls -A -1 | git check-ignore --stdin); do
+        echo "$parent/$item --> $child/$item" >&2
+        if test -d "$item"; then
+            mkdir -p "$child/$item"
+            rsync -a --delete --link-dest="$parent/$item/" "$parent/$item/" "$child/$item/"
+        else
+            cp -a "$parent/$item" "$child/$item"
+        fi
+    done
+}
+
+function find_parent_worktree {
+    cur=$(git rev-parse HEAD)
+
+    mapfile -t rows < <(
+        git worktree list --porcelain | awk '
+            $1=="worktree"{path=$2}
+            $1=="HEAD"{head=$2}
+            $1==""{
+              if(path!="" && head!="") print path "\t" head
+              path=head=""
+            }
+        '
+    )
+
+    best_dist=""
+    best_path=""
+
+    for row in "${rows[@]}"; do
+        path=${row%%$'\t'*}
+        head=${row#*$'\t'}
+
+        # 今いるworktreeは除外
+        if [[ "$path" == "$(pwd)" ]]; then
+            continue
+        fi
+
+        # 祖先判定
+        if git merge-base --is-ancestor "$head" "$cur"; then
+            dist=$(git rev-list --count "$head..$cur")
+
+            # 完全一致
+            if [[ "$dist" -eq 0 ]]; then
+                printf "%s\n" "$path"
+                return
+            fi
+
+            # 最小距離を更新
+            if [[ -z "$best_dist" || "$dist" -lt "$best_dist" ]]; then
+                best_dist="$dist"
+                best_path="$path"
+            fi
+        fi
+    done
+
+    # 最も近かったものを返す
+    if [[ -n "$best_path" ]]; then
+        printf "%s\n" "$best_path"
+        return
+    fi
+
+    exit 1
+}
+
+main

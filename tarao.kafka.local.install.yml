@@ -8,4 +8,5 @@
   local.zsh: tarao.kafka.local.zsh
 bin:
   <src>/bin:
+    git-worktree-copy-ignored: git-worktree-copy-ignored
     open-emacs-frame.zsh: open-emacs-frame.zsh

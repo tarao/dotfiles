@@ -72,5 +72,6 @@
     root = ~/.ghq
 [wt]
     basedir = .wt
+    hook = git-worktree-copy-ignored
 [include]
     path = ~/.gitconfig.local
