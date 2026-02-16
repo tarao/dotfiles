@@ -14,12 +14,24 @@ whence javac >/dev/null && {
     export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))
 }
 
+asdf_sh="$HOME/.asdf/asdf.sh"
+[ -r "$asdf_sh" ] && {
+    . "$asdf_sh"
+}
+
+sdkman_init_sh="$HOME/.sdkman/bin/sdkman-init.sh"
+[ -r "$sdkman_init_sh" ] && {
+    . "$sdkman_init_sh"
+}
+
 # PATH
 function _set_path_env() {
     local su_path; su_path=(
         {,/usr/local,/usr}/sbin(N-/)
     )
     path=(
+        ~/bin
+        ~/bin/tools
         ~/.local/bin
         /snap/bin
         /usr/local/go/bin(N-/) # golang
@@ -29,18 +41,7 @@ function _set_path_env() {
         ~/.anyenv/bin
         $path
     )
-    [ -r "$HOME/.sdkman/bin/sdkman-init.sh" ] && {
-        . "$HOME/.sdkman/bin/sdkman-init.sh"
-    }
     whence anyenv >/dev/null && eval "$(anyenv init -)"
-    [ -r "$HOME/.asdf/asdf.sh" ] && {
-        . "$HOME/.asdf/asdf.sh"
-    }
-    path=(
-        ~/bin
-        ~/bin/tools
-        $path
-    )
     [ "`id -u`" -eq 0 ] && path=($su_path $path)
     typeset -gxU path
 }
