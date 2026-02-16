@@ -31,6 +31,11 @@ typeset -xT SUDO_PATH sudo_path
 typeset -U sudo_path
 sudo_path=({/usr/local,/usr,/}/sbin(N-/))
 
+# rust
+whence sccache >/dev/null && {
+   export RUSTC_WRAPPER=sccache
+}
+
 # python
 function venv_activate() {
     for dir in venv .venv; do
