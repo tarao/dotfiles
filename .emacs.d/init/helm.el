@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 (eval-when-compile (require 'cl-lib))
 
 (defvar tarao/helm-for-files-basic-sources
@@ -131,11 +133,16 @@
         #'(lambda (dir)
             (if (helm-ghq-wt:should-show-worktrees-p dir)
                 ;; Show worktree selection
-                (helm-ghq-wt:select-worktree dir #'helm-ghq-wt:default-action)
+                (helm-ghq-wt:select-worktree dir
+                  (helm-ghq-wt:action-wrapper dir #'helm-ghq-wt:default-action))
               ;; Use default action
               (helm-ghq-wt:default-action dir)))))
 
   ;; git-wt worktree selection integration
+
+  (defvar helm-ghq-wt:after-select-hook nil
+    "Hook run after selecting a worktree via helm-ghq.
+Functions receive two arguments: PARENT-DIR and SELECTED-DIR.")
 
   (defun helm-ghq-wt:parse-worktree-line (line)
     "Parse a worktree line and return (display . path) cons cell."
@@ -147,6 +154,13 @@
                       "  "
                       (propertize path 'face 'font-lock-comment-face))
               path))))
+
+  (defun helm-ghq-wt:action-wrapper (parent-dir original-action)
+    "Return an action function that runs hooks before calling ORIGINAL-ACTION.
+PARENT-DIR is the repository root containing worktrees."
+    (lambda (selected-dir)
+      (run-hook-with-args 'helm-ghq-wt:after-select-hook parent-dir selected-dir)
+      (funcall original-action selected-dir)))
 
   (defun helm-ghq-wt:get-worktrees (dir)
     "Get list of worktrees for DIR as helm candidates."

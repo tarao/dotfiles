@@ -63,3 +63,28 @@
          (window-size-fixed))
     (window-resize win (- sidebar-width width) t)))
 (advice-add 'lsp-treemacs-symbols :after #'adjust-lsp-treemacs-symbols-window)
+
+;; Automatically add child worktrees to LSP workspace folders
+
+(bundle helm-git-files
+  (require 'lsp-mode)
+  (defun helm-ghq-wt:lsp-add-child-workspace (parent-dir selected-dir)
+    "Add SELECTED-DIR to LSP workspace if PARENT-DIR has LSP workspace.
+This function is intended to be added to `helm-ghq-wt:after-select-hook'."
+    (when (and (featurep 'lsp-mode)
+               (lsp-session))
+      (let* ((parent-canonical (lsp-f-canonical parent-dir))
+             (selected-canonical (lsp-f-canonical selected-dir))
+             (workspace-folders (lsp-session-folders (lsp-session))))
+        ;; Check conditions:
+        ;; 1. Parent is in LSP workspace
+        ;; 2. Selected is different from parent (i.e., it's a child worktree)
+        (when (and (member parent-canonical workspace-folders)
+                   (not (string= parent-canonical selected-canonical)))
+          ;; Add child worktree to LSP workspace
+          ;; Note: lsp-workspace-folders-add is idempotent (uses cl-pushnew)
+          (lsp-workspace-folders-add selected-canonical)))))
+
+  ;; Add hook function
+  (add-hook 'helm-ghq-wt:after-select-hook
+            'helm-ghq-wt:lsp-add-child-workspace))
