@@ -10,3 +10,9 @@ bin:
   <src>/bin:
     git-worktree-copy-ignored: git-worktree-copy-ignored
     open-emacs-frame.zsh: open-emacs-frame.zsh
+    ccstatusline-git-branch: ccstatusline-git-branch
+    ccstatusline-git-repo: ccstatusline-git-repo
+    ccstatusline-context-bar: ccstatusline-context-bar
+.config/ccstatusline:
+  <src>/.config/ccstatusline:
+    settings.json: settings.json

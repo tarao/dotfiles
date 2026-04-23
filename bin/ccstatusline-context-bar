@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+import json, sys
+
+data = json.load(sys.stdin)
+cw = data.get('context_window') or {}
+
+pct = cw.get('used_percentage')
+
+if pct is None:
+    window_size = cw.get('context_window_size')
+    current_usage = cw.get('current_usage')
+    if not window_size or window_size <= 0 or current_usage is None:
+        sys.exit(0)
+    if isinstance(current_usage, dict):
+        current_usage = (current_usage.get('input_tokens', 0) +
+                         current_usage.get('cache_creation_input_tokens', 0) +
+                         current_usage.get('cache_read_input_tokens', 0))
+    pct = min(100, current_usage / window_size * 100)
+
+pct = max(0, min(100, float(pct)))
+pct_text = f"{round(pct)}%"
+pct_len = len(pct_text)
+
+bar_width = 10
+filled = max(0, min(bar_width, round(pct / 100 * bar_width)))
+
+# Center the percentage text within the bar
+text_start = (bar_width - pct_len) // 2
+text_end = text_start + pct_len
+
+RESET        = "\033[0m"
+FILLED_BG    = "\033[44m"   # blue background (filled)
+EMPTY_BG     = "\033[100m"  # dark gray background (empty)
+TEXT_FILLED  = "\033[97m"   # bright white text on filled
+TEXT_EMPTY   = "\033[37m"   # gray text on empty
+
+result = ""
+for i in range(bar_width):
+    in_filled = i < filled
+    bg = FILLED_BG if in_filled else EMPTY_BG
+    fg = TEXT_FILLED if in_filled else TEXT_EMPTY
+    char = pct_text[i - text_start] if text_start <= i < text_end else " "
+    result += bg + fg + char
+result += RESET
+
+print(result, end="")

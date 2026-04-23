@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+common_dir=$(git rev-parse --git-common-dir 2>/dev/null)
+[ -z "$common_dir" ] && exit 0
+
+if [[ "$common_dir" != /* ]]; then
+  # Relative path means we're in the main worktree
+  git rev-parse --show-toplevel 2>/dev/null | xargs -I{} basename {}
+else
+  # Absolute path means we're in a linked worktree
+  dir=$(basename "$common_dir")
+  if [[ "$dir" == ".git" ]]; then
+    # Normal repo: .git is a subdirectory
+    basename "$(dirname "$common_dir")"
+  else
+    # Bare repo: the git dir itself is the repo
+    basename "$common_dir" .git
+  fi
+fi

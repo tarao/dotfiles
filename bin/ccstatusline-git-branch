@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+branch=$(git branch --show-current 2>/dev/null)
+[ -z "$branch" ] && exit 0
+
+max=25
+if [ ${#branch} -gt $max ]; then
+  printf "⎇ …%s" "${branch: -$((max-1))}"
+else
+  printf "⎇ %s" "$branch"
+fi
