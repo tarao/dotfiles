@@ -64,6 +64,8 @@
     rebase = true
 [rebase]
     autostash = true
+[diff]
+    wordRegex = [a-zA-Z0-9_]+|[ぁ-ん]+|[ァ-ヶー]+|[一-龥々〇〆]+|.
 [tig]
     line-graphics = ascii
 [ghq]
