@@ -21,3 +21,5 @@ Thumbs.db
 .svn
 CVS
 /sketch/
+.claude/
+.playwright-cli/
